@@ -1,0 +1,9 @@
+/api/all ---> all data from the server   --> GET request from server 
+/api/all ---> add data to the server   --> POST request from server 
+
+/api/consumer  -----> all consumer from the server    --> GET request for consumer data
+/api/admin -----> all admin from the server         --> GET request for consumer data
+
+
+/api/consumer/promote/:id   -----> promote to admin    ----> PUT request
+/api/admin/demote/:id   -----> demote to consumer    ----> PUT request
