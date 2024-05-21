@@ -4,6 +4,6 @@
 /api/consumer  -----> all consumer from the server    --> GET request for consumer data
 /api/admin -----> all admin from the server         --> GET request for consumer data
 
-
+/api/admin/request/:id      ----> request to be admin  --->PUT request
 /api/consumer/promote/:id   -----> promote to admin    ----> PUT request
 /api/admin/demote/:id   -----> demote to consumer    ----> PUT request
