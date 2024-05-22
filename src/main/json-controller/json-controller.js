@@ -1,5 +1,5 @@
 class JsonController {
-    fetchAllData() {
+    fetchSampleData() {
         return {"name" : "Nuez Technologies"};
     }
 }

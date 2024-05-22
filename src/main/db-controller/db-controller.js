@@ -1,8 +1,8 @@
 const jsonController = require("../json-controller/json-controller");
 
 class DbController {
-    fetchAllDataFromJsonDb() {
-        let data = jsonController.fetchAllData();
+    fetchSampleDataFromServer() {
+        let data = jsonController.fetchSampleData();
         console.log(data);
         return data;
     }
