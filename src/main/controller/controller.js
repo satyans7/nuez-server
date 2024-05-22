@@ -42,6 +42,16 @@ class Controller {
       console.log(data);
       return data;
     }
+    requestPromoteUser() {
+      let data =  dbController.fetchSampleDataFromServer();
+      console.log(data);
+      return data;
+    }
+    requestDemoteUser() {
+      let data =  dbController.fetchSampleDataFromServer();
+      console.log(data);
+      return data;
+    }
 
   }
 module.exports = new Controller();
