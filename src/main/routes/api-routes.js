@@ -69,8 +69,8 @@ module.exports = function (app) {
 
 
   app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, (req, res) => {
-    const data = controller.requestRoleChange(req,res);
-    console.log(data);
+    const data = controller.requestRoleChange(req);
+    // console.log(data);
     // res.send(data);
   });
   

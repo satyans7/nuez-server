@@ -10,8 +10,8 @@ class DbController {
     return jsonController.postUserDataToServer(user);
     
   }
-  postUserRequestToServer(user){
-    jsonController.postUserRequestToServer(user);
+  postUserRequestToServer(user,reqRole){
+    jsonController.postUserRequestToServer(user,reqRole);
   }
   fetchAllUsers(){
     let data=jsonController.fetchAllUsers();
@@ -27,9 +27,14 @@ class DbController {
   fetchUserById(userId){
     let data=jsonController.fetchAllUsers();
     // console.log(data);
-    // console.log(userId);
+    console.log(userId);
     const user=data.find(user=> user._id === parseInt(userId));
     return user;
+  }
+
+  requestRoleChange(user,reqRole){
+    
+    jsonController.postUserRequestToServer(user,reqRole);
   }
 }
 module.exports = new DbController();

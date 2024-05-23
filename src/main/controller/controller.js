@@ -6,11 +6,14 @@ class Controller {
     console.log(data);
     return data;
   }
+
+
+
   async registerUser(req, res) {
     const newUser=await dbController.postUserDataToServer(req.body);
     console.log(newUser);
     if(req.body.role==='admin'){
-     await dbController.postUserRequestToServer(newUser);
+     await dbController.postUserRequestToServer(newUser,req.body.role);
     }
     
   }
@@ -44,10 +47,15 @@ class Controller {
     console.log(data);
     return data;
   }
-  requestRoleChange() {
-    let data = dbController.fetchSampleDataFromServer();
-    console.log(data);
-    return data;
+  requestRoleChange(req) {
+    let userId=req.body._id;
+    console.log(userId);
+    const user=dbController.fetchUserById(userId);
+    console.log(user);
+    const reqRole=req.reqRole;;
+    dbController.requestRoleChange(user,reqRole)
+    // console.log(data);
+    // return data;
   }
   
 }

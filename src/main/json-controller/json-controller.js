@@ -28,23 +28,27 @@ class JsonController {
       throw new Error('Failed to post user data: ' + error.message);
     }
   };
-  postUserRequestToServer =  (user) => {
+  postUserRequestToServer =  (user,reqRole) => {
     try {
       const data =  this.readDatabase(REQ_DATA);
-  
+      const currRole=user.role;
+      // const reqRole=(user.role==="consumer")?"admin":"consumers"
       const newReq = {
         _id: user._id,
         name: user.name,
-        'current-role': "consumer",
-        'requested-role': "admin",
-        'request-status': "pending"
+        // 'current-role': "consumer",
+        // 'requested-role': "admin",
+        // 'request-status': "pending"
+        "current-role":currRole,
+        "requested-role":reqRole,
+        "request-status": "pending"
       };
       data.push(newReq);
       
        this.writeDatabase(REQ_DATA,data);
   
       // return newUser;
-      console.log(`${newUser.name} successfully added request`);
+      console.log(`${newReq.name} successfully added request`);
     } catch (error) {
       throw new Error('Failed to post user request: ' + error.message);
     }
