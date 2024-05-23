@@ -1,4 +1,3 @@
-//import * as client from "./client";
 import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests } from './client.js';
 
 const usersTab = document.getElementById('users-tab');
@@ -15,85 +14,120 @@ const allLists = document.getElementsByClassName('list');
 const usersTableBody = document.getElementById('users-table-body')
 const adminsTableBody = document.getElementById('admins-table-body')
 
+
+//function to hide all tables
+
 function hideAllLists() {
     for (let i = 0; i < allLists.length; i++) {
         allLists[i].style.display = 'none';
     }
 }
 
+// Default table on loading
+
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log("fetching users")
     hideAllLists();
     usersList.style.display = 'block';
-    //client.getAllUsers();
     let data = await getAllUsers();
-    //console.log(data);
     usersTableBody.innerHTML = '';
-    if (data && data.Users && data.Users.length > 0) {
-        data.Users.forEach(user => {
+    if (data && data.length > 0) {
+        data.forEach(user => {
             if (user.role === "consumer") {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
-                    <button onclick="promoteUser('${user.id}')">Promote</button>
+                    <button onclick="promoteUser('${user._id}')">Promote</button>
                 </td>
             `;
                 usersTableBody.appendChild(row);
             }
         });
+    } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td colspan="3">No users available</td>
+        `;
+        usersTableBody.appendChild(row);
     }
-    
+
 });
 
+// On clicking Users Tab
 
 usersTab.addEventListener('click', async () => {
+    console.log("fetching users")
     hideAllLists();
     usersList.style.display = 'block';
-    //client.getAllUsers();
     let data = await getAllUsers();
-    //console.log(data);
     usersTableBody.innerHTML = '';
-    if (data && data.Users && data.Users.length > 0) {
-        data.Users.forEach(user => {
-            if(user.role === "consumer"){
-            const row = document.createElement('tr');
-            row.innerHTML = `
+    if (data && data.length > 0) {
+        data.forEach(user => {
+            if (user.role === "consumer") {
+                const row = document.createElement('tr');
+                row.innerHTML = `
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
-                    <button onclick="promoteUser('${user.id}')">Promote</button>
+                    <button onclick="promoteUser('${user._id}')">Promote</button>
                 </td>
             `;
-            usersTableBody.appendChild(row);
+                usersTableBody.appendChild(row);
             }
         });
+    } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td colspan="3">No users available</td>
+        `;
+        usersTableBody.appendChild(row);
     }
 });
 
+
+function promoteUser(id){
+
+}
+
+
+// On clicking Admin Tab
+
 adminsTab.addEventListener('click', async () => {
+    console.log("fetching all admins")
     hideAllLists();
     adminList.style.display = 'block';
-    //client.getAllUsers();
     let data = await getAllUsers();
-    //console.log(data);
     adminsTableBody.innerHTML = '';
-    if (data && data.Users && data.Users.length > 0) {
-        data.Users.forEach(user => {
+    if (data && data.length > 0) {
+        data.forEach(user => {
             if (user.role === "admin") {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
-                    <button onclick="promoteUser('${user.id}')">Demote</button>
+                    <button onclick="demoteUser('${user._id}')">Demote</button>
                 </td>
             `;
                 adminsTableBody.appendChild(row);
             }
         });
+    } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td colspan="3">No Admin available</td>
+        `;
+        usersTableBody.appendChild(row);
     }
 });
+
+function demoteUser(id){
+
+}
+
+
 
 approvedTab.addEventListener('click', () => {
     hideAllLists();

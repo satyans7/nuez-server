@@ -10,7 +10,9 @@ import * as controller from "./controller.js";
 // Super Admin 
 
 export async function getAllUsers() {
-    return await controller.fetchAllUsersFromServer()
+    const data =  await controller.fetchAllUsersFromServer()
+    //console.log(data)
+    return data
 }
 
 export function getAllApprovedRequests() {

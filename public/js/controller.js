@@ -8,7 +8,7 @@ export async function fetchAllDataFromServer() {
 }
 
 export async function fetchAllUsersFromServer() {
-    const api = cep.getApiToFetchSampleDataFromServer();
+    const api = cep.getApiToFetchUserDetailsForAll();
     let res = await cep.getAllUsersDataFromServer(api);
     //console.log(res);
     return res;
