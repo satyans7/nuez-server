@@ -1,9 +1,7 @@
 const express = require("express");
-const { register } = require("module");
-const path = require("path");
-
 const app = express();
-// require("./src/main/routes/api-routes")(app);
+const path = require("path");
+const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC = "public";
@@ -19,12 +17,17 @@ const TEST = "test.html";
 const SAMPLE_DATA_VIEW = "src/main/views";
 const SAMPLE_DATA_PAGE = "data.html";
 const SAMPLE_DATA_FOLDER = "src/main/data/xml";
-
 // Serve static files (including CSS) from the public directory
 app.use(express.static(path.join(__dirname, PUBLIC)));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Parse URL-encoded bodies (usually for form data)
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Parse JSON bodies (usually for JSON data)
+app.use(bodyParser.json());
 
 // Define routes
 app.get("/", (req, res) => {
@@ -67,6 +70,7 @@ app.get("/test", (req, res) => {
 // });
 
 // Start the server
+require("./src/main/routes/api-routes")(app);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
