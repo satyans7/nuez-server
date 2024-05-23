@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link rel="stylesheet" href="/css/register.css">
+    </head>
 <body>
-    <h1>hello from register</h1>
+    <form id="regForm">
+        <label for="fname">Name</label>
+        <br />
+        <input type="text" id="fname" name="name">
+        <br />
+        <label for="email">Email_Id</label>
+        <br />
+        <input type="text" id="email" name="email">
+        <br />
+        <label for="password">Password</label>
+        <br />
+        <input type="password" id="password" name="password">
+        <br />
+        <label for="admin">Admin</label>
+        <input type="radio" id="admin" name="role" value="admin">
+        <label for="consumer">Consumer</label>
+        <input type="radio" id="consumer" name="role" value="consumer">
+        <br />
+        <button type="submit">Submit</button>
+    </form>
+    <script type="module" src="/pages/register.js"></script>
 </body>
 </html>
