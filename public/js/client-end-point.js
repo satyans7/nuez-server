@@ -55,3 +55,17 @@ export async function getDataFromServer(apiEndPoint) {
         return null;
       });
 }
+
+export async function getAllUsersDataFromServer(api){
+  try {
+    const response = await fetch(api);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }  
+}
