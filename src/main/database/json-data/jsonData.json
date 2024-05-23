@@ -13,6 +13,34 @@
       "email": "bob.smith@example.com",
       "password": "password123",
       "role": "consumer"
+    },
+    {
+      "_id": 3,
+      "name": "hello",
+      "email": "priyansu.iitism@gmail.com",
+      "password": "hehekkd",
+      "role": "consumer"
+    },
+    {
+      "_id": 4,
+      "name": "hellonikhil",
+      "email": "priyansu.iitism@gmail.com",
+      "password": "hehekkd",
+      "role": "consumer"
+    },
+    {
+      "_id": 5,
+      "name": "pankaj",
+      "email": "pankaj123@gmail.com",
+      "password": "password123",
+      "role": "admin"
+    },
+    {
+      "_id": 6,
+      "name": "pankaj",
+      "email": "pankaj123@gmail.com",
+      "password": "password123",
+      "role": "admin"
     }
   ]
 }

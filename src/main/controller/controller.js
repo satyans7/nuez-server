@@ -7,12 +7,8 @@ class Controller {
     return data;
   }
   registerUser(req, res) {
-    dbController.postUserDataToServer(req.body, (err, newUser) => {
-      if (err) {
-        return res.status(500).send({ error: "Failed to write data" });
-      }
-      res.status(201).send(newUser);
-    });
+    dbController.postUserDataToServer(req.body);
+    
   }
   authenticateUser() {
     let data = dbController.fetchSampleDataFromServer();
@@ -25,13 +21,18 @@ class Controller {
     return data;
   }
   fetchAllUsers() {
-    let data = dbController.fetchSampleDataFromServer();
-    console.log(data);
-    return data;
+    let data = dbController.fetchAllUsers();
+      // console.log(data);
+      return data;
   }
-  fetchUserById() {
-    let data = dbController.fetchSampleDataFromServer();
-    console.log(data);
+  fetchRoleChangeReq() {
+    let data = dbController.fetchRoleChangeReq();
+      // console.log(data);
+      return data;
+  }
+  fetchUserById(userId) {
+    let data = dbController.fetchUserById(userId);
+    // console.log(data);
     return data;
   }
   promoteUser() {

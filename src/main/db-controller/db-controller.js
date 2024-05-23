@@ -6,8 +6,27 @@ class DbController {
     console.log(data);
     return data;
   }
-  postUserDataToServer(user, callback) {
-    jsonController.postUserDataToServer(user,callback);
+  postUserDataToServer(user) {
+    jsonController.postUserDataToServer(user);
+    
+  }
+  fetchAllUsers(){
+    let data=jsonController.fetchAllUsers();
+    // console.log(data);
+    return(data);
+  }
+  fetchRoleChangeReq(){
+    let data=jsonController.fetchRoleChangeReq();
+    // console.log(data);
+    return(data);
+  }
+
+  fetchUserById(userId){
+    let data=jsonController.fetchAllUsers();
+    // console.log(data);
+    // console.log(userId);
+    const user=data.find(user=> user._id === parseInt(userId));
+    return user;
   }
 }
 module.exports = new DbController();
