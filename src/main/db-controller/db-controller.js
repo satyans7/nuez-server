@@ -12,8 +12,16 @@ class DbController {
     return(data);
 }
   postUserDataToServer(user) {
-    let data =jsonController.postUserDataToServer(user);
+    jsonController.postUserDataToServer(user);
     
+  }
+
+  fetchUserById(userId){
+    let data=jsonController.fetchAllUsers();
+    // console.log(data);
+    // console.log(userId);
+    const user=data.find(user=> user._id === parseInt(userId));
+    return user;
   }
 }
 module.exports = new DbController();

@@ -33,13 +33,13 @@ module.exports = function (app) {
   });
   app.get(AEP_TO_FETCH_ALL_USERS, (req, res) => {
     const data = controller.fetchAllUsers();
-    console.log(data);
-    res.send(data);
+    // console.log(data);
+    res.json(data);
   });
   app.get(AEP_TO_FETCH_USER_BY_ID, (req, res) => {
-    const data = controller.fetchUserById();
-    console.log(data);
-    res.send(data);
+    const data = controller.fetchUserById(req.params.id);
+    // console.log(req.params.id);
+    res.json(data);
   });
   app.patch(AEP_TO_PROMOTE_A_USER, (req, res) => {
     const data = controller.promoteUser();

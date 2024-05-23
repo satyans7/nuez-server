@@ -22,12 +22,12 @@ class Controller {
   }
   fetchAllUsers() {
     let data = dbController.fetchAllUsers();
-      console.log(data);
+      // console.log(data);
       return data;
   }
-  fetchUserById() {
-    let data = dbController.fetchSampleDataFromServer();
-    console.log(data);
+  fetchUserById(userId) {
+    let data = dbController.fetchUserById(userId);
+    // console.log(data);
     return data;
   }
   promoteUser() {
