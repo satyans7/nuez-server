@@ -1,7 +1,9 @@
-const express = require("express");
+import express from 'express';
+import path from 'path';
+import bodyParser from 'body-parser';
+
 const app = express();
-const path = require("path");
-const bodyParser = require('body-parser');
+const __dirname = path.resolve();
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC = "public";
@@ -70,7 +72,9 @@ app.get("/test", (req, res) => {
 // });
 
 // Start the server
-require("./src/main/routes/api-routes")(app);
+import apiRoutes from './src/main/routes/api-routes.js';
+apiRoutes(app);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
