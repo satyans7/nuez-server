@@ -1,7 +1,9 @@
-{
-  "_id":1,
-  "name": "Alice Johnson",
-  "current-role": "consumer",
-  "requested-role" : "admin",
-  "request-status":"pending"
-}
+[
+  {
+    "_id": 1,
+    "name": "Alice Johnson",
+    "current-role": "consumer",
+    "requested-role": "admin",
+    "request-status": "pending"
+  }
+]

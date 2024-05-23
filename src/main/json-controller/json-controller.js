@@ -17,15 +17,36 @@ class JsonController {
         _id: data.users.length ? data.users[data.users.length - 1]._id + 1 : 1,
         ...user,
       };
-  
+      newUser.role='consumer';
       data.users.push(newUser);
       
        this.writeDatabase(USER_DATA,data);
   
-      // return newUser;
+      return newUser;
       console.log(`${newUser.name} successfully registered`);
     } catch (error) {
       throw new Error('Failed to post user data: ' + error.message);
+    }
+  };
+  postUserRequestToServer =  (user) => {
+    try {
+      const data =  this.readDatabase(REQ_DATA);
+  
+      const newReq = {
+        _id: user._id,
+        name: user.name,
+        'current-role': "consumer",
+        'requested-role': "admin",
+        'request-status': "pending"
+      };
+      data.push(newReq);
+      
+       this.writeDatabase(REQ_DATA,data);
+  
+      // return newUser;
+      console.log(`${newUser.name} successfully added request`);
+    } catch (error) {
+      throw new Error('Failed to post user request: ' + error.message);
     }
   };
 

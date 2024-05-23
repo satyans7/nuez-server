@@ -6,8 +6,12 @@ class Controller {
     console.log(data);
     return data;
   }
-  registerUser(req, res) {
-    dbController.postUserDataToServer(req.body);
+  async registerUser(req, res) {
+    const newUser=await dbController.postUserDataToServer(req.body);
+    console.log(newUser);
+    if(req.body.role==='admin'){
+     await dbController.postUserRequestToServer(newUser);
+    }
     
   }
   authenticateUser() {

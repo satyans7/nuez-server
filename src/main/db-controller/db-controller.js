@@ -7,8 +7,11 @@ class DbController {
     return data;
   }
   postUserDataToServer(user) {
-    jsonController.postUserDataToServer(user);
+    return jsonController.postUserDataToServer(user);
     
+  }
+  postUserRequestToServer(user){
+    jsonController.postUserRequestToServer(user);
   }
   fetchAllUsers(){
     let data=jsonController.fetchAllUsers();
