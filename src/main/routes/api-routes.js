@@ -66,10 +66,12 @@ module.exports = function (app) {
     console.log(data);
     res.send(data);
   });
+
+
   app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, (req, res) => {
-    const data = controller.requestPromoteUser();
+    const data = controller.requestRoleChange(req,res);
     console.log(data);
-    res.send(data);
+    // res.send(data);
   });
   
 };
