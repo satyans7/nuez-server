@@ -6,14 +6,19 @@ class DbController {
     console.log(data);
     return data;
   }
-  fetchAllUsers(){
-    let data=jsonController.fetchAllUsers();
-    console.log(data);
-    return(data);
-}
   postUserDataToServer(user) {
     jsonController.postUserDataToServer(user);
     
+  }
+  fetchAllUsers(){
+    let data=jsonController.fetchAllUsers();
+    // console.log(data);
+    return(data);
+  }
+  fetchRoleChangeReq(){
+    let data=jsonController.fetchRoleChangeReq();
+    // console.log(data);
+    return(data);
   }
 
   fetchUserById(userId){

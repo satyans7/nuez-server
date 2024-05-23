@@ -3,15 +3,16 @@ export function getApiToFetchSampleDataFromServer() {
   return AEP_SAMPLE;
 }
 
-const AEP_TO_REGISTER_A_USER = "/api/user/register";
-const AEP_TO_AUTHENTICATE_A_USER = "/api/user/authenticate";
-const AEP_TO_UPDATE_PROFILE_OF_A_USER = "/api/user/profile/:id";
-const AEP_TO_FETCH_ALL_USERS = "/api/user";
-const AEP_TO_FETCH_USER_BY_ID = "/api/user/:id";
-const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
-const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
-const AEP_TO_REQUEST_PROMOTE_A_USER = "/api/user/request/promote/:id";
-const AEP_TO_REQUEST_DEMOTE_A_USER = "/api/user/request/demote/:id";
+  const AEP_TO_REGISTER_A_USER = "/api/user/register";
+  const AEP_TO_AUTHENTICATE_A_USER = "/api/user/authenticate";
+  const AEP_TO_UPDATE_PROFILE_OF_A_USER = "/api/user/profile/:id";
+  const AEP_TO_FETCH_ALL_USERS = "/api/user";
+  const AEP_TO_FETCH_USER_BY_ID = "/api/user/:id";
+  const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
+  const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
+  const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
+  const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
+
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
@@ -34,11 +35,12 @@ export function getApiToPromoteUser() {
 export function getApiToDemoteUser() {
   return AEP_TO_DEMOTE_A_USER;
 }
-export function getApiToRequestPromoteUser() {
-  return AEP_TO_REQUEST_PROMOTE_A_USER;
+
+export function getApiToRequestRoleChange() {
+  return AEP_TO_REQUEST_FOR_ROLE_CHANGE
 }
-export function getApiToRequestDemoteUser() {
-  return AEP_TO_REQUEST_DEMOTE_A_USER;
+export function getApiToRoleChangeRequest() {
+  return AEP_TO_FETCH_ROLE_CHANGE_REQ ;
 }
 
 export async function getDataFromServer(apiEndPoint) {

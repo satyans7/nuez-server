@@ -27,6 +27,20 @@
       "email": "priyansu.iitism@gmail.com",
       "password": "hehekkd",
       "role": "consumer"
+    },
+    {
+      "_id": 5,
+      "name": "pankaj",
+      "email": "pankaj123@gmail.com",
+      "password": "password123",
+      "role": "admin"
+    },
+    {
+      "_id": 6,
+      "name": "pankaj",
+      "email": "pankaj123@gmail.com",
+      "password": "password123",
+      "role": "admin"
     }
   ]
 }

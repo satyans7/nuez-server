@@ -25,6 +25,11 @@ class Controller {
       // console.log(data);
       return data;
   }
+  fetchRoleChangeReq() {
+    let data = dbController.fetchRoleChangeReq();
+      // console.log(data);
+      return data;
+  }
   fetchUserById(userId) {
     let data = dbController.fetchUserById(userId);
     // console.log(data);

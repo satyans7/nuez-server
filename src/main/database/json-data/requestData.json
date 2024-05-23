@@ -1,3 +1,6 @@
 {
-  
+  "_id":1,
+  "current-role": "consumer",
+  "requested-role" : "admin",
+  "request-status":"pending"
 }

@@ -15,32 +15,47 @@ module.exports = function (app) {
   const AEP_TO_FETCH_USER_BY_ID = "/api/user/:id";
   const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
   const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
-  const AEP_TO_REQUEST_PROMOTE_A_USER = "/api/user/request/promote/:id";
-  const AEP_TO_REQUEST_DEMOTE_A_USER = "/api/user/request/demote/:id";
+  const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
+  const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
+  
 
   app.post(AEP_TO_REGISTER_A_USER,(req, res) => {
     controller.registerUser(req, res); 
-});
-  app.post(AEP_TO_AUTHENTICATE_A_USER, (req, res) => {
-    const data = controller.authenticateUser();
-    console.log(data);
-    res.send(data);
-  });
-  app.put(AEP_TO_UPDATE_PROFILE_OF_A_USER, (req, res) => {
-    const data = controller.updateProfileOfUser();
-    console.log(data);
-    res.send(data);
   });
   app.get(AEP_TO_FETCH_ALL_USERS, (req, res) => {
     const data = controller.fetchAllUsers();
     // console.log(data);
     res.json(data);
   });
+  app.get(AEP_TO_FETCH_ROLE_CHANGE_REQ , (req, res) => {
+    const data = controller.fetchRoleChangeReq();
+    // console.log(data);
+    res.json(data);
+  });
+  
   app.get(AEP_TO_FETCH_USER_BY_ID, (req, res) => {
     const data = controller.fetchUserById(req.params.id);
     // console.log(req.params.id);
     res.json(data);
   });
+  
+
+
+
+  app.post(AEP_TO_AUTHENTICATE_A_USER, (req, res) => {
+    const data = controller.authenticateUser();
+    console.log(data);
+    res.send(data);
+  });
+
+
+  app.put(AEP_TO_UPDATE_PROFILE_OF_A_USER, (req, res) => {
+    const data = controller.updateProfileOfUser();
+    console.log(data);
+    res.send(data);
+  });
+
+
   app.patch(AEP_TO_PROMOTE_A_USER, (req, res) => {
     const data = controller.promoteUser();
     console.log(data);
@@ -51,14 +66,10 @@ module.exports = function (app) {
     console.log(data);
     res.send(data);
   });
-  app.patch(AEP_TO_REQUEST_PROMOTE_A_USER, (req, res) => {
+  app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, (req, res) => {
     const data = controller.requestPromoteUser();
     console.log(data);
     res.send(data);
   });
-  app.patch(AEP_TO_REQUEST_DEMOTE_A_USER, (req, res) => {
-    const data = controller.requestDemoteUser();
-    console.log(data);
-    res.send(data);
-  });
+  
 };
