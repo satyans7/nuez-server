@@ -6,3 +6,11 @@ export async function fetchAllDataFromServer() {
     console.log(res);
 
 }
+
+export async function fetchAllUsersFromServer() {
+    const api = cep.getApiToFetchUserDetailsForAll();
+    let res = await cep.getAllUsersDataFromServer(api);
+    //console.log(res);
+    return res;
+}
+
