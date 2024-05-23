@@ -7,56 +7,68 @@ class JsonController {
     return { name: "Nuez Technologies" };
   }
 
-  readData(callback) {
-    fs.readFile(DATA_FILE, "utf8", (err, data) => {
-      if (err) {
-        callback(err);
-      } else {
-        try {
-          const parsedData = JSON.parse(data);
-          callback(null, parsedData);
-        } catch (parseErr) {
-          callback(parseErr);
-        }
-      }
-    });
-  }
+  // readData(callback) {
+  //   fs.readFile(DATA_FILE, "utf8", (err, data) => {
+  //     if (err) {
+  //       callback(err);
+  //     } else {
+  //       try {
+  //         const parsedData = JSON.parse(data);
+  //         callback(null, parsedData);
+  //       } catch (parseErr) {
+  //         callback(parseErr);
+  //       }
+  //     }
+  //   });
+  // }
 
-  writeData(data, callback) {
-    fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf8", (err) => {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null);
-      }
-    });
-  }
+  // writeData(data, callback) {
+  //   fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf8", (err) => {
+  //     if (err) {
+  //       callback(err);
+  //     } else {
+  //       callback(null);
+  //     }
+  //   });
+  // }
 
-  postUserDataToServer(user, callback) {
-    this.readData((err, data) => {
-      if (err) {
-        return callback(err);
-      }
+  postUserDataToServer =  (user) => {
+    try {
+      const data =  this.readDatabase();
+  
+      const newUser = {
+        _id: data.users.length ? data.users[data.users.length - 1]._id + 1 : 1,
+        ...user,
+      };
+  
+      data.users.push(newUser);
+      
+       this.writeDatabase(data);
+  
+      // return newUser;
+      console.log(`${newUser.name} successfully registered`);
+    } catch (error) {
+      throw new Error('Failed to post user data: ' + error.message);
+    }
+  };
 
-      try {
-        const newUser = {
-          _id: data.users.length ? data.users[data.users.length - 1]._id + 1 : 1,
-          ...user,
-        };
-        
-        data.users.push(newUser);
+  readDatabase ()  {
+    try {
+      const data = fs.readFileSync(DATA_FILE, 'utf8');
+      return JSON.parse(data);
+    } catch (error) {
+      throw new Error('Unable to read database: ' + error.message);
+    }
+  };
 
-        this.writeData(data, (writeErr) => {
-          if (writeErr) {
-            return callback(writeErr);
-          }
-          callback(null, newUser);
-        });
-      } catch (err) {
-        callback(err);
-      }
-    });
-  }
+  writeDatabase (data){
+    try {
+      const jsonData = JSON.stringify(data, null, 2); 
+      fs.writeFileSync(DATA_FILE, jsonData, 'utf8');
+    } catch (error) {
+      throw new Error('Unable to write to the database: ' + error.message);
+    }
+  };
   fetchAllUsers(){
     const db=this.readDatabase();
     return db.users;

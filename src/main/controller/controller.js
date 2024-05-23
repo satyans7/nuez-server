@@ -7,12 +7,8 @@ class Controller {
     return data;
   }
   registerUser(req, res) {
-    dbController.postUserDataToServer(req.body, (err, newUser) => {
-      if (err) {
-        return res.status(500).send({ error: "Failed to write data" });
-      }
-      res.status(201).send(newUser);
-    });
+    dbController.postUserDataToServer(req.body);
+    
   }
   authenticateUser() {
     let data = dbController.fetchSampleDataFromServer();
@@ -25,7 +21,7 @@ class Controller {
     return data;
   }
   fetchAllUsers() {
-    let data =  dbController.fetchAllUsers();
+    let data = dbController.fetchAllUsers();
       console.log(data);
       return data;
   }

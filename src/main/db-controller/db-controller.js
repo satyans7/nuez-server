@@ -11,8 +11,9 @@ class DbController {
     console.log(data);
     return(data);
 }
-  postUserDataToServer(user, callback) {
-    jsonController.postUserDataToServer(user,callback);
+  postUserDataToServer(user) {
+    let data =jsonController.postUserDataToServer(user);
+    
   }
 }
 module.exports = new DbController();

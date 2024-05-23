@@ -13,6 +13,14 @@
       "email": "bob.smith@example.com",
       "password": "password123",
       "role": "consumer"
+    },
+    {
+      "_id": 3,
+      "name": "hello",
+      "email": "priyansu.iitism@gmail.com",
+      "password": "hehekkd",
+      "role": "consumer"
     }
+    
   ]
 }
