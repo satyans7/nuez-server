@@ -18,7 +18,7 @@ export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
 export function getApiToAuthenticateUser() {
-  return AEP_TO_AUTHENTICATE_A_USER;
+  return AEP_TO_AUTHENTICATE_A_USER;  
 }
 export function getApiToUpdateProfileOfUser() {
   return AEP_TO_UPDATE_PROFILE_OF_A_USER;
