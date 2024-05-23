@@ -1,8 +1,7 @@
 const express = require("express");
-const path = require("path");
-
 const app = express();
-const bodyParser =require("body-parser");
+const path = require("path");
+const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC = "public";
@@ -72,7 +71,6 @@ app.get("/test", (req, res) => {
 
 // Start the server
 require("./src/main/routes/api-routes")(app);
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

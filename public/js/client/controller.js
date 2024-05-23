@@ -7,9 +7,11 @@ export async function fetchAllDataFromServer() {
 
 }
 
-export async function postUserDataToServer(formData){
+export function postUserDataToServer(formData){
     const api = cep.getApiToRegisterUser();
-    await cep.fetchPost(api,formData);
+    cep.fetchPost(api,formData);
+
+
 }
 export async function fetchAllUsersFromServer() {
     const api = cep.getApiToFetchUserDetailsForAll();
