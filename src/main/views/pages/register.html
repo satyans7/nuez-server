@@ -7,12 +7,13 @@
         <link rel="stylesheet" href="/css/register.css">
     </head>
 <body>
+    <div class="container">
     <form id="regForm">
-        <label for="fname">Name</label>
+        <!-- <label for="fname">Name</label>
         <br />
         <input type="text" id="fname" name="name">
-        <br />
-        <label for="email">Email_Id</label>
+        <br /> -->
+        <!-- <label for="email">Email_Id</label>
         <br />
         <input type="text" id="email" name="email">
         <br />
@@ -25,8 +26,37 @@
         <label for="consumer">Consumer</label>
         <input type="radio" id="consumer" name="role" value="consumer">
         <br />
+        <button type="submit">Submit</button> -->
+        <div>
+            <label for="fname">Full Name <span class="asterisk" aria-hidden="true">*</span></label>
+            <br>
+            <input type="text" id="fname" name="name" required>
+        </div>
+
+        <div>
+            <label for="email">Email Address <span class="asterisk" aria-hidden="true">*</span></label>
+            <br>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Password <span class="asterisk" aria-hidden="true">*</span></label>
+            <br>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <fieldset>
+            <legend class="role">Role <span class="asterisk" aria-hidden="true">*</span></legend>
+            <div>
+                <input type="radio" class="radio" id="admin" name="role" value="true">
+                <label for="admin">Admin</label>
+            </div>
+            <div>
+                <input type="radio" class="radio" id="consumer" name="role" value="false">
+                <label for="consumer">Consumer</label>
+            </div>
+        </fieldset>
         <button type="submit">Submit</button>
     </form>
+    </div>
     <script type="module" src="/pages/register.js"></script>
 </body>
 </html>
