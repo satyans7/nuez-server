@@ -41,6 +41,13 @@
       "email": "pankaj123@gmail.com",
       "password": "password123",
       "role": "admin"
+    },
+    {
+      "_id": 7,
+      "name": "pankaj",
+      "email": "pankaj123@gmail.com",
+      "password": "password123",
+      "role": "admin"
     }
   ]
 }
