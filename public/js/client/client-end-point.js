@@ -58,6 +58,22 @@ export async function getDataFromServer(apiEndPoint) {
       });
 }
 
+export async function fetchPost(AEP_TO_REGISTER_A_USER,formData){
+  return await (fetch(AEP_TO_REGISTER_A_USER, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+    
+}).then(response => response.json())
+.then(data => {
+    console.log('Success:', data);
+})
+.catch((error) => {
+    console.error('Error:', error);
+}))}
+
 export async function getAllUsersDataFromServer(api){
   try {
     const response = await fetch(api);
