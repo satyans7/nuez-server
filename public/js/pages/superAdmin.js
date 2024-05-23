@@ -1,4 +1,4 @@
-import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests } from './client.js';
+import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
 const adminsTab = document.getElementById('admins-tab');
