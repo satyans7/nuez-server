@@ -1,0 +1,75 @@
+/* Ensure the form container takes the full height of the screen */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Style the form container */
+form {
+    width: 400px; 
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 255, 0.3); 
+}
+
+/* Style form labels */
+
+label {
+    
+    margin-bottom: 8px; 
+    font-weight: bold;
+} 
+
+
+
+
+
+
+
+
+
+/* Style form inputs */
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 12px; /* Adjust margin-bottom to match label */
+    margin-top:4px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+/* Style the submit button */
+/* Style the submit button */
+button[type="submit"] {
+    width: 80%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px; /* Added margin for better spacing */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* Change background color on hover */
+button[type="submit"]:hover {
+    background-color: #45a049; /* Blue color on hover */
+}
+
+/* Change background color when clicked */
+button[type="submit"]:active {
+    background-color: #45a049; /* Green color when clicked */
+}
