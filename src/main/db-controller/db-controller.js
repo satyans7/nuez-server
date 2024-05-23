@@ -6,6 +6,11 @@ class DbController {
     console.log(data);
     return data;
   }
+  fetchAllUsers(){
+    let data=jsonController.fetchAllUsers();
+    console.log(data);
+    return(data);
+}
   postUserDataToServer(user, callback) {
     jsonController.postUserDataToServer(user,callback);
   }

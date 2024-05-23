@@ -25,9 +25,9 @@ class Controller {
     return data;
   }
   fetchAllUsers() {
-    let data = dbController.fetchSampleDataFromServer();
-    console.log(data);
-    return data;
+    let data =  dbController.fetchAllUsers();
+      console.log(data);
+      return data;
   }
   fetchUserById() {
     let data = dbController.fetchSampleDataFromServer();

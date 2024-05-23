@@ -57,6 +57,10 @@ class JsonController {
       }
     });
   }
+  fetchAllUsers(){
+    const db=this.readDatabase();
+    return db.users;
+}
 }
 
 module.exports = new JsonController();

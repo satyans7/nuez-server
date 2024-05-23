@@ -1,9 +1,12 @@
-/api/all ---> all data from the server   --> GET request from server 
-/api/all ---> add data to the server   --> POST request from server 
 
-/api/consumer  -----> all consumer from the server    --> GET request for consumer data
-/api/admin -----> all admin from the server         --> GET request for consumer data
 
-/api/admin/request/:id      ----> request to be admin  --->PUT request
-/api/consumer/promote/:id   -----> promote to admin    ----> PUT request
-/api/admin/demote/:id   -----> demote to consumer    ----> PUT request
+
+    const AEP_TO_REGISTER_A_USER = "/api/user/register";
+    const AEP_TO_AUTHENTICATE_A_USER = "/api/user/authenticate";
+    const AEP_TO_UPDATE_PROFILE_OF_A_USER = "/api/user/profile/:id";
+    const AEP_TO_FETCH_ALL_USERS = "/api/user";
+    const AEP_TO_FETCH_USER_BY_ID = "/api/user/:id";
+    const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
+    const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
+    const AEP_TO_REQUEST_PROMOTE_A_USER = "/api/user/request/promote/:id";
+    const AEP_TO_REQUEST_DEMOTE_A_USER = "/api/user/request/demote/:id";
