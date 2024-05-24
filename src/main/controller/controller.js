@@ -8,14 +8,36 @@ class Controller {
   }
 
 
-
-  async registerUser(req, res) {
-    const newUser=await dbController.postUserDataToServer(req.body);
-    console.log(newUser);
-    if(req.body.role==='admin'){
-     await dbController.postUserRequestToServer(newUser,req.body.role);
+  registerUser(req, res) {
+    try {
+      const email = req.body.email;
+  
+      // Validate email uniqueness
+      const isUnique = this.validateUniquenessOfUserName(email);
+  
+      if (isUnique) {
+        return res.status(400).json({ success: false, message: 'Username already exists' });
+      } else {
+        // Register the new user
+        const newUser = dbController.postUserDataToServer(req.body);
+        console.log('New user registered:', newUser);
+  
+        // Additional handling for admin role
+        if (req.body.role === 'admin') {
+          dbController.postUserRequestToServer(newUser, req.body.role);
+        }
+  
+        return res.status(201).json({ success: true, message: 'Successfully registered' });
+      }
+    } catch (error) {
+      console.error('Error in registerUser:', error.message);
+      return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-    
+  }
+  
+  validateUniquenessOfUserName(username){
+    const user=dbController.findUserByEmail(username);
+    return user !== undefined; 
   }
   authenticateUser(formData) {
     try{

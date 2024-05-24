@@ -66,7 +66,7 @@ export async function fetchPost(url, data) {
     body: JSON.stringify(data),
   });
   console.log(response)
-  return response;
+  return response.json();
 }
 
 

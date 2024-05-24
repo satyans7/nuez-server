@@ -7,8 +7,7 @@ import * as controller from "./controller.js";
 
 
 export function postUserDataToServer(formData) {
-    console.log("fetched")
-    controller.postUserRegisterDataToServer(formData);
+    return controller.postUserRegisterDataToServer(formData);
     
 }
 

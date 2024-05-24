@@ -25,7 +25,7 @@ module.exports = function (app) {
     const PRIVATE_AEP_TO_CONSUMERROUTE="/api/consumer-dashboard"
 
   app.post(AEP_TO_REGISTER_A_USER,(req, res) => {
-    controller.registerUser(req, res); 
+    return controller.registerUser(req, res); 
   });
   app.get(AEP_TO_FETCH_ALL_USERS, (req, res) => {
     const data = controller.fetchAllUsers();
