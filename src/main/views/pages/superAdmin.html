@@ -5,55 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Admin</title>
-    <style>
-        .super-admin-panel {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-
-        }
-
-        .super-admin-tabs {
-            margin-bottom: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .super-admin-tabs button {
-
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        .list {
-            display: none;
-        }
-
-        #user-list {
-            display: block;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-
-        button {
-            padding: 5px 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/superAdmin.css">
 </head>
 
 <body>
     <div class="super-admin-panel">
         <div class="super-admin-heading">
             <h1>Welcome, NUEZ Technologies.</h1>
+            <hr>
         </div>
         <div class="super-admin-tabs">
             <button id="users-tab">All Consumers</button>
@@ -62,80 +21,91 @@
             <button id="rejected-tab">Rejected Requests</button>
             <button id="pending-tab">Pending Requests</button>
         </div>
+        <hr>
         <div id="super-admin-content">
             <div id="user-list" class="list">
                 <h2>All Consumers</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="users-table-body"></tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
             </div>
             <div id="admin-list" class="list">
                 <h2>All Admins</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admins-table-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admins-table-body">
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div id="approved-list" class="list">
                 <h2>Approved Requests</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>TimeStamp</th>
-                        </tr>
-                    </thead>
-                    <tbody id="approved-table-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>TimeStamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approved-table-body">
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div id="rejected-list" class="list">
                 <h2>Rejected Requests</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rejected-table-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rejected-table-body">
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div id="pending-list" class="list">
                 <h2>Pending Requests</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Current Role</th>
-                            <th>Requested Role</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pending-table-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Current Role</th>
+                                <th>Requested Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pending-table-body">
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
