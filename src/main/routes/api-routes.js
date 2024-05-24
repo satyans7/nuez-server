@@ -86,18 +86,18 @@ app.post(AEP_TO_AUTHENTICATE_A_USER, (req, res) => {
     const data = controller.deleteUserById(req.params.id)
     res.json(data);
     // res.send(data);
+
   });
-};
 
-
-
-////////////PROTECTED ROUTES//////////////////
+  ////////////PROTECTED ROUTES//////////////////
 app.get(PRIVATE_AEP_TO_ADMINROUTE,(req,res)=>{
     res.sendFile(ADMINPAGE);
     })
     app.get(PRIVATE_AEP_TO_CONSUMERROUTE,(req,res)=>{
     res.sendFile(CONSUMERPAGE);
     })
+};
+
 
 
 
