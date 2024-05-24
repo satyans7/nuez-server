@@ -16,24 +16,10 @@
     },
     {
       "_id": 3,
-      "name": "pankaj",
-      "email": "pankaj123@gmail.com",
-      "password": "password123",
+      "name": "Nikhil Priyadarshan",
+      "email": "nikhilpriyadarshan1234@gmail.com",
+      "password": "12345678",
       "role": "consumer"
-    },
-    {
-      "_id": 4,
-      "name": "suraj",
-      "email": "pankaj123@gmail.com",
-      "password": "password123",
-      "role": "admin"
-    },
-    {
-      "_id": 5,
-      "name": "pankaj",
-      "email": "pankaj123@gmail.com",
-      "password": "password123",
-      "role": "admin"
     }
   ]
 }

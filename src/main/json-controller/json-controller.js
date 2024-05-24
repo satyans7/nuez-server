@@ -86,7 +86,9 @@ class JsonController {
     const userIndex=data.users.findIndex(it=> it._id===userId)
     const deletedUser=data.users.splice(userIndex,1)[0];
     this.writeDatabase(USER_DATA,data);
+    console.log(`${deletedUser.name} has been deleted successfully`)
     return deletedUser;
+    
   }
 
   // const db = readDatabase();

@@ -1,3 +1,4 @@
+const path = require('path')
 const controller = require("../controller/controller.js");
 
 module.exports = function (app) {
@@ -18,7 +19,10 @@ module.exports = function (app) {
   const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
   const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
   const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
-  
+  const ADMINPAGE=path.join(__dirname, '../views/pages', 'admin.html');
+    const CONSUMERPAGE=path.join(__dirname, '../views/pages', 'consumer.html');
+    const PRIVATE_AEP_TO_ADMINROUTE="/api/admin-dashboard"
+    const PRIVATE_AEP_TO_CONSUMERROUTE="/api/consumer-dashboard"
 
   app.post(AEP_TO_REGISTER_A_USER,(req, res) => {
     controller.registerUser(req, res); 
@@ -42,13 +46,15 @@ module.exports = function (app) {
   
 
 
-
-  app.post(AEP_TO_AUTHENTICATE_A_USER, (req, res) => {
-    const data = controller.authenticateUser();
-    console.log(data);
-    res.send(data);
-  });
-
+/////
+app.post(AEP_TO_AUTHENTICATE_A_USER, (req, res) => {
+    const data = controller.authenticateUser(req.body);
+    if(data.success){
+          return res.json(data);
+    }
+    else return res.status(401).json({ message: 'Invalid email or password' })
+});
+/////
 
   app.put(AEP_TO_UPDATE_PROFILE_OF_A_USER, (req, res) => {
     const data = controller.updateProfileOfUser();
@@ -78,7 +84,21 @@ module.exports = function (app) {
 
   app.delete(AEP_TO_DELETE_A_USER, (req, res) => {
     const data = controller.deleteUserById(req.params.id)
-    console.log(data);
+    res.json(data);
     // res.send(data);
+
   });
+
+  ////////////PROTECTED ROUTES//////////////////
+app.get(PRIVATE_AEP_TO_ADMINROUTE,(req,res)=>{
+    res.sendFile(ADMINPAGE);
+    })
+    app.get(PRIVATE_AEP_TO_CONSUMERROUTE,(req,res)=>{
+    res.sendFile(CONSUMERPAGE);
+    })
 };
+
+
+
+
+

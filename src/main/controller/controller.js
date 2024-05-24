@@ -1,5 +1,5 @@
 const dbController = require("../db-controller/db-controller");
-
+const authController = require("../auth-controller/auth-controller")
 class Controller {
   fetchSampleDataFromServer() {
     let data = dbController.fetchSampleDataFromServer();
@@ -17,11 +17,20 @@ class Controller {
     }
     
   }
-  authenticateUser() {
-    let data = dbController.fetchSampleDataFromServer();
-    console.log(data);
-    return data;
-  }
+  authenticateUser(formData) {
+    try{
+    let authResult =  authController.authenticateUser(formData);
+       if (authResult.success) {
+        let route = `/${authResult.role}-dashboard`
+         return {success:true,route:route,message:`Logged In Successful`}
+      } else {
+        return {success:false,route:"null",message:"Invalid username or password!!!"};
+      }
+    } 
+    catch (error) {
+      return {success:false,route:route,message:"Internal Server Error"};
+    }
+  };
   updateProfileOfUser() {
     let data = dbController.fetchSampleDataFromServer();
     console.log(data);
@@ -61,7 +70,7 @@ class Controller {
 
 
   deleteUserById(userId){
-    dbController.deleteUserById(userId);
+    return dbController.deleteUserById(userId);
   }
   
 }

@@ -39,7 +39,16 @@ class DbController {
 
   deleteUserById(userId){
     const data=jsonController.deleteUserById(parseInt(userId))
-    console.log(data);
+    // console.log(data);
+    return data;
   }
+
+
+  findUserByEmail(email){
+    const users = jsonController.fetchAllUsers();
+    const user = users.find(user => user.email === email);
+    return user;
+ }
 }
 module.exports = new DbController();
+
