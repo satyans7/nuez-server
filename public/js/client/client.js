@@ -21,6 +21,13 @@ export async function getAllUsers() {
     return data
 }
 
+
+export async function getAllPendingRequests() {
+    const data = await controller.fetchPendingRequestsFromServer()
+    //console.log(data)
+    return data
+}
+
 export function getAllApprovedRequests() {
     console.log('Fetching all approved requests');
 }
@@ -31,10 +38,7 @@ export function getAllRejectedRequests() {
 
 }
 
-export function getAllPendingRequests() {
-    console.log('Fetching all pending requests');
 
-}
 
 
 //login
