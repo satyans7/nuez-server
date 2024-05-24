@@ -38,3 +38,16 @@ export function postRequestToRoleChangeToServer(id, data) {
     cep.fetchPost(api, data);
     //console.log(id)
 }
+
+
+export function postapproveRoleChange(id,data) {
+    const api =cep.getApiToApproveRoleChange(id);
+    cep.fetchPost(api,data);
+    console.log(id);
+}
+
+export function postrejectRoleChange(id,data) {
+    const api =cep.getApiToRejectRoleChange(id);
+    cep.fetchPost(api,data);
+    //console.log(id);
+}

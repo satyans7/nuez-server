@@ -51,5 +51,12 @@ export function userLoginDetailsPost(userData){
 }
 
 
-
-  
+export function postapproveRoleChange(id,request) {
+    console.log(`posting the approval request ${id}`);
+    controller.postapproveRoleChange(id,request);
+}
+ 
+export function postrejectRoleChange(id,request) {
+    console.log(`posting the reject request ${id}`);
+    controller.postrejectRoleChange(id,request);
+}
