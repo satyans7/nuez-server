@@ -42,5 +42,13 @@ class DbController {
     // console.log(data);
     return data;
   }
+
+
+  findUserByEmail(email){
+    const users = jsonController.getAllUsers();
+    const user = users.find(user => user.email === email);
+    return user;
+ }
 }
 module.exports = new DbController();
+
