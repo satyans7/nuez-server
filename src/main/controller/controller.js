@@ -21,7 +21,7 @@ class Controller {
     try{
     let authResult =  authController.authenticateUser(formData);
        if (authResult.success) {
-        let route = `/${authResult.role}-dashboard`
+        let route = `/api/${authResult.role}-dashboard`
          return {success:true,route:route,message:`Logged In Successful`}
       } else {
         return {success:false,route:"null",message:"Invalid username or password!!!"};
