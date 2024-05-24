@@ -57,31 +57,18 @@ export async function getDataFromServer(apiEndPoint) {
     });
 }
 
-export async function fetchPost(AEP_TO_REGISTER_A_USER, data) {
-  return await fetch(AEP_TO_REGISTER_A_USER, {
+export async function fetchPost(url, data) {
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
-  })
-    .then(async (response) => {
-      console.log(response.json());
-      // const mockResponse = {
-      //   success: true,
-      //   route: '/admin',
-      //   message: 'success'
-      // };
-      //return await mockResponse;
-      return await response.json();
-    })
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  });
+  console.log(response)
+  return response;
 }
+
 
 export async function getAllUsersDataFromServer(api) {
   try {

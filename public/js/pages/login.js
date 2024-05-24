@@ -8,20 +8,27 @@ document.addEventListener('DOMContentLoaded',()=>
         event.preventDefault();
 
         const logData={
-            username: document.getElementById('username').value,
+            email: document.getElementById('username').value,
             password: document.getElementById('password').value
         };
         try {
-            const response=await client.userLoginDetailsPost(logData);
-            
-            alert(response.message);
-            if(response.success)
-            window.location.href = response.route;
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            // Show error message (optional)
-            alert(error);
-        }
+            const response = await client.userLoginDetailsPost(logData);
+            const jsonResponse = await response.json();
+      
+            if (jsonResponse.success) {
+              console.log(`Redirecting to ${jsonResponse.route}`);
+              // Show a success message
+              alert(jsonResponse.message);
+              // Redirect to the route specified in the response
+              window.location.href = jsonResponse.route;
+            } else {
+              alert(jsonResponse.message);
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+          }
+             
         form.reset();
 
     })
