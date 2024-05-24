@@ -52,7 +52,8 @@ class Controller {
     console.log(userId);
     const user=dbController.fetchUserById(userId);
     console.log(user);
-    const reqRole=req.reqRole;;
+    const reqRole=req.body.reqRole;
+    console.log(reqRole)
     dbController.requestRoleChange(user,reqRole)
     // console.log(data);
     // return data;

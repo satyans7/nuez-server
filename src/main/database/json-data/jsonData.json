@@ -33,14 +33,7 @@
       "name": "pankaj",
       "email": "pankaj123@gmail.com",
       "password": "password123",
-      "role": "consumer"
-    },
-    {
-      "_id": 6,
-      "name": "pankaj",
-      "email": "pankaj123@gmail.com",
-      "password": "password123",
-      "role": "consumer"
+      "role": "admin"
     }
   ]
 }
