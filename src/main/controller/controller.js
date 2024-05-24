@@ -28,7 +28,8 @@ class Controller {
       }
     } 
     catch (error) {
-      return {success:false,route:route,message:"Internal Server Error"};
+      
+      return {success:false,route:'null',message:"Internal Server Error"};
     }
   };
   updateProfileOfUser() {
