@@ -57,25 +57,29 @@ export async function getDataFromServer(apiEndPoint) {
     });
 }
 
-export async function fetchPost(AEP_TO_REGISTER_A_USER, formData) {
-  await fetch(AEP_TO_REGISTER_A_USER, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
+export async function fetchPost(AEP_TO_REGISTER_A_USER, data) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // Mock response
+      const mockResponse = {
+        success: true,
+        route: '/admin',
+        message: 'success'
+      };
+
+      // Simulate success response
+      resolve(mockResponse);
+    }, 1000); // Simulate a delay of 1 second
   })
-    .then(() => {
-      console.log(response.json());
-      (response) => response.json();
-    })
-    .then((data) => {
-      console.log("Success:", data);
+    .then((response) => {
+      console.log("Success:", response);
+      return response;
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 }
+
 
 export async function getAllUsersDataFromServer(api) {
   try {
