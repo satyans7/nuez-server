@@ -90,3 +90,19 @@ export async function getAllUsersDataFromServer(api) {
     return null;
   }
 }
+
+
+
+export async function getAllPendingRequestsFromServer(api) {
+  try {
+    const response = await fetch(api);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+}

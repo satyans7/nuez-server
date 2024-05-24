@@ -19,3 +19,10 @@ export async function fetchAllUsersFromServer() {
     //console.log(res);
     return res;
 }
+
+export async function fetchPendingRequestsFromServer() {
+    const api = cep.getApiToRoleChangeRequest();
+    let res = await cep.getAllPendingRequestsFromServer(api);
+    //console.log(res);
+    return res;
+}
