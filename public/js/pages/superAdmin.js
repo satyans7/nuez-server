@@ -140,6 +140,8 @@ pendingTab.addEventListener('click', async() => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                 <td>${user.name}</td>
+                <td>${user.currentRole}</td>
+                <td>${user.requestedRole}</td>
                 <td>
                     <button onclick="approveRoleChange('${user._id}')">Approve</button>
                     <button onclick="rejectRoleChange('${user._id}')">Reject</button>
