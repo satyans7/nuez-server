@@ -1,0 +1,173 @@
+/*     .super-admin-panel {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+
+        }
+
+        .super-admin-tabs {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .super-admin-tabs button {
+
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .list {
+            display: none;
+        }
+
+        #user-list {
+            display: block;
+        }
+*/
+body,html{
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    display: block;
+    background-color: #f4f7fa;
+}
+h1 {
+   text-align: center;
+   margin-bottom: 40px;
+}
+
+.super-admin-heading hr {
+    border: 0;
+    height: 1px;
+    background: #01033b;
+    margin-bottom: 5px;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #01033b;
+    margin-top: 5px;
+    
+}
+.super-admin-panel {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+
+    max-width: 1200px; /* New line */
+    margin: auto; /* New line */
+    background-color: white; /* New line */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* New line */
+    border-radius: 8px; /* New line */
+
+}
+
+.super-admin-tabs {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between;
+    font-weight: bold; /* New line */
+}
+
+.super-admin-tabs button {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 255, 0.3);
+    border-radius: 6px;
+    border: 2px solid rgb(3, 3, 47);
+    text-align: center;
+    transition: background-color 0.3s;
+    color: rgb(30, 28, 28);
+}
+
+.super-admin-tabs button:hover {
+    background-color: rgba(0, 0, 255, 0.5);
+}
+
+.super-admin-tabs button.active {
+    background-color: rgba(11, 160, 51, 0.7);       /*works only when js adjusted accordingly*/
+    color: white; /* New line */
+}
+
+.list {
+    display: none;
+}
+
+#user-list {
+    display: block;
+}
+
+/*  table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+button {
+    padding: 5px 10px;
+}
+
+*/
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th,
+td {
+    padding: 15px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+button {
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+h2 {
+    color: rgb(183, 24, 122);
+    text-transform: uppercase;
+}
+th {
+    color: rgb(10, 10, 101);
+}
+
