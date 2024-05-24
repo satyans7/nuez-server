@@ -2,21 +2,22 @@
   {
     "_id": 5,
     "name": "pankaj",
-    "current-role": "consumer",
-    "requested-role": "admin",
-    "request-status": "pending"
+    "currentRole": "consumer",
+    "requestedRole": "admin",
+    "requestStatus": "pending"
   },
   {
     "_id": 2,
     "name": "Bob Smith",
-    "current-role": "consumer",
-    "requested-role": "admin",
-    "request-status": "pending"
+    "currentRole": "consumer",
+    "requestedRole": "admin",
+    "requestStatus": "pending"
   },
   {
-    "_id": 6,
-    "name": "pankaj",
-    "current-role": "admin",
-    "request-status": "pending"
+    "_id": 4,
+    "name": "suraj",
+    "currentRole": "admin",
+    "requestedRole": "consumer",
+    "requestStatus": "pending"
   }
 ]

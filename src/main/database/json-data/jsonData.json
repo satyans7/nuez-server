@@ -23,10 +23,10 @@
     },
     {
       "_id": 4,
-      "name": "pankaj",
+      "name": "suraj",
       "email": "pankaj123@gmail.com",
       "password": "password123",
-      "role": "consumer"
+      "role": "admin"
     },
     {
       "_id": 5,

@@ -36,5 +36,10 @@ class DbController {
     
     jsonController.postUserRequestToServer(user,reqRole);
   }
+
+  deleteUserById(userId){
+    const data=jsonController.deleteUserById(parseInt(userId))
+    console.log(data);
+  }
 }
 module.exports = new DbController();

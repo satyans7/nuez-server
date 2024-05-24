@@ -39,9 +39,9 @@ class JsonController {
         // 'current-role': "consumer",
         // 'requested-role': "admin",
         // 'request-status': "pending"
-        "current-role":currRole,
-        "requested-role":reqRole,
-        "request-status": "pending"
+        "currentRole":currRole,
+        "requestedRole":reqRole,
+        "requestStatus": "pending"
       };
       data.push(newReq);
       
@@ -79,6 +79,26 @@ class JsonController {
     const db=this.readDatabase(REQ_DATA);
     return db;
   }
+
+
+  deleteUserById(userId){
+    const data = this.readDatabase(USER_DATA);
+    const userIndex=data.users.findIndex(it=> it._id===userId)
+    const deletedUser=data.users.splice(userIndex,1)[0];
+    this.writeDatabase(USER_DATA,data);
+    return deletedUser;
+  }
+
+  // const db = readDatabase();
+  // const user = db.users.find(user => user.id === parseInt(req.params.id));
+  // if (user) {
+  //   const userIndex=db.users.findIndex(it=> it.id===user.id)
+  //   const deletedUser=db.users.splice(userIndex, 1)[0];
+  //   writeDatabase(db);
+  //   res.status(200).json({ deletedUser });
+  // } else {
+  //   res.status(404).send('User not found');
+  // }
 }
 
 module.exports = new JsonController();

@@ -15,6 +15,7 @@ module.exports = function (app) {
   const AEP_TO_FETCH_USER_BY_ID = "/api/user/:id";
   const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
   const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
+  const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
   const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
   const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
   
@@ -74,4 +75,10 @@ module.exports = function (app) {
     // res.send(data);
   });
   
+
+  app.delete(AEP_TO_DELETE_A_USER, (req, res) => {
+    const data = controller.deleteUserById(req.params.id)
+    console.log(data);
+    // res.send(data);
+  });
 };

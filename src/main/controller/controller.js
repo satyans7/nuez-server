@@ -58,6 +58,11 @@ class Controller {
     // console.log(data);
     // return data;
   }
+
+
+  deleteUserById(userId){
+    dbController.deleteUserById(userId);
+  }
   
 }
 module.exports = new Controller();
