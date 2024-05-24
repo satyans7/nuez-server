@@ -78,7 +78,7 @@ module.exports = function (app) {
 
   app.delete(AEP_TO_DELETE_A_USER, (req, res) => {
     const data = controller.deleteUserById(req.params.id)
-    console.log(data);
+    res.json(data);
     // res.send(data);
   });
 };

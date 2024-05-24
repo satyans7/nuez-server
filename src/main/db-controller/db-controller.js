@@ -39,7 +39,8 @@ class DbController {
 
   deleteUserById(userId){
     const data=jsonController.deleteUserById(parseInt(userId))
-    console.log(data);
+    // console.log(data);
+    return data;
   }
 }
 module.exports = new DbController();

@@ -61,7 +61,7 @@ class Controller {
 
 
   deleteUserById(userId){
-    dbController.deleteUserById(userId);
+    return dbController.deleteUserById(userId);
   }
   
 }

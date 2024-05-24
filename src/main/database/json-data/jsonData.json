@@ -15,13 +15,6 @@
       "role": "consumer"
     },
     {
-      "_id": 3,
-      "name": "pankaj",
-      "email": "pankaj123@gmail.com",
-      "password": "password123",
-      "role": "consumer"
-    },
-    {
       "_id": 4,
       "name": "suraj",
       "email": "pankaj123@gmail.com",
