@@ -1,4 +1,4 @@
-import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests, postRequesttoRoleChange } from '../client/client.js';
+import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests, postRequesttoRoleChange,postapproveRoleChange,postrejectRoleChange } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
 const adminsTab = document.getElementById('admins-tab');
@@ -162,6 +162,7 @@ async function requestRoleChange(id, req) {
 }
 
 
+
 pendingTab.addEventListener('click', async () => {
     console.log("fetching all pending requests")
     hideAllLists();
@@ -172,15 +173,26 @@ pendingTab.addEventListener('click', async () => {
         data.forEach(user => {
             if (user.requestStatus === "pending") {
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.currentRole}</td>
-                <td>${user.requestedRole}</td>
-                <td>
-                    <button onclick="approveRoleChange('${user._id}')">Approve</button>
-                    <button onclick="rejectRoleChange('${user._id}')">Reject</button>
-                </td>
-            `;
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                const currentRoleCell = document.createElement('td');
+                currentRoleCell.textContent = user.currentRole;
+                const requestedRoleCell = document.createElement('td');
+                requestedRoleCell.textContent = user.requestedRole;
+                const actionCell = document.createElement('td');
+                const approveButton = document.createElement('button');
+                approveButton.textContent = 'Approve';
+                approveButton.addEventListener('click', () => approveRoleChange(user._id));
+                const rejectButton = document.createElement('button');
+                rejectButton.textContent = 'Reject';
+                rejectButton.addEventListener('click', () => rejectRoleChange(user._id));
+                actionCell.appendChild(approveButton);
+                actionCell.appendChild(rejectButton);
+                row.appendChild(nameCell);
+                row.appendChild(currentRoleCell);
+                row.appendChild(requestedRoleCell);
+                row.appendChild(actionCell);
+
                 pendingTableBody.appendChild(row);
             }
         });
@@ -196,14 +208,36 @@ pendingTab.addEventListener('click', async () => {
 
 
 async function approveRoleChange(id) {
-    console.log('Role change request Accepted !')
-    alert('Request Accepted')
+    console.log(id)
+    const apr = {
+        _id: id,
+        action: "approve"
+    }
+    try {
+        await postapproveRoleChange(id, apr);
+        console.log('request sent')
+
+    } catch (error) {
+        console.log('Error in sending request')
+
+    }
 
 }
 
 async function rejectRoleChange(id) {
-    console.log('Role change request Denied!')
-    alert('Request Denied')
+    console.log(id);
+    const rej = {
+        _id: id,
+        action: "reject"
+    }
+    try {
+    await postrejectRoleChange(id, rej);
+        console.log('request sent')
+
+    } catch (error) {
+        console.log('Error in sending request')
+
+    }
 
 }
 

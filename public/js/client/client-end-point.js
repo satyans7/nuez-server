@@ -38,6 +38,15 @@ export function getApiToDemoteUser() {
 export function getApiToRequestRoleChange(id) {
   return `/api/user/request/${id}`;
 }
+
+export function getApiToApproveRoleChange(id) {
+  console.log("request approve");
+}
+export function getApiToRejectRoleChange(id) {
+  console.log("request reject");
+}
+
+
 export function getApiToRoleChangeRequest() {
   return AEP_TO_FETCH_ROLE_CHANGE_REQ;
 }
