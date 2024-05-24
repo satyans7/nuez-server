@@ -1,12 +1,5 @@
 [
   {
-    "_id": 5,
-    "name": "pankaj",
-    "currentRole": "consumer",
-    "requestedRole": "admin",
-    "requestStatus": "pending"
-  },
-  {
     "_id": 2,
     "name": "Bob Smith",
     "currentRole": "consumer",
@@ -14,10 +7,10 @@
     "requestStatus": "pending"
   },
   {
-    "_id": 4,
-    "name": "suraj",
-    "currentRole": "admin",
-    "requestedRole": "consumer",
+    "_id": 3,
+    "name": "Nikhil Priyadarshan",
+    "currentRole": "consumer",
+    "requestedRole": "admin",
     "requestStatus": "pending"
   }
 ]

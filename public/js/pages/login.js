@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded',()=>
             const response=await client.userLoginDetailsPost(logData);
             
             alert(response.message);
-            // Redirect to login page after showing the alert
             if(response.success)
             window.location.href = response.route;
         } catch (error) {

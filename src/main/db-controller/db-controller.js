@@ -45,7 +45,7 @@ class DbController {
 
 
   findUserByEmail(email){
-    const users = jsonController.getAllUsers();
+    const users = jsonController.fetchAllUsers();
     const user = users.find(user => user.email === email);
     return user;
  }
