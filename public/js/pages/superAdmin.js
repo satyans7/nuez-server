@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
-                    <button onclick="promoteUser('${user._id}')">Promote</button>
+                    <button onclick="promoteUser('${user._id}')">Request for Role change</button>
                 </td>
             `;
                 usersTableBody.appendChild(row);
@@ -71,7 +71,7 @@ usersTab.addEventListener('click', async () => {
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
-                    <button onclick="promoteUser('${user._id}')">Promote</button>
+                    <button onclick="promoteUser('${user._id}')">Request for Role change</button>
                 </td>
             `;
                 usersTableBody.appendChild(row);
@@ -108,7 +108,7 @@ adminsTab.addEventListener('click', async () => {
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
-                    <button onclick="demoteUser('${user._id}')">Demote</button>
+                    <button onclick="demoteUser('${user._id}')">Request for Role change</button>
                 </td>
             `;
                 adminsTableBody.appendChild(row);
