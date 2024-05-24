@@ -16,6 +16,9 @@ export function postUserLoginDataToServer(data){
     return cep.fetchPost(api,data);
 }
 
+
+//Super Admin
+
 export async function fetchAllUsersFromServer() {
     const api = cep.getApiToFetchUserDetailsForAll();
     let res = await cep.getAllUsersDataFromServer(api);
@@ -28,4 +31,10 @@ export async function fetchPendingRequestsFromServer() {
     let res = await cep.getAllPendingRequestsFromServer(api);
     //console.log(res);
     return res;
+}
+
+export function postRequestToRoleChangeToServer(id, data) {
+    const api = cep.getApiToRequestRoleChange(id);
+    cep.fetchPost(api, data);
+    //console.log(id)
 }

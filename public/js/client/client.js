@@ -38,6 +38,11 @@ export function getAllRejectedRequests() {
 
 }
 
+export function postRequesttoRoleChange(id, request) {
+    console.log(`posting the request ${id}`)
+    controller.postRequestToRoleChangeToServer(id, request);
+}
+
 
 
 
