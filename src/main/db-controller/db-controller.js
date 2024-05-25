@@ -23,6 +23,16 @@ class DbController {
     // console.log(data);
     return(data);
   }
+  fetchApprovedLog(){
+    let data=jsonController.fetchApprovedLog();
+    // console.log(data);
+    return(data);
+  }
+  fetchRejectedLog(){
+    let data=jsonController.fetchRejectedLog();
+    // console.log(data);
+    return(data);
+  }
 
   fetchUserById(userId){
     let data=jsonController.fetchAllUsers();

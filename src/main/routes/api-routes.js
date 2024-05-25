@@ -25,6 +25,9 @@ module.exports = function (app) {
     const PRIVATE_AEP_TO_CONSUMERROUTE="/api/consumer-dashboard"
   const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
 
+ const AEP_TO_FETCH_APPROVED_LOG= "/api/response/approved";
+ const AEP_TO_FETCH_DENIED_LOG= "/api/response/denied";
+
 
   app.post(AEP_TO_REGISTER_A_USER,(req, res) => {
     return controller.registerUser(req, res); 
@@ -36,6 +39,16 @@ module.exports = function (app) {
   });
   app.get(AEP_TO_FETCH_ROLE_CHANGE_REQ , (req, res) => {
     const data = controller.fetchRoleChangeReq();
+    // console.log(data);
+    res.json(data);
+  });
+  app.get(AEP_TO_FETCH_APPROVED_LOG, (req, res) => {
+    const data = controller.fetchApprovedLog;
+    // console.log(data);
+    res.json(data);
+  });
+  app.get(AEP_TO_FETCH_DENIED_LOG , (req, res) => {
+    const data = controller.fetchRejectedLog();
     // console.log(data);
     res.json(data);
   });

@@ -82,6 +82,15 @@ class JsonController {
     const db=this.readDatabase(REQ_DATA);
     return db;
   }
+  fetchApprovedLog(){
+    const db=this.readDatabase(ACCEPTED_LOG);
+    return db;
+  }
+  fetchRejectedLog(){
+    const db=this.readDatabase(REJECTED_LOG);
+    return db;
+  }
+
 
 ////////  NOT USED CURRENTLY ////////
 //// TO DELETE A PARTICULAR USER BY ID FROM THE MAIN DATABASE/////

@@ -69,6 +69,19 @@ class Controller {
       // console.log(data);
       return data;
   }
+  fetchApprovedLog() {
+    let data = dbController.fetchApprovedLog();
+      // console.log(data);
+      return data;
+  }
+  fetchRejectedLog() {
+    let data = dbController.fetchRejectedLog();
+      // console.log(data);
+      return data;
+  }
+
+
+
   fetchUserById(userId) {
     let data = dbController.fetchUserById(userId);
     // console.log(data);
