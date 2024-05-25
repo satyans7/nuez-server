@@ -63,7 +63,7 @@ hr {
 }
 
 .super-admin-tabs {
-    margin-bottom: 20px;
+    margin: 10px 0;
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -157,6 +157,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-right: 10px;
 }
 
 button:hover {
@@ -170,4 +171,3 @@ h2 {
 th {
     color: rgb(10, 10, 101);
 }
-
