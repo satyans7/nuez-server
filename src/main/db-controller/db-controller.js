@@ -1,76 +1,73 @@
 const jsonController = require("../json-controller/json-controller");
 
 class DbController {
-  fetchSampleDataFromServer() {
-    let data = jsonController.fetchSampleData();
+  async fetchSampleDataFromServer() {
+    let data = await jsonController.fetchSampleData();
     console.log(data);
     return data;
   }
-  postUserDataToServer(user) {
-    return jsonController.postUserDataToServer(user);
-    
-  }
-  postUserRequestToServer(user,reqRole){
-    jsonController.postUserRequestToServer(user,reqRole);
-  }
-  fetchAllUsers(){
-    let data=jsonController.fetchAllUsers();
-    // console.log(data);
-    return(data);
-  }
-  fetchRoleChangeReq(){
-    let data=jsonController.fetchRoleChangeReq();
-    // console.log(data);
-    return(data);
-  }
-  fetchApprovedLog(){
-    let data=jsonController.fetchApprovedLog();
-    // console.log(data);
-    return(data);
-  }
-  fetchRejectedLog(){
-    let data=jsonController.fetchRejectedLog();
-    // console.log(data);
-    return(data);
+
+  async postUserDataToServer(user) {
+    return await jsonController.postUserDataToServer(user);
   }
 
-  fetchUserById(userId){
-    let data=jsonController.fetchAllUsers();
-    // console.log(data);
-    console.log(userId);
-    const user=data.find(user=> user._id === parseInt(userId));
-    return user;
+  async postUserRequestToServer(user, reqRole) {
+    await jsonController.postUserRequestToServer(user, reqRole);
   }
 
-  requestRoleChange(user,reqRole){
-    
-    jsonController.postUserRequestToServer(user,reqRole);
-  }
-
-  deleteUserById(userId){
-    const data=jsonController.deleteUserById(parseInt(userId))
-    // console.log(data);
+  async fetchAllUsers() {
+    let data = await jsonController.fetchAllUsers();
     return data;
   }
 
+  async fetchRoleChangeReq() {
+    let data = await jsonController.fetchRoleChangeReq();
+    return data;
+  }
 
-  findUserByEmail(email){
-    const users = jsonController.fetchAllUsers();
+  async fetchApprovedLog() {
+    let data = await jsonController.fetchApprovedLog();
+    return data;
+  }
+
+  async fetchRejectedLog() {
+    let data = await jsonController.fetchRejectedLog();
+    return data;
+  }
+
+  async fetchUserById(userId) {
+    let data = await jsonController.fetchAllUsers();
+    console.log(userId);
+    const user = data.find(user => user._id === parseInt(userId));
+    return user;
+  }
+
+  async requestRoleChange(user, reqRole) {
+    await jsonController.postUserRequestToServer(user, reqRole);
+  }
+
+  async deleteUserById(userId) {
+    const data = await jsonController.deleteUserById(parseInt(userId));
+    return data;
+  }
+
+  async findUserByEmail(email) {
+    const users = await jsonController.fetchAllUsers();
     const user = users.find(user => user.email === email);
     return user;
   }
 
-  deleteReqByUserId(userId){
-    return jsonController.deleteReqByUserId(userId)
+  async deleteReqByUserId(userId) {
+    return await jsonController.deleteReqByUserId(userId);
   }
 
-  addResponseToLog(user,userData){
-    jsonController.addResponseToLog(user,userData);
-
+  async addResponseToLog(user, userData) {
+    await jsonController.addResponseToLog(user, userData);
   }
-  roleChange(userId){
-    jsonController.roleChange(userId);
+
+  async roleChange(userId) {
+    await jsonController.roleChange(userId);
   }
 }
-module.exports = new DbController();
 
+module.exports = new DbController();

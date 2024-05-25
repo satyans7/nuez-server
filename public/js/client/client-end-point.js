@@ -71,6 +71,7 @@ export function getApiToFetchDeniedLog() {
 
 
 export async function fetchPost(url, data) {
+  console.log("data");
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -78,7 +79,7 @@ export async function fetchPost(url, data) {
     },
     body: JSON.stringify(data),
   });
-  console.log(response)
+  
   return response.json();
 }
 

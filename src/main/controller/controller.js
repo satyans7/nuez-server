@@ -1,30 +1,30 @@
 const dbController = require("../db-controller/db-controller");
-const authController = require("../auth-controller/auth-controller")
+const authController = require("../auth-controller/auth-controller");
+
 class Controller {
-  fetchSampleDataFromServer() {
-    let data = dbController.fetchSampleDataFromServer();
+  async fetchSampleDataFromServer() {
+    let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
     return data;
   }
 
-
-  registerUser(req, res) {
+  async registerUser(req, res) {
     try {
       const email = req.body.email;
   
       // Validate email uniqueness
-      const isUnique = this.validateUniquenessOfUserName(email);
+      const isUnique = await this.validateUniquenessOfUserName(email);
   
       if (isUnique) {
         return res.status(400).json({ success: false, message: 'Username already exists' });
       } else {
         // Register the new user
-        const newUser = dbController.postUserDataToServer(req.body);
+        const newUser = await dbController.postUserDataToServer(req.body);
         console.log('New user registered:', newUser);
   
         // Additional handling for admin role
         if (req.body.role === 'admin') {
-          dbController.postUserRequestToServer(newUser, req.body.role);
+          await dbController.postUserRequestToServer(newUser, req.body.role);
         }
   
         return res.status(201).json({ success: true, message: 'Successfully registered' });
@@ -35,96 +35,83 @@ class Controller {
     }
   }
   
-  validateUniquenessOfUserName(username){
-    const user=dbController.findUserByEmail(username);
+  async validateUniquenessOfUserName(username) {
+    const user = await dbController.findUserByEmail(username);
     return user !== undefined; 
   }
-  authenticateUser(formData) {
-    try{
-    let authResult =  authController.authenticateUser(formData);
-       if (authResult.success) {
-        let route = `/api/${authResult.role}-dashboard`
-         return {success:true,route:route,message:`Logged In Successful`}
+
+  async authenticateUser(formData) {
+    try {
+      let authResult = await authController.authenticateUser(formData);
+      if (authResult.success) {
+        let route = `/api/${authResult.role}-dashboard`;
+        return { success: true, route: route, message: `Logged In Successful` };
       } else {
-        return {success:false,route:"null",message:"Invalid username or password!!!"};
+        return { success: false, route: "null", message: "Invalid username or password!!!" };
       }
-    } 
-    catch (error) {
-      
-      return {success:false,route:'null',message:"Internal Server Error"};
+    } catch (error) {
+      return { success: false, route: 'null', message: "Internal Server Error" };
     }
-  };
-  updateProfileOfUser() {
-    let data = dbController.fetchSampleDataFromServer();
+  }
+
+  async updateProfileOfUser() {
+    let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
     return data;
   }
-  fetchAllUsers() {
-    let data = dbController.fetchAllUsers();
-      // console.log(data);
-      return data;
-  }
-  fetchRoleChangeReq() {
-    let data = dbController.fetchRoleChangeReq();
-      // console.log(data);
-      return data;
-  }
-  fetchApprovedLog() {
-    let data = dbController.fetchApprovedLog();
-      // console.log(data);
-      return data;
-  }
-  fetchRejectedLog() {
-    let data = dbController.fetchRejectedLog();
-      // console.log(data);
-      return data;
-  }
 
-
-
-  fetchUserById(userId) {
-    let data = dbController.fetchUserById(userId);
-    // console.log(data);
+  async fetchAllUsers() {
+    let data = await dbController.fetchAllUsers();
     return data;
   }
-  promoteUser() {
-    let data = dbController.fetchSampleDataFromServer();
+
+  async fetchRoleChangeReq() {
+    let data = await dbController.fetchRoleChangeReq();
+    return data;
+  }
+
+  async fetchApprovedLog() {
+    let data = await dbController.fetchApprovedLog();
+    return data;
+  }
+
+  async fetchRejectedLog() {
+    let data = await dbController.fetchRejectedLog();
+    return data;
+  }
+
+  async fetchUserById(userId) {
+    let data = await dbController.fetchUserById(userId);
+    return data;
+  }
+
+  async promoteUser() {
+    let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
     return data;
   }
-  requestRoleChange(req) {
-    let userId=req.body._id;
-    // console.log(userId);
-    const user=dbController.fetchUserById(userId);
-    // console.log(user);
-    const reqRole=req.body.reqRole;
-    // console.log(reqRole)
-    dbController.requestRoleChange(user,reqRole)
-    // console.log(data);
-    // return data;
+
+  async requestRoleChange(req) {
+    let userId = req.body._id;
+    const user = await dbController.fetchUserById(userId);
+    const reqRole = req.body.reqRole;
+    await dbController.requestRoleChange(user, reqRole);
   }
-  roleChangeResponse(req){
-    const action= req.body.action;
-    const userId= req.body._id;
-    const user= dbController.deleteReqByUserId(userId);
+
+  async roleChangeResponse(req) {
+    const action = req.body.action;
+    const userId = req.body._id;
+    const user = await dbController.deleteReqByUserId(userId);
     console.log(user);
-    dbController.addResponseToLog(user,req.body);
-    if(action==="approved"){
-      dbController.roleChange(userId);
+    await dbController.addResponseToLog(user, req.body);
+    if (action === "approved") {
+      await dbController.roleChange(userId);
     }
-    
   }
 
-
-
-
-
-
-  deleteUserById(userId){
-    return dbController.deleteUserById(userId);
+  async deleteUserById(userId) {
+    return await dbController.deleteUserById(userId);
   }
-  
-
-
 }
+
 module.exports = new Controller();

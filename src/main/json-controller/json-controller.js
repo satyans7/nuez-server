@@ -47,9 +47,9 @@ class JsonController {
       throw new Error('Failed to post user data: ' + error.message);
     }
   };
-  postUserRequestToServer =  (user,reqRole) => {
+  postUserRequestToServer =  async (user,reqRole) => {
     try {
-      const data =  this.readDatabase(REQ_DATA);
+      const data = await this.readDatabase(REQ_DATA);
       const currRole=user.role;
       // const reqRole=(user.role==="consumer")?"admin":"consumers"
       const newReq = {
@@ -64,7 +64,7 @@ class JsonController {
       };
       data.push(newReq);
       
-       this.writeDatabase(REQ_DATA,data);
+      await this.writeDatabase(REQ_DATA,data);
   
       // return newUser;
       console.log(`${newReq.name} successfully added request`);
@@ -73,51 +73,51 @@ class JsonController {
     }
   };
   ///// FETCH ALL USER DATA FROM THE DATABASE//////
-  fetchAllUsers(){
-    const db=this.readDatabase(USER_DATA);
+  async fetchAllUsers(){
+    const db=await this.readDatabase(USER_DATA);
     return db.users;
   }
   ////// FETCH ALL ROLE CHANGE REQUEST FROM THE DATABASE/////
-  fetchRoleChangeReq(){
-    const db=this.readDatabase(REQ_DATA);
+  async fetchRoleChangeReq(){
+    const db=await this.readDatabase(REQ_DATA);
     return db;
   }
-  fetchApprovedLog(){
-    const db=this.readDatabase(ACCEPTED_LOG);
+  async fetchApprovedLog(){
+    const db=await this.readDatabase(ACCEPTED_LOG);
     return db;
   }
-  fetchRejectedLog(){
-    const db=this.readDatabase(REJECTED_LOG);
+  async fetchRejectedLog(){
+    const db=await this.readDatabase(REJECTED_LOG);
     return db;
   }
 
 
 ////////  NOT USED CURRENTLY ////////
 //// TO DELETE A PARTICULAR USER BY ID FROM THE MAIN DATABASE/////
-  deleteUserById(userId){
-    const data = this.readDatabase(USER_DATA);
-    const userIndex=data.users.findIndex(it=> it._id===userId)
-    const deletedUser=data.users.splice(userIndex,1)[0];
-    this.writeDatabase(USER_DATA,data);
+ async deleteUserById(userId){
+    const data =await this.readDatabase(USER_DATA);
+    const userIndex=await data.users.findIndex(it=> it._id===userId)
+    const deletedUser=await data.users.splice(userIndex,1)[0];
+    await this.writeDatabase(USER_DATA,data);
     console.log(`${deletedUser.name} has been deleted successfully`)
     return deletedUser;
     
   }
 
 
-  deleteReqByUserId(userId){
-    const data = this.readDatabase(REQ_DATA);
-    const userIndex=data.findIndex(it=> it._id===userId)
-    const deletedUser=data.splice(userIndex,1)[0];
-    this.writeDatabase(REQ_DATA,data);
+  async deleteReqByUserId(userId){
+    const data =await this.readDatabase(REQ_DATA);
+    const userIndex=await data.findIndex(it=> it._id===userId)
+    const deletedUser=await data.splice(userIndex,1)[0];
+    await this.writeDatabase(REQ_DATA,data);
     console.log(`${deletedUser.name} has been deleted successfully from role req table`)
     return deletedUser;
   }
 
-  addResponseToLog(user,userData){
+  async addResponseToLog(user,userData){
     const LOG_DB =(userData.action==="approved") ?ACCEPTED_LOG:REJECTED_LOG;
     try {
-      const data =  this.readDatabase(LOG_DB);
+      const data = await this.readDatabase(LOG_DB);
       
       const newLog ={
         _id : user._id,
@@ -127,7 +127,7 @@ class JsonController {
         "timeStamp" : userData.time
       }
       data.push(newLog)
-       this.writeDatabase(LOG_DB,data);
+       await this.writeDatabase(LOG_DB,data);
   
       // return newUser;
       console.log(`${newLog.name} successfully added request`);
@@ -136,16 +136,16 @@ class JsonController {
     }
   }
 
-  roleChange(userId){
-    const data = this.readDatabase(USER_DATA);
-    const user=data.users.find( it=> it._id===userId)
+  async roleChange(userId){
+    const data =await this.readDatabase(USER_DATA);
+    const user=await data.users.find( it=> it._id===userId)
     if(user.role==="consumer"){
       user.role="admin"
     }
     else{
       user.role="consumer"
     }
-    this.writeDatabase(USER_DATA,data);
+    await this.writeDatabase(USER_DATA,data);
   }
 
 }
