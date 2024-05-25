@@ -40,9 +40,11 @@ export function getApiToRequestRoleChange(id) {
 }
 
 export function getApiToApproveRoleChange(id) {
+   return `/api/user/response/${id}`
   console.log("request approve");
 }
 export function getApiToRejectRoleChange(id) {
+  return `/api/user/response/${id}`
   console.log("request reject");
 }
 
