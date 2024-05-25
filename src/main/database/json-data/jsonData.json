@@ -19,14 +19,14 @@
       "name": "Nikhil Priyadarshan",
       "email": "nikhilpriyadarshan1234@gmail.com",
       "password": "12345678",
-      "role": "consumer"
+      "role": "admin"
     },
     {
       "_id": 4,
       "name": "Nikhil ",
       "email": "nikhilpriyadarshan12345@gmail.com",
       "password": "12345678",
-      "role": "consumer"
+      "role": "admin"
     },
     {
       "_id": 5,
@@ -35,6 +35,5 @@
       "password": "12345678",
       "role": "admin"
     }
-
   ]
 }

@@ -20,21 +20,23 @@ export async function getAllUsers() {
     return data
 }
 
-
 export async function getAllPendingRequests() {
     const data = await controller.fetchPendingRequestsFromServer()
     //console.log(data)
     return data
 }
 
-export function getAllApprovedRequests() {
-    console.log('Fetching all approved requests');
+export async function getAllApprovedRequests() {
+    const data = await controller.fetchApprovedRequests();
+    //console.log('Approved Requests:', data);
+    return data
 }
 
 
-export function getAllRejectedRequests() {
-    console.log('Fetching all rejected requests');
-
+export async function getAllRejectedRequests() {
+    const data = await controller.fetchDeniedRequests();
+    //console.log('Denied Requests:', data);
+    return data
 }
 
 export function postRequesttoRoleChange(id, request) {

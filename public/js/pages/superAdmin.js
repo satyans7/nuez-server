@@ -1,4 +1,4 @@
-import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests, postRequesttoRoleChange,postapproveRoleChange,postrejectRoleChange } from '../client/client.js';
+import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests, postRequesttoRoleChange, postapproveRoleChange, postrejectRoleChange } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
 const adminsTab = document.getElementById('admins-tab');
@@ -14,6 +14,8 @@ const allLists = document.getElementsByClassName('list');
 const usersTableBody = document.getElementById('users-table-body')
 const adminsTableBody = document.getElementById('admins-table-body')
 const pendingTableBody = document.getElementById('pending-table-body')
+const approvedTableBody = document.getElementById('approved-table-body')
+const rejectedTableBody = document.getElementById('rejected-table-body')
 
 
 //function to hide all tables
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const requestButton = document.createElement('button');
                 requestButton.textContent = 'Request for Role change';
                 const request = {
-                    _id : user._id,
+                    _id: user._id,
                     reqRole: "consumer"
                 }
                 requestButton.addEventListener('click', () => requestRoleChange(user._id, request));
@@ -162,8 +164,78 @@ async function requestRoleChange(id, req) {
 }
 
 
+// Approved Tab
 
-pendingTab.addEventListener('click', async () => {
+
+approvedTab.addEventListener('click', async () => {
+    hideAllLists();
+    approvedList.style.display = 'block';
+    let data = await getAllApprovedRequests();
+    console.log(data)
+    approvedTableBody.innerHTML = '';
+    if (data && data.length > 0) {
+        data.forEach(user => {
+
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            nameCell.textContent = user.name;
+            const timeStampCell = document.createElement('td');
+            timeStampCell.textContent = "00:00";
+            row.appendChild(nameCell);
+            row.appendChild(timeStampCell);
+            approvedTableBody.appendChild(row);
+        });
+    } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td colspan="2">No users available</td>
+        `;
+        approvedTableBody.appendChild(row);
+    }
+});
+
+
+// Rejected Tab
+
+
+rejectedTab.addEventListener('click', async () => {
+    hideAllLists();
+    rejectedList.style.display = 'block';
+    let data = await getAllRejectedRequests();
+    console.log(data)
+    rejectedTableBody.innerHTML = '';
+    if (data && data.length > 0) {
+        data.forEach(user => {
+
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            nameCell.textContent = user.name;
+            const timeStampCell = document.createElement('td');
+            timeStampCell.textContent = "00:00";
+            row.appendChild(nameCell);
+            row.appendChild(timeStampCell);
+            rejectedTableBody.appendChild(row);
+        });
+    } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td colspan="2">No users available</td>
+        `;
+        rejectedTableBody.appendChild(row);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+async function pendingTabDisplay() {
     console.log("fetching all pending requests")
     hideAllLists();
     pendingList.style.display = 'block';
@@ -184,7 +256,7 @@ pendingTab.addEventListener('click', async () => {
                 approveButton.textContent = 'Approve';
                 approveButton.addEventListener('click', () => approveRoleChange(user._id));
                 const rejectButton = document.createElement('button');
-                rejectButton.textContent = 'Reject';
+                rejectButton.textContent = 'Deny';
                 rejectButton.addEventListener('click', () => rejectRoleChange(user._id));
                 actionCell.appendChild(approveButton);
                 actionCell.appendChild(rejectButton);
@@ -199,19 +271,20 @@ pendingTab.addEventListener('click', async () => {
     } else {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td colspan="2">No Pending Requests available</td>
+            <td colspan="4">No Pending Requests available</td>
         `;
         pendingTableBody.appendChild(row);
+
     }
-});
+}
 
-
+pendingTab.addEventListener('click', () => pendingTabDisplay());
 
 async function approveRoleChange(id) {
     console.log(id)
     const apr = {
         _id: id,
-        action: "approve"
+        action: "approved"
     }
     try {
         await postapproveRoleChange(id, apr);
@@ -221,6 +294,7 @@ async function approveRoleChange(id) {
         console.log('Error in sending request')
 
     }
+    pendingTabDisplay();
 
 }
 
@@ -228,31 +302,19 @@ async function rejectRoleChange(id) {
     console.log(id);
     const rej = {
         _id: id,
-        action: "reject"
+        action: "denied"
     }
     try {
-    await postrejectRoleChange(id, rej);
+        await postrejectRoleChange(id, rej);
         console.log('request sent')
 
     } catch (error) {
         console.log('Error in sending request')
 
     }
-
+    pendingTabDisplay();
 }
 
 
-approvedTab.addEventListener('click', () => {
-    hideAllLists();
-    approvedList.style.display = 'block';
-    //client.getAllApprovedRequests();
-    getAllApprovedRequests();
-});
 
-rejectedTab.addEventListener('click', () => {
-    hideAllLists();
-    rejectedList.style.display = 'block';
-    //client.getAllRejectedRequests();
-    getAllRejectedRequests();
-});
 

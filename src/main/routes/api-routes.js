@@ -43,7 +43,7 @@ module.exports = function (app) {
     res.json(data);
   });
   app.get(AEP_TO_FETCH_APPROVED_LOG, (req, res) => {
-    const data = controller.fetchApprovedLog;
+    const data = controller.fetchApprovedLog();
     // console.log(data);
     res.json(data);
   });

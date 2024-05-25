@@ -12,6 +12,8 @@ const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
 const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
 const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
 const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
+const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
+const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
@@ -35,6 +37,16 @@ export function getApiToDemoteUser() {
   return AEP_TO_DEMOTE_A_USER;
 }
 
+export function getApiToRoleChangeRequest() {
+  return AEP_TO_FETCH_ROLE_CHANGE_REQ;
+}
+export function getApiTofetchApprovedData() {
+  return AEP_TO_FETCH_APPROVED_LOG;
+}
+export function getApiTofetchDeniedData() {
+  return AEP_TO_FETCH_DENIED_LOG;
+}
+
 export function getApiToRequestRoleChange(id) {
   return `/api/user/request/${id}`;
 }
@@ -46,11 +58,6 @@ export function getApiToApproveRoleChange(id) {
 export function getApiToRejectRoleChange(id) {
   return `/api/user/response/${id}`
   console.log("request reject");
-}
-
-
-export function getApiToRoleChangeRequest() {
-  return AEP_TO_FETCH_ROLE_CHANGE_REQ;
 }
 
 export async function getDataFromServer(apiEndPoint) {
@@ -68,6 +75,7 @@ export async function getDataFromServer(apiEndPoint) {
     });
 }
 
+
 export async function fetchPost(url, data) {
   const response = await fetch(url, {
     method: "POST",
@@ -81,21 +89,7 @@ export async function fetchPost(url, data) {
 }
 
 
-export async function getAllUsersDataFromServer(api) {
-  try {
-    const response = await fetch(api);
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return null;
-  }
-}
-
-export async function getAllPendingRequestsFromServer(api) {
+export async function fetchDataFromServer(api) {
   try {
     const response = await fetch(api);
     if (!response.ok) {

@@ -7,13 +7,13 @@ export async function fetchAllDataFromServer() {
 
 }
 
-export function postUserRegisterDataToServer(data){
+export function postUserRegisterDataToServer(data) {
     const api = cep.getApiToRegisterUser();
-    return cep.fetchPost(api,data);
+    return cep.fetchPost(api, data);
 }
-export function postUserLoginDataToServer(data){
+export function postUserLoginDataToServer(data) {
     const api = cep.getApiToAuthenticateUser();
-    return cep.fetchPost(api,data);
+    return cep.fetchPost(api, data);
 }
 
 
@@ -21,33 +21,46 @@ export function postUserLoginDataToServer(data){
 
 export async function fetchAllUsersFromServer() {
     const api = cep.getApiToFetchUserDetailsForAll();
-    let res = await cep.getAllUsersDataFromServer(api);
-    //console.log(res);
+    let res = await cep.fetchDataFromServer(api);
+    console.log(res);
+    return res;
+}
+
+export async function fetchApprovedRequests() {
+    const api = cep.getApiTofetchApprovedData();
+    let res = await cep.fetchDataFromServer(api);
+    console.log(res);
+    return res;
+}
+export async function fetchDeniedRequests() {
+    const api = cep.getApiTofetchDeniedData();
+    let res = await cep.fetchDataFromServer(api);
+    console.log(res);
     return res;
 }
 
 export async function fetchPendingRequestsFromServer() {
     const api = cep.getApiToRoleChangeRequest();
-    let res = await cep.getAllPendingRequestsFromServer(api);
-    //console.log(res);
+    let res = await cep.fetchDataFromServer(api);
+    console.log(res);
     return res;
 }
 
-export function postRequestToRoleChangeToServer(id, data) {
-    const api = cep.getApiToRequestRoleChange(id);
+
+export async function postRequestToRoleChangeToServer(id, data) {
+    const api = await cep.getApiToRequestRoleChange(id);
     cep.fetchPost(api, data);
-    //console.log(id)
 }
 
 
-export function postapproveRoleChange(id,data) {
-    const api =cep.getApiToApproveRoleChange(id);
-    cep.fetchPost(api,data);
-    console.log(id);
+export async function postapproveRoleChange(id, data) {
+    const api = await cep.getApiToApproveRoleChange(id);
+    cep.fetchPost(api, data);
+    //console.log(id);
 }
 
-export function postrejectRoleChange(id,data) {
-    const api =cep.getApiToRejectRoleChange(id);
-    cep.fetchPost(api,data);
+export async function postrejectRoleChange(id, data) {
+    const api = await cep.getApiToRejectRoleChange(id);
+    cep.fetchPost(api, data);
     //console.log(id);
 }
