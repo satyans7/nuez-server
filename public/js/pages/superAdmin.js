@@ -49,7 +49,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     _id: user._id,
                     reqRole: "consumer"
                 }
-                requestButton.addEventListener('click', () => requestRoleChange(user._id, request));
+                requestButton.addEventListener('click', (event) => {
+                    requestRoleChange(user._id, request)
+                });
                 actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
                 row.appendChild(emailCell);
@@ -90,9 +92,14 @@ usersTab.addEventListener('click', async () => {
                 requestButton.textContent = 'Request for Role change';
                 const request = {
                     _id: user._id,
-                    reqRole: "consumer"
+                    reqRole: "admin"
                 }
-                requestButton.addEventListener('click', () => requestRoleChange(user._id, request));
+                requestButton.addEventListener('click', (event) => {
+                    const button = event.target;
+                    if(button.disabled) return
+                    button.disabled = true;       
+                    requestRoleChange(user._id, request)
+                });
                 actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
                 row.appendChild(emailCell);
@@ -134,7 +141,10 @@ adminsTab.addEventListener('click', async () => {
                     _id: user._id,
                     reqRole: "consumer"
                 }
-                requestButton.addEventListener('click', () => requestRoleChange(user._id, request));
+                requestButton.addEventListener('click', () => {
+                    requestRoleChange(user._id, request)
+                    alert("request added successfully")
+                });
                 actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
                 row.appendChild(emailCell);

@@ -92,6 +92,7 @@ app.post(AEP_TO_AUTHENTICATE_A_USER, (req, res) => {
 
   app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, (req, res) => {
     const data = controller.requestRoleChange(req);
+    console.log(`this req is being called ${Math.random()}`);
     // console.log(data);
     // res.send(data);
   });
