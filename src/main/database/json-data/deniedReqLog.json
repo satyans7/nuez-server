@@ -1,12 +1,32 @@
 [
   {
-    "_id": 2,
-    "name": "Bob Smith",
-    "actionTaken": "approve"
+    "_id": 1,
+    "name": "Alice Johnson",
+    "actionTaken": "denied"
+  },
+  {
+    "_id": 1,
+    "name": "Alice Johnson",
+    "actionTaken": "denied"
+  },
+  {
+    "_id": 1,
+    "name": "Alice Johnson",
+    "actionTaken": "denied"
   },
   {
     "_id": 2,
     "name": "Bob Smith",
-    "actionTaken": "approve"
+    "actionTaken": "denied"
+  },
+  {
+    "_id": 2,
+    "name": "Bob Smith",
+    "actionTaken": "denied"
+  },
+  {
+    "_id": 2,
+    "name": "Bob Smith",
+    "actionTaken": "denied"
   }
 ]

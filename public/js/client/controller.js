@@ -21,14 +21,14 @@ export function postUserLoginDataToServer(data){
 
 export async function fetchAllUsersFromServer() {
     const api = cep.getApiToFetchUserDetailsForAll();
-    let res = await cep.getAllUsersDataFromServer(api);
+    let res = await cep.getDataFromServer(api);
     //console.log(res);
     return res;
 }
 
 export async function fetchPendingRequestsFromServer() {
     const api = cep.getApiToRoleChangeRequest();
-    let res = await cep.getAllPendingRequestsFromServer(api);
+    let res = await cep.getDataFromServer(api);
     //console.log(res);
     return res;
 }

@@ -211,7 +211,7 @@ async function approveRoleChange(id) {
     console.log(id)
     const apr = {
         _id: id,
-        action: "approve"
+        action: "approved"
     }
     try {
         await postapproveRoleChange(id, apr);
@@ -228,7 +228,7 @@ async function rejectRoleChange(id) {
     console.log(id);
     const rej = {
         _id: id,
-        action: "reject"
+        action: "denied"
     }
     try {
     await postrejectRoleChange(id, rej);
