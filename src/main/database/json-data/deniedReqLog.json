@@ -58,5 +58,6 @@
     "_id": 2,
     "name": "Bob Smith",
     "actionTaken": "denied"
+    "actionTaken": "denied"
   }
 ]

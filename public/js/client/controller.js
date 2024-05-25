@@ -27,13 +27,13 @@ export async function fetchAllUsersFromServer() {
 }
 
 export async function fetchApprovedRequests() {
-    const api = cep.getApiTofetchApprovedData();
+    const api = cep.getApiToFetchApprovedLog();
     let res = await cep.fetchDataFromServer(api);
     console.log(res);
     return res;
 }
 export async function fetchDeniedRequests() {
-    const api = cep.getApiTofetchDeniedData();
+    const api = cep.getApiToFetchDeniedLog();
     let res = await cep.fetchDataFromServer(api);
     console.log(res);
     return res;
