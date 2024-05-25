@@ -1,0 +1,23 @@
+{
+    "siteRegistrations": [
+      {
+        "siteId": 1,
+        "name": "Site One",
+        "location": "Location One",
+        "registrationDate": "2023-01-15"
+      },
+      {
+        "siteId": 2,
+        "name": "Site Two",
+        "location": "Location Two",
+        "registrationDate": "2023-02-20"
+      },
+      {
+        "siteId": 3,
+        "name": "Site Three",
+        "location": "Location Three",
+        "registrationDate": "2023-03-10"
+      }
+    ]
+  }
+  
