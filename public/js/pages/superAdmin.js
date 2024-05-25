@@ -1,4 +1,4 @@
-import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests } from '../client/client.js';
+import { getAllUsers, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests, postRequesttoRoleChange,postapproveRoleChange,postrejectRoleChange } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
 const adminsTab = document.getElementById('admins-tab');
@@ -36,13 +36,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         data.forEach(user => {
             if (user.role === "consumer") {
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.email}</td>
-                <td>
-                    <button onclick="requestRoleChange('${user._id}')">Request for Role change</button>
-                </td>
-            `;
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                const emailCell = document.createElement('td');
+                emailCell.textContent = user.email;
+                const actionCell = document.createElement('td');
+                const requestButton = document.createElement('button');
+                requestButton.textContent = 'Request for Role change';
+                const request = {
+                    _id : user._id,
+                    reqRole: "consumer"
+                }
+                requestButton.addEventListener('click', () => requestRoleChange(user._id, request));
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(emailCell);
+                row.appendChild(actionCell);
                 usersTableBody.appendChild(row);
             }
         });
@@ -70,13 +79,22 @@ usersTab.addEventListener('click', async () => {
         data.forEach(user => {
             if (user.role === "consumer") {
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.email}</td>
-                <td>
-                    <button onclick="requestRoleChange('${user._id}')">Request for Role change</button>
-                </td>
-            `;
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                const emailCell = document.createElement('td');
+                emailCell.textContent = user.email;
+                const actionCell = document.createElement('td');
+                const requestButton = document.createElement('button');
+                requestButton.textContent = 'Request for Role change';
+                const request = {
+                    _id: user._id,
+                    reqRole: "consumer"
+                }
+                requestButton.addEventListener('click', () => requestRoleChange(user._id, request));
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(emailCell);
+                row.appendChild(actionCell);
                 usersTableBody.appendChild(row);
             }
         });
@@ -103,13 +121,22 @@ adminsTab.addEventListener('click', async () => {
         data.forEach(user => {
             if (user.role === "admin") {
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.email}</td>
-                <td>
-                    <button onclick="requestRoleChange('${user._id}')">Request for Role change</button>
-                </td>
-            `;
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                const emailCell = document.createElement('td');
+                emailCell.textContent = user.email;
+                const actionCell = document.createElement('td');
+                const requestButton = document.createElement('button');
+                requestButton.textContent = 'Request for Role change';
+                const request = {
+                    _id: user._id,
+                    reqRole: "consumer"
+                }
+                requestButton.addEventListener('click', () => requestRoleChange(user._id, request));
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(emailCell);
+                row.appendChild(actionCell);
                 adminsTableBody.appendChild(row);
             }
         });
@@ -118,17 +145,25 @@ adminsTab.addEventListener('click', async () => {
         row.innerHTML = `
             <td colspan="3">No Admin available</td>
         `;
-        usersTableBody.appendChild(row);
+        adminsTableBody.appendChild(row);
     }
 });
 
-function requestRoleChange(id) {
-    console.log('role change requested')
+async function requestRoleChange(id, req) {
+    console.log(id)
+    try {
+        await postRequesttoRoleChange(id, req);
+        console.log('request sent')
 
+    } catch (error) {
+        console.log('Error in sending request')
+
+    }
 }
 
 
-pendingTab.addEventListener('click', async() => {
+
+pendingTab.addEventListener('click', async () => {
     console.log("fetching all pending requests")
     hideAllLists();
     pendingList.style.display = 'block';
@@ -138,15 +173,26 @@ pendingTab.addEventListener('click', async() => {
         data.forEach(user => {
             if (user.requestStatus === "pending") {
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.currentRole}</td>
-                <td>${user.requestedRole}</td>
-                <td>
-                    <button onclick="approveRoleChange('${user._id}')">Approve</button>
-                    <button onclick="rejectRoleChange('${user._id}')">Reject</button>
-                </td>
-            `;
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                const currentRoleCell = document.createElement('td');
+                currentRoleCell.textContent = user.currentRole;
+                const requestedRoleCell = document.createElement('td');
+                requestedRoleCell.textContent = user.requestedRole;
+                const actionCell = document.createElement('td');
+                const approveButton = document.createElement('button');
+                approveButton.textContent = 'Approve';
+                approveButton.addEventListener('click', () => approveRoleChange(user._id));
+                const rejectButton = document.createElement('button');
+                rejectButton.textContent = 'Reject';
+                rejectButton.addEventListener('click', () => rejectRoleChange(user._id));
+                actionCell.appendChild(approveButton);
+                actionCell.appendChild(rejectButton);
+                row.appendChild(nameCell);
+                row.appendChild(currentRoleCell);
+                row.appendChild(requestedRoleCell);
+                row.appendChild(actionCell);
+
                 pendingTableBody.appendChild(row);
             }
         });
@@ -161,15 +207,37 @@ pendingTab.addEventListener('click', async() => {
 
 
 
-async function approveRoleChange(id){
-    console.log('Role change request Accepted !')
-    alert('Request Accepted')
+async function approveRoleChange(id) {
+    console.log(id)
+    const apr = {
+        _id: id,
+        action: "approve"
+    }
+    try {
+        await postapproveRoleChange(id, apr);
+        console.log('request sent')
+
+    } catch (error) {
+        console.log('Error in sending request')
+
+    }
 
 }
 
-async function rejectRoleChange(id){
-    console.log('Role change request Denied!')
-    alert('Request Denied')
+async function rejectRoleChange(id) {
+    console.log(id);
+    const rej = {
+        _id: id,
+        action: "reject"
+    }
+    try {
+    await postrejectRoleChange(id, rej);
+        console.log('request sent')
+
+    } catch (error) {
+        console.log('Error in sending request')
+
+    }
 
 }
 

@@ -1,0 +1,12 @@
+[
+  {
+    "_id": 2,
+    "name": "Bob Smith",
+    "actionTaken": "approve"
+  },
+  {
+    "_id": 2,
+    "name": "Bob Smith",
+    "actionTaken": "approve"
+  }
+]

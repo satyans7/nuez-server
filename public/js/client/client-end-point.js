@@ -17,7 +17,7 @@ export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
 export function getApiToAuthenticateUser() {
-  return AEP_TO_AUTHENTICATE_A_USER;  
+  return AEP_TO_AUTHENTICATE_A_USER;
 }
 export function getApiToUpdateProfileOfUser() {
   return AEP_TO_UPDATE_PROFILE_OF_A_USER;
@@ -35,9 +35,20 @@ export function getApiToDemoteUser() {
   return AEP_TO_DEMOTE_A_USER;
 }
 
-export function getApiToRequestRoleChange() {
-  return AEP_TO_REQUEST_FOR_ROLE_CHANGE;
+export function getApiToRequestRoleChange(id) {
+  return `/api/user/request/${id}`;
 }
+
+export function getApiToApproveRoleChange(id) {
+   return `/api/user/response/${id}`
+  console.log("request approve");
+}
+export function getApiToRejectRoleChange(id) {
+  return `/api/user/response/${id}`
+  console.log("request reject");
+}
+
+
 export function getApiToRoleChangeRequest() {
   return AEP_TO_FETCH_ROLE_CHANGE_REQ;
 }
@@ -48,8 +59,8 @@ export async function getDataFromServer(apiEndPoint) {
       return response.ok
         ? response.json()
         : response.text().then((text) => {
-            throw new Error(`[${response.status}] ${text}`);
-          });
+          throw new Error(`[${response.status}] ${text}`);
+        });
     })
     .catch((error) => {
       console.error("Error getting data:", error.message);
@@ -66,7 +77,7 @@ export async function fetchPost(url, data) {
     body: JSON.stringify(data),
   });
   console.log(response)
-  return response;
+  return response.json();
 }
 
 

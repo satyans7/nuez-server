@@ -7,8 +7,7 @@ import * as controller from "./controller.js";
 
 
 export function postUserDataToServer(formData) {
-    console.log("fetched")
-    controller.postUserRegisterDataToServer(formData);
+    return controller.postUserRegisterDataToServer(formData);
     
 }
 
@@ -38,6 +37,11 @@ export function getAllRejectedRequests() {
 
 }
 
+export function postRequesttoRoleChange(id, request) {
+    console.log(`posting the request ${id}`)
+    controller.postRequestToRoleChangeToServer(id, request);
+}
+
 
 
 
@@ -47,5 +51,12 @@ export function userLoginDetailsPost(userData){
 }
 
 
-
-  
+export function postapproveRoleChange(id,request) {
+    console.log(`posting the approval request ${id}`);
+    controller.postapproveRoleChange(id,request);
+}
+ 
+export function postrejectRoleChange(id,request) {
+    console.log(`posting the reject request ${id}`);
+    controller.postrejectRoleChange(id,request);
+}

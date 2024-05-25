@@ -2,12 +2,31 @@ const fs = require("fs");
 const path = require("path");
 const USER_DATA = path.join(__dirname, "../database/json-data/jsonData.json");
 const REQ_DATA = path.join(__dirname, "../database/json-data/requestData.json");
-
+const ACCEPTED_LOG = path.join(__dirname, "../database/json-data/approvedReqLog.json");
+const REJECTED_LOG = path.join(__dirname, "../database/json-data/deniedReqLog.json");
 class JsonController {
   fetchSampleData() {
     return { name: "Nuez Technologies" };
   }
-
+    /////////// DO NOT CHANGE /////////////////////
+    readDatabase (DATA_FILE)  {
+      try {
+        const data = fs.readFileSync(DATA_FILE, 'utf8');
+        return JSON.parse(data);
+      } catch (error) {
+        throw new Error('Unable to read database: ' + error.message);
+      }
+    };
+  
+    writeDatabase (DATA_FILE,data){
+      try {
+        const jsonData = JSON.stringify(data, null, 2); 
+        fs.writeFileSync(DATA_FILE, jsonData, 'utf8');
+      } catch (error) {
+        throw new Error('Unable to write to the database: ' + error.message);
+      }
+    };
+  /////////// DO NOT CHANGE /////////////////////
 
   postUserDataToServer =  (user) => {
     try {
@@ -53,34 +72,28 @@ class JsonController {
       throw new Error('Failed to post user request: ' + error.message);
     }
   };
-
-  readDatabase (DATA_FILE)  {
-    try {
-      const data = fs.readFileSync(DATA_FILE, 'utf8');
-      return JSON.parse(data);
-    } catch (error) {
-      throw new Error('Unable to read database: ' + error.message);
-    }
-  };
-
-  writeDatabase (DATA_FILE,data){
-    try {
-      const jsonData = JSON.stringify(data, null, 2); 
-      fs.writeFileSync(DATA_FILE, jsonData, 'utf8');
-    } catch (error) {
-      throw new Error('Unable to write to the database: ' + error.message);
-    }
-  };
+  ///// FETCH ALL USER DATA FROM THE DATABASE//////
   fetchAllUsers(){
     const db=this.readDatabase(USER_DATA);
     return db.users;
   }
+  ////// FETCH ALL ROLE CHANGE REQUEST FROM THE DATABASE/////
   fetchRoleChangeReq(){
     const db=this.readDatabase(REQ_DATA);
     return db;
   }
+  fetchApprovedLog(){
+    const db=this.readDatabase(ACCEPTED_LOG);
+    return db;
+  }
+  fetchRejectedLog(){
+    const db=this.readDatabase(REJECTED_LOG);
+    return db;
+  }
 
 
+////////  NOT USED CURRENTLY ////////
+//// TO DELETE A PARTICULAR USER BY ID FROM THE MAIN DATABASE/////
   deleteUserById(userId){
     const data = this.readDatabase(USER_DATA);
     const userIndex=data.users.findIndex(it=> it._id===userId)
@@ -91,16 +104,50 @@ class JsonController {
     
   }
 
-  // const db = readDatabase();
-  // const user = db.users.find(user => user.id === parseInt(req.params.id));
-  // if (user) {
-  //   const userIndex=db.users.findIndex(it=> it.id===user.id)
-  //   const deletedUser=db.users.splice(userIndex, 1)[0];
-  //   writeDatabase(db);
-  //   res.status(200).json({ deletedUser });
-  // } else {
-  //   res.status(404).send('User not found');
-  // }
+
+  deleteReqByUserId(userId){
+    const data = this.readDatabase(REQ_DATA);
+    const userIndex=data.findIndex(it=> it._id===userId)
+    const deletedUser=data.splice(userIndex,1)[0];
+    this.writeDatabase(REQ_DATA,data);
+    console.log(`${deletedUser.name} has been deleted successfully from role req table`)
+    return deletedUser;
+  }
+
+  addResponseToLog(user,userData){
+    const LOG_DB =(userData.action==="approved") ?ACCEPTED_LOG:REJECTED_LOG;
+    try {
+      const data =  this.readDatabase(LOG_DB);
+      
+      const newLog ={
+        _id : user._id,
+        name : user.name,
+        "roleRequested" : user.reqestedRole,
+        "actionTaken": userData.action,
+        "timeStamp" : userData.time
+      }
+      data.push(newLog)
+       this.writeDatabase(LOG_DB,data);
+  
+      // return newUser;
+      console.log(`${newLog.name} successfully added request`);
+    } catch (error) {
+      throw new Error('Failed to post user request: ' + error.message);
+    }
+  }
+
+  roleChange(userId){
+    const data = this.readDatabase(USER_DATA);
+    const user=data.users.find( it=> it._id===userId)
+    if(user.role==="consumer"){
+      user.role="admin"
+    }
+    else{
+      user.role="consumer"
+    }
+    this.writeDatabase(USER_DATA,data);
+  }
+
 }
 
 module.exports = new JsonController();

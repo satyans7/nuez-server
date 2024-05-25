@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded',()=>
             password: document.getElementById('password').value
         };
         try {
-            const response = await client.userLoginDetailsPost(logData);
-            const jsonResponse = await response.json();
+            const jsonResponse = await client.userLoginDetailsPost(logData);
       
             if (jsonResponse.success) {
               console.log(`Redirecting to ${jsonResponse.route}`);

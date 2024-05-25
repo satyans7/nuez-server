@@ -23,6 +23,16 @@ class DbController {
     // console.log(data);
     return(data);
   }
+  fetchApprovedLog(){
+    let data=jsonController.fetchApprovedLog();
+    // console.log(data);
+    return(data);
+  }
+  fetchRejectedLog(){
+    let data=jsonController.fetchRejectedLog();
+    // console.log(data);
+    return(data);
+  }
 
   fetchUserById(userId){
     let data=jsonController.fetchAllUsers();
@@ -48,7 +58,19 @@ class DbController {
     const users = jsonController.fetchAllUsers();
     const user = users.find(user => user.email === email);
     return user;
- }
+  }
+
+  deleteReqByUserId(userId){
+    return jsonController.deleteReqByUserId(userId)
+  }
+
+  addResponseToLog(user,userData){
+    jsonController.addResponseToLog(user,userData);
+
+  }
+  roleChange(userId){
+    jsonController.roleChange(userId);
+  }
 }
 module.exports = new DbController();
 
