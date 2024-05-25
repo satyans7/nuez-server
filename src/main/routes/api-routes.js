@@ -14,8 +14,8 @@ module.exports = function (app) {
   const AEP_TO_UPDATE_PROFILE_OF_A_USER = "/api/user/profile/:id";
   const AEP_TO_FETCH_ALL_USERS = "/api/user";
   const AEP_TO_FETCH_USER_BY_ID = "/api/user/:id";
-  const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
-  const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
+  // const AEP_TO_PROMOTE_A_USER = "/api/user/promote/:id";
+  // const AEP_TO_DEMOTE_A_USER = "/api/user/demote/:id";
   const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
   const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
   const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
@@ -23,6 +23,8 @@ module.exports = function (app) {
     const CONSUMERPAGE=path.join(__dirname, '../views/pages', 'consumer.html');
     const PRIVATE_AEP_TO_ADMINROUTE="/api/admin-dashboard"
     const PRIVATE_AEP_TO_CONSUMERROUTE="/api/consumer-dashboard"
+  const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
+
 
   app.post(AEP_TO_REGISTER_A_USER,(req, res) => {
     return controller.registerUser(req, res); 
@@ -63,20 +65,25 @@ app.post(AEP_TO_AUTHENTICATE_A_USER, (req, res) => {
   });
 
 
-  app.patch(AEP_TO_PROMOTE_A_USER, (req, res) => {
-    const data = controller.promoteUser();
-    console.log(data);
-    res.send(data);
-  });
-  app.patch(AEP_TO_DEMOTE_A_USER, (req, res) => {
-    const data = controller.demoteUser();
-    console.log(data);
-    res.send(data);
-  });
+  // app.patch(AEP_TO_PROMOTE_A_USER, (req, res) => {
+  //   const data = controller.promoteUser();
+  //   console.log(data);
+  //   res.send(data);
+  // });
+  // app.patch(AEP_TO_DEMOTE_A_USER, (req, res) => {
+  //   const data = controller.demoteUser();
+  //   console.log(data);
+  //   res.send(data);
+  // });
 
 
   app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, (req, res) => {
     const data = controller.requestRoleChange(req);
+    // console.log(data);
+    // res.send(data);
+  });
+  app.post(AEP_FOR_ROLE_CHANGE_RESPONSE, (req, res) => {
+    const data = controller.roleChangeResponse(req);
     // console.log(data);
     // res.send(data);
   });

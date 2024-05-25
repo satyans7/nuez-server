@@ -48,7 +48,19 @@ class DbController {
     const users = jsonController.fetchAllUsers();
     const user = users.find(user => user.email === email);
     return user;
- }
+  }
+
+  deleteReqByUserId(userId){
+    return jsonController.deleteReqByUserId(userId)
+  }
+
+  addResponseToLog(user,userData){
+    jsonController.addResponseToLog(user,userData);
+
+  }
+  roleChange(userId){
+    jsonController.roleChange(userId);
+  }
 }
 module.exports = new DbController();
 

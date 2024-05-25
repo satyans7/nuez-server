@@ -81,20 +81,37 @@ class Controller {
   }
   requestRoleChange(req) {
     let userId=req.body._id;
-    console.log(userId);
+    // console.log(userId);
     const user=dbController.fetchUserById(userId);
-    console.log(user);
+    // console.log(user);
     const reqRole=req.body.reqRole;
-    console.log(reqRole)
+    // console.log(reqRole)
     dbController.requestRoleChange(user,reqRole)
     // console.log(data);
     // return data;
   }
+  roleChangeResponse(req){
+    const action= req.body.action;
+    const userId= req.body._id;
+    const user= dbController.deleteReqByUserId(userId);
+    console.log(user);
+    dbController.addResponseToLog(user,req.body);
+    if(action==="approved"){
+      dbController.roleChange(userId);
+    }
+    
+  }
+
+
+
+
 
 
   deleteUserById(userId){
     return dbController.deleteUserById(userId);
   }
   
+
+
 }
 module.exports = new Controller();
