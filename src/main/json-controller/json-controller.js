@@ -4,6 +4,7 @@ const USER_DATA = path.join(__dirname, "../database/json-data/jsonData.json");
 const REQ_DATA = path.join(__dirname, "../database/json-data/requestData.json");
 const ACCEPTED_LOG = path.join(__dirname, "../database/json-data/approvedReqLog.json");
 const REJECTED_LOG = path.join(__dirname, "../database/json-data/deniedReqLog.json");
+const ntpClient = require('ntp-client');
 class JsonController {
   fetchSampleData() {
     return { name: "Nuez Technologies" };
@@ -58,8 +59,8 @@ class JsonController {
         // 'current-role': "consumer",
         // 'requested-role': "admin",
         // 'request-status': "pending"
-        "currentRole":currRole,
-        "requestedRole":reqRole,
+        currentRole:currRole,
+        requestedRole:reqRole,
         "requestStatus": "pending"
       };
       data.push(newReq);
@@ -113,18 +114,44 @@ class JsonController {
     console.log(`${deletedUser.name} has been deleted successfully from role req table`)
     return deletedUser;
   }
-
+  async getTimeAndDate() {
+    // try {
+    //   const response = await axios.get('https://timeapi.io/api/Time/current/zone?timeZone=UTC');
+    //   // const responseData = response.data;
+    //   const dateTime = response.date.toLocaleString();
+    //   return dateTime;
+    // } catch (error) {
+    //   console.error('Error fetching time:', error);
+    //   return null;
+    // }
+    return new Promise((resolve, reject) => {
+      ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
+        if (err) {
+          console.error('Error fetching time:', err);
+          reject(err);
+        } else {
+          // Log the received date for debugging
+          console.log('Received Date:', date);
+          resolve(date.toLocaleString());
+        }
+      });
+    });
+  }
   async addResponseToLog(user,userData){
     const LOG_DB =(userData.action==="approved") ?ACCEPTED_LOG:REJECTED_LOG;
     try {
       const data = await this.readDatabase(LOG_DB);
+      // const now=new Date();
+      // console.log(now.toLocaleString());
+      // const dateTime=now.toLocaleString();
       
+      const dateTime = await this.getTimeAndDate();
       const newLog ={
         _id : user._id,
         name : user.name,
-        "roleRequested" : user.reqestedRole,
-        "actionTaken": userData.action,
-        "timeStamp" : userData.time
+        roleRequested : user.requestedRole,
+        actionTaken : userData.action,
+        timeStamp : dateTime
       }
       data.push(newLog)
        await this.writeDatabase(LOG_DB,data);
