@@ -1,3 +1,51 @@
 [
-  
+  {
+    "_id": 3,
+    "name": "Nikhil Priyadarshan",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "27/5/2024, 1:03:49 pm"
+  },
+  {
+    "_id": 4,
+    "name": "Nikhil ",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "27/5/2024, 1:03:50 pm"
+  },
+  {
+    "_id": 3,
+    "name": "Nikhil Priyadarshan",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "27/5/2024, 1:03:51 pm"
+  },
+  {
+    "_id": 1,
+    "name": "Alice Johnson",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "27/5/2024, 2:29:23 pm"
+  },
+  {
+    "_id": 1,
+    "name": "Alice Johnson",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "27/5/2024, 2:29:26 pm"
+  },
+  {
+    "_id": 4,
+    "name": "Nikhil ",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "27/5/2024, 2:29:28 pm"
+  },
+  {
+    "_id": 4,
+    "name": "Nikhil ",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "27/5/2024, 2:30:04 pm"
+  }
 ]

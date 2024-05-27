@@ -79,6 +79,7 @@ usersTab.addEventListener('click', async () => {
     hideAllLists();
     usersList.style.display = 'block';
     let data = await getAllUsers();
+    let datap = await getAllPendingRequests();
     usersTableBody.innerHTML = '';
     if (data && data.length > 0) {
         data.forEach(user => {
@@ -91,13 +92,22 @@ usersTab.addEventListener('click', async () => {
                 const actionCell = document.createElement('td');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = 'Request for Role change';
+
+                 // Check if there is a pending request for this user by matching IDs
+                 const hasPendingRequest = datap.some(request => request._id === user._id);
+                
+                 if (hasPendingRequest) {
+                     requestButton.disabled = true;
+                 }
+
                 const request = {
                     _id: user._id,
                     reqRole: "admin"
                 }
-                requestButton.addEventListener('click', (event) => {
+                requestButton.addEventListener('click', async (event) => {
                     const button = event.target;
-                    if(button.disabled) return
+                    if(button.disabled) 
+                    return;
                     button.disabled = true;       
                     requestRoleChange(user._id, request)
                     alert("request added successfully")
@@ -127,6 +137,7 @@ adminsTab.addEventListener('click', async () => {
     hideAllLists();
     adminList.style.display = 'block';
     let data = await getAllUsers();
+    let datap = await getAllPendingRequests();
     adminsTableBody.innerHTML = '';
     if (data && data.length > 0) {
         data.forEach(user => {
@@ -139,11 +150,21 @@ adminsTab.addEventListener('click', async () => {
                 const actionCell = document.createElement('td');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = 'Request for Role change';
+                const hasPendingRequest = datap.some(request => request._id === user._id);
+                
+                if (hasPendingRequest) {
+                    requestButton.disabled = true;
+                }
+
                 const request = {
                     _id: user._id,
                     reqRole: "consumer"
                 }
                 requestButton.addEventListener('click', () => {
+                    const button = event.target;
+                    if(button.disabled) 
+                    return;
+                    button.disabled = true; 
                     requestRoleChange(user._id, request)
                     alert("request added successfully")
                 });
