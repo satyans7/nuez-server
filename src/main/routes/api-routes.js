@@ -19,6 +19,7 @@ module.exports = function (app) {
   const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
   const ADMINPAGE = path.join(__dirname, '../views/pages', 'admin.html');
   const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
+  const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard";
   const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard";
   const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
@@ -94,4 +95,11 @@ module.exports = function (app) {
   app.get(PRIVATE_AEP_TO_CONSUMERROUTE, (req, res) => {
     res.sendFile(CONSUMERPAGE);
   });
+
+  app.get('/superAdmin.html', (req, res) => {
+    res.sendFile(SUPERADMINPAGE);
+  });
 };
+
+
+

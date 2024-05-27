@@ -7,7 +7,15 @@ class DbController {
     return data;
   }
 
+  async isEmailReserved(email) {
+    return await jsonController.isEmailReserved(email);
+  }
+  
   async postUserDataToServer(user) {
+    const isReserved = await this.isEmailReserved(user.email);
+    if (isReserved) {
+      throw new Error('This email is reserved and cannot be registered.');
+    }
     return await jsonController.postUserDataToServer(user);
   }
 
@@ -50,6 +58,10 @@ class DbController {
     const data = await jsonController.deleteUserById(parseInt(userId));
     return data;
   }
+
+  async isEmailReserved(email) {
+    return await jsonController.isEmailReserved(email);
+}
 
   async findUserByEmail(email) {
     const users = await jsonController.fetchAllUsers();

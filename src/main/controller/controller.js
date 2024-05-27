@@ -11,6 +11,13 @@ class Controller {
   async registerUser(req, res) {
     try {
       const email = req.body.email;
+
+         // Check if email is reserved
+         const isReserved = await dbController.isEmailReserved(email);
+
+         if (isReserved) {
+             return res.status(400).json({ success: false, message: 'Username already exists' });
+         }
   
       // Validate email uniqueness
       const isUnique = await this.validateUniquenessOfUserName(email);
@@ -34,25 +41,31 @@ class Controller {
       return res.status(500).json({ success: false, message: 'Internal server error' });
     }
   }
-  
+
+
   async validateUniquenessOfUserName(username) {
     const user = await dbController.findUserByEmail(username);
     return user !== undefined; 
   }
-
+//isko mt chedna
   async authenticateUser(formData) {
     try {
-      let authResult = await authController.authenticateUser(formData);
-      if (authResult.success) {
-        let route = `/api/${authResult.role}-dashboard`;
-        return { success: true, route: route, message: `Logged In Successful` };
-      } else {
-        return { success: false, route: "null", message: "Invalid username or password!!!" };
-      }
+        let authResult = await authController.authenticateUser(formData);
+        if (authResult.success) {
+            if (authResult.route) {
+                // Handle special case for reserved emails
+                return { success: true, route: authResult.route, message: authResult.message };
+            } else {
+                let route = `/api/${authResult.role}-dashboard`;
+                return { success: true, route: route, message: 'Logged In Successfully' };
+            }
+        } else {
+            return { success: false, route: 'null', message: 'Invalid username or password!!!' };
+        }
     } catch (error) {
-      return { success: false, route: 'null', message: "Internal Server Error" };
+        return { success: false, route: 'null', message: 'Internal Server Error' };
     }
-  }
+}
 
   async updateProfileOfUser() {
     let data = await dbController.fetchSampleDataFromServer();

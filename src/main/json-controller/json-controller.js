@@ -4,6 +4,7 @@ const USER_DATA = path.join(__dirname, "../database/json-data/jsonData.json");
 const REQ_DATA = path.join(__dirname, "../database/json-data/requestData.json");
 const ACCEPTED_LOG = path.join(__dirname, "../database/json-data/approvedReqLog.json");
 const REJECTED_LOG = path.join(__dirname, "../database/json-data/deniedReqLog.json");
+const RESERVED_EMAILS = path.join(__dirname, "../database/json-data/reserved.json");
 const ntpClient = require('ntp-client');
 class JsonController {
   fetchSampleData() {
@@ -174,6 +175,16 @@ class JsonController {
     }
     await this.writeDatabase(USER_DATA,data);
   }
+
+  async isEmailReserved(email) {
+    try {
+        const reservedData = this.readDatabase(RESERVED_EMAILS);
+        const reservedEmails = reservedData.reserved_emails;
+        return reservedEmails.includes(email);
+    } catch (error) {
+        throw new Error('Failed to check if email is reserved: ' + error.message);
+    }
+}
 
 }
 
