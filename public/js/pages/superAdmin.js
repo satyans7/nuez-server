@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     reqRole: "admin"
                 }
                 requestButton.addEventListener('click', (event) => {
-                    
                     requestRoleChange(user._id, request)
                     alert("request added successfully")
                 });
@@ -97,7 +96,9 @@ usersTab.addEventListener('click', async () => {
                     reqRole: "admin"
                 }
                 requestButton.addEventListener('click', (event) => {
-                      
+                    const button = event.target;
+                    if(button.disabled) return
+                    button.disabled = true;       
                     requestRoleChange(user._id, request)
                     alert("request added successfully")
                 });
