@@ -1,13 +1,8 @@
 {
-    "adminSiteMapping": [
-      {
-        "adminId": 1,
-        "siteIds": ["site1", "site2"]
-      },
-      {
-        "adminId":2,
-        "siteIds": ["site3"]
-      }
-    ]
+  "adminSiteMapping": {
+    "1": [1, 4],
+    "2": [2, 5],
+    "3": [3, 6],
+    "6": [7, 8]
   }
-  
+}
