@@ -47,10 +47,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 requestButton.textContent = 'Request for Role change';
                 const request = {
                     _id: user._id,
-                    reqRole: "consumer"
+                    reqRole: "admin"
                 }
                 requestButton.addEventListener('click', (event) => {
+                    
                     requestRoleChange(user._id, request)
+                    alert("request added successfully")
                 });
                 actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
@@ -95,10 +97,9 @@ usersTab.addEventListener('click', async () => {
                     reqRole: "admin"
                 }
                 requestButton.addEventListener('click', (event) => {
-                    const button = event.target;
-                    if(button.disabled) return
-                    button.disabled = true;       
+                      
                     requestRoleChange(user._id, request)
+                    alert("request added successfully")
                 });
                 actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
@@ -189,9 +190,12 @@ approvedTab.addEventListener('click', async () => {
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             nameCell.textContent = user.name;
+            const reqRoleCell = document.createElement('td');
+            reqRoleCell.textContent = user.roleRequested;
             const timeStampCell = document.createElement('td');
-            timeStampCell.textContent = "00:00";
+            timeStampCell.textContent =user.timeStamp;
             row.appendChild(nameCell);
+            row.appendChild(reqRoleCell);
             row.appendChild(timeStampCell);
             approvedTableBody.appendChild(row);
         });
@@ -220,9 +224,12 @@ rejectedTab.addEventListener('click', async () => {
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             nameCell.textContent = user.name;
+            const reqRoleCell = document.createElement('td');
+            reqRoleCell.textContent = user.roleRequested;
             const timeStampCell = document.createElement('td');
-            timeStampCell.textContent = "00:00";
+            timeStampCell.textContent = user.timeStamp;
             row.appendChild(nameCell);
+            row.appendChild(reqRoleCell);
             row.appendChild(timeStampCell);
             rejectedTableBody.appendChild(row);
         });
