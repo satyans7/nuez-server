@@ -1,6 +1,6 @@
 const dbController = require("../db-controller/db-controller");
 const authController = require("../auth-controller/auth-controller");
-
+const ntpClient = require('ntp-client');
 class Controller {
   async fetchSampleDataFromServer() {
     let data = await dbController.fetchSampleDataFromServer();
@@ -66,16 +66,23 @@ class Controller {
         return { success: false, route: 'null', message: 'Internal Server Error' };
     }
 }
-
+  /////////////////UNUSED/////////////
   async updateProfileOfUser() {
     let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
     return data;
   }
+  async deleteUserById(userId) {
+    return await dbController.deleteUserById(userId);
+  }
+  /////////////////UNUSED/////////////
 
   async fetchAllUsers() {
     let data = await dbController.fetchAllUsers();
     return data;
+  }
+  async fetchAllConsumers(){
+
   }
 
   async fetchRoleChangeReq() {
@@ -106,24 +113,53 @@ class Controller {
 
   async requestRoleChange(req) {
     let userId = req.body._id;
-    const user = await dbController.fetchUserById(userId);
+    // const user = await dbController.fetchUserById(userId);
+   
     const reqRole = req.body.reqRole;
-    await dbController.requestRoleChange(user, reqRole);
+    await dbController.requestRoleChange(userId, reqRole);
   }
 
   async roleChangeResponse(req) {
     const action = req.body.action;
     const userId = req.body._id;
-    const user = await dbController.deleteReqByUserId(userId);
-    console.log(user);
-    await dbController.addResponseToLog(user, req.body);
+    const delUser = await dbController.deleteReqByUserId(userId);
+    const timeStamp = await this.getTimeAndDate();
+    console.log(delUser);
+    await dbController.addResponseToLog(delUser, req.body,timeStamp);
     if (action === "approved") {
       await dbController.roleChange(userId);
     }
   }
 
-  async deleteUserById(userId) {
-    return await dbController.deleteUserById(userId);
+  
+  async getTimeAndDate() {
+    // try {
+    //   const response = await axios.get('https://timeapi.io/api/Time/current/zone?timeZone=UTC');
+    //   // const responseData = response.data;
+    //   const dateTime = response.date.toLocaleString();
+    //   return dateTime;
+    // } catch (error) {
+    //   console.error('Error fetching time:', error);
+    //   return null;
+    // }
+    return new Promise((resolve, reject) => {
+      ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
+        if (err) {
+          console.error('Error fetching time:', err);
+          reject(err);
+        } else {
+          // Log the received date for debugging
+          console.log('Received Date:', date);
+          resolve(date.toLocaleString());
+        }
+      });
+    });
+  }
+
+
+  ///////////TESTING CONTROLLER///////////
+  async test (data){
+    return dbController.test(data.body);
   }
 }
 

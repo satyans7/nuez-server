@@ -1,11 +1,11 @@
 {
-  "user_2":{
+  "user_2": {
     "name": "Bob Smith",
     "currentRole": "admin",
     "requestedRole": "consumer",
     "requestStatus": "pending"
   },
-  "user_4":{
+  "user_4": {
     "name": "Bobby Smith",
     "currentRole": "consumer",
     "requestedRole": "admin",

@@ -5,7 +5,7 @@ const REQ_DATA = path.join(__dirname, "../database/json-data/requestData.json");
 const ACCEPTED_LOG = path.join(__dirname, "../database/json-data/approvedReqLog.json");
 const REJECTED_LOG = path.join(__dirname, "../database/json-data/deniedReqLog.json");
 const RESERVED_EMAILS = path.join(__dirname, "../database/json-data/reserved.json");
-const ntpClient = require('ntp-client');
+
 class JsonController {
   fetchSampleData() {
     return { name: "Nuez Technologies" };
@@ -28,35 +28,54 @@ class JsonController {
         throw new Error('Unable to write to the database: ' + error.message);
       }
     };
+
+    createNewUserId (lastUserId){
+      if(lastUserId=="-1") return "user_1";
+      let numericPart = parseInt(lastUserId.split('_')[1]);
+      numericPart++;
+      let newUserId = `user_${numericPart}`;
+      return newUserId;
+
+    }
   /////////// DO NOT CHANGE /////////////////////
 
   postUserDataToServer =  (user) => {
     try {
       const data =  this.readDatabase(USER_DATA);
-  
+      const hasUser = Object.keys(data).length > 0;
+      const usersIds =Object.keys(data);
+      let lastUserId;
+      if(hasUser){
+        lastUserId=usersIds[usersIds.length-1];
+      }
+      else{
+        lastUserId="-1"
+      }
+      const newUserId=this.createNewUserId(lastUserId);
       const newUser = {
-        _id: data.users.length ? data.users[data.users.length - 1]._id + 1 : 1,
         ...user,
       };
+      
       newUser.role='consumer';
-      data.users.push(newUser);
+      data[newUserId]=newUser;
       
        this.writeDatabase(USER_DATA,data);
   
+       console.log(`${newUser.name} successfully registered`);
       return newUser;
-      console.log(`${newUser.name} successfully registered`);
     } catch (error) {
       throw new Error('Failed to post user data: ' + error.message);
     }
   };
-  postUserRequestToServer =  async (user,reqRole) => {
+  postUserRequestToServer =  async (userId,reqRole) => {
     try {
       const data = await this.readDatabase(REQ_DATA);
-      const currRole=user.role;
+      const users = await this.readDatabase(USER_DATA);
+      const currRole=users[userId].role;
+      const userName= users[userId].name;
       // const reqRole=(user.role==="consumer")?"admin":"consumers"
       const newReq = {
-        _id: user._id,
-        name: user.name,
+        name: userName,
         // 'current-role': "consumer",
         // 'requested-role': "admin",
         // 'request-status': "pending"
@@ -64,7 +83,7 @@ class JsonController {
         requestedRole:reqRole,
         "requestStatus": "pending"
       };
-      data.push(newReq);
+      data[userId]=newReq;
       
       await this.writeDatabase(REQ_DATA,data);
   
@@ -109,36 +128,14 @@ class JsonController {
 
   async deleteReqByUserId(userId){
     const data =await this.readDatabase(REQ_DATA);
-    const userIndex=await data.findIndex(it=> it._id===userId)
-    const deletedUser=await data.splice(userIndex,1)[0];
+    const deletedUser= data[userId];
+    delete data[userId];
     await this.writeDatabase(REQ_DATA,data);
     console.log(`${deletedUser.name} has been deleted successfully from role req table`)
     return deletedUser;
   }
-  async getTimeAndDate() {
-    // try {
-    //   const response = await axios.get('https://timeapi.io/api/Time/current/zone?timeZone=UTC');
-    //   // const responseData = response.data;
-    //   const dateTime = response.date.toLocaleString();
-    //   return dateTime;
-    // } catch (error) {
-    //   console.error('Error fetching time:', error);
-    //   return null;
-    // }
-    return new Promise((resolve, reject) => {
-      ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
-        if (err) {
-          console.error('Error fetching time:', err);
-          reject(err);
-        } else {
-          // Log the received date for debugging
-          console.log('Received Date:', date);
-          resolve(date.toLocaleString());
-        }
-      });
-    });
-  }
-  async addResponseToLog(user,userData){
+  
+  async addResponseToLog(delUser,userData,timeStamp){
     const LOG_DB =(userData.action==="approved") ?ACCEPTED_LOG:REJECTED_LOG;
     try {
       const data = await this.readDatabase(LOG_DB);
@@ -146,13 +143,13 @@ class JsonController {
       // console.log(now.toLocaleString());
       // const dateTime=now.toLocaleString();
       
-      const dateTime = await this.getTimeAndDate();
+      
       const newLog ={
-        _id : user._id,
-        name : user.name,
-        roleRequested : user.requestedRole,
+        _id : userData._id,
+        name : delUser.name,
+        roleRequested : delUser.requestedRole,
         actionTaken : userData.action,
-        timeStamp : dateTime
+        timeStamp : timeStamp
       }
       data.push(newLog)
        await this.writeDatabase(LOG_DB,data);
@@ -166,13 +163,13 @@ class JsonController {
 
   async roleChange(userId){
     const data =await this.readDatabase(USER_DATA);
-    const user=await data.users.find( it=> it._id===userId)
-    if(user.role==="consumer"){
-      user.role="admin"
+    if(data[userId].role==="consumer"){
+      data[userId].role="admin"
     }
     else{
-      user.role="consumer"
+      data[userId].role="consumer"
     }
+    
     await this.writeDatabase(USER_DATA,data);
   }
 

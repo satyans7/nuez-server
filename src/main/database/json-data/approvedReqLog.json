@@ -12,5 +12,12 @@
     "roleRequested": "admin",
     "actionTaken": "approved",
     "timeStamp": "27/5/2024, 10:51:44 am"
+  },
+  {
+    "_id": "user_1",
+    "name": "Alice Johnson",
+    "roleRequested": "consumer",
+    "actionTaken": "approved",
+    "timeStamp": "28/5/2024, 11:42:08 pm"
   }
 ]

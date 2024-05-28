@@ -50,8 +50,8 @@ class DbController {
     return user;
   }
 
-  async requestRoleChange(user, reqRole) {
-    await jsonController.postUserRequestToServer(user, reqRole);
+  async requestRoleChange(userId, reqRole) {
+    await jsonController.postUserRequestToServer(userId, reqRole);
   }
 
   async deleteUserById(userId) {
@@ -73,12 +73,17 @@ class DbController {
     return await jsonController.deleteReqByUserId(userId);
   }
 
-  async addResponseToLog(user, userData) {
-    await jsonController.addResponseToLog(user, userData);
+  async addResponseToLog(delUser, userData,timeStamp) {
+    await jsonController.addResponseToLog(delUser, userData,timeStamp);
   }
 
   async roleChange(userId) {
     await jsonController.roleChange(userId);
+  }
+
+  //////////////FOR TEST PURPOSE USE THIS/////////////
+  async test(data){
+    await jsonController.postUserDataToServer(data);
   }
 }
 

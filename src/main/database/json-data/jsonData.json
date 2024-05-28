@@ -3,18 +3,24 @@
     "name": "Alice Johnson",
     "email": "alice.johnson@example.com",
     "password": "password123",
-    "role": "admin"
+    "role": "consumer"
   },
-  "user_2":{
+  "user_2": {
     "name": "Bob Smith",
     "email": "bob.smith@example.com",
     "password": "password123",
     "role": "admin"
   },
-  "user_3":{
+  "user_3": {
     "name": "Nikhil Priyadarshan",
     "email": "nikhilpriyadarshan1234@gmail.com",
     "password": "12345678",
     "role": "admin"
+  },
+  "user_4": {
+    "name": "Bobby Smith",
+    "email": "bobbby@example.com",
+    "password": "password123",
+    "role": "consumer"
   }
 }

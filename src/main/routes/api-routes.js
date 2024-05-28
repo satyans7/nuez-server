@@ -99,6 +99,14 @@ module.exports = function (app) {
   app.get('/superAdmin.html', (req, res) => {
     res.sendFile(SUPERADMINPAGE);
   });
+
+
+
+  ///////////TESTING ROUTES////////////////
+  app.post("/test-url",(req,res)=>{
+    let data = controller.test(req);
+    return data;
+  })
 };
 
 
