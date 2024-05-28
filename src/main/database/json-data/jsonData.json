@@ -1,46 +1,20 @@
 {
-  "users": [
-    {
-      "_id": 1,
-      "name": "Alice Johnson",
-      "email": "alice.johnson@example.com",
-      "password": "password123",
-      "role": "admin"
-    },
-    {
-      "_id": 2,
-      "name": "Bob Smith",
-      "email": "bob.smith@example.com",
-      "password": "password123",
-      "role": "admin"
-    },
-    {
-      "_id": 3,
-      "name": "Nikhil Priyadarshan",
-      "email": "nikhilpriyadarshan1234@gmail.com",
-      "password": "12345678",
-      "role": "admin"
-    },
-    {
-      "_id": 4,
-      "name": "Nikhil ",
-      "email": "nikhilpriyadarshan12345@gmail.com",
-      "password": "12345678",
-      "role": "consumer"
-    },
-    {
-      "_id": 5,
-      "name": "Nikh ",
-      "email": "nikhildarshan12345@gmail.com",
-      "password": "12345678",
-      "role": "consumer"
-    },
-    {
-      "_id": 6,
-      "name": "suresh",
-      "email": "suresh@yahoo.com",
-      "password": "hellosuresh",
-      "role": "admin"
-    }
-  ]
+  "user_1": {
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "password": "password123",
+    "role": "admin"
+  },
+  "user_2":{
+    "name": "Bob Smith",
+    "email": "bob.smith@example.com",
+    "password": "password123",
+    "role": "admin"
+  },
+  "user_3":{
+    "name": "Nikhil Priyadarshan",
+    "email": "nikhilpriyadarshan1234@gmail.com",
+    "password": "12345678",
+    "role": "admin"
+  }
 }
