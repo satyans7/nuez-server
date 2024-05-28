@@ -96,11 +96,13 @@ class JsonController {
   ///// FETCH ALL USER DATA FROM THE DATABASE//////
   async fetchAllUsers(){
     const db=await this.readDatabase(USER_DATA);
-    return db.users;
+    return db;
   }
   ////// FETCH ALL ROLE CHANGE REQUEST FROM THE DATABASE/////
   async fetchRoleChangeReq(){
+    
     const db=await this.readDatabase(REQ_DATA);
+   
     return db;
   }
   async fetchApprovedLog(){

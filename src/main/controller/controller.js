@@ -77,17 +77,54 @@ class Controller {
   }
   /////////////////UNUSED/////////////
 
-  async fetchAllUsers() {
+  async fetchAllAdminInfo() {
     let data = await dbController.fetchAllUsers();
-    return data;
+    
+    const newObject={};
+    let ids=Object.keys(data);
+    ids.forEach(id => {
+      const user = data[id];
+      if(user.role==='admin'){
+      newObject[id] = {
+          name: user.name,
+          email: user.email,
+          role: user.role 
+      };}
+  });
+    return newObject;
   }
-  async fetchAllConsumers(){
-
+  async fetchAllConsumerInfo(){
+    let data = await dbController.fetchAllUsers();
+    
+    const newObject={};
+    let ids=Object.keys(data);
+    ids.forEach(id => {
+      const user = data[id];
+      if(user.role==='consumer'){
+      newObject[id] = {
+          name: user.name,
+          email: user.email,
+          role: user.role 
+      };}
+  });
+    return newObject;
   }
 
   async fetchRoleChangeReq() {
     let data = await dbController.fetchRoleChangeReq();
-    return data;
+    const newObject={};
+    let ids=Object.keys(data);
+    ids.forEach(id => {
+      const user = data[id];
+      newObject[id] = {
+          name: user.name,
+          currentRole: user.currentRole,
+          requestedRole: user.requestedRole,
+          requestStatus: user.requestStatus
+      
+      };
+  });
+    return newObject;
   }
 
   async fetchApprovedLog() {
@@ -101,7 +138,7 @@ class Controller {
   }
 
   async fetchUserById(userId) {
-    let data = await dbController.fetchUserById(userId);
+
     return data;
   }
 
