@@ -1,44 +1,15 @@
-{
-  "sites": {
-      "1": {
-          "siteId": 1,
+ {
+      "site_1": {
           "name": "Site One",
           "location": "Location One"
       },
-      "2": {
-          "siteId": 2,
+      "site_2": {
+          
           "name": "Site Two",
           "location": "Location Two"
       },
-      "3": {
-          "siteId": 3,
+      "site_3": {
           "name": "Site Three",
           "location": "Location Three"
-      },
-      "4": {
-          "siteId": 4,
-          "name": "Site Four",
-          "location": "Location Four"
-      },
-      "5": {
-          "siteId": 5,
-          "name": "Site Five",
-          "location": "Location Five"
-      },
-      "6": {
-          "siteId": 6,
-          "name": "Site Six",
-          "location": "Location Six"
-      },
-      "7": {
-          "siteId": 7,
-          "name": "Site Seven",
-          "location": "Location Seven"
-      },
-      "8": {
-          "siteId": 8,
-          "name": "Site Eight",
-          "location": "Location Eight"
       }
   }
-}
