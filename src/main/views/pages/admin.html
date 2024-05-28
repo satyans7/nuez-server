@@ -1,11 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
+
 <body>
-    <h1>hello from admin</h1>
+
+    <div class="sidebar">
+        <h2>Admin ID : ABC123</h2>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#users">Users</a>
+        <a href="#settings">Settings</a>
+        <a href="#logout">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>All Registered Sites</h1>
+            <button>Add Site +</button>
+        </div>
+        <div class="all-sites">
+
+            <div class="card">
+                <div class="card-heading">
+                    <h3>Site 1</h3>
+                    <button id="fetch-site-data">More Details</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-heading">
+                    <h3>Site 2</h3>
+                    <button id="fetch-site-data">More Details</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-heading">
+                    <h3>Site 3</h3>
+                    <button id="fetch-site-data">More Details</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-heading">
+                    <h3>Site 4</h3>
+                    <button id="fetch-site-data">More Details</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-heading">
+                    <h3>Site 5</h3>
+                    <button id="fetch-site-data">More Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/js/pages/admin.js"></script>
+
 </body>
+
 </html>
