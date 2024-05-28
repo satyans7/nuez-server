@@ -1,23 +1,14 @@
-[
-  {
-    "_id": 1,
-    "name": "Alice Johnson",
+{
+  "user_2":{
+    "name": "Bob Smith",
     "currentRole": "admin",
     "requestedRole": "consumer",
     "requestStatus": "pending"
   },
-  {
-    "_id": 4,
-    "name": "Nikhil ",
-    "currentRole": "consumer",
-    "requestedRole": "admin",
-    "requestStatus": "pending"
-  },
-  {
-    "_id": 5,
-    "name": "Nikh ",
+  "user_4":{
+    "name": "Bobby Smith",
     "currentRole": "consumer",
     "requestedRole": "admin",
     "requestStatus": "pending"
   }
-]
+}
