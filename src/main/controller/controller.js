@@ -140,6 +140,10 @@ class Controller {
     
     return user=={}
   }
+  async fetchAllUsers() {
+    let data = await dbController.fetchAllUsers();
+    return data;
+  }
   async fetchAllAdminInfo() {
     let data = await dbController.fetchAllUsers();
     

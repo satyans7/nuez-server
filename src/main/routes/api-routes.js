@@ -34,14 +34,9 @@ module.exports = function (app) {
   const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
   const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
   
-  const ADMINPAGE = path.join(__dirname, '../views/pages', 'admin.html');
-  const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
-  const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
-  const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard";
-  const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard";
-  const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
-  const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
-  const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
+  
+  
+
 
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
