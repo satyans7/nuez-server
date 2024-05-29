@@ -100,7 +100,9 @@ class JsonController {
   }
   ////// FETCH ALL ROLE CHANGE REQUEST FROM THE DATABASE/////
   async fetchRoleChangeReq(){
+    
     const db=await this.readDatabase(REQ_DATA);
+   
     return db;
   }
   async fetchApprovedLog(){

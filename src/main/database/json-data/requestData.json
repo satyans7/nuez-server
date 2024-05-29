@@ -1,12 +1,6 @@
 {
-  "user_2": {
-    "name": "Bob Smith",
-    "currentRole": "admin",
-    "requestedRole": "consumer",
-    "requestStatus": "pending"
-  },
-  "user_4": {
-    "name": "Priyansu Mohanty",
+  "user_1": {
+    "name": "Alice Johnson",
     "currentRole": "consumer",
     "requestedRole": "admin",
     "requestStatus": "pending"

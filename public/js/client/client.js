@@ -14,9 +14,15 @@ export function postUserDataToServer(formData) {
 
 // Super Admin 
 
-export async function getAllUsers() {
-    const data =  await controller.fetchAllUsersFromServer()
-    //console.log(data)
+export async function getAllConsumers() {
+    const data =  await controller.fetchAllConsumersFromServer()
+   // console.log(data)
+    return data
+}
+
+export async function getAllAdmins() {
+    const data =  await controller.fetchAllAdminsFromServer()
+   // console.log(data)
     return data
 }
 
@@ -39,26 +45,25 @@ export async function getAllRejectedRequests() {
     return data
 }
 
-export function postRequesttoRoleChange(id, request) {
+export async function postRequesttoRoleChange(id, request) {
     console.log(`posting the request ${id}`)
-    controller.postRequestToRoleChangeToServer(id, request);
+    await controller.postRequestToRoleChangeToServer(id, request);
 }
 
 
+export async function postapproveRoleChange(id,request) {
+    console.log(`posting the approval request ${id}`);
+    await controller.postapproveRoleChange(id,request);
+}
+ 
+export async function postrejectRoleChange(id,request) {
+    console.log(`posting the reject request ${id}`);
+    await controller.postrejectRoleChange(id,request);
+}
 
 
 //login
-export function userLoginDetailsPost(userData){
-    return controller.postUserLoginDataToServer(userData);
+export async function userLoginDetailsPost(userData){
+    return await controller.postUserLoginDataToServer(userData);
 }
 
-
-export function postapproveRoleChange(id,request) {
-    console.log(`posting the approval request ${id}`);
-    controller.postapproveRoleChange(id,request);
-}
- 
-export function postrejectRoleChange(id,request) {
-    console.log(`posting the reject request ${id}`);
-    controller.postrejectRoleChange(id,request);
-}

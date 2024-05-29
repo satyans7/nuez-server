@@ -7,22 +7,29 @@ export async function fetchAllDataFromServer() {
 
 }
 
-export function postUserRegisterDataToServer(data) {
+export async function postUserRegisterDataToServer(data) {
     const api = cep.getApiToRegisterUser();
-    return cep.fetchPost(api, data);
+    return await cep.fetchPost(api, data);
 }
-export function postUserLoginDataToServer(data) {
+export async function postUserLoginDataToServer(data) {
     const api = cep.getApiToAuthenticateUser();
-    return cep.fetchPost(api, data);
+    return await cep.fetchPost(api, data);
 }
 
 
 //Super Admin
 
-export async function fetchAllUsersFromServer() {
-    const api = cep.getApiToFetchUserDetailsForAll();
+export async function fetchAllConsumersFromServer() {
+    const api = cep.getApiToFetchConsumerDetailsForAll();
     let res = await cep.fetchDataFromServer(api);
-    console.log(res);
+    //console.log(res);
+    return res;
+}
+
+export async function fetchAllAdminsFromServer() {
+    const api = cep.getApiToFetchAdminDetailsForAll();
+    let res = await cep.fetchDataFromServer(api);
+    //console.log(res);
     return res;
 }
 

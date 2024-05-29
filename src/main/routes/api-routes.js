@@ -9,10 +9,22 @@ module.exports = function (app) {
     res.send(data);
   });
 
+  
+  const ADMINPAGE = path.join(__dirname, '../views/pages', 'admin.html');
+  const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
+  const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
+
+  //private
+  const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard";
+  const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard";
+
+  //public
+
   const AEP_TO_REGISTER_A_USER = "/api/user/register";
   const AEP_TO_AUTHENTICATE_A_USER = "/api/user/authenticate";
   const AEP_TO_UPDATE_PROFILE_OF_A_USER = "/api/user/profile/:id";
-  const AEP_TO_FETCH_ALL_USERS = "/api/user";
+  const AEP_TO_FETCH_ALL_CONSUMERS = "/api/consumer";
+  const AEP_TO_FETCH_ALL_ADMINS = "/api/admin";
   const AEP_TO_FETCH_USER_BY_ID = "/api/user/:id";
   const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
   const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
@@ -27,13 +39,21 @@ module.exports = function (app) {
   const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard";
   const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard";
+  const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
+  const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
+  const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
+
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
     await controller.registerUser(req, res);
   });
 
-  app.get(AEP_TO_FETCH_ALL_USERS, async (req, res) => {
-    const data = await controller.fetchAllUsers();
+  app.get(AEP_TO_FETCH_ALL_CONSUMERS, async (req, res) => {
+    const data = await controller.fetchAllConsumerInfo();
+    res.json(data);
+  });
+  app.get(AEP_TO_FETCH_ALL_ADMINS, async (req, res) => {
+    const data = await controller.fetchAllAdminInfo();
     res.json(data);
   });
 

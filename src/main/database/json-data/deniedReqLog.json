@@ -1,51 +1,93 @@
 [
   {
-    "_id": 3,
+    "_id": "user_2",
+    "name": "Bob Smith",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "28/5/2024, 11:58:47 pm"
+  },
+  {
+    "_id": "user_4",
+    "name": "Bobby Smith",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "28/5/2024, 11:58:48 pm"
+  },
+  {
+    "_id": "user_2",
+    "name": "Bob Smith",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 1:07:43 am"
+  },
+  {
+    "_id": "user_3",
     "name": "Nikhil Priyadarshan",
-    "roleRequested": "consumer",
-    "actionTaken": "denied",
-    "timeStamp": "27/5/2024, 1:03:49 pm"
-  },
-  {
-    "_id": 4,
-    "name": "Nikhil ",
     "roleRequested": "admin",
     "actionTaken": "denied",
-    "timeStamp": "27/5/2024, 1:03:50 pm"
+    "timeStamp": "29/5/2024, 1:07:45 am"
   },
   {
-    "_id": 3,
+    "_id": "user_1",
+    "name": "Alice Johnson",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 1:11:42 am"
+  },
+  {
+    "_id": "user_2",
+    "name": "Bob Smith",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 1:11:42 am"
+  },
+  {
+    "_id": "user_2",
+    "name": "Bob Smith",
+    "roleRequested": "consumer",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 1:25:44 am"
+  },
+  {
+    "_id": "user_3",
     "name": "Nikhil Priyadarshan",
-    "roleRequested": "consumer",
-    "actionTaken": "denied",
-    "timeStamp": "27/5/2024, 1:03:51 pm"
-  },
-  {
-    "_id": 1,
-    "name": "Alice Johnson",
-    "roleRequested": "consumer",
-    "actionTaken": "denied",
-    "timeStamp": "27/5/2024, 2:29:23 pm"
-  },
-  {
-    "_id": 1,
-    "name": "Alice Johnson",
-    "roleRequested": "consumer",
-    "actionTaken": "denied",
-    "timeStamp": "27/5/2024, 2:29:26 pm"
-  },
-  {
-    "_id": 4,
-    "name": "Nikhil ",
     "roleRequested": "admin",
     "actionTaken": "denied",
-    "timeStamp": "27/5/2024, 2:29:28 pm"
+    "timeStamp": "29/5/2024, 1:25:45 am"
   },
   {
-    "_id": 4,
-    "name": "Nikhil ",
+    "_id": "user_1",
+    "name": "Alice Johnson",
     "roleRequested": "admin",
     "actionTaken": "denied",
-    "timeStamp": "27/5/2024, 2:30:04 pm"
+    "timeStamp": "29/5/2024, 1:27:08 am"
+  },
+  {
+    "_id": "user_3",
+    "name": "Nikhil Priyadarshan",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 1:43:09 am"
+  },
+  {
+    "_id": "user_1",
+    "name": "Alice Johnson",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 1:49:37 am"
+  },
+  {
+    "_id": "user_1",
+    "name": "Alice Johnson",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 1:51:03 am"
+  },
+  {
+    "_id": "user_1",
+    "name": "Alice Johnson",
+    "roleRequested": "admin",
+    "actionTaken": "denied",
+    "timeStamp": "29/5/2024, 2:03:15 am"
   }
 ]
