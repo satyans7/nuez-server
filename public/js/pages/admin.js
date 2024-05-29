@@ -1,4 +1,4 @@
-import { getCurrentAdmin, getSitesData, getUserSiteMapping } from '../client/client.js';
+import { getSitesData, getUserSiteMapping } from '../client/client.js';
 
 const allSitesContainer = document.querySelector('.all-sites');
 const registerTab = document.getElementById('register-form-container');
@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
+function getCurrentAdmin() {
+    const fullUrl = window.location.href;
+    const url = new URL(fullUrl);
+    const pathname = url.pathname;
+    const segments = pathname.split('/');
+    const userId = segments[segments.length - 1];
+    return userId;
+};
+
 
 
 async function viewAllSites() {
@@ -36,6 +45,7 @@ async function viewAllSites() {
     registerTab.style.display = 'none';
     allSitesContainer.style.display = 'flex';
     const AdminId = getCurrentAdmin();
+    console.log(AdminId)
     const sitesData = await getSitesData();
     const usersSitesMapping = await getUserSiteMapping();
     let sites = [];

@@ -71,16 +71,10 @@ export async function userLoginDetailsPost(userData) {
 
 // Site - Admin 
 
-export function getCurrentAdmin() {
-    //return controller.getCurrentAdminId();
-    return "user_2";
-}
-
 export async function getSitesData() {
-    return controller.getAllSitesData();
+    return await controller.getAllSitesData();
 }
 export async function getUserSiteMapping() {
-    const data =  await controller.getUserToSiteMapping();
-    return data;
+    return await controller.getUserToSiteMapping();
 }
 
