@@ -17,6 +17,7 @@ const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
 const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
 
 const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
+const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites"
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
@@ -74,10 +75,15 @@ export function getApiToFetchDeniedLog() {
   return AEP_TO_FETCH_DENIED_LOG;
 }
 //ADMIN PAGE ADMIN_TO_SITE_MAPPING
-export function getApiToFetchAllAdminToSite()
-{
+export function getApiToFetchAdminSiteMapping() {
   return AEP_TO_FETCH_ALL_ADMINS_TO_SITES;
 }
+
+export function getApitoFetchAllSitesData() {
+  return AEP_TO_FETCH_ALL_SITES;
+}
+
+
 
 export async function fetchPost(url, data) {
   console.log("data");
@@ -88,7 +94,7 @@ export async function fetchPost(url, data) {
     },
     body: JSON.stringify(data),
   });
-  
+
   return response.json();
 }
 

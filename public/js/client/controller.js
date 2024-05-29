@@ -71,3 +71,23 @@ export async function postrejectRoleChange(id, data) {
     cep.fetchPost(api, data);
     //console.log(id);
 }
+
+
+// Site - Admin 
+
+export function getCurrentAdminId(){
+    const api = cep.getApitoFetchCurrentAdmin();
+    return cep.fetchDataFromServer(api);
+}
+
+export function getAllSitesData(){
+    const api = cep.getApitoFetchAllSitesData();
+    return cep.fetchDataFromServer(api);
+}
+
+export async function getUserToSiteMapping(){
+    const api = cep.getApiToFetchAdminSiteMapping();
+    return await cep.fetchDataFromServer(api);
+}
+
+// site to device
