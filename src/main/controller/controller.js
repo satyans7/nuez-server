@@ -136,8 +136,14 @@ class Controller {
   }
   async validateUniquenessOfUserName(username) {
     const user = await this.findUserByEmail(username);
-    
-    return user=={}
+    // console.log(user);
+    const size=Object.keys(user).length
+    if(size){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
   async fetchAllUsers() {
     let data = await dbController.fetchAllUsers();
