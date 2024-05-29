@@ -62,7 +62,7 @@ class JsonController {
        this.writeDatabase(USER_DATA,data);
   
        console.log(`${newUser.name} successfully registered`);
-      return newUser;
+      return newUserId;
     } catch (error) {
       throw new Error('Failed to post user data: ' + error.message);
     }
@@ -96,7 +96,7 @@ class JsonController {
   ///// FETCH ALL USER DATA FROM THE DATABASE//////
   async fetchAllUsers(){
     const db=await this.readDatabase(USER_DATA);
-    return db.users;
+    return db;
   }
   ////// FETCH ALL ROLE CHANGE REQUEST FROM THE DATABASE/////
   async fetchRoleChangeReq(){

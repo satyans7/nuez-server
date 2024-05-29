@@ -3,7 +3,7 @@
     "name": "Alice Johnson",
     "email": "alice.johnson@example.com",
     "password": "password123",
-    "role": "consumer"
+    "role": "admin"
   },
   "user_2": {
     "name": "Bob Smith",
@@ -18,9 +18,9 @@
     "role": "admin"
   },
   "user_4": {
-    "name": "Bobby Smith",
-    "email": "bobbby@example.com",
-    "password": "password123",
+    "name": "Priyansu Mohanty",
+    "email": "user@user.com",
+    "password": "user",
     "role": "consumer"
   }
 }

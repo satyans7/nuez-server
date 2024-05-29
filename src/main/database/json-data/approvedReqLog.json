@@ -1,23 +1,16 @@
 [
   {
-    "_id": 3,
-    "name": "Nikhil Priyadarshan",
-    "roleRequested": "admin",
-    "actionTaken": "approved",
-    "timeStamp": "27/5/2024, 9:02:36 am"
-  },
-  {
-    "_id": 4,
-    "name": "Nikhil ",
-    "roleRequested": "admin",
-    "actionTaken": "approved",
-    "timeStamp": "27/5/2024, 10:51:44 am"
-  },
-  {
     "_id": "user_1",
     "name": "Alice Johnson",
     "roleRequested": "consumer",
     "actionTaken": "approved",
     "timeStamp": "28/5/2024, 11:42:08 pm"
+  },
+  {
+    "_id": "user_1",
+    "name": "Alice Johnson",
+    "roleRequested": "admin",
+    "actionTaken": "approved",
+    "timeStamp": "28/5/2024, 11:53:48 pm"
   }
 ]

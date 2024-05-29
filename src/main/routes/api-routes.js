@@ -17,17 +17,18 @@ module.exports = function (app) {
   const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
   const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
   const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
+  const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
+  
+  const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
+  const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
+  
   const ADMINPAGE = path.join(__dirname, '../views/pages', 'admin.html');
   const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
   const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard";
   const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard";
-  const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
-
-  const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
-  const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
-
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
+    // console.log("registering")
     await controller.registerUser(req, res);
   });
 
@@ -103,9 +104,9 @@ module.exports = function (app) {
 
 
   ///////////TESTING ROUTES////////////////
-  app.post("/test-url",(req,res)=>{
-    let data = controller.test(req);
-    return data;
+  app.post("/test-url", async(req,res)=>{
+    let data = await controller.test();
+    res.json(data);
   })
 };
 

@@ -1,4 +1,6 @@
+
 const dbController = require("../db-controller/db-controller");
+
 
 class authController {
     async authenticateUser(formData) {
@@ -13,9 +15,11 @@ class authController {
         }
 
         // Fetch the user from the database
+        console.log("reached here")
         const user = await dbController.findUserByEmail(email);
+        console.log(user);
 
-        if (!user || user.password !== password) {
+        if (user=={} || user.password !== password) {
             return { success: false, role: 'null', message: 'Invalid email or password' };
         }
 

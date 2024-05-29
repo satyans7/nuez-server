@@ -19,8 +19,8 @@ class DbController {
     return await jsonController.postUserDataToServer(user);
   }
 
-  async postUserRequestToServer(user, reqRole) {
-    await jsonController.postUserRequestToServer(user, reqRole);
+  async postUserRequestToServer(userId, reqRole) {
+    await jsonController.postUserRequestToServer(userId, reqRole);
   }
 
   async fetchAllUsers() {
@@ -46,7 +46,7 @@ class DbController {
   async fetchUserById(userId) {
     let data = await jsonController.fetchAllUsers();
     console.log(userId);
-    const user = data.find(user => user._id === parseInt(userId));
+    const user = data[userId];
     return user;
   }
 
@@ -63,11 +63,7 @@ class DbController {
     return await jsonController.isEmailReserved(email);
 }
 
-  async findUserByEmail(email) {
-    const users = await jsonController.fetchAllUsers();
-    const user = users.find(user => user.email === email);
-    return user;
-  }
+  
 
   async deleteReqByUserId(userId) {
     return await jsonController.deleteReqByUserId(userId);
@@ -79,6 +75,20 @@ class DbController {
 
   async roleChange(userId) {
     await jsonController.roleChange(userId);
+  }
+
+  async findUserByEmail(email) {
+    // console.log(typeof(email));
+    const users = await this.fetchAllUsers()
+    // console.log(users);
+    for(let userId in  users ){
+      // console.log(userId)
+      if(users[userId].email===email){
+        // console.log("matched")
+        return users[userId]
+      }
+    }
+    return {}
   }
 
   //////////////FOR TEST PURPOSE USE THIS/////////////

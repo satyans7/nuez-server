@@ -16,6 +16,7 @@ class Controller {
          const isReserved = await dbController.isEmailReserved(email);
 
          if (isReserved) {
+           
              return res.status(400).json({ success: false, message: 'Username already exists' });
          }
   
@@ -23,15 +24,17 @@ class Controller {
       const isUnique = await this.validateUniquenessOfUserName(email);
   
       if (isUnique) {
+        
         return res.status(400).json({ success: false, message: 'Username already exists' });
       } else {
         // Register the new user
-        const newUser = await dbController.postUserDataToServer(req.body);
-        console.log('New user registered:', newUser);
+        const newUserId = await dbController.postUserDataToServer(req.body);
+        // console.log('New user registered:', newUser);
   
         // Additional handling for admin role
+        console.log(req.body.role);
         if (req.body.role === 'admin') {
-          await dbController.postUserRequestToServer(newUser, req.body.role);
+          await dbController.postUserRequestToServer(newUserId, req.body.role);
         }
   
         return res.status(201).json({ success: true, message: 'Successfully registered' });
@@ -43,14 +46,12 @@ class Controller {
   }
 
 
-  async validateUniquenessOfUserName(username) {
-    const user = await dbController.findUserByEmail(username);
-    return user !== undefined; 
-  }
+  
 //isko mt chedna
   async authenticateUser(formData) {
     try {
         let authResult = await authController.authenticateUser(formData);
+        console.log("authResult")
         if (authResult.success) {
             if (authResult.route) {
                 // Handle special case for reserved emails
@@ -77,6 +78,68 @@ class Controller {
   }
   /////////////////UNUSED/////////////
 
+  
+
+  async requestRoleChange(req) {
+    let userId = req.body._id;
+    // const user = await dbController.fetchUserById(userId);
+   
+    const reqRole = req.body.reqRole;
+    await dbController.requestRoleChange(userId, reqRole);
+  }
+
+  async roleChangeResponse(req) {
+    const action = req.body.action;
+    const userId = req.body._id;
+    const delUser = await dbController.deleteReqByUserId(userId);
+    const timeStamp = await this.getTimeAndDate();
+    console.log(delUser);
+    await dbController.addResponseToLog(delUser, req.body,timeStamp);
+    if (action === "approved") {
+      await dbController.roleChange(userId);
+    }
+  }
+
+  
+  async getTimeAndDate() {
+    try {
+      const ntpTime = await new Promise((resolve, reject) => {
+        ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(date);
+          }
+        });
+      });
+      console.log('Received NTP Date:', ntpTime);
+      return ntpTime.toLocaleString();
+    } catch (error) {
+      console.error('Error fetching time from NTP:', error);
+      const localTime = new Date();
+      console.log('Using local time:', localTime);
+      return localTime.toLocaleString();
+    }
+  }
+
+  async findUserByEmail(email) {
+    // console.log(typeof(email));
+    const users = await this.fetchAllUsers()
+    // console.log(users);
+    for(let userId in  users ){
+      // console.log(userId)
+      if(users[userId].email===email){
+        // console.log("matched")
+        return users[userId]
+      }
+    }
+    return {}
+  }
+  async validateUniquenessOfUserName(username) {
+    const user = await this.findUserByEmail(username);
+    
+    return user=={}
+  }
   async fetchAllUsers() {
     let data = await dbController.fetchAllUsers();
     return data;
@@ -105,62 +168,15 @@ class Controller {
     return data;
   }
 
-  async promoteUser() {
-    let data = await dbController.fetchSampleDataFromServer();
-    console.log(data);
-    return data;
+ 
+  ///////////TESTING CONTROLLER///////////
+  async test (){
+    return await this.postUserRequestToServer();
   }
 
-  async requestRoleChange(req) {
-    let userId = req.body._id;
-    // const user = await dbController.fetchUserById(userId);
-   
-    const reqRole = req.body.reqRole;
-    await dbController.requestRoleChange(userId, reqRole);
-  }
-
-  async roleChangeResponse(req) {
-    const action = req.body.action;
-    const userId = req.body._id;
-    const delUser = await dbController.deleteReqByUserId(userId);
-    const timeStamp = await this.getTimeAndDate();
-    console.log(delUser);
-    await dbController.addResponseToLog(delUser, req.body,timeStamp);
-    if (action === "approved") {
-      await dbController.roleChange(userId);
-    }
-  }
 
   
-  async getTimeAndDate() {
-    // try {
-    //   const response = await axios.get('https://timeapi.io/api/Time/current/zone?timeZone=UTC');
-    //   // const responseData = response.data;
-    //   const dateTime = response.date.toLocaleString();
-    //   return dateTime;
-    // } catch (error) {
-    //   console.error('Error fetching time:', error);
-    //   return null;
-    // }
-    return new Promise((resolve, reject) => {
-      ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
-        if (err) {
-          console.error('Error fetching time:', err);
-          reject(err);
-        } else {
-          // Log the received date for debugging
-          console.log('Received Date:', date);
-          resolve(date.toLocaleString());
-        }
-      });
-    });
-  }
-
-
-  ///////////TESTING CONTROLLER///////////
-  async test (data){
-    return dbController.test(data.body);
-  }
+  
 }
 
 module.exports = new Controller();
