@@ -35,6 +35,7 @@ module.exports = function (app) {
   const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
 
   const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
+  const AEP_TO_FETCH_ALL_SITES = '/api/admin/sites';
   
   
   
@@ -144,6 +145,17 @@ module.exports = function (app) {
 app.get(AEP_TO_FETCH_ALL_ADMINS_TO_SITES, async (req, res) => {
   const data = await controller.fetchAllAdminToSite();
   res.json(data);
+});
+
+//fetch all sites
+
+app.get(AEP_TO_FETCH_ALL_SITES, async (req, res) => {
+  try {
+    const data = await controller.fetchAllSites();
+    res.json(data);
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
 });
 };
 

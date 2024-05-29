@@ -232,6 +232,12 @@ class Controller {
     let data = await dbController.fetchAllAdminToSite();
     return data;
   }
+
+//Fetch all sites
+async fetchAllSites() {
+  let data = await dbController.fetchAllSites();
+  return data;
+}
   
 }
 

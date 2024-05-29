@@ -109,6 +109,12 @@ class DbController {
     let data = await jsonController.fetchAllAdminToSite();
     return data;
   }
+
+//fetch all sites
+async fetchAllSites() {
+  let data = await jsonController.fetchAllSites();
+  return data;
+}
 }
 
 

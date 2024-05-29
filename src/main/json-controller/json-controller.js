@@ -6,6 +6,7 @@ const ACCEPTED_LOG = path.join(__dirname, "../database/json-data/approvedReqLog.
 const REJECTED_LOG = path.join(__dirname, "../database/json-data/deniedReqLog.json");
 const RESERVED_EMAILS = path.join(__dirname, "../database/json-data/reserved.json");
 const ADMIN_TO_SITE_DATA = path.join(__dirname, "../database/json-data/adminToSites.json");
+const SITE_DATA= path.join(__dirname, "../database/json-data/siteRegistration.json");
 
 class JsonController {
   fetchSampleData() {
@@ -191,6 +192,12 @@ class JsonController {
 // GET ADMIN_TO_SITE_MAPPING
 async fetchAllAdminToSite(){
   const db=await this.readDatabase(ADMIN_TO_SITE_DATA);
+  return db;
+}
+
+//Fetch all sites
+async fetchAllSites() {
+  const db = await this.readDatabase(SITE_DATA);
   return db;
 }
 }
