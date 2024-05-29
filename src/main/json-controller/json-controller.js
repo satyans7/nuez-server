@@ -5,6 +5,7 @@ const REQ_DATA = path.join(__dirname, "../database/json-data/requestData.json");
 const ACCEPTED_LOG = path.join(__dirname, "../database/json-data/approvedReqLog.json");
 const REJECTED_LOG = path.join(__dirname, "../database/json-data/deniedReqLog.json");
 const RESERVED_EMAILS = path.join(__dirname, "../database/json-data/reserved.json");
+const ADMIN_TO_SITE_DATA = path.join(__dirname, "../database/json-data/adminToSites.json");
 
 class JsonController {
   fetchSampleData() {
@@ -185,6 +186,16 @@ class JsonController {
     }
 }
 
+
+
+// GET ADMIN_TO_SITE_MAPPING
+async fetchAllAdminToSite(){
+  const db=await this.readDatabase(ADMIN_TO_SITE_DATA);
+  return db;
 }
+}
+
+
+
 
 module.exports = new JsonController();

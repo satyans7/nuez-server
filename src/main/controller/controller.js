@@ -221,7 +221,11 @@ class Controller {
   }
 
 
-  
+  //ADMIN_TO_SITE_MAPPING
+  async fetchAllAdminToSite() {
+    let data = await dbController.fetchAllAdminToSite();
+    return data;
+  }
   
 }
 

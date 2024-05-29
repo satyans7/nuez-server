@@ -95,6 +95,15 @@ class DbController {
   async test(data){
     await jsonController.postUserDataToServer(data);
   }
+
+
+// ADMIN_TO_SITE_MAPPING
+  async  fetchAllAdminToSite() {
+    let data = await jsonController.fetchAllAdminToSite();
+    return data;
+  }
 }
+
+
 
 module.exports = new DbController();

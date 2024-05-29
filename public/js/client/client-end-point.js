@@ -16,6 +16,8 @@ const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
 const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
 const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
 
+const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
+
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
@@ -71,7 +73,11 @@ export function getApiToFetchApprovedLog() {
 export function getApiToFetchDeniedLog() {
   return AEP_TO_FETCH_DENIED_LOG;
 }
-
+//ADMIN PAGE ADMIN_TO_SITE_MAPPING
+export function getApiToFetchAllAdminToSite()
+{
+  return AEP_TO_FETCH_ALL_ADMINS_TO_SITES;
+}
 
 export async function fetchPost(url, data) {
   console.log("data");

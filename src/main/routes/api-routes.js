@@ -33,6 +33,8 @@ module.exports = function (app) {
   
   const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
   const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
+
+  const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
   
   
   
@@ -123,6 +125,13 @@ module.exports = function (app) {
     let data = await controller.test();
     res.json(data);
   })
+
+
+  //ADMIN PAGE  ADMIN_TO_SITE_MAPPING
+app.get(AEP_TO_FETCH_ALL_ADMINS_TO_SITES, async (req, res) => {
+  const data = await controller.fetchAllAdminToSite();
+  res.json(data);
+});
 };
 
 
