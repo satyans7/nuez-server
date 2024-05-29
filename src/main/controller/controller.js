@@ -2,12 +2,14 @@ const dbController = require("../db-controller/db-controller");
 const authController = require("../auth-controller/auth-controller");
 const ntpClient = require('ntp-client');
 class Controller {
+  //////////// FETCHING SAMPLE DATA///////////////////////////////////////////////
   async fetchSampleDataFromServer() {
     let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
     return data;
   }
 
+  ///////////////////////////////REGISTER A USER///////////////////////////////////
   async registerUser(req, res) {
     try {
       const email = req.body.email;
@@ -46,7 +48,7 @@ class Controller {
   }
 
 
-  
+  /////////////////////AUTHENTICATE USER/////////////////////////
 //isko mt chedna
   async authenticateUser(formData) {
     try {
@@ -57,7 +59,7 @@ class Controller {
                 // Handle special case for reserved emails
                 return { success: true, route: authResult.route, message: authResult.message };
             } else {
-                let route = `/api/${authResult.role}-dashboard`;
+                let route = `/api/${authResult.role}-dashboard/${authResult._id}`;
                 return { success: true, route: route, message: 'Logged In Successfully' };
             }
         } else {
@@ -67,7 +69,7 @@ class Controller {
         return { success: false, route: 'null', message: 'Internal Server Error' };
     }
 }
-  /////////////////UNUSED/////////////
+  ///////////////////////////////////////UNUSED/////////////////////////////////////////////////////
   async updateProfileOfUser() {
     let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
@@ -76,10 +78,10 @@ class Controller {
   async deleteUserById(userId) {
     return await dbController.deleteUserById(userId);
   }
-  /////////////////UNUSED/////////////
+  ////////////////-----------------------------------------------------------------///////////////////
 
   
-
+  //////////////////////////SEND A REQ FOR ROLE CHANGE///////////////////////////////////////////////
   async requestRoleChange(req) {
     let userId = req.body._id;
     // const user = await dbController.fetchUserById(userId);
@@ -87,7 +89,7 @@ class Controller {
     const reqRole = req.body.reqRole;
     await dbController.requestRoleChange(userId, reqRole);
   }
-
+  ////////////////////////////DELETE THE REQ AND ADD TO LOG////////////////////////////////////////
   async roleChangeResponse(req) {
     const action = req.body.action;
     const userId = req.body._id;
@@ -99,7 +101,7 @@ class Controller {
     }
   }
 
-  
+  /////////////////////////FUNCTION FOR DATE AND TIME///////////////////////////
   async getTimeAndDate() {
     // try {
     //   const ntpTime = await new Promise((resolve, reject) => {
@@ -120,7 +122,7 @@ class Controller {
       return localTime.toLocaleString();
     
   }
-
+  //////////////////////////////////////////FIND USER BY EMAIL///////////////////
   async findUserByEmail(email) {
     // console.log(typeof(email));
     const users = await this.fetchAllUsers()
@@ -134,6 +136,7 @@ class Controller {
     }
     return {}
   }
+  ////////////////////////UNIQUENESS OF EMAIL/USERNAME////////////////////////////////////
   async validateUniquenessOfUserName(username) {
     const user = await this.findUserByEmail(username);
     // console.log(user);
@@ -145,10 +148,12 @@ class Controller {
       return false;
     }
   }
+  ////////////////////FETCH ALL USERS///////////////////////////////////////////////
   async fetchAllUsers() {
     let data = await dbController.fetchAllUsers();
     return data;
   }
+  ////////////////////////////FETCH ALL ADMIN INFO/////////////////////////////////
   async fetchAllAdminInfo() {
     let data = await dbController.fetchAllUsers();
     
@@ -165,6 +170,7 @@ class Controller {
   });
     return newObject;
   }
+  //////////////////////////////FETCH ALL CONSUMER INFO/////////////////////////////
   async fetchAllConsumerInfo(){
     let data = await dbController.fetchAllUsers();
     
@@ -181,7 +187,7 @@ class Controller {
   });
     return newObject;
   }
-
+  //////////////////////////FETCH ALL ROLE CHANGE REQ///////////////////////////////
   async fetchRoleChangeReq() {
     let data = await dbController.fetchRoleChangeReq();
     const newObject={};
@@ -198,17 +204,17 @@ class Controller {
   });
     return newObject;
   }
-
+  /////////////////////////FETCH THE APPROVED LOG/////////////////////////
   async fetchApprovedLog() {
     let data = await dbController.fetchApprovedLog();
     return data;
   }
-
+  ////////////////////////FETCH THE DENIED LOG//////////////////////////////
   async fetchRejectedLog() {
     let data = await dbController.fetchRejectedLog();
     return data;
   }
-
+  ///////////////////////FETCH A SINGLE USER BY ID//////////////////////////
   async fetchUserById(userId) {
     let data = await dbController.fetchUserById(userId);
     return data;

@@ -85,7 +85,14 @@ class DbController {
       // console.log(userId)
       if(users[userId].email===email){
         // console.log("matched")
-        return users[userId]
+        let newobj= users[userId];
+        // let newobj={
+        //   _id:userId,
+        //   ...newo
+        // }
+        newobj["_id"]=userId;
+        console.log(newobj);
+        return newobj;
       }
     }
     return {}

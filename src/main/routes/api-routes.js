@@ -15,8 +15,8 @@ module.exports = function (app) {
   const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
 
   //private
-  const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard";
-  const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard";
+  const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard/:id";
+  const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard/:id";
 
   //public
 
@@ -37,41 +37,12 @@ module.exports = function (app) {
   
   
 
-
+  ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
     await controller.registerUser(req, res);
   });
-
-  app.get(AEP_TO_FETCH_ALL_CONSUMERS, async (req, res) => {
-    const data = await controller.fetchAllConsumerInfo();
-    res.json(data);
-  });
-  app.get(AEP_TO_FETCH_ALL_ADMINS, async (req, res) => {
-    const data = await controller.fetchAllAdminInfo();
-    res.json(data);
-  });
-
-  app.get(AEP_TO_FETCH_ROLE_CHANGE_REQ, async (req, res) => {
-    const data = await controller.fetchRoleChangeReq();
-    res.json(data);
-  });
-
-  app.get(AEP_TO_FETCH_APPROVED_LOG, async (req, res) => {
-    const data = await controller.fetchApprovedLog();
-    res.json(data);
-  });
-
-  app.get(AEP_TO_FETCH_DENIED_LOG, async (req, res) => {
-    const data = await controller.fetchRejectedLog();
-    res.json(data);
-  });
-
-  app.get(AEP_TO_FETCH_USER_BY_ID, async (req, res) => {
-    const data = await controller.fetchUserById(req.params.id);
-    res.json(data);
-  });
-
+  ////////LOGIN A USER / AUTHENTICATE/////////
   app.post(AEP_TO_AUTHENTICATE_A_USER, async (req, res) => {
     const data = await controller.authenticateUser(req.body);
     if (data.success) {
@@ -80,30 +51,58 @@ module.exports = function (app) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
   });
-
-  app.put(AEP_TO_UPDATE_PROFILE_OF_A_USER, async (req, res) => {
-    const data = await controller.updateProfileOfUser();
-    console.log(data);
-    res.send(data);
+  //////////////////////////////////////////FETCH DATA//////////////////////////////////////////////////
+  
+  
+  ///////////FETCH ALL CONSUMERS///////////
+  app.get(AEP_TO_FETCH_ALL_CONSUMERS, async (req, res) => {
+    const data = await controller.fetchAllConsumerInfo();
+    res.json(data);
+  });
+  /////////FETCH ALL ADMINS/////////////////
+  app.get(AEP_TO_FETCH_ALL_ADMINS, async (req, res) => {
+    const data = await controller.fetchAllAdminInfo();
+    res.json(data);
+  });
+  //////////FETCH DATA FROM ROLE CHANGE REQ DB///////////
+  app.get(AEP_TO_FETCH_ROLE_CHANGE_REQ, async (req, res) => {
+    const data = await controller.fetchRoleChangeReq();
+    res.json(data);
+  });
+  //////////FETCH ALL DATA FROM APPROVED LOG////////////
+  app.get(AEP_TO_FETCH_APPROVED_LOG, async (req, res) => {
+    const data = await controller.fetchApprovedLog();
+    res.json(data);
+  });
+  //////////FETCH ALL DATA FROM DENIED LOG////////////
+  app.get(AEP_TO_FETCH_DENIED_LOG, async (req, res) => {
+    const data = await controller.fetchRejectedLog();
+    res.json(data);
+  });
+  ////////////FETCH A SINGLE USER BY ID////////////////
+  app.get(AEP_TO_FETCH_USER_BY_ID, async (req, res) => {
+    const data = await controller.fetchUserById(req.params.id);
+    res.json(data);
   });
 
+
+  ///----------------------------------------------------------------------------------------------------/////
+
+  /////////////SEND A ROLE CHANGE REQ/////////////////////////
   app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, async (req, res) => {
     console.log("hello");
     await controller.requestRoleChange(req);
     res.sendStatus(200); // Sending a status to indicate success
   });
-
+  //////////////SEND THE RESPONSE FOR A REQUEST////////////////////
   app.post(AEP_FOR_ROLE_CHANGE_RESPONSE, async (req, res) => {
     await controller.roleChangeResponse(req);
     res.sendStatus(200); // Sending a status to indicate success
   });
 
-  app.delete(AEP_TO_DELETE_A_USER, async (req, res) => {
-    const data = await controller.deleteUserById(req.params.id);
-    res.json(data);
-  });
+ 
 
-  ////////////PROTECTED ROUTES//////////////////
+  ////////////PROTECTED ROUTES FOR PAGES RENDERING//////////////////
   app.get(PRIVATE_AEP_TO_ADMINROUTE, (req, res) => {
     res.sendFile(ADMINPAGE);
   });
@@ -116,6 +115,20 @@ module.exports = function (app) {
     res.sendFile(SUPERADMINPAGE);
   });
 
+
+
+  
+
+  /////////UNUSED ROUTES/////////////////
+  app.put(AEP_TO_UPDATE_PROFILE_OF_A_USER, async (req, res) => {
+    const data = await controller.updateProfileOfUser();
+    console.log(data);
+    res.send(data);
+  });
+  app.delete(AEP_TO_DELETE_A_USER, async (req, res) => {
+    const data = await controller.deleteUserById(req.params.id);
+    res.json(data);
+  });
 
 
   ///////////TESTING ROUTES////////////////
