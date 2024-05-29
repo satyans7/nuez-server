@@ -122,7 +122,6 @@ class JsonController {
     const userIndex=await data.users.findIndex(it=> it._id===userId)
     const deletedUser=await data.users.splice(userIndex,1)[0];
     await this.writeDatabase(USER_DATA,data);
-    console.log(`${deletedUser.name} has been deleted successfully`)
     return deletedUser;
     
   }
@@ -130,10 +129,11 @@ class JsonController {
 
   async deleteReqByUserId(userId){
     const data =await this.readDatabase(REQ_DATA);
+    console.log(data)
     const deletedUser= data[userId];
     delete data[userId];
     await this.writeDatabase(REQ_DATA,data);
-    console.log(`${deletedUser.name} has been deleted successfully from role req table`)
+    
     return deletedUser;
   }
   

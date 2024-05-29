@@ -93,7 +93,6 @@ class Controller {
     const userId = req.body._id;
     const delUser = await dbController.deleteReqByUserId(userId);
     const timeStamp = await this.getTimeAndDate();
-    console.log(delUser);
     await dbController.addResponseToLog(delUser, req.body,timeStamp);
     if (action === "approved") {
       await dbController.roleChange(userId);
@@ -102,24 +101,24 @@ class Controller {
 
   
   async getTimeAndDate() {
-    try {
-      const ntpTime = await new Promise((resolve, reject) => {
-        ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(date);
-          }
-        });
-      });
-      console.log('Received NTP Date:', ntpTime);
-      return ntpTime.toLocaleString();
-    } catch (error) {
-      console.error('Error fetching time from NTP:', error);
+    // try {
+    //   const ntpTime = await new Promise((resolve, reject) => {
+    //     ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
+    //       if (err) {
+    //         reject(err);
+    //       } else {
+    //         resolve(date);
+    //       }
+    //     });
+    //   });
+    //   console.log('Received NTP Date:', ntpTime);
+    //   return await ntpTime.toLocaleString();
+    // } catch (error) {
+    //   console.error('Error fetching time from NTP:', error);
       const localTime = new Date();
       console.log('Using local time:', localTime);
       return localTime.toLocaleString();
-    }
+    
   }
 
   async findUserByEmail(email) {
