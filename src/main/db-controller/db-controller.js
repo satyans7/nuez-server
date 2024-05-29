@@ -76,7 +76,7 @@ class DbController {
   async roleChange(userId) {
     await jsonController.roleChange(userId);
   }
-
+  /////added this////
   async findUserByEmail(email) {
     // console.log(typeof(email));
     const users = await this.fetchAllUsers()
