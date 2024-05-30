@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Profile</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+<div class="device-profile-container">
+    <h1 class="device-profile-heading">Device Profile</h1>
+
+    <div class="device-card" id="device-card">
+        <h3>Device ID: ABC123</h3>
+        <p>Location: Living Room</p>
+        <p>Total Consumption: 500 kWh</p>
+        <p>Status: Active</p>
+        <hr>
+        <div class="button-container">
+            <button onclick="editProfile()">Edit Profile</button>
+            <button onclick="deleteDevice()">Delete Device</button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/pages/deviceProfile.js"></script>
+</body>
+</html>
