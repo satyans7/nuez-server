@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Device Dashboard</title>
+<link rel="stylesheet" href="/css/siteToDevice.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Site ID: <span id="site-id-display">Loading...</span></h2>
+    <a href="#dashboard" id="dashboard-link">Dashboard</a>
+    <a href="#devices" id="devices-link">Devices</a>
+    <a href="#settings" id="settings-link">Settings</a>
+    <a href="#logout" id="logout-link">Logout</a>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <h1>Site Device Dashboard</h1>
+    </div>
+
+    <div id="device-list" class="all-devices">
+        <!-- Device cards will be inserted here dynamically -->
+    </div>
+</div>
+
+<script src="s/js/pages/siteToDevice.js"></script>
+</body>
+</html>
