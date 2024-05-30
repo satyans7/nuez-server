@@ -14,11 +14,13 @@ module.exports = function (app) {
   const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
   const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
   const SITEPAGE = path.join(__dirname, '../views/pages', 'siteToDevice.html')
+  const DEVICEPROFILE=path.join(__dirname, '../views/pages', 'deviceProfile.html');
 
   //private
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard/:id";
   const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard/:id";
   const PRIVATE_AEP_TO_SITES = "/api/site-dashboard/:id";
+  const PRIVATE_AEP_TO_DEVICEPROFILE="/api/device-profile/:id";
 
   //public
 
@@ -129,6 +131,10 @@ module.exports = function (app) {
   app.get(PRIVATE_AEP_TO_SITES, (req, res) => {
     res.sendFile(SITEPAGE)
   })
+
+  app.get(PRIVATE_AEP_TO_DEVICEPROFILE,(req,res)=> {
+    res.sendFile(DEVICEPROFILE)
+  });
 
   // LOGIN VIA OTP 
   app.post(AEP_TO_GENERATE_OTP, async (req, res) => {

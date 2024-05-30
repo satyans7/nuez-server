@@ -77,6 +77,10 @@ async function viewAlldevices() {
             const moreDetailsButton = document.createElement('button');
             moreDetailsButton.id = 'fetch-device-data';
             moreDetailsButton.textContent = 'More Details';
+            moreDetailsButton.addEventListener('click', ()=>{
+                const route = `/api/device-profile/${key}`;
+                window.open(route, '_blank')
+            })
             cardHeading.appendChild(deviceName);
             cardHeading.appendChild(moreDetailsButton);
             deviceCard.appendChild(cardHeading);
