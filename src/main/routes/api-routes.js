@@ -41,7 +41,12 @@ module.exports = function (app) {
 
   const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
   const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
+  
+  const AEP_TO_GENERATE_OTP = "/api/generateotp"
+  const AEP_TO_VERIFY_OTP ="/api/verifyotp"
+  
 
+  
 
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -125,21 +130,20 @@ module.exports = function (app) {
     res.sendFile(SITEPAGE)
   })
 
-
-
-
-
-  /////////UNUSED ROUTES/////////////////
-  app.put(AEP_TO_UPDATE_PROFILE_OF_A_USER, async (req, res) => {
-    const data = await controller.updateProfileOfUser();
-    console.log(data);
-    res.send(data);
-  });
-  app.delete(AEP_TO_DELETE_A_USER, async (req, res) => {
-    const data = await controller.deleteUserById(req.params.id);
-    res.json(data);
+  // LOGIN VIA OTP 
+  app.post(AEP_TO_GENERATE_OTP, async (req, res) => {
+    const email=await controller.OTPGenerationAndStorage(req.body.email);
+    return res.status(200).json({message:`Otp has been sent to ${email} successfully!!!`})
   });
 
+  app.post(AEP_TO_VERIFY_OTP, async (req, res) => {
+    const data =await controller.OTPVerification(req.body.email,req.body.otp );
+    if (data.success) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
+    }
+  });
 
   ///////////TESTING ROUTES////////////////
   app.post("/test-url", async (req, res) => {

@@ -1,5 +1,6 @@
 const dbController = require("../db-controller/db-controller");
 const authController = require("../auth-controller/auth-controller");
+const otpGeneratorUtility=require("../utils/otp-generator")
 const ntpClient = require('ntp-client');
 class Controller {
   //////////// FETCHING SAMPLE DATA///////////////////////////////////////////////
@@ -226,6 +227,32 @@ class Controller {
     return await this.postUserRequestToServer();
   }
 
+  async OTPGenerationAndStorage(email){
+   const otp =otpGeneratorUtility.generateOTP();
+    await authController.sendVerificationEmail(email,otp);
+    const OTPAlreadyRequested=await dbController.isOTPRequested(email);
+     if(OTPAlreadyRequested){
+      return await dbController.updateotpemail(email,otp);
+     }
+     else return await dbController.saveotpemail(email,otp);
+  }
+  async OTPVerification(email,providedotp){
+    const authResult= await authController.verifyOTP(email,providedotp);
+    if (authResult.success) {
+          await dbController.deleteOTPByEmail(email);
+          let route = `/api/${authResult.role}-dashboard`;
+          return { success: true, route: route, message: 'Logged In Successfully' };
+      }
+   else {
+      return { success: false, route: 'null', message: 'Invalid username or password!!!' };
+  }
+ }
+  
+  
+
+// const obj = new Controller();
+// obj.OTPGenerationAndStorage("priyansu.iitism@gmail.com");
+// obj.OTPVerification("priyansu.iitism@gmail.com","Wz8pRT");
 
   //ADMIN_TO_SITE_MAPPING
   async fetchAllAdminToSite() {
