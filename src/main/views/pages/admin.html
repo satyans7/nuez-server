@@ -12,49 +12,41 @@
 
     <div class="sidebar">
         <h2>Admin ID : ABC123</h2>
-        <a href="#dashboard">Dashboard</a>
-        <a href="#users">Users</a>
-        <a href="#settings">Settings</a>
-        <a href="#logout">Logout</a>
+        <a href="#dashboard" id="dashboard-link">Dashboard</a>
+        <a href="#users" id="users-link">Users</a>
+        <a href="#settings" id="settings-link">Settings</a>
+        <a href="#logout" id="logout-link">Logout</a>
     </div>
 
     <div class="main-content">
         <div class="header">
-            <h1>All Registered Sites</h1>
-            <button>Add Site +</button>
+            <h1>Site Admin Dashboard</h1>
+            <div class="button-group">
+                <button id="view-site-button">View All</button>
+                <button id="register-site-button">Register</button>
+                <button id="deregister-site-button">Deregister</button>
+            </div>
         </div>
-        <div class="all-sites">
 
-            <div class="card">
-                <div class="card-heading">
-                    <h3>Site 1</h3>
-                    <button id="fetch-site-data">More Details</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-heading">
-                    <h3>Site 2</h3>
-                    <button id="fetch-site-data">More Details</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-heading">
-                    <h3>Site 3</h3>
-                    <button id="fetch-site-data">More Details</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-heading">
-                    <h3>Site 4</h3>
-                    <button id="fetch-site-data">More Details</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-heading">
-                    <h3>Site 5</h3>
-                    <button id="fetch-site-data">More Details</button>
-                </div>
-            </div>
+        <div id="site-list" class="all-sites">
+            
+        </div>
+
+        <div id="register-form-container" class="form-container" style="display: none;">
+            <form id="site-form">
+                <label for="site-id">Site ID:</label>
+                <input type="text" id="site-id" name="site-id" required>
+                <button type="submit">Register</button>
+                <button type="button" id="cancel-button">Cancel</button>
+            </form>
+        </div>
+        <div id="deregister-form-container" class="form-container" style="display: none;">
+            <form id="site-form">
+                <label for="site-id">Site ID:</label>
+                <input type="text" id="site-id" name="site-id" required>
+                <button type="submit">De-register</button>
+                <button type="button" id="cancel-button">Cancel</button>
+            </form>
         </div>
     </div>
 

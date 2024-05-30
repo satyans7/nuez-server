@@ -3,12 +3,14 @@ const authController = require("../auth-controller/auth-controller");
 const otpGeneratorUtility=require("../utils/otp-generator")
 const ntpClient = require('ntp-client');
 class Controller {
+  //////////// FETCHING SAMPLE DATA///////////////////////////////////////////////
   async fetchSampleDataFromServer() {
     let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
     return data;
   }
 
+  ///////////////////////////////REGISTER A USER///////////////////////////////////
   async registerUser(req, res) {
     try {
       const email = req.body.email;
@@ -47,7 +49,7 @@ class Controller {
   }
 
 
-  
+  /////////////////////AUTHENTICATE USER/////////////////////////
 //isko mt chedna
   async authenticateUser(formData) {
     try {
@@ -58,7 +60,7 @@ class Controller {
                 // Handle special case for reserved emails
                 return { success: true, route: authResult.route, message: authResult.message };
             } else {
-                let route = `/api/${authResult.role}-dashboard`;
+                let route = `/api/${authResult.role}-dashboard/${authResult._id}`;
                 return { success: true, route: route, message: 'Logged In Successfully' };
             }
         } else {
@@ -68,7 +70,7 @@ class Controller {
         return { success: false, route: 'null', message: 'Internal Server Error' };
     }
 }
-  /////////////////UNUSED/////////////
+  ///////////////////////////////////////UNUSED/////////////////////////////////////////////////////
   async updateProfileOfUser() {
     let data = await dbController.fetchSampleDataFromServer();
     console.log(data);
@@ -77,10 +79,10 @@ class Controller {
   async deleteUserById(userId) {
     return await dbController.deleteUserById(userId);
   }
-  /////////////////UNUSED/////////////
+  ////////////////-----------------------------------------------------------------///////////////////
 
   
-
+  //////////////////////////SEND A REQ FOR ROLE CHANGE///////////////////////////////////////////////
   async requestRoleChange(req) {
     let userId = req.body._id;
     // const user = await dbController.fetchUserById(userId);
@@ -88,41 +90,40 @@ class Controller {
     const reqRole = req.body.reqRole;
     await dbController.requestRoleChange(userId, reqRole);
   }
-
+  ////////////////////////////DELETE THE REQ AND ADD TO LOG////////////////////////////////////////
   async roleChangeResponse(req) {
     const action = req.body.action;
     const userId = req.body._id;
     const delUser = await dbController.deleteReqByUserId(userId);
     const timeStamp = await this.getTimeAndDate();
-    console.log(delUser);
     await dbController.addResponseToLog(delUser, req.body,timeStamp);
     if (action === "approved") {
       await dbController.roleChange(userId);
     }
   }
 
-  
+  /////////////////////////FUNCTION FOR DATE AND TIME///////////////////////////
   async getTimeAndDate() {
-    try {
-      const ntpTime = await new Promise((resolve, reject) => {
-        ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(date);
-          }
-        });
-      });
-      console.log('Received NTP Date:', ntpTime);
-      return ntpTime.toLocaleString();
-    } catch (error) {
-      console.error('Error fetching time from NTP:', error);
+    // try {
+    //   const ntpTime = await new Promise((resolve, reject) => {
+    //     ntpClient.getNetworkTime('pool.ntp.org', 123, (err, date) => {
+    //       if (err) {
+    //         reject(err);
+    //       } else {
+    //         resolve(date);
+    //       }
+    //     });
+    //   });
+    //   console.log('Received NTP Date:', ntpTime);
+    //   return await ntpTime.toLocaleString();
+    // } catch (error) {
+    //   console.error('Error fetching time from NTP:', error);
       const localTime = new Date();
       console.log('Using local time:', localTime);
       return localTime.toLocaleString();
-    }
+    
   }
-
+  //////////////////////////////////////////FIND USER BY EMAIL///////////////////
   async findUserByEmail(email) {
     // console.log(typeof(email));
     const users = await this.fetchAllUsers()
@@ -136,15 +137,24 @@ class Controller {
     }
     return {}
   }
+  ////////////////////////UNIQUENESS OF EMAIL/USERNAME////////////////////////////////////
   async validateUniquenessOfUserName(username) {
     const user = await this.findUserByEmail(username);
-    
-    return user=={}
+    // console.log(user);
+    const size=Object.keys(user).length
+    if(size){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
+  ////////////////////FETCH ALL USERS///////////////////////////////////////////////
   async fetchAllUsers() {
     let data = await dbController.fetchAllUsers();
     return data;
   }
+  ////////////////////////////FETCH ALL ADMIN INFO/////////////////////////////////
   async fetchAllAdminInfo() {
     let data = await dbController.fetchAllUsers();
     
@@ -161,6 +171,7 @@ class Controller {
   });
     return newObject;
   }
+  //////////////////////////////FETCH ALL CONSUMER INFO/////////////////////////////
   async fetchAllConsumerInfo(){
     let data = await dbController.fetchAllUsers();
     
@@ -177,7 +188,7 @@ class Controller {
   });
     return newObject;
   }
-
+  //////////////////////////FETCH ALL ROLE CHANGE REQ///////////////////////////////
   async fetchRoleChangeReq() {
     let data = await dbController.fetchRoleChangeReq();
     const newObject={};
@@ -194,17 +205,17 @@ class Controller {
   });
     return newObject;
   }
-
+  /////////////////////////FETCH THE APPROVED LOG/////////////////////////
   async fetchApprovedLog() {
     let data = await dbController.fetchApprovedLog();
     return data;
   }
-
+  ////////////////////////FETCH THE DENIED LOG//////////////////////////////
   async fetchRejectedLog() {
     let data = await dbController.fetchRejectedLog();
     return data;
   }
-
+  ///////////////////////FETCH A SINGLE USER BY ID//////////////////////////
   async fetchUserById(userId) {
     let data = await dbController.fetchUserById(userId);
     return data;
@@ -242,5 +253,35 @@ class Controller {
 // const obj = new Controller();
 // obj.OTPGenerationAndStorage("priyansu.iitism@gmail.com");
 // obj.OTPVerification("priyansu.iitism@gmail.com","Wz8pRT");
+
+  //ADMIN_TO_SITE_MAPPING
+  async fetchAllAdminToSite() {
+    let data = await dbController.fetchAllAdminToSite();
+    return data;
+  }
+
+//Fetch all sites
+async fetchAllSites() {
+  let data = await dbController.fetchAllSites();
+  return data;
+}
+
+// Site to device mapping
+
+  async fetchAllSiteToDevice() {
+    let data = await dbController.fetchAllSitetoDevice();
+    return data;
+  }
+
+  // fetch all devices
+
+  async fetchAllDevices() {
+    let data = await dbController.fetchAllDevices();
+    return data;
+  }
+
+
+  
+}
 
 module.exports = new Controller();

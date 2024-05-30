@@ -96,8 +96,7 @@ class DbController {
   async roleChange(userId) {
     await jsonController.roleChange(userId);
   }
-  async 
-
+  /////added this////
   async findUserByEmail(email) {
     // console.log(typeof(email));
     const users = await this.fetchAllUsers()
@@ -106,7 +105,14 @@ class DbController {
       // console.log(userId)
       if(users[userId].email===email){
         // console.log("matched")
-        return users[userId]
+        let newobj= users[userId];
+        // let newobj={
+        //   _id:userId,
+        //   ...newo
+        // }
+        newobj["_id"]=userId;
+        console.log(newobj);
+        return newobj;
       }
     }
     return {}
@@ -116,6 +122,36 @@ class DbController {
   async test(data){
     await jsonController.postUserDataToServer(data);
   }
+
+
+// ADMIN_TO_SITE_MAPPING
+  async  fetchAllAdminToSite() {
+    let data = await jsonController.fetchAllAdminToSite();
+    return data;
+  }
+
+//fetch all sites
+async fetchAllSites() {
+  let data = await jsonController.fetchAllSites();
+  return data;
 }
+
+// Site to device mapping
+
+  async fetchAllSitetoDevice() {
+    let data = await jsonController.fetchAllSitetoDevice();
+    return data;
+  }
+
+  //fetch all devices
+  async fetchAllDevices() {
+    let data = await jsonController.fetchAllDevices();
+    return data;
+  }
+
+
+}
+
+
 
 module.exports = new DbController();

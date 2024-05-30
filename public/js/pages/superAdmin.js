@@ -1,4 +1,13 @@
-import { getAllConsumers,getAllAdmins, getAllApprovedRequests, getAllRejectedRequests, getAllPendingRequests, postRequesttoRoleChange, postapproveRoleChange, postrejectRoleChange } from '../client/client.js';
+import { 
+    getAllConsumers, 
+    getAllAdmins, 
+    getAllApprovedRequests, 
+    getAllRejectedRequests, 
+    getAllPendingRequests, 
+    postRequesttoRoleChange, 
+    postapproveRoleChange, 
+    postrejectRoleChange 
+} from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
 const adminsTab = document.getElementById('admins-tab');
@@ -16,141 +25,55 @@ const adminsTableBody = document.getElementById('admins-table-body')
 const pendingTableBody = document.getElementById('pending-table-body')
 const approvedTableBody = document.getElementById('approved-table-body')
 const rejectedTableBody = document.getElementById('rejected-table-body')
-const userRequestState = {};
 
 
-// Function to disable the 'Request for Role change' button and update state
-function disableRequestButton(button, id) {
+// Function to disable the 'Request for Role change' button
+function disableRequestButton(button) {
     button.disabled = true;
     button.textContent = 'Request Sent'; // Optionally change button text
-    userRequestState[id] = true; // Update state to indicate request sent
 }
 
-// Function to enable the 'Request for Role change' button and update state
-function enableRequestButton(button, id) {
+// Function to enable the 'Request for Role change' button
+function enableRequestButton(button) {
     button.disabled = false;
     button.textContent = 'Request for Role change'; // Optionally reset button text
-    userRequestState[id] = false; // Update state to indicate request can be sent
 }
 
-// Function to enable or disable the 'Request for Role change' button based on the user request state
-function updateRequestButtonState(requestButton, id) {
-    if (userRequestState[id]) {
-        requestButton.disabled = true;
-        requestButton.textContent = 'Request Sent'; // Optionally change button text
+// Function to update the 'Request for Role change' button state
+async function updateRequestButtonState(requestButton, id) {
+    const pendingRequests = await getAllPendingRequests();
+    if (pendingRequests[id] && pendingRequests[id].requestStatus === 'pending') {
+        disableRequestButton(requestButton);
     } else {
-        requestButton.disabled = false;
-        requestButton.textContent = 'Request for Role change'; // Optionally reset button text
+        enableRequestButton(requestButton);
     }
 }
 
 // Function to handle 'Request for Role change' button click
 async function handleRequestRoleChange(id, requestButton, request) {
     try {
-        disableRequestButton(requestButton, id); // Disable button on click
+        disableRequestButton(requestButton); // Disable button on click
         await requestRoleChange(id, request);
         alert("Request added successfully");
     } catch (error) {
         console.log('Error in sending request');
-        enableRequestButton(requestButton, id); // Re-enable button in case of error
+        enableRequestButton(requestButton); // Re-enable button in case of error
     }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Fetch pending request data
-    const pendingRequests = await getAllPendingRequests();
-
-    // Iterate through pending request data
-    for (const userId in pendingRequests) {
-        const user = pendingRequests[userId];
-        // Check if the user has a pending request
-        if (user.requestStatus === 'pending') {
-            // Disable the button for this user
-            const requestButton = document.getElementById(`request-button-${userId}`);
-            if (requestButton) {
-                requestButton.disabled = true;
-                requestButton.textContent = 'Request Sent';
-            }
-        }
-    }
-});
-
-
-//function to hide all tables
-
-function hideAllLists() {
-    for (let i = 0; i < allLists.length; i++) {
-        allLists[i].style.display = 'none';
-    }
-}
-
-// Default table on loading
-
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log("fetching users")
     hideAllLists();
     usersList.style.display = 'block';
-    let data = await getAllConsumers();
-    usersTableBody.innerHTML = '';
-    let ids=Object.keys(data);
-    if (ids && ids.length > 0) {
-        ids.forEach(id => {
-            let user=data[id];
-            if (user.role === "consumer") {
-          
-                const row = document.createElement('tr');
-                const nameCell = document.createElement('td');
-                nameCell.textContent = user.name;
-                const emailCell = document.createElement('td');
-                emailCell.textContent = user.email;
-                const actionCell = document.createElement('td');
-                const requestButton = document.createElement('button');
-                requestButton.textContent = 'Request for Role change';
-                const request = {
-                    _id: id,
-                    reqRole: "admin"
-                }
-                 // Update button state based on user request state
-                 updateRequestButtonState(requestButton, id);
-
-                 requestButton.addEventListener('click', async (event) => {
-                     if (!userRequestState[id]) { // Check if request has not been sent
-                         await handleRequestRoleChange(id, requestButton, request);
-                     }
-                 });
-                
-                actionCell.appendChild(requestButton);
-                row.appendChild(nameCell);
-                row.appendChild(emailCell);
-                row.appendChild(actionCell);
-                usersTableBody.appendChild(row);
-            }
-        });
-    } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="3">No users available</td>
-        `;
-        usersTableBody.appendChild(row);
-    }
-
+    await loadUsersTable();
 });
 
-
-
-// On clicking Users Tab
-
-usersTab.addEventListener('click', async () => {
-    console.log("fetching users")
-    hideAllLists();
-    usersList.style.display = 'block';
+async function loadUsersTable() {
+    console.log("fetching users");
     let data = await getAllConsumers();
-    let ids=Object.keys(data);
-    let datap = await getAllPendingRequests();
-    let req_id=Object.keys(datap);
     usersTableBody.innerHTML = '';
+    let ids = Object.keys(data);
     if (ids && ids.length > 0) {
-        ids.forEach(id => {
+        ids.forEach(async id => {
             let user = data[id];
             if (user.role === "consumer") {
                 const row = document.createElement('tr');
@@ -161,20 +84,16 @@ usersTab.addEventListener('click', async () => {
                 const actionCell = document.createElement('td');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = 'Request for Role change';
-
                 const request = {
                     _id: id,
                     reqRole: "admin"
                 }
-                 // Update button state based on user request state
-                 updateRequestButtonState(requestButton, id);
-
-                 requestButton.addEventListener('click', async (event) => {
-                     if (!userRequestState[id]) { // Check if request has not been sent
-                         await handleRequestRoleChange(id, requestButton, request);
-                     }
-                 });
-
+                await updateRequestButtonState(requestButton, id);
+                requestButton.addEventListener('click', async () => {
+                    if (requestButton.disabled === false) { // Check if request can be sent
+                        await handleRequestRoleChange(id, requestButton, request);
+                    }
+                });
                 actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
                 row.appendChild(emailCell);
@@ -184,24 +103,38 @@ usersTab.addEventListener('click', async () => {
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="3">No users available</td>
-        `;
+        row.innerHTML = `<td colspan="3">No users available</td>`;
         usersTableBody.appendChild(row);
     }
+}
+
+// Function to hide all tables
+function hideAllLists() {
+    for (let i = 0; i < allLists.length; i++) {
+        allLists[i].style.display = 'none';
+    }
+}
+
+// On clicking Users Tab
+usersTab.addEventListener('click', async () => {
+    hideAllLists();
+    usersList.style.display = 'block';
+    await loadUsersTable();
 });
 
 adminsTab.addEventListener('click', async () => {
-    console.log("fetching admin")
     hideAllLists();
-    usersList.style.display = 'block';
+    adminList.style.display = 'block';
+    await loadAdminsTable();
+});
+
+async function loadAdminsTable() {
+    console.log("fetching admins");
     let data = await getAllAdmins();
-    let ids=Object.keys(data);
-    let datap = await getAllPendingRequests();
-    let req_id=Object.keys(datap);
-    usersTableBody.innerHTML = '';
+    adminsTableBody.innerHTML = '';
+    let ids = Object.keys(data);
     if (ids && ids.length > 0) {
-        ids.forEach(id => {
+        ids.forEach(async id => {
             let user = data[id];
             if (user.role === "admin") {
                 const row = document.createElement('tr');
@@ -216,11 +149,9 @@ adminsTab.addEventListener('click', async () => {
                     _id: id,
                     reqRole: "consumer"
                 }
-                 // Update button state based on user request state
-                updateRequestButtonState(requestButton, id);
-
-                requestButton.addEventListener('click', async (event) => {
-                    if (!userRequestState[id]) { // Check if request has not been sent
+                await updateRequestButtonState(requestButton, id);
+                requestButton.addEventListener('click', async () => {
+                    if (requestButton.disabled === false) { // Check if request can be sent
                         await handleRequestRoleChange(id, requestButton, request);
                     }
                 });
@@ -228,52 +159,45 @@ adminsTab.addEventListener('click', async () => {
                 row.appendChild(nameCell);
                 row.appendChild(emailCell);
                 row.appendChild(actionCell);
-                usersTableBody.appendChild(row);
+                adminsTableBody.appendChild(row);
             }
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="3">No users available</td>
-        `;
-        usersTableBody.appendChild(row);
-    }
-});
-
-
-
-async function requestRoleChange(id, req) {
-    console.log(id)
-    try {
-        await postRequesttoRoleChange(id, req);
-        console.log('request sent')
-
-    } catch (error) {
-        console.log('Error in sending request')
-
+        row.innerHTML = `<td colspan="3">No admins available</td>`;
+        adminsTableBody.appendChild(row);
     }
 }
 
+async function requestRoleChange(id, req) {
+    try {
+        await postRequesttoRoleChange(id, req);
+        console.log('request sent');
+    } catch (error) {
+        console.log('Error in sending request');
+    }
+}
 
 // Approved Tab
-
-
 approvedTab.addEventListener('click', async () => {
     hideAllLists();
     approvedList.style.display = 'block';
+    await loadApprovedTable();
+});
+
+async function loadApprovedTable() {
+    console.log("fetching approved requests");
     let data = await getAllApprovedRequests();
-    console.log(data)
     approvedTableBody.innerHTML = '';
     if (data && data.length > 0) {
         data.forEach(user => {
-
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             nameCell.textContent = user.name;
             const reqRoleCell = document.createElement('td');
             reqRoleCell.textContent = user.roleRequested;
             const timeStampCell = document.createElement('td');
-            timeStampCell.textContent =user.timeStamp;
+            timeStampCell.textContent = user.timeStamp;
             row.appendChild(nameCell);
             row.appendChild(reqRoleCell);
             row.appendChild(timeStampCell);
@@ -281,26 +205,24 @@ approvedTab.addEventListener('click', async () => {
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="2">No users available</td>
-        `;
+        row.innerHTML = `<td colspan="2">No approved requests available</td>`;
         approvedTableBody.appendChild(row);
     }
-});
-
+}
 
 // Rejected Tab
-
-
 rejectedTab.addEventListener('click', async () => {
     hideAllLists();
     rejectedList.style.display = 'block';
+    await loadRejectedTable();
+});
+
+async function loadRejectedTable() {
+    console.log("fetching rejected requests");
     let data = await getAllRejectedRequests();
-    console.log(data)
     rejectedTableBody.innerHTML = '';
     if (data && data.length > 0) {
         data.forEach(user => {
-
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             nameCell.textContent = user.name;
@@ -315,26 +237,21 @@ rejectedTab.addEventListener('click', async () => {
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="2">No users available</td>
-        `;
+        row.innerHTML = `<td colspan="2">No rejected requests available</td>`;
         rejectedTableBody.appendChild(row);
     }
-});
-
-
-
+}
 
 async function pendingTabDisplay() {
-    console.log("fetching all pending requests")
+    console.log("fetching all pending requests");
     hideAllLists();
     pendingList.style.display = 'block';
     let data = await getAllPendingRequests();
-    let ids=Object.keys(data);
+    let ids = Object.keys(data);
     pendingTableBody.innerHTML = '';
     if (ids && ids.length > 0) {
         ids.forEach(id => {
-            let user=data[id];
+            let user = data[id];
             if (user.requestStatus === "pending") {
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
@@ -356,17 +273,13 @@ async function pendingTabDisplay() {
                 row.appendChild(currentRoleCell);
                 row.appendChild(requestedRoleCell);
                 row.appendChild(actionCell);
-
                 pendingTableBody.appendChild(row);
             }
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="4">No Pending Requests available</td>
-        `;
+        row.innerHTML = `<td colspan="4">No Pending Requests available</td>`;
         pendingTableBody.appendChild(row);
-
     }
 }
 
@@ -380,10 +293,9 @@ async function approveRoleChange(id) {
     }
     try {
         await postapproveRoleChange(id, apr);
-        console.log('request sent')
-        userRequestState[id] = false; // Update user request state to false after approval
+        console.log('request sent');
     } catch (error) {
-        console.log('Error in sending request')
+        console.log('Error in sending request');
     }
     pendingTabDisplay();
 }
@@ -396,10 +308,9 @@ async function rejectRoleChange(id) {
     }
     try {
         await postrejectRoleChange(id, rej);
-        console.log('request sent')
-        userRequestState[id] = false; // Update user request state to false after rejection
+        console.log('request sent');
     } catch (error) {
-        console.log('Error in sending request')
+        console.log('Error in sending request');
     }
     pendingTabDisplay();
 }

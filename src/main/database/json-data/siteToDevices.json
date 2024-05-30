@@ -1,17 +1,14 @@
 {
-    "siteDeviceMapping": [
-      {
-        "siteId": "site1",
-        "deviceIds": ["device1", "device2"]
-      },
-      {
-        "siteId": "site2",
-        "deviceIds": ["device3"]
-      },
-      {
-        "siteId": "site3",
-        "deviceIds": ["device4", "device5"]
-      }
-    ]
-  }
-  
+  "site_1": [
+    "device1",
+    "device2"
+  ],
+  "site_2": [
+    "device3"
+  ],
+  "site_3": [
+    "device4",
+    "device5"
+  ]
+
+}

@@ -20,11 +20,11 @@ class authController {
         console.log(user);
 
         if (user=={} || user.password !== password) {
-            return { success: false, role: 'null', message: 'Invalid email or password' };
+            return { success: false,_id:user._id, role: 'null', message: 'Invalid email or password' };
         }
 
         let role = user.role;
-        return { success: true, role: role, message: 'Logged In Successfully' };
+        return { success: true,_id:user._id, role: role, message: 'Logged In Successfully' };
     }
     async  sendVerificationEmail(email, otp) {
         try {

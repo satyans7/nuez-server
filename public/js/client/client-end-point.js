@@ -20,6 +20,12 @@ const AEP_TO_VERIFY_OTP ="/api/verifyotp"
 
 /// 
 
+const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
+const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites"
+
+const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
+const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
+
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
@@ -84,6 +90,22 @@ export function getApiToVerifyOTP() {
 }
 
 
+//ADMIN PAGE ADMIN_TO_SITE_MAPPING
+export function getApiToFetchAdminSiteMapping() {
+  return AEP_TO_FETCH_ALL_ADMINS_TO_SITES;
+}
+
+export function getApitoFetchAllSitesData() {
+  return AEP_TO_FETCH_ALL_SITES;
+}
+// SITE DEVICE PAGE
+export function getApitoFetchAllDevicesData() {
+  return AEP_TO_FETCH_ALL_DEVICES;
+}
+
+export function getApiToFetchSiteDeviceMapping() {
+  return AEP_TO_FETCH_ALL_SITES_TO_DEVICES;  //MAPPING SITE->DEVICE
+}
 
 export async function fetchPost(url, data) {
   const response = await fetch(url, {
@@ -93,7 +115,7 @@ export async function fetchPost(url, data) {
     },
     body: JSON.stringify(data),
   });
-  
+
   return response.json();
 }
 

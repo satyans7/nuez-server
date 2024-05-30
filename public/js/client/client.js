@@ -8,21 +8,21 @@ import * as controller from "./controller.js";
 
 export function postUserDataToServer(formData) {
     return controller.postUserRegisterDataToServer(formData);
-    
+
 }
 
 
 // Super Admin 
 
 export async function getAllConsumers() {
-    const data =  await controller.fetchAllConsumersFromServer()
-   // console.log(data)
+    const data = await controller.fetchAllConsumersFromServer()
+    // console.log(data)
     return data
 }
 
 export async function getAllAdmins() {
-    const data =  await controller.fetchAllAdminsFromServer()
-   // console.log(data)
+    const data = await controller.fetchAllAdminsFromServer()
+    // console.log(data)
     return data
 }
 
@@ -51,19 +51,19 @@ export async function postRequesttoRoleChange(id, request) {
 }
 
 
-export async function postapproveRoleChange(id,request) {
+export async function postapproveRoleChange(id, request) {
     console.log(`posting the approval request ${id}`);
-    await controller.postapproveRoleChange(id,request);
+    await controller.postapproveRoleChange(id, request);
 }
- 
-export async function postrejectRoleChange(id,request) {
+
+export async function postrejectRoleChange(id, request) {
     console.log(`posting the reject request ${id}`);
-    await controller.postrejectRoleChange(id,request);
+    await controller.postrejectRoleChange(id, request);
 }
 
 
 //login
-export async function userLoginDetailsPost(userData){
+export async function userLoginDetailsPost(userData) {
     return await controller.postUserLoginDataToServer(userData);
 }
 
@@ -74,4 +74,23 @@ export async function generateOTP(email){
 
 export async function verifyOTP(email,otp){
     return await controller.verifyOTP(email,otp);
+}
+
+// Site - Admin 
+
+export async function getSitesData() {
+    return await controller.getAllSitesData();
+}
+export async function getUserSiteMapping() {
+    return await controller.getUserToSiteMapping();
+}
+
+
+//SITE DEVICE PAGE
+export async function getDevicesData() {
+    return await controller.getAllDevicesData();
+}
+//SITE DEVICE MAPPING
+export async function getSiteDeviceMapping() {
+    return await controller.getSiteToDeviceMapping();
 }
