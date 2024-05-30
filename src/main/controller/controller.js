@@ -249,7 +249,7 @@ class Controller {
  }
   
   
-}
+
 // const obj = new Controller();
 // obj.OTPGenerationAndStorage("priyansu.iitism@gmail.com");
 // obj.OTPVerification("priyansu.iitism@gmail.com","Wz8pRT");
