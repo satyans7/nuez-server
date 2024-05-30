@@ -9,6 +9,7 @@ const VIEW = "src/main/views";
 const HOME = "index.html";
 const LOGIN = "pages/login.html";
 const REGISTER = "pages/register.html";
+const OTPLOGIN="pages/loginviaotp.html"
 const SUPERADMIN = "pages/superAdmin.html";
 const ADMIN = "pages/admin.html";
 const CONSUMER="pages/consumer.html";
@@ -22,12 +23,12 @@ app.use(express.static(path.join(__dirname, PUBLIC)));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-
+app.use(bodyParser.json());
 // Parse URL-encoded bodies (usually for form data)
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Parse JSON bodies (usually for JSON data)
-app.use(bodyParser.json());
+
 
 // Define routes
 app.get("/", (req, res) => {
@@ -39,6 +40,9 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, VIEW, REGISTER));
 });
+app.get("/loginviaotp",(req,res)=>{
+  res.sendFile(path.join(__dirname,VIEW,OTPLOGIN))
+})
 app.get("/superAdmin", (req, res) => {
   res.sendFile(path.join(__dirname, VIEW, SUPERADMIN));
 });

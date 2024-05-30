@@ -67,3 +67,11 @@ export async function userLoginDetailsPost(userData){
     return await controller.postUserLoginDataToServer(userData);
 }
 
+// generate otp
+export async function generateOTP(email){
+    return await controller.generateOTP(email);
+}
+
+export async function verifyOTP(email,otp){
+    return await controller.verifyOTP(email,otp);
+}

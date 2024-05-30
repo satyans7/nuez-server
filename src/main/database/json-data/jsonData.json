@@ -3,24 +3,25 @@
     "name": "Alice Johnson",
     "email": "alice.johnson@example.com",
     "password": "password123",
-    "role": "admin"
+    "role": "consumer"
   },
-  "user_2": {
+  "user_2":{
     "name": "Bob Smith",
     "email": "bob.smith@example.com",
     "password": "password123",
     "role": "admin"
   },
-  "user_3": {
+  "user_3":{
     "name": "Nikhil Priyadarshan",
     "email": "nikhilpriyadarshan1234@gmail.com",
     "password": "12345678",
-    "role": "consumer"
+    "role": "admin"
   },
-  "user_4": {
-    "name": "Priyansu Mohanty",
-    "email": "user@user.com",
-    "password": "user",
+  "user_4":{
+    "name": "Pankaj Sharma",
+    "email": "oyeeitspankaj@gmail.com",
+    "password": "12345678",
     "role": "consumer"
   }
+
 }

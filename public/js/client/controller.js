@@ -71,3 +71,23 @@ export async function postrejectRoleChange(id, data) {
     cep.fetchPost(api, data);
     //console.log(id);
 }
+
+export async function generateOTP(email) {
+    const api = await cep.getApiToGenerateOTP();
+    const data={
+        "email":email
+    }
+    return await  cep.fetchPost(api,data);
+}
+
+export async function verifyOTP(email,otp) {
+    const api = await cep.getApiToVerifyOTP();
+    const data={
+        "email":email,
+        "otp":otp
+    }
+   return await cep.fetchPost(api,data);
+    //console.log(id);
+}
+
+

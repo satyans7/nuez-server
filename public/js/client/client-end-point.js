@@ -15,6 +15,10 @@ const AEP_TO_FETCH_ALL_ADMINS = "/api/admin";
 const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
 const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
 const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
+const AEP_TO_GENERATE_OTP="/api/generateotp";
+const AEP_TO_VERIFY_OTP ="/api/verifyotp"
+
+/// 
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
@@ -72,9 +76,16 @@ export function getApiToFetchDeniedLog() {
   return AEP_TO_FETCH_DENIED_LOG;
 }
 
+export function getApiToGenerateOTP() {
+  return AEP_TO_GENERATE_OTP;
+}
+export function getApiToVerifyOTP() {
+  return AEP_TO_VERIFY_OTP;
+}
+
+
 
 export async function fetchPost(url, data) {
-  console.log("data");
   const response = await fetch(url, {
     method: "POST",
     headers: {

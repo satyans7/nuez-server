@@ -5,6 +5,7 @@ const REQ_DATA = path.join(__dirname, "../database/json-data/requestData.json");
 const ACCEPTED_LOG = path.join(__dirname, "../database/json-data/approvedReqLog.json");
 const REJECTED_LOG = path.join(__dirname, "../database/json-data/deniedReqLog.json");
 const RESERVED_EMAILS = path.join(__dirname, "../database/json-data/reserved.json");
+const OTPEMAIL = path.join(__dirname, "../database/json-data/otp-email.json");
 
 class JsonController {
   fetchSampleData() {
@@ -185,6 +186,37 @@ class JsonController {
     }
 }
 
-}
+  async saveotpemail(otp,email){
+    const data = {}
+      data[email]=otp;
+    
+    await this.writeDatabase(OTPEMAIL,data);
+    console.log(`${email} otp has been saved successfully`)
+    return email;
+  }
+  async updateotpemail(otp,email){
+    const data =await this.readDatabase(OTPEMAIL);
+     data[email]=otp;
+    await this.writeDatabase(OTPEMAIL,data);
+    console.log(`${email} otp has been updated successfully`)
+    return email;
+  }
+  
+  async isOTPRequested(email){
+    const data = await this.readDatabase(OTPEMAIL);
+    if(data[email])return 1;
+    return 0;
+  }
 
+  async findOTPByEmail(email){
+    const data =await this.readDatabase(OTPEMAIL);
+    return await data[email];
+  }
+   
+  async deleteOTPByEmail(email){
+    const data =await this.readDatabase(OTPEMAIL);
+    delete data[email];
+    await this.writeDatabase(OTPEMAIL,data);
+  }
+}
 module.exports = new JsonController();

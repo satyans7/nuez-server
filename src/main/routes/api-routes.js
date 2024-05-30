@@ -34,7 +34,10 @@ module.exports = function (app) {
   const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
   const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
   
+  const AEP_TO_GENERATE_OTP = "/api/generateotp"
+  const AEP_TO_VERIFY_OTP ="/api/verifyotp"
   
+
   
 
 
@@ -116,7 +119,20 @@ module.exports = function (app) {
     res.sendFile(SUPERADMINPAGE);
   });
 
+  // LOGIN VIA OTP 
+  app.post(AEP_TO_GENERATE_OTP, async (req, res) => {
+    const email=await controller.OTPGenerationAndStorage(req.body.email);
+    return res.status(200).json({message:`Otp has been sent to ${email} successfully!!!`})
+  });
 
+  app.post(AEP_TO_VERIFY_OTP, async (req, res) => {
+    const data =await controller.OTPVerification(req.body.email,req.body.otp );
+    if (data.success) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
+    }
+  });
 
   ///////////TESTING ROUTES////////////////
   app.post("/test-url", async(req,res)=>{
