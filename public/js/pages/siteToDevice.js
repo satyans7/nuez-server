@@ -1,66 +1,90 @@
-// siteToDevice.js
+import { getDevicesData, getSiteDeviceMapping } from '../client/client.js';
 
-import { getSiteDetails, getDevicesForSite } from '../client/client.js';
+const alldevicesContainer = document.querySelector('.all-devices');
+const registerTab = document.getElementById('register-form-container');
+const deregisterTab = document.getElementById('deregister-form-container');
+const registerBtn = document.getElementById('register-device-button');
+const deregisterBtn = document.getElementById('deregister-device-button');
+const viewdevicesBtn = document.getElementById('view-device-button')
+const headingText = document.getElementById('heading');
+const currentSite = document.getElementById('site-id')
 
-const siteIdDisplay = document.getElementById('site-id-display');
-const allDevicesContainer = document.querySelector('.all-devices');
+const title = document.createElement('h1');
+title.textContent = `Welcome, ${getCurrentSite()}`
+headingText.appendChild(title)
+
+const currentid = document.createElement('h1');
+currentid.textContent = `Id : ${getCurrentSite()}`
+currentSite.appendChild(currentid)
+
+
+registerBtn.addEventListener('click', () => {
+    alldevicesContainer.style.display = 'none';
+    deregisterTab.style.display = 'none';
+    registerTab.style.display = 'block';
+})
+
+deregisterBtn.addEventListener('click', () => {
+    alldevicesContainer.style.display = 'none';
+    registerTab.style.display = 'none';
+    deregisterTab.style.display = 'block';
+})
+
+viewdevicesBtn.addEventListener('click', async () => {
+    await viewAlldevices();
+})
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const siteId = getSiteIdFromURL();
-    siteIdDisplay.textContent = siteId; 
-    await viewAllDevices();
+    await viewAlldevices();
+
 });
 
-function getSiteIdFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('siteId');
-}
+function getCurrentSite() {
+    const fullUrl = window.location.href;
+    const url = new URL(fullUrl);
+    const pathname = url.pathname;
+    const segments = pathname.split('/');
+    const siteId = segments[segments.length - 1];
+    return siteId;
+};
 
-async function viewAllDevices() {
-    const siteId = getSiteIdFromURL();
-    allDevicesContainer.innerHTML = '';
 
-    try {
-        // Fetch site details and devices for the site
-        const siteDetails = await getSiteDetails(siteId);
-        const devices = await getDevicesForSite(siteId);
 
-        console.log("Site Details:", siteDetails);
-        console.log("Devices:", devices);
-
-        // Create and append device cards
-        devices.forEach(device => {
+async function viewAlldevices() {
+    deregisterTab.style.display = 'none';
+    registerTab.style.display = 'none';
+    alldevicesContainer.style.display = 'flex';
+    const SiteId = getCurrentSite();
+    console.log(SiteId)
+    const devicesData = await getDevicesData();
+    const sitesdevicesMapping = await getSiteDeviceMapping();
+    let devices = [];
+    devices = sitesdevicesMapping[SiteId];
+    alldevicesContainer.innerHTML = '';
+    devices.forEach(key => {
+        const device = devicesData[key];
+        if (device) {
             const deviceCard = document.createElement('div');
             deviceCard.className = 'card';
-            
             const cardHeading = document.createElement('div');
             cardHeading.className = 'card-heading';
-            
             const cardBody = document.createElement('div');
             cardBody.className = 'card-body';
-            
             const deviceName = document.createElement('h3');
             deviceName.textContent = device.name;
-            
-            const deviceType = document.createElement('h4');
-            deviceType.textContent = device.type;
-            
+            const deviceLocation = document.createElement('h4');
+            deviceLocation.textContent = device.location;
             const moreDetailsButton = document.createElement('button');
-            moreDetailsButton.className = 'fetch-device-data';
+            moreDetailsButton.id = 'fetch-device-data';
             moreDetailsButton.textContent = 'More Details';
-            // Add event listener for device details if needed
-
             cardHeading.appendChild(deviceName);
             cardHeading.appendChild(moreDetailsButton);
-            
             deviceCard.appendChild(cardHeading);
-            cardBody.appendChild(deviceType);
-            deviceCard.appendChild(cardBody);
-            
-            allDevicesContainer.appendChild(deviceCard);
-        });
-    } catch (error) {
-        console.error('Error fetching devices data:', error);
-        allDevicesContainer.innerHTML = '<p>Error fetching devices data. Please try again later.</p>';
-    }
+            cardBody.appendChild(deviceLocation);
+            deviceCard.appendChild(cardBody)
+            alldevicesContainer.appendChild(deviceCard);
+        }
+    });
 }
+
+
