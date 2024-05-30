@@ -19,6 +19,9 @@ const AEP_TO_DELETE_A_USER = "/api/user/terminate/:id";
 const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
 const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites"
 
+const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
+const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
+
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
