@@ -78,3 +78,18 @@ export async function getUserSiteMapping() {
     return await controller.getUserToSiteMapping();
 }
 
+
+export async function getSitesData() {
+    return await controller.getAllSitesData();
+}
+export async function getUserSiteMapping() {
+    return await controller.getUserToSiteMapping();
+}
+//SITE DEVICE PAGE
+export async function getDevicesData() {
+    return await controller.getAllDevicesData();
+}
+//SITE DEVICE MAPPING
+export async function getSiteDeviceMapping() {
+    return await controller.getSiteToDeviceMapping();
+}

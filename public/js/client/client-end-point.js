@@ -85,8 +85,14 @@ export function getApiToFetchAdminSiteMapping() {
 export function getApitoFetchAllSitesData() {
   return AEP_TO_FETCH_ALL_SITES;
 }
+// SITE DEVICE PAGE
+export function getApitoFetchAllDevicesData() {
+  return AEP_TO_FETCH_ALL_DEVICES;
+}
 
-
+export function getApiToFetchSiteDeviceMapping() {
+  return AEP_TO_FETCH_ALL_SITES_TO_DEVICES;  //MAPPING SITE->DEVICE
+}
 
 export async function fetchPost(url, data) {
   console.log("data");

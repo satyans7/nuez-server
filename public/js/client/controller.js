@@ -84,3 +84,13 @@ export async function getUserToSiteMapping(){
     const api = cep.getApiToFetchAdminSiteMapping();
     return await cep.fetchDataFromServer(api);
 }
+//SITE DEVICE PAGE
+export async function getAllDevicesData(){
+    const api = cep.getApitoFetchAllDevicesData();
+    return await cep.fetchDataFromServer(api);
+}
+//SITE DEVICE MAPPING
+export async function getSiteToDeviceMapping(){
+    const api =cep.getApiToFetchSiteDeviceMapping();
+    return await cep.fetchDataFromServer(api);
+}
