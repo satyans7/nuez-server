@@ -6,6 +6,16 @@ const deregisterTab = document.getElementById('deregister-form-container');
 const registerBtn = document.getElementById('register-site-button');
 const deregisterBtn = document.getElementById('deregister-site-button');
 const viewSitesBtn = document.getElementById('view-site-button')
+const headingText = document.getElementById('heading');
+const currentAdmin = document.getElementById('admin-id')
+
+const title = document.createElement('h1');
+title.textContent = `Welcome, ${getCurrentAdmin()}`
+headingText.appendChild(title)
+
+const currentid = document.createElement('h1');
+currentid.textContent = `Id : ${getCurrentAdmin()}`
+currentAdmin.appendChild(currentid)
 
 
 registerBtn.addEventListener('click', () => {
@@ -67,6 +77,10 @@ async function viewAllSites() {
             const moreDetailsButton = document.createElement('button');
             moreDetailsButton.id = 'fetch-site-data';
             moreDetailsButton.textContent = 'More Details';
+            moreDetailsButton.addEventListener('click', ()=>{
+                const route = `/api/site-dashboard/${key}`;
+                window.open(route, '_blank')
+            })
             cardHeading.appendChild(siteName);
             cardHeading.appendChild(moreDetailsButton);
             siteCard.appendChild(cardHeading);

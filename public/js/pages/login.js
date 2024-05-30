@@ -1,4 +1,3 @@
-
 import * as client from "../client/client.js";
 document.addEventListener('DOMContentLoaded',()=>
 {
@@ -32,3 +31,8 @@ document.addEventListener('DOMContentLoaded',()=>
 
     })
 })
+document.addEventListener('DOMContentLoaded',()=>
+  { document.getElementById("otplogin").addEventListener("click",()=>{
+        window.location.href="./loginviaotp"
+  })
+  })

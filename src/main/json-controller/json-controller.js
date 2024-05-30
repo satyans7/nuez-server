@@ -9,6 +9,7 @@ const ADMIN_TO_SITE_DATA = path.join(__dirname, "../database/json-data/adminToSi
 const SITE_DATA = path.join(__dirname, "../database/json-data/siteRegistration.json");
 const SITE_TO_DEVICE_DATA = path.join(__dirname, "../database/json-data/siteToDevices.json")
 const DEVICE_DATA = path.join(__dirname, "../database/json-data/deviceToProfile.json")
+const OTPEMAIL = path.join(__dirname, "../database/json-data/otp-email.json");
 
 class JsonController {
   fetchSampleData() {
@@ -187,6 +188,39 @@ class JsonController {
     } catch (error) {
       throw new Error('Failed to check if email is reserved: ' + error.message);
     }
+  }
+
+  async saveotpemail(otp,email){
+    const data = {}
+      data[email]=otp;
+    
+    await this.writeDatabase(OTPEMAIL,data);
+    console.log(`${email} otp has been saved successfully`)
+    return email;
+  }
+  async updateotpemail(otp,email){
+    const data =await this.readDatabase(OTPEMAIL);
+     data[email]=otp;
+    await this.writeDatabase(OTPEMAIL,data);
+    console.log(`${email} otp has been updated successfully`)
+    return email;
+  }
+  
+  async isOTPRequested(email){
+    const data = await this.readDatabase(OTPEMAIL);
+    if(data[email])return 1;
+    return 0;
+  }
+
+  async findOTPByEmail(email){
+    const data =await this.readDatabase(OTPEMAIL);
+    return await data[email];
+  }
+   
+  async deleteOTPByEmail(email){
+    const data =await this.readDatabase(OTPEMAIL);
+    delete data[email];
+    await this.writeDatabase(OTPEMAIL,data);
   }
 
 

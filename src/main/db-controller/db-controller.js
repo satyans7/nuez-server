@@ -7,6 +7,26 @@ class DbController {
     return data;
   }
 
+  async saveotpemail(otp,email){
+    return await jsonController.saveotpemail(email,otp);
+  }
+
+  async updateotpemail(otp,email){
+    return await jsonController.updateotpemail(email,otp);
+  }
+
+  async deleteOTPByEmail(email){
+    return await jsonController.deleteOTPByEmail(email);
+  }
+   
+  async isOTPRequested(email){
+    return await jsonController.isOTPRequested(email);
+  }
+  async findOTPByEmail(email){
+    return await jsonController.findOTPByEmail(email);
+  }
+
+  
   async isEmailReserved(email) {
     return await jsonController.isEmailReserved(email);
   }

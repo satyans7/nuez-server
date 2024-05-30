@@ -1,31 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site Device Dashboard</title>
-<link rel="stylesheet" href="/css/siteToDevice.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Dashboard</title>
+    <link rel="stylesheet" href="/css/siteToDevice.css">
 </head>
+
 <body>
 
-<div class="sidebar">
-    <h2>Site ID: <span id="site-id-display">Loading...</span></h2>
-    <a href="#dashboard" id="dashboard-link">Dashboard</a>
-    <a href="#devices" id="devices-link">Devices</a>
-    <a href="#settings" id="settings-link">Settings</a>
-    <a href="#logout" id="logout-link">Logout</a>
-</div>
-
-<div class="main-content">
-    <div class="header">
-        <h1>Site Device Dashboard</h1>
+    <div class="sidebar">
+        <div id="site-id"></div>
+        <a href="#dashboard" id="dashboard-link">Dashboard</a>
+        <a href="#users" id="users-link">Users</a>
+        <a href="#settings" id="settings-link">Settings</a>
+        <a href="#logout" id="logout-link">Logout</a>
     </div>
 
-    <div id="device-list" class="all-devices">
-        <!-- Device cards will be inserted here dynamically -->
-    </div>
-</div>
+    <div class="main-content">
+        <div class="header">
+            <div id="heading">
+            </div>
+            <div class="button-group">
+                <button id="view-device-button">All Devices</button>
+                <button id="register-device-button">Register</button>
+                <button id="deregister-device-button">Deregister</button>
+            </div>
+        </div>
 
-<script src="s/js/pages/siteToDevice.js"></script>
+        <div id="device-list" class="all-devices">
+
+        </div>
+
+        <div id="register-form-container" class="form-container" style="display: none;">
+            <form id="device-form">
+                <label for="device-id">Device ID:</label>
+                <input type="text" id="device-id" name="device-id" required>
+                <button type="submit">Register</button>
+                <button type="button" id="cancel-button">Cancel</button>
+            </form>
+        </div>
+        <div id="deregister-form-container" class="form-container" style="display: none;">
+            <form id="device-form">
+                <label for="device-id">Device ID:</label>
+                <input type="text" id="device-id" name="device-id" required>
+                <button type="submit">De-register</button>
+                <button type="button" id="cancel-button">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/js/pages/siteToDevice.js"></script>
+
 </body>
+
 </html>
