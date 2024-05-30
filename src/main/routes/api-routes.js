@@ -37,7 +37,8 @@ module.exports = function (app) {
   const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
   const AEP_TO_FETCH_ALL_SITES = '/api/admin/sites';
   
-  
+  const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
+  const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
   
 
   ////////REGISTERING A USER///////
@@ -157,6 +158,28 @@ app.get(AEP_TO_FETCH_ALL_SITES, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+//sites to device mapping
+
+  app.get(AEP_TO_FETCH_ALL_SITES_TO_DEVICES, async (req, res) => {
+    const data = await controller.fetchAllSiteToDevice();
+    res.json(data);
+  });
+
+  // fetch all devices
+
+  app.get(AEP_TO_FETCH_ALL_DEVICES, async (req, res) => {
+    try {
+      const data = await controller.fetchAllDevices();
+      res.json(data);
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+
+
 };
 
 

@@ -238,6 +238,22 @@ async fetchAllSites() {
   let data = await dbController.fetchAllSites();
   return data;
 }
+
+// Site to device mapping
+
+  async fetchAllSiteToDevice() {
+    let data = await dbController.fetchAllSitetoDevice();
+    return data;
+  }
+
+  // fetch all devices
+
+  async fetchAllDevices() {
+    let data = await dbController.fetchAllDevices();
+    return data;
+  }
+
+
   
 }
 
