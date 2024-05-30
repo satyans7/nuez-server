@@ -222,7 +222,7 @@ class JsonController {
     delete data[email];
     await this.writeDatabase(OTPEMAIL,data);
   }
-}
+
 
 
   // GET ADMIN_TO_SITE_MAPPING
