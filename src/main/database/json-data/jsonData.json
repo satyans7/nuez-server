@@ -22,6 +22,25 @@
     "email": "oyeeitspankaj@gmail.com",
     "password": "12345678",
     "role": "consumer"
+  },
+  "user_5": {
+    "name": "Emma Johnson",
+    "email": "emma.johnson@example.com",
+    "password": "emma123",
+    "role": "consumer"
+  },
+  "user_6": {
+    "name": "Michael Smith",
+    "email": "michael.smith@example.com",
+    "password": "michael123",
+    "role": "consumer"
+  },
+  "user_7": {
+    "name": "Sophia Brown",
+    "email": "sophia.brown@example.com",
+    "password": "sophia123",
+    "role": "consumer"
   }
+
 
 }
