@@ -1,175 +1,173 @@
 {
-    "user4": [
-      "device1",
-      "device4",
-      "device7",
-      "device10",
-      "device13",
-      "device16"
+    "user_4": [
+      "device_1",
+      "device_4",
+      "device_7",
+      "device_10",
+      "device_13",
+      "device_16"
     ],
-    "user5": [
-      "device2",
-      "device5",
-      "device8",
-      "device11",
-      "device14",
-      "device37"
+    "user_5": [
+      "device_2",
+      "device_5",
+      "device_8",
+      "device_11",
+      "device_14",
+      "device_37"
     ],
-    "user6": [
-      "device3",
-      "device6",
-      "device9",
-      "device12",
-      "device15",
-      "device18"
+    "user_6": [
+      "device_3",
+      "device_6",
+      "device_9",
+      "device_12",
+      "device_15",
+      "device_18"
     ],
-    "user7": [
-      "device38"
+    "user_7": [
+      "device_38"
     ],
-    "user8": [
-      "device39",
-      "device40",
-      "device41",
-      "device19",
-      "device20",
-      "device21"
+    "user_8": [
+      "device_39",
+      "device_40",
+      "device_41",
+      "device_19",
+      "device_20",
+      "device_21"
     ],
-    "user9": [
-      "device22",
-      "device23",
-      "device24",
-      "device25",
-      "device42",
-      "device43"
+    "user_9": [
+      "device_22",
+      "device_23",
+      "device_24",
+      "device_25",
+      "device_42",
+      "device_43"
     ],
-    "user10": [
-      "device26",
-      "device27",
-      "device28",
-      "device29",
-      "device44",
-      "device45"
+    "user_10": [
+      "device_26",
+      "device_27",
+      "device_28",
+      "device_29",
+      "device_44",
+      "device_45"
     ],
-    "user11": [
-      "device30",
-      "device31",
-      "device32",
-      "device33",
-      "device34",
-      "device35"
+    "user_11": [
+      "device_30",
+      "device_31",
+      "device_32",
+      "device_33",
+      "device_34",
+      "device_35"
     ],
-    "user12": [
-      "device36",
-      "device46",
-      "device47",
-      "device48",
-      "device49",
-      "device50"
+    "user_12": [
+      "device_36",
+      "device_46",
+      "device_47",
+      "device_48",
+      "device_49",
+      "device_50"
     ],
-    "user13": [
-      "device51",
-      "device52",
-      "device53"
+    "user_13": [
+      "device_51",
+      "device_52",
+      "device_53"
     ],
-    "user14": [
-      "device54",
-      "device55"
+    "user_14": [
+      "device_54",
+      "device_55"
     ],
-    "user15": [
-      "device56",
-      "device57",
-      "device58"
+    "user_15": [
+      "device_56",
+      "device_57",
+      "device_58"
     ],
-    "user16": [
-      "device59",
-      "device60",
-      "device61"
+    "user_16": [
+      "device_59",
+      "device_60",
+      "device_61"
     ],
-    "user17": [
-      "device62",
-      "device63",
-      "device64"
+    "user_17": [
+      "device_62",
+      "device_63",
+      "device_64"
     ],
-    "user18": [
-      "device65",
-      "device66",
-      "device67"
+    "user_18": [
+      "device_65",
+      "device_66",
+      "device_67"
     ],
-    "user19": [
-      "device68",
-      "device69",
-      "device70"
+    "user_19": [
+      "device_68",
+      "device_69",
+      "device_70"
     ],
-    "user20": [
-      "device71",
-      "device72",
-      "device73"
+    "user_20": [
+      "device_71",
+      "device_72",
+      "device_73"
     ],
-    "user21": [
-      "device74",
-      "device75",
-      "device76"
+    "user_21": [
+      "device_74",
+      "device_75",
+      "device_76"
     ],
-    "user22": [
-      "device77",
-      "device78",
-      "device79"
+    "user_22": [
+      "device_77",
+      "device_78",
+      "device_79"
     ],
-    "user23": [
-      "device80",
-      "device81",
-      "device82"
+    "user_23": [
+      "device_80",
+      "device_81",
+      "device_82"
     ],
-    "user24": [
-      "device83",
-      "device84",
-      "device85"
+    "user_24": [
+      "device_83",
+      "device_84",
+      "device_85"
     ],
-    "user25": [
-      "device86",
-      "device87",
-      "device88"
+    "user_25": [
+      "device_86",
+      "device_87",
+      "device_88"
     ],
-    "user26": [
-      "device89",
-      "device90",
-      "device91"
+    "user_26": [
+      "device_89",
+      "device_90",
+      "device_91"
     ],
-    "user27": [
-      "device92",
-      "device93",
-      "device94"
+    "user_27": [
+      "device_92",
+      "device_93",
+      "device_94"
     ],
-    "user28": [
-      "device95",
-      "device96",
-      "device97"
+    "user_28": [
+      "device_95",
+      "device_96",
+      "device_97"
     ],
-    "user29": [
-      "device98",
-      "device99",
-      "device100"
+    "user_29": [
+      "device_98",
+      "device_99",
+      "device_100"
     ],
-    "user30": [
-      "device101",
-      "device102",
-      "device103"
+    "user_30": [
+      "device_101",
+      "device_102",
+      "device_103"
     ],
-    "user31": [
-      "device104",
-      "device105",
-      "device106"
+    "user_31": [
+      "device_104",
+      "device_105",
+      "device_106"
     ],
-    "user32": [
-      "device107",
-      "device108",
-      "device109"
+    "user_32": [
+      "device_107",
+      "device_108",
+      "device_109"
     ],
-    "user33": [
-      "device110",
-      "device111",
-      "device112"
+    "user_33": [
+      "device_110",
+      "device_111",
+      "device_112"
     ]
-  }
-  
-  
+}
