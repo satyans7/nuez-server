@@ -24,7 +24,10 @@ const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
 const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites"
 
 const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
+const AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS = "/api/admin/sitetoconsumer";
 const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
+
+const AEP_TO_FETCH_CONSUMERS_TO_DEVICES = "/api/consumer/consumertodevice";
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
@@ -105,6 +108,14 @@ export function getApitoFetchAllDevicesData() {
 
 export function getApiToFetchSiteDeviceMapping() {
   return AEP_TO_FETCH_ALL_SITES_TO_DEVICES;  //MAPPING SITE->DEVICE
+}
+
+export function getApiToFetchSiteConsumerMapping() {
+  return AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS;
+}
+
+export function getApiToFetchConsumerDeviceMapping() {
+  return AEP_TO_FETCH_CONSUMERS_TO_DEVICES;  //MAPPING CONSUMER->DEVICE
 }
 
 export async function fetchPost(url, data) {

@@ -115,3 +115,16 @@ export async function getSiteToDeviceMapping(){
     const api =cep.getApiToFetchSiteDeviceMapping();
     return await cep.fetchDataFromServer(api);
 }
+
+export async function getSiteToConsumerMapping() {
+    const api = cep.getApiToFetchSiteConsumerMapping();
+    return await cep.fetchDataFromServer(api);
+}
+
+
+//Consumer
+
+export async function getConsumerToDeviceMapping() {
+    const api = cep.getApiToFetchConsumerDeviceMapping();
+    return await cep.fetchDataFromServer(api);
+}

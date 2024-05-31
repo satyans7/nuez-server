@@ -94,3 +94,14 @@ export async function getDevicesData() {
 export async function getSiteDeviceMapping() {
     return await controller.getSiteToDeviceMapping();
 }
+
+export async function getSiteConsumerMapping() {
+    return await controller.getSiteToConsumerMapping();
+}
+
+//Consumer
+export async function getConsumerDeviceMapping() {
+    const data =  await controller.getConsumerToDeviceMapping();
+    console.log(data)
+    return data
+}

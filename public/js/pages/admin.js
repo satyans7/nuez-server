@@ -77,9 +77,9 @@ async function viewAllSites() {
             const moreDetailsButton = document.createElement('button');
             moreDetailsButton.id = 'fetch-site-data';
             moreDetailsButton.textContent = 'More Details';
-            moreDetailsButton.addEventListener('click', ()=>{
+            moreDetailsButton.addEventListener('click', () => {
                 const route = `/api/site-dashboard/${key}`;
-                window.open(route, '_blank')
+                window.location.href = route;
             })
             cardHeading.appendChild(siteName);
             cardHeading.appendChild(moreDetailsButton);
