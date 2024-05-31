@@ -148,6 +148,17 @@ async fetchAllSites() {
     let data = await jsonController.fetchAllDevices();
     return data;
   }
+  //consumer to device mapping
+  async fetchAllConsumertoDevice(){
+    let data =await jsonController.fetchConsumerToDevice();
+    return data;
+  }
+
+  //site to consumer mapping
+  async fetchAllSiteToConsumer(){
+    let data=await jsonController.fetchSiteToConsumer();
+    return data;
+  }
 
 
 }

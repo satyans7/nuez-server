@@ -47,7 +47,8 @@ module.exports = function (app) {
   const AEP_TO_GENERATE_OTP = "/api/generateotp"
   const AEP_TO_VERIFY_OTP ="/api/verifyotp"
   
-
+  const AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS ="/api/admin/sitetoconsumer";
+  const AEP_TO_FETCH_CONSUMERS_TO_DEVICES="/api/consumer/consumertodevice";
   
 
   ////////REGISTERING A USER///////
@@ -190,6 +191,25 @@ module.exports = function (app) {
       const data = await controller.fetchAllDevices();
       res.json(data);
     } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  //consumer to device mapping
+  app.get(AEP_TO_FETCH_CONSUMERS_TO_DEVICES, async (req, res) => {
+    try {
+      const data = await controller.fetchAllConsumerToDevice();
+      res.json(data);
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  app.get(AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS, async(req,res)=>{
+    try{
+      const data =await controller.fetchAllSiteToConsumer();
+      res.json(data);
+    } catch (error){
       res.status(500).send('Internal Server Error');
     }
   });

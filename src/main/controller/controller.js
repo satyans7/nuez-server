@@ -280,7 +280,17 @@ async fetchAllSites() {
     return data;
   }
 
+  //fetch all consumer to device
+  async fetchAllConsumerToDevice() {
+    let data =await dbController.fetchAllConsumertoDevice();
+    return data;
+  }
 
+  //fetch all site to consumer
+  async fetchAllSiteToConsumer(){
+    let data=await dbController.fetchAllSiteToConsumer();
+    return data;
+  }
   
 }
 

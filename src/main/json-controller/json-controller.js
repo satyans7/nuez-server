@@ -9,6 +9,8 @@ const ADMIN_TO_SITE_DATA = path.join(__dirname, "../database/json-data/adminToSi
 const SITE_DATA = path.join(__dirname, "../database/json-data/siteRegistration.json");
 const SITE_TO_DEVICE_DATA = path.join(__dirname, "../database/json-data/siteToDevices.json")
 const DEVICE_DATA = path.join(__dirname, "../database/json-data/deviceToProfile.json")
+const CONSUMER_TO_DEVICE_DATA =path.join(__dirname, "../database/json-data/consumerToDevices.json");
+const SITE_TO_CONSUMER_DATA= path.join(__dirname, "../database/json-data/siteToConsumer.json");
 const OTPEMAIL = path.join(__dirname, "../database/json-data/otp-email.json");
 
 class JsonController {
@@ -250,6 +252,18 @@ class JsonController {
 
   async fetchAllDevices() {
     const db = await this.readDatabase(DEVICE_DATA);
+    return db;
+  }
+
+  //fetch consumer to device mapping
+  async fetchConsumerToDevice(){
+    const db =await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+    return db;
+  }
+
+  //fetch site to consumer mapping
+  async fetchSiteToConsumer(){
+    const db =await this.readDatabase(SITE_TO_CONSUMER_DATA);
     return db;
   }
 
