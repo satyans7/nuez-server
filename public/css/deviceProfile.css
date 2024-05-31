@@ -1,0 +1,63 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fa; 
+}
+
+.device-profile-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: white; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.device-profile-heading {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #0a0a65; /* Heading color */
+}
+
+.device-card {
+    background-color: #f0f0f0; /* Card background color */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.device-card h3 {
+    color: #b7187a; /* Heading color */
+}
+
+.device-card p {
+    color: #0a0a65; /* Text color */
+}
+
+.device-card hr {
+    border: 0;
+    height: 1px;
+    background: #01033b; /* Line color */
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    text-align: center;
+}
+
+.button-container button {
+    padding: 10px 20px;
+    background-color: #3498db; /* Button background color */
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-container button:hover {
+    background-color: #2980b9; /* Hover color */
+}

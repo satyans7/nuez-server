@@ -9,14 +9,18 @@ module.exports = function (app) {
     res.send(data);
   });
 
-  
+
   const ADMINPAGE = path.join(__dirname, '../views/pages', 'admin.html');
   const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
   const SUPERADMINPAGE = path.join(__dirname, '../views/pages', 'superAdmin.html');
+  const SITEPAGE = path.join(__dirname, '../views/pages', 'siteToDevice.html')
+  const DEVICEPROFILE=path.join(__dirname, '../views/pages', 'deviceProfile.html');
 
   //private
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard/:id";
   const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard/:id";
+  const PRIVATE_AEP_TO_SITES = "/api/site-dashboard/:id";
+  const PRIVATE_AEP_TO_DEVICEPROFILE="/api/device-profile/:id";
 
   //public
 
@@ -30,14 +34,21 @@ module.exports = function (app) {
   const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
   const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
   const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
-  
+
   const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
   const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
 
   const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
   const AEP_TO_FETCH_ALL_SITES = '/api/admin/sites';
+
+  const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
+  const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
   
+  const AEP_TO_GENERATE_OTP = "/api/generateotp"
+  const AEP_TO_VERIFY_OTP ="/api/verifyotp"
   
+  const AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS ="/api/admin/sitetoconsumer";
+  const AEP_TO_FETCH_CONSUMERS_TO_DEVICES="/api/consumer/consumertodevice";
   
 
   ////////REGISTERING A USER///////
@@ -55,8 +66,8 @@ module.exports = function (app) {
     }
   });
   //////////////////////////////////////////FETCH DATA//////////////////////////////////////////////////
-  
-  
+
+
   ///////////FETCH ALL CONSUMERS///////////
   app.get(AEP_TO_FETCH_ALL_CONSUMERS, async (req, res) => {
     const data = await controller.fetchAllConsumerInfo();
@@ -103,7 +114,7 @@ module.exports = function (app) {
     res.sendStatus(200); // Sending a status to indicate success
   });
 
- 
+
 
   ////////////PROTECTED ROUTES FOR PAGES RENDERING//////////////////
   app.get(PRIVATE_AEP_TO_ADMINROUTE, (req, res) => {
@@ -118,45 +129,93 @@ module.exports = function (app) {
     res.sendFile(SUPERADMINPAGE);
   });
 
+  app.get(PRIVATE_AEP_TO_SITES, (req, res) => {
+    res.sendFile(SITEPAGE)
+  })
 
-
-  
-
-  /////////UNUSED ROUTES/////////////////
-  app.put(AEP_TO_UPDATE_PROFILE_OF_A_USER, async (req, res) => {
-    const data = await controller.updateProfileOfUser();
-    console.log(data);
-    res.send(data);
-  });
-  app.delete(AEP_TO_DELETE_A_USER, async (req, res) => {
-    const data = await controller.deleteUserById(req.params.id);
-    res.json(data);
+  app.get(PRIVATE_AEP_TO_DEVICEPROFILE,(req,res)=> {
+    res.sendFile(DEVICEPROFILE)
   });
 
+  // LOGIN VIA OTP 
+  app.post(AEP_TO_GENERATE_OTP, async (req, res) => {
+    const email=await controller.OTPGenerationAndStorage(req.body.email);
+    return res.status(200).json({message:`Otp has been sent to ${email} successfully!!!`})
+  });
+
+  app.post(AEP_TO_VERIFY_OTP, async (req, res) => {
+    const data =await controller.OTPVerification(req.body.email,req.body.otp );
+    if (data.success) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
+    }
+  });
 
   ///////////TESTING ROUTES////////////////
-  app.post("/test-url", async(req,res)=>{
+  app.post("/test-url", async (req, res) => {
     let data = await controller.test();
     res.json(data);
   })
 
 
   //ADMIN PAGE  ADMIN_TO_SITE_MAPPING
-app.get(AEP_TO_FETCH_ALL_ADMINS_TO_SITES, async (req, res) => {
-  const data = await controller.fetchAllAdminToSite();
-  res.json(data);
-});
-
-//fetch all sites
-
-app.get(AEP_TO_FETCH_ALL_SITES, async (req, res) => {
-  try {
-    const data = await controller.fetchAllSites();
+  app.get(AEP_TO_FETCH_ALL_ADMINS_TO_SITES, async (req, res) => {
+    const data = await controller.fetchAllAdminToSite();
     res.json(data);
-  } catch (error) {
-    res.status(500).send('Internal Server Error');
-  }
-});
+  });
+
+  //fetch all sites
+
+  app.get(AEP_TO_FETCH_ALL_SITES, async (req, res) => {
+    try {
+      const data = await controller.fetchAllSites();
+      res.json(data);
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+
+  //sites to device mapping
+
+  app.get(AEP_TO_FETCH_ALL_SITES_TO_DEVICES, async (req, res) => {
+    const data = await controller.fetchAllSiteToDevice();
+    res.json(data);
+  });
+
+  // fetch all devices
+
+  app.get(AEP_TO_FETCH_ALL_DEVICES, async (req, res) => {
+    try {
+      const data = await controller.fetchAllDevices();
+      res.json(data);
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  //consumer to device mapping
+  app.get(AEP_TO_FETCH_CONSUMERS_TO_DEVICES, async (req, res) => {
+    try {
+      const data = await controller.fetchAllConsumerToDevice();
+      res.json(data);
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  app.get(AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS, async(req,res)=>{
+    try{
+      const data =await controller.fetchAllSiteToConsumer();
+      res.json(data);
+    } catch (error){
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+
+
 };
 
 

@@ -67,7 +67,14 @@ export async function userLoginDetailsPost(userData) {
     return await controller.postUserLoginDataToServer(userData);
 }
 
+// generate otp
+export async function generateOTP(email){
+    return await controller.generateOTP(email);
+}
 
+export async function verifyOTP(email,otp){
+    return await controller.verifyOTP(email,otp);
+}
 
 // Site - Admin 
 
@@ -78,3 +85,23 @@ export async function getUserSiteMapping() {
     return await controller.getUserToSiteMapping();
 }
 
+
+//SITE DEVICE PAGE
+export async function getDevicesData() {
+    return await controller.getAllDevicesData();
+}
+//SITE DEVICE MAPPING
+export async function getSiteDeviceMapping() {
+    return await controller.getSiteToDeviceMapping();
+}
+
+export async function getSiteConsumerMapping() {
+    return await controller.getSiteToConsumerMapping();
+}
+
+//Consumer
+export async function getConsumerDeviceMapping() {
+    const data =  await controller.getConsumerToDeviceMapping();
+    console.log(data)
+    return data
+}

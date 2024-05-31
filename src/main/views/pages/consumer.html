@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>consumer Dashboard</title>
+    <link rel="stylesheet" href="/css/consumer.css">
 </head>
+
 <body>
-    <h1>hello from consumer</h1>
+
+    <div class="sidebar">
+        <div id="consumer-id"></div>
+        <a href="#dashboard" id="dashboard-link">Dashboard</a>
+        <a href="#users" id="users-link">Users</a>
+        <a href="#settings" id="settings-link">Settings</a>
+        <a href="#logout" id="logout-link">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div id="heading">
+            </div>
+        </div>
+
+        <div id="device-list" class="all-devices">
+
+        </div>
+
+
+    </div>
+
+    <script type="module" src="/js/pages/consumer.js"></script>
+
 </body>
+
 </html>

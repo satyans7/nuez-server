@@ -7,6 +7,26 @@ class DbController {
     return data;
   }
 
+  async saveotpemail(otp,email){
+    return await jsonController.saveotpemail(email,otp);
+  }
+
+  async updateotpemail(otp,email){
+    return await jsonController.updateotpemail(email,otp);
+  }
+
+  async deleteOTPByEmail(email){
+    return await jsonController.deleteOTPByEmail(email);
+  }
+   
+  async isOTPRequested(email){
+    return await jsonController.isOTPRequested(email);
+  }
+  async findOTPByEmail(email){
+    return await jsonController.findOTPByEmail(email);
+  }
+
+  
   async isEmailReserved(email) {
     return await jsonController.isEmailReserved(email);
   }
@@ -115,6 +135,32 @@ async fetchAllSites() {
   let data = await jsonController.fetchAllSites();
   return data;
 }
+
+// Site to device mapping
+
+  async fetchAllSitetoDevice() {
+    let data = await jsonController.fetchAllSitetoDevice();
+    return data;
+  }
+
+  //fetch all devices
+  async fetchAllDevices() {
+    let data = await jsonController.fetchAllDevices();
+    return data;
+  }
+  //consumer to device mapping
+  async fetchAllConsumertoDevice(){
+    let data =await jsonController.fetchConsumerToDevice();
+    return data;
+  }
+
+  //site to consumer mapping
+  async fetchAllSiteToConsumer(){
+    let data=await jsonController.fetchSiteToConsumer();
+    return data;
+  }
+
+
 }
 
 

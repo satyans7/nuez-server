@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/css/admin.css">
+    <title>Site Dashboard</title>
+    <link rel="stylesheet" href="/css/siteToDevice.css">
 </head>
 
 <body>
 
     <div class="sidebar">
-        <div id="admin-id"></div>
+        <div id="site-id"></div>
         <a href="#dashboard" id="dashboard-link">Dashboard</a>
         <a href="#users" id="users-link">Users</a>
         <a href="#settings" id="settings-link">Settings</a>
@@ -23,35 +23,46 @@
             <div id="heading">
             </div>
             <div class="button-group">
-                <button id="view-site-button">All Sites</button>
-                <button id="register-site-button">Register</button>
-                <button id="deregister-site-button">Deregister</button>
+                <button id="register-device-button">Register</button>
+                <button id="deregister-device-button">Deregister</button>
             </div>
         </div>
 
-        <div id="site-list" class="all-sites">
+        <div id="main-container" class="container">
+            <div class="tabs">
+                <button id="device-tab">All Devices</button>
+                <button id="consumer-tab">All Consumers</button>
+            </div>
+            <div id="device-list" class="all-devices">
+
+            </div>
+            <div id="consumer-list" class="all-consumers">
+
+            </div>
+
 
         </div>
 
+
         <div id="register-form-container" class="form-container" style="display: none;">
-            <form id="site-form">
-                <label for="site-id">Site ID:</label>
-                <input type="text" id="site-id" name="site-id" required>
+            <form id="device-form">
+                <label for="device-id">Device ID:</label>
+                <input type="text" id="device-id" name="device-id" required>
                 <button type="submit">Register</button>
                 <button type="button" id="cancel-button">Cancel</button>
             </form>
         </div>
         <div id="deregister-form-container" class="form-container" style="display: none;">
-            <form id="site-form">
-                <label for="site-id">Site ID:</label>
-                <input type="text" id="site-id" name="site-id" required>
+            <form id="device-form">
+                <label for="device-id">Device ID:</label>
+                <input type="text" id="device-id" name="device-id" required>
                 <button type="submit">De-register</button>
                 <button type="button" id="cancel-button">Cancel</button>
             </form>
         </div>
     </div>
 
-    <script type="module" src="/js/pages/admin.js"></script>
+    <script type="module" src="/js/pages/siteToDevice.js"></script>
 
 </body>
 
