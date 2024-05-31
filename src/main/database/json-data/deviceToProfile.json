@@ -1,564 +1,179 @@
 {
   "device_1": {
-    "name": "Sensor_One",
-    "type": "Sensor",
+    "name": "Watermeter_One",
+    "location": "Residential Area",
+    "totalConsumption": "1200 liters",
+    "status": "Active",
     "registrationDate": "2023-01-20"
   },
   "device_2": {
-    "name": "Camera_Two",
-    "type": "Camera",
+    "name": "Watermeter_Two",
+    "location": "Commercial Building",
+    "totalConsumption": "1500 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-01-22"
   },
   "device_3": {
-    "name": "Sensor_Three",
-    "type": "Sensor",
+    "name": "Watermeter_Three",
+    "location": "Industrial Plant",
+    "totalConsumption": "2000 liters",
+    "status": "Active",
     "registrationDate": "2023-02-25"
   },
   "device_4": {
-    "name": "Camera_Four",
-    "type": "Camera",
+    "name": "Watermeter_Four",
+    "location": "Shopping Mall",
+    "totalConsumption": "1800 liters",
+    "status": "Active",
     "registrationDate": "2023-03-12"
   },
   "device_5": {
-    "name": "Sensor_Five",
-    "type": "Sensor",
+    "name": "Watermeter_Five",
+    "location": "School",
+    "totalConsumption": "900 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-03-15"
   },
   "device_6": {
-    "name": "Camera_Six",
-    "type": "Camera",
+    "name": "Watermeter_Six",
+    "location": "Park",
+    "totalConsumption": "700 liters",
+    "status": "Active",
     "registrationDate": "2023-03-18"
   },
   "device_7": {
-    "name": "Sensor_Seven",
-    "type": "Sensor",
+    "name": "Watermeter_Seven",
+    "location": "Hospital",
+    "totalConsumption": "2500 liters",
+    "status": "Active",
     "registrationDate": "2023-03-20"
   },
   "device_8": {
-    "name": "Camera_Eight",
-    "type": "Camera",
+    "name": "Watermeter_Eight",
+    "location": "Office Building",
+    "totalConsumption": "2200 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-03-22"
   },
   "device_9": {
-    "name": "Sensor_Nine",
-    "type": "Sensor",
+    "name": "Watermeter_Nine",
+    "location": "Sports Stadium",
+    "totalConsumption": "3500 liters",
+    "status": "Active",
     "registrationDate": "2023-03-25"
   },
   "device_10": {
-    "name": "Camera_Ten",
-    "type": "Camera",
+    "name": "Watermeter_Ten",
+    "location": "Warehouse",
+    "totalConsumption": "2800 liters",
+    "status": "Active",
     "registrationDate": "2023-03-28"
   },
   "device_11": {
-    "name": "Sensor_Eleven",
-    "type": "Sensor",
+    "name": "Watermeter_Eleven",
+    "location": "Residential Area",
+    "totalConsumption": "1200 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-04-01"
   },
   "device_12": {
-    "name": "Camera_Twelve",
-    "type": "Camera",
+    "name": "Watermeter_Twelve",
+    "location": "Commercial Building",
+    "totalConsumption": "1500 liters",
+    "status": "Active",
     "registrationDate": "2023-04-04"
   },
   "device_13": {
-    "name": "Sensor_Thirteen",
-    "type": "Sensor",
+    "name": "Watermeter_Thirteen",
+    "location": "Industrial Plant",
+    "totalConsumption": "2000 liters",
+    "status": "Active",
     "registrationDate": "2023-04-07"
   },
   "device_14": {
-    "name": "Camera_Fourteen",
-    "type": "Camera",
+    "name": "Watermeter_Fourteen",
+    "location": "Shopping Mall",
+    "totalConsumption": "1800 liters",
+    "status": "Active",
     "registrationDate": "2023-04-10"
   },
   "device_15": {
-    "name": "Sensor_Fifteen",
-    "type": "Sensor",
+    "name": "Watermeter_Fifteen",
+    "location": "School",
+    "totalConsumption": "900 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-04-13"
   },
   "device_16": {
-    "name": "Camera_Sixteen",
-    "type": "Camera",
+    "name": "Watermeter_Sixteen",
+    "location": "Park",
+    "totalConsumption": "700 liters",
+    "status": "Active",
     "registrationDate": "2023-04-16"
   },
   "device_17": {
-    "name": "Sensor_Seventeen",
-    "type": "Sensor",
+    "name": "Watermeter_Seventeen",
+    "location": "Hospital",
+    "totalConsumption": "2500 liters",
+    "status": "Active",
     "registrationDate": "2023-04-19"
   },
   "device_18": {
-    "name": "Camera_Eighteen",
-    "type": "Camera",
+    "name": "Watermeter_Eighteen",
+    "location": "Office Building",
+    "totalConsumption": "2200 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-04-22"
   },
   "device_19": {
-    "name": "Sensor_Nineteen",
-    "type": "Sensor",
+    "name": "Watermeter_Nineteen",
+    "location": "Sports Stadium",
+    "totalConsumption": "3500 liters",
+    "status": "Active",
     "registrationDate": "2023-04-25"
   },
   "device_20": {
-    "name": "Camera_Twenty",
-    "type": "Camera",
+    "name": "Watermeter_Twenty",
+    "location": "Warehouse",
+    "totalConsumption": "2800 liters",
+    "status": "Active",
     "registrationDate": "2023-04-28"
   },
   "device_21": {
-    "name": "Sensor_TwentyOne",
-    "type": "Sensor",
+    "name": "Watermeter_TwentyOne",
+    "location": "Residential Area",
+    "totalConsumption": "1200 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-05-01"
   },
   "device_22": {
-    "name": "Camera_TwentyTwo",
-    "type": "Camera",
+    "name": "Watermeter_TwentyTwo",
+    "location": "Commercial Building",
+    "totalConsumption": "1500 liters",
+    "status": "Active",
     "registrationDate": "2023-05-04"
   },
   "device_23": {
-    "name": "Sensor_TwentyThree",
-    "type": "Sensor",
+    "name": "Watermeter_TwentyThree",
+    "location": "Industrial Plant",
+    "totalConsumption": "2000 liters",
+    "status": "Active",
     "registrationDate": "2023-05-07"
   },
   "device_24": {
-    "name": "Camera_TwentyFour",
-    "type": "Camera",
+    "name": "Watermeter_TwentyFour",
+    "location": "Shopping Mall",
+    "totalConsumption": "1800 liters",
+    "status": "Active",
     "registrationDate": "2023-05-10"
   },
   "device_25": {
-    "name": "Sensor_TwentyFive",
-    "type": "Sensor",
+    "name": "Watermeter_TwentyFive",
+    "location": "School",
+    "totalConsumption": "900 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-05-13"
-  },
-  "device_26": {
-    "name": "Camera_TwentySix",
-    "type": "Camera",
-    "registrationDate": "2023-05-16"
-  },
-  "device_27": {
-    "name": "Sensor_TwentySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-05-19"
-  },
-  "device_28": {
-    "name": "Camera_TwentyEight",
-    "type": "Camera",
-    "registrationDate": "2023-05-22"
-  },
-  "device_29": {
-    "name": "Sensor_TwentyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-05-25"
-  },
-  "device_30": {
-    "name": "Camera_Thirty",
-    "type": "Camera",
-    "registrationDate": "2023-05-28"
-  },
-  "device_31": {
-    "name": "Sensor_ThirtyOne",
-    "type": "Sensor",
-    "registrationDate": "2023-06-01"
-  },
-  "device_32": {
-    "name": "Camera_ThirtyTwo",
-    "type": "Camera",
-    "registrationDate": "2023-06-04"
-  },
-  "device_33": {
-    "name": "Sensor_ThirtyThree",
-    "type": "Sensor",
-    "registrationDate": "2023-06-07"
-  },
-  "device_34": {
-    "name": "Camera_ThirtyFour",
-    "type": "Camera",
-    "registrationDate": "2023-06-10"
-  },
-  "device_35": {
-    "name": "Sensor_ThirtyFive",
-    "type": "Sensor",
-    "registrationDate": "2023-06-13"
-  },
-  "device_36": {
-    "name": "Camera_ThirtySix",
-    "type": "Camera",
-    "registrationDate": "2023-06-16"
-  },
-  "device_37": {
-    "name": "Sensor_ThirtySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-06-19"
-  },
-  "device_38": {
-    "name": "Camera_ThirtyEight",
-    "type": "Camera",
-    "registrationDate": "2023-06-22"
-  },
-  "device_39": {
-    "name": "Sensor_ThirtyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-06-25"
-  },
-  "device_40": {
-    "name": "Camera_Forty",
-    "type": "Camera",
-    "registrationDate": "2023-06-28"
-  },
-  "device_41": {
-    "name": "Sensor_FortyOne",
-    "type": "Sensor",
-    "registrationDate": "2023-07-01"
-  },
-  "device_42": {
-    "name": "Camera_FortyTwo",
-    "type": "Camera",
-    "registrationDate": "2023-07-04"
-  },
-  "device_43": {
-    "name": "Sensor_FortyThree",
-    "type": "Sensor",
-    "registrationDate": "2023-07-07"
-  },
-  "device_44": {
-    "name": "Camera_FortyFour",
-    "type": "Camera",
-    "registrationDate": "2023-07-10"
-  },
-  "device_45": {
-    "name": "Sensor_FortyFive",
-    "type": "Sensor",
-    "registrationDate": "2023-07-13"
-  },
-  "device_46": {
-    "name": "Camera_FortySix",
-    "type": "Camera",
-    "registrationDate": "2023-07-16"
-  },
-  "device_47": {
-    "name": "Sensor_FortySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-07-19"
-  },
-  "device_48": {
-    "name": "Camera_FortyEight",
-    "type": "Camera",
-    "registrationDate": "2023-07-22"
-  },
-  "device_49": {
-    "name": "Sensor_FortyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-07-25"
-  },
-  "device_50": {
-    "name": "Camera_Fifty",
-    "type": "Camera",
-    "registrationDate": "2023-07-28"
-  },
-  "device_51": {
-    "name": "Sensor_FiftyOne",
-    "type": "Sensor",
-    "registrationDate": "2023-08-01"
-  },
-  "device_52": {
-    "name": "Camera_FiftyTwo",
-    "type": "Camera",
-    "registrationDate": "2023-08-04"
-  },
-  "device_53": {
-    "name": "Sensor_FiftyThree",
-    "type": "Sensor",
-    "registrationDate": "2023-08-07"
-  },
-  "device_54": {
-    "name": "Camera_FiftyFour",
-    "type": "Camera",
-    "registrationDate": "2023-08-10"
-  },
-  "device_55": {
-    "name": "Sensor_FiftyFive",
-    "type": "Sensor",
-    "registrationDate": "2023-08-13"
-  },
-  "device_56": {
-    "name": "Camera_FiftySix",
-    "type": "Camera",
-    "registrationDate": "2023-08-16"
-  },
-  "device_57": {
-    "name": "Sensor_FiftySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-08-19"
-  },
-  "device_58": {
-    "name": "Camera_FiftyEight",
-    "type": "Camera",    "registrationDate": "2023-08-22"
-  },
-  "device_59": {
-    "name": "Sensor_FiftyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-08-25"
-  },
-  "device_60": {
-    "name": "Camera_Sixty",
-    "type": "Camera",
-    "registrationDate": "2023-08-28"
-  },
-  "device_61": {
-    "name": "Sensor_SixtyOne",
-    "type": "Sensor",
-    "registrationDate": "2023-09-01"
-  },
-  "device_62": {
-    "name": "Camera_SixtyTwo",
-    "type": "Camera",
-    "registrationDate": "2023-09-04"
-  },
-  "device_63": {
-    "name": "Sensor_SixtyThree",
-    "type": "Sensor",
-    "registrationDate": "2023-09-07"
-  },
-  "device_64": {
-    "name": "Camera_SixtyFour",
-    "type": "Camera",
-    "registrationDate": "2023-09-10"
-  },
-  "device_65": {
-    "name": "Sensor_SixtyFive",
-    "type": "Sensor",
-    "registrationDate": "2023-09-13"
-  },
-  "device_66": {
-    "name": "Camera_SixtySix",
-    "type": "Camera",
-    "registrationDate": "2023-09-16"
-  },
-  "device_67": {
-    "name": "Sensor_SixtySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-09-19"
-  },
-  "device_68": {
-    "name": "Camera_SixtyEight",
-    "type": "Camera",
-    "registrationDate": "2023-09-22"
-  },
-  "device_69": {
-    "name": "Sensor_SixtyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-09-25"
-  },
-  "device_70": {
-    "name": "Camera_Seventy",
-    "type": "Camera",
-    "registrationDate": "2023-09-28"
-  },
-  "device_71": {
-    "name": "Sensor_SeventyOne",
-    "type": "Sensor",
-    "registrationDate": "2023-10-01"
-  },
-  "device_72": {
-    "name": "Camera_SeventyTwo",
-    "type": "Camera",
-    "registrationDate": "2023-10-04"
-  },
-  "device_73": {
-    "name": "Sensor_SeventyThree",
-    "type": "Sensor",
-    "registrationDate": "2023-10-07"
-  },
-  "device_74": {
-    "name": "Camera_SeventyFour",
-    "type": "Camera",
-    "registrationDate": "2023-10-10"
-  },
-  "device_75": {
-    "name": "Sensor_SeventyFive",
-    "type": "Sensor",
-    "registrationDate": "2023-10-13"
-  },
-  "device_76": {
-    "name": "Camera_SeventySix",
-    "type": "Camera",
-    "registrationDate": "2023-10-16"
-  },
-  "device_77": {
-    "name": "Sensor_SeventySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-10-19"
-  },
-  "device_78": {
-    "name": "Camera_SeventyEight",
-    "type": "Camera",
-    "registrationDate": "2023-10-22"
-  },
-  "device_79": {
-    "name": "Sensor_SeventyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-10-25"
-  },
-  "device_80": {
-    "name": "Camera_Eighty",
-    "type": "Camera",
-    "registrationDate": "2023-10-28"
-  },
-  "device_81": {
-    "name": "Sensor_EightyOne",
-    "type": "Sensor",
-    "registrationDate": "2023-11-01"
-  },
-  "device_82": {
-    "name": "Camera_EightyTwo",
-    "type": "Camera",
-    "registrationDate": "2023-11-04"
-  },
-  "device_83": {
-    "name": "Sensor_EightyThree",
-    "type": "Sensor",
-    "registrationDate": "2023-11-07"
-  },
-  "device_84": {
-    "name": "Camera_EightyFour",
-    "type": "Camera",
-    "registrationDate": "2023-11-10"
-  },
-  "device_85": {
-    "name": "Sensor_EightyFive",
-    "type": "Sensor",
-    "registrationDate": "2023-11-13"
-  },
-  "device_86": {
-    "name": "Camera_EightySix",
-    "type": "Camera",
-    "registrationDate": "2023-11-16"
-  },
-  "device_87": {
-    "name": "Sensor_EightySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-11-19"
-  },
-  "device_88": {
-    "name": "Camera_EightyEight",
-    "type": "Camera",
-    "registrationDate": "2023-11-22"
-  },
-  "device_89": {
-    "name": "Sensor_EightyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-11-25"
-  },
-  "device_90": {
-    "name": "Camera_Ninety",
-    "type": "Camera",
-    "registrationDate": "2023-11-28"
-  },
-  "device_91": {
-    "name": "Sensor_NinetyOne",
-    "type": "Sensor",
-    "registrationDate": "2023-12-01"
-  },
-  "device_92": {
-    "name": "Camera_NinetyTwo",
-    "type": "Camera",
-    "registrationDate": "2023-12-04"
-  },
-  "device_93": {
-    "name": "Sensor_NinetyThree",
-    "type": "Sensor",
-    "registrationDate": "2023-12-07"
-  },
-  "device_94": {
-    "name": "Camera_NinetyFour",
-    "type": "Camera",
-    "registrationDate": "2023-12-10"
-  },
-  "device_95": {
-    "name": "Sensor_NinetyFive",
-    "type": "Sensor",
-    "registrationDate": "2023-12-13"
-  },
-  "device_96": {
-    "name": "Camera_NinetySix",
-    "type": "Camera",
-    "registrationDate": "2023-12-16"
-  },
-  "device_97": {
-    "name": "Sensor_NinetySeven",
-    "type": "Sensor",
-    "registrationDate": "2023-12-19"
-  },
-  "device_98": {
-    "name": "Camera_NinetyEight",
-    "type": "Camera",
-    "registrationDate": "2023-12-22"
-  },
-  "device_99": {
-    "name": "Sensor_NinetyNine",
-    "type": "Sensor",
-    "registrationDate": "2023-12-25"
-  },
-  "device_100": {
-    "name": "Camera_Hundred",
-    "type": "Camera",
-    "registrationDate": "2023-12-28"
-  },
-  "device_101": {
-    "name": "Sensor_HundredOne",
-    "type": "Sensor",
-    "registrationDate": "2024-01-01"
-  },
-  "device_102": {
-    "name": "Camera_HundredTwo",
-    "type": "Camera",
-    "registrationDate": "2024-01-04"
-  },
-  "device_103": {
-    "name": "Sensor_HundredThree",
-    "type": "Sensor",
-    "registrationDate": "2024-01-07"
-  },
-  "device_104": {
-    "name": "Camera_HundredFour",
-    "type": "Camera",
-    "registrationDate": "2024-01-10"
-  },
-  "device_105": {
-    "name": "Sensor_HundredFive",
-    "type": "Sensor",
-    "registrationDate": "2024-01-13"
-  },
-  "device_106": {
-    "name": "Camera_HundredSix",
-    "type": "Camera",
-    "registrationDate": "2024-01-16"
-  },
-  "device_107": {
-    "name": "Sensor_HundredSeven",
-    "type": "Sensor",
-    "registrationDate": "2024-01-19"
-  },
-  "device_108": {
-    "name": "Camera_HundredEight",
-    "type": "Camera",
-    "registrationDate": "2024-01-22"
-  },
-  "device_109": {
-    "name": "Sensor_HundredNine",
-    "type": "Sensor",
-    "registrationDate": "2024-01-25"
-  },
-  "device_110": {
-    "name": "Camera_HundredTen",
-    "type": "Camera",
-    "registrationDate": "2024-01-28"
-  },
-  "device_111": {
-    "name": "Sensor_HundredEleven",
-    "type": "Sensor",
-    "registrationDate": "2024-02-01"
-  },
-  "device_112": {
-    "name": "Camera_HundredTwelve",
-    "type": "Camera",
-    "registrationDate": "2024-02-04"
   }
+ 
 }
-
-
 
