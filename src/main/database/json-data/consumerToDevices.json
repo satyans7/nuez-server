@@ -12,8 +12,7 @@
       "device_5",
       "device_8",
       "device_11",
-      "device_14",
-      "device_37"
+      "device_14"
     ],
     "user_6": [
       "device_3",
@@ -24,15 +23,15 @@
       "device_18"
     ],
     "user_7": [
-      "device_38"
+      "device_38",
+      "device_37"
     ],
     "user_8": [
       "device_39",
       "device_40",
       "device_41",
       "device_19",
-      "device_20",
-      "device_21"
+      "device_20"
     ],
     "user_9": [
       "device_22",
@@ -44,27 +43,18 @@
     ],
     "user_10": [
       "device_26",
-      "device_27",
-      "device_28",
-      "device_29",
-      "device_44",
-      "device_45"
+      "device_27"
     ],
     "user_11": [
       "device_30",
       "device_31",
-      "device_32",
-      "device_33",
-      "device_34",
-      "device_35"
+      "device_32"
     ],
     "user_12": [
       "device_36",
       "device_46",
       "device_47",
-      "device_48",
-      "device_49",
-      "device_50"
+      "device_48"
     ],
     "user_13": [
       "device_51",
@@ -82,8 +72,7 @@
     ],
     "user_16": [
       "device_59",
-      "device_60",
-      "device_61"
+      "device_60"
     ],
     "user_17": [
       "device_62",
@@ -101,73 +90,24 @@
       "device_70"
     ],
     "user_20": [
-      "device_71",
-      "device_72",
-      "device_73"
+      "device_33",
+      "device_34",
+      "device_35"
     ],
     "user_21": [
-      "device_74",
-      "device_75",
-      "device_76"
+      "device_61"
     ],
     "user_22": [
-      "device_77",
-      "device_78",
-      "device_79"
+      "device_49",
+      "device_50"
     ],
     "user_23": [
-      "device_80",
-      "device_81",
-      "device_82"
+      "device_28",
+      "device_29",
+      "device_44",
+      "device_45"
     ],
     "user_24": [
-      "device_83",
-      "device_84",
-      "device_85"
-    ],
-    "user_25": [
-      "device_86",
-      "device_87",
-      "device_88"
-    ],
-    "user_26": [
-      "device_89",
-      "device_90",
-      "device_91"
-    ],
-    "user_27": [
-      "device_92",
-      "device_93",
-      "device_94"
-    ],
-    "user_28": [
-      "device_95",
-      "device_96",
-      "device_97"
-    ],
-    "user_29": [
-      "device_98",
-      "device_99",
-      "device_100"
-    ],
-    "user_30": [
-      "device_101",
-      "device_102",
-      "device_103"
-    ],
-    "user_31": [
-      "device_104",
-      "device_105",
-      "device_106"
-    ],
-    "user_32": [
-      "device_107",
-      "device_108",
-      "device_109"
-    ],
-    "user_33": [
-      "device_110",
-      "device_111",
-      "device_112"
+      "device_21"
     ]
 }

@@ -1,27 +1,179 @@
 {
-  "device1": {
-    "name": "Device One",
-    "type": "Sensor",
+  "device_1": {
+    "name": "Watermeter_One",
+    "location": "Residential Area",
+    "totalConsumption": "1200 liters",
+    "status": "Active",
     "registrationDate": "2023-01-20"
   },
-  "device2": {
-    "name": "Device Two",
-    "type": "Camera",
+  "device_2": {
+    "name": "Watermeter_Two",
+    "location": "Commercial Building",
+    "totalConsumption": "1500 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-01-22"
   },
-  "device3": {
-    "name": "Device Three",
-    "type": "Sensor",
+  "device_3": {
+    "name": "Watermeter_Three",
+    "location": "Industrial Plant",
+    "totalConsumption": "2000 liters",
+    "status": "Active",
     "registrationDate": "2023-02-25"
   },
-  "device4": {
-    "name": "Device Four",
-    "type": "Camera",
+  "device_4": {
+    "name": "Watermeter_Four",
+    "location": "Shopping Mall",
+    "totalConsumption": "1800 liters",
+    "status": "Active",
     "registrationDate": "2023-03-12"
   },
-  "device5": {
-    "name": "Device Five",
-    "type": "Sensor",
+  "device_5": {
+    "name": "Watermeter_Five",
+    "location": "School",
+    "totalConsumption": "900 liters",
+    "status": "Under maintenance",
     "registrationDate": "2023-03-15"
+  },
+  "device_6": {
+    "name": "Watermeter_Six",
+    "location": "Park",
+    "totalConsumption": "700 liters",
+    "status": "Active",
+    "registrationDate": "2023-03-18"
+  },
+  "device_7": {
+    "name": "Watermeter_Seven",
+    "location": "Hospital",
+    "totalConsumption": "2500 liters",
+    "status": "Active",
+    "registrationDate": "2023-03-20"
+  },
+  "device_8": {
+    "name": "Watermeter_Eight",
+    "location": "Office Building",
+    "totalConsumption": "2200 liters",
+    "status": "Under maintenance",
+    "registrationDate": "2023-03-22"
+  },
+  "device_9": {
+    "name": "Watermeter_Nine",
+    "location": "Sports Stadium",
+    "totalConsumption": "3500 liters",
+    "status": "Active",
+    "registrationDate": "2023-03-25"
+  },
+  "device_10": {
+    "name": "Watermeter_Ten",
+    "location": "Warehouse",
+    "totalConsumption": "2800 liters",
+    "status": "Active",
+    "registrationDate": "2023-03-28"
+  },
+  "device_11": {
+    "name": "Watermeter_Eleven",
+    "location": "Residential Area",
+    "totalConsumption": "1200 liters",
+    "status": "Under maintenance",
+    "registrationDate": "2023-04-01"
+  },
+  "device_12": {
+    "name": "Watermeter_Twelve",
+    "location": "Commercial Building",
+    "totalConsumption": "1500 liters",
+    "status": "Active",
+    "registrationDate": "2023-04-04"
+  },
+  "device_13": {
+    "name": "Watermeter_Thirteen",
+    "location": "Industrial Plant",
+    "totalConsumption": "2000 liters",
+    "status": "Active",
+    "registrationDate": "2023-04-07"
+  },
+  "device_14": {
+    "name": "Watermeter_Fourteen",
+    "location": "Shopping Mall",
+    "totalConsumption": "1800 liters",
+    "status": "Active",
+    "registrationDate": "2023-04-10"
+  },
+  "device_15": {
+    "name": "Watermeter_Fifteen",
+    "location": "School",
+    "totalConsumption": "900 liters",
+    "status": "Under maintenance",
+    "registrationDate": "2023-04-13"
+  },
+  "device_16": {
+    "name": "Watermeter_Sixteen",
+    "location": "Park",
+    "totalConsumption": "700 liters",
+    "status": "Active",
+    "registrationDate": "2023-04-16"
+  },
+  "device_17": {
+    "name": "Watermeter_Seventeen",
+    "location": "Hospital",
+    "totalConsumption": "2500 liters",
+    "status": "Active",
+    "registrationDate": "2023-04-19"
+  },
+  "device_18": {
+    "name": "Watermeter_Eighteen",
+    "location": "Office Building",
+    "totalConsumption": "2200 liters",
+    "status": "Under maintenance",
+    "registrationDate": "2023-04-22"
+  },
+  "device_19": {
+    "name": "Watermeter_Nineteen",
+    "location": "Sports Stadium",
+    "totalConsumption": "3500 liters",
+    "status": "Active",
+    "registrationDate": "2023-04-25"
+  },
+  "device_20": {
+    "name": "Watermeter_Twenty",
+    "location": "Warehouse",
+    "totalConsumption": "2800 liters",
+    "status": "Active",
+    "registrationDate": "2023-04-28"
+  },
+  "device_21": {
+    "name": "Watermeter_TwentyOne",
+    "location": "Residential Area",
+    "totalConsumption": "1200 liters",
+    "status": "Under maintenance",
+    "registrationDate": "2023-05-01"
+  },
+  "device_22": {
+    "name": "Watermeter_TwentyTwo",
+    "location": "Commercial Building",
+    "totalConsumption": "1500 liters",
+    "status": "Active",
+    "registrationDate": "2023-05-04"
+  },
+  "device_23": {
+    "name": "Watermeter_TwentyThree",
+    "location": "Industrial Plant",
+    "totalConsumption": "2000 liters",
+    "status": "Active",
+    "registrationDate": "2023-05-07"
+  },
+  "device_24": {
+    "name": "Watermeter_TwentyFour",
+    "location": "Shopping Mall",
+    "totalConsumption": "1800 liters",
+    "status": "Active",
+    "registrationDate": "2023-05-10"
+  },
+  "device_25": {
+    "name": "Watermeter_TwentyFive",
+    "location": "School",
+    "totalConsumption": "900 liters",
+    "status": "Under maintenance",
+    "registrationDate": "2023-05-13"
   }
+ 
 }
+

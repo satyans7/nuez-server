@@ -3,7 +3,7 @@
     "name": "Alice Johnson",
     "email": "alice.johnson@example.com",
     "password": "password123",
-    "role": "consumer"
+    "role": "admin"
   },
   "user_2":{
     "name": "Bob Smith",
@@ -40,7 +40,84 @@
     "email": "sophia.brown@example.com",
     "password": "sophia123",
     "role": "consumer"
+  },
+  "user_8": {
+    "name": "Alice Smith",
+    "email": "alice.smith@example.com",
+    "password": "alice123",
+    "role": "consumer"
+  },
+  "user_9": {
+    "name": "Noah Martinez",
+    "email": "noah.martinez@example.com",
+    "password": "noah123",
+    "role": "consumer"
+  },
+  "user_10": {
+    "name": "Mia Davis",
+    "email": "mia.davis@example.com",
+    "password": "mia123",
+    "role": "consumer"
+  },
+  "user_13": {
+    "name": "Luca Rossi",
+    "email": "luca.rossi@example.com",
+    "password": "luca123",
+    "role": "consumer"
+  },
+  "user_17": {
+    "name": "Elena Petrova",
+    "email": "elena.petrova@example.com",
+    "password": "elena123",
+    "role": "consumer"
+  },
+  "user_18": {
+    "name": "Nadia Mahmoud",
+    "email": "nadia.mahmoud@example.com",
+    "password": "nadia123",
+    "role": "consumer"
+  },
+  "user_19": {
+    "name": "Dimitri Ivanov",
+    "email": "dimitri.ivanov@example.com",
+    "password": "dimitri123",
+    "role": "consumer"
+  },
+  "user_20": {
+    "name": "Leila Rahman",
+    "email": "leila.rahman@example.com",
+    "password": "leila123",
+    "role": "consumer"
+  },
+  "user_21": {
+    "name": "Harry Potter",
+    "email": "harry@example.com",
+    "password": "hassan123",
+    "role": "consumer"
+  },
+  "user_22": {
+    "name": "Sakura Yamamoto",
+    "email": "sakura.yamamoto@example.com",
+    "password": "sakura123",
+    "role": "consumer"
+  },
+  "user_23": {
+    "name": "Nina Muller",
+    "email": "nina.mueller@example.com",
+    "password": "nina123",
+    "role": "consumer"
+  },
+  "user_24": {
+    "name": "Armaan",
+    "email": "armaan@example.com",
+    "password": "ahmed123",
+    "role": "consumer"
+  },
+  "user_25": {
+    "name": "Aisha Aisha",
+    "email": "aisha@example.com",
+    "password": "aisha123",
+    "role": "consumer"
   }
-
 
 }
