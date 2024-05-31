@@ -1,25 +1,25 @@
 {
-  "device1": {
+  "device_1": {
     "name": "Device One",
     "type": "Sensor",
     "registrationDate": "2023-01-20"
   },
-  "device2": {
+  "device_2": {
     "name": "Device Two",
     "type": "Camera",
     "registrationDate": "2023-01-22"
   },
-  "device3": {
+  "device_3": {
     "name": "Device Three",
     "type": "Sensor",
     "registrationDate": "2023-02-25"
   },
-  "device4": {
+  "device_4": {
     "name": "Device Four",
     "type": "Camera",
     "registrationDate": "2023-03-12"
   },
-  "device5": {
+  "device_5": {
     "name": "Device Five",
     "type": "Sensor",
     "registrationDate": "2023-03-15"
