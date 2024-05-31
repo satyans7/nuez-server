@@ -65,6 +65,25 @@
     "password": "luca123",
     "role": "consumer"
   },
+  "user_14": {
+    "name": "XYZ",
+    "email": "xyz@example.com",
+    "password": "xyz123",
+    "role": "consumer"
+  },
+  "user_15": {
+    "name": "Stephan Salvatore",
+    "email": "salvtore@example.com",
+    "password": "password123",
+    "role": "consumer"
+  },
+  "user_16": {
+    "name": "Thor",
+    "email": "thor@example.com",
+    "password": "thor123",
+    "role": "consumer"
+  },
+
   "user_17": {
     "name": "Elena Petrova",
     "email": "elena.petrova@example.com",
