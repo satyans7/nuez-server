@@ -7,7 +7,8 @@ import {
     postRequesttoRoleChange,
     postapproveRoleChange,
     postrejectRoleChange,
-    getUserSiteMapping
+    getUserSiteMapping,
+    getConsumerDeviceMapping
 } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
@@ -45,12 +46,14 @@ function enableRequestButton(button, msg) {
 // Function to update the 'Request for Role change' button state
 async function updateRequestButtonState(requestButton, id) {
     const admintosite = await getUserSiteMapping();
+    const consumertodevice= await getConsumerDeviceMapping();
     console.log(admintosite)
+    console.log(consumertodevice)
     const pendingRequests = await getAllPendingRequests();
     if (pendingRequests[id] && pendingRequests[id].requestStatus === 'pending') {
         const msg = 'Request Sent';
         disableRequestButton(requestButton, msg);
-    } else if (admintosite[id] && admintosite[id].length > 0) {
+    } else if ((admintosite[id] && admintosite[id].length > 0)  || (consumertodevice[id] && consumertodevice[id].length > 0) ) {
         const msg = 'Already have sites'
         disableRequestButton(requestButton, msg);
 
