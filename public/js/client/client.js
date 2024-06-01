@@ -105,3 +105,10 @@ export async function getConsumerDeviceMapping() {
     console.log(data)
     return data
 }
+
+//
+export async function getAllAdminKeys() {
+    const response = await controller.fetchAllAdminsFromServer();
+    const data = await response.json();
+    return Object.keys(data); // Return the keys (user IDs) from the response
+}

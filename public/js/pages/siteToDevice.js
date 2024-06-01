@@ -164,8 +164,10 @@ function createConsumerCard(consumer, key) {
     moreDetailsButton.id = 'fetch-consumer-data';
     moreDetailsButton.textContent = 'More Details';
     moreDetailsButton.addEventListener('click', () => {
-        const route = `/api/consumer-dashboard/${key}`;
-        window.location.href = route;
+        const adminId = getCurrentAdmin();
+        const route = `/api/consumer-dashboard/${key}?adminId=${adminId}`;
+        console.log(`Redirecting to: ${route}`);  // Log the route for debugging
+        window.location.href = route;  // Ensure the redirection logic is execut
     });
 
     cardHeading.appendChild(consumerName);
@@ -182,4 +184,11 @@ function createConsumerCard(consumer, key) {
     consumerCard.appendChild(cardBody);
 
     return consumerCard;
+}
+function getCurrentAdmin() {
+    const fullUrl = window.location.href;
+    const url = new URL(fullUrl);
+    const pathname = url.pathname;
+    const segments = pathname.split('/');
+    return segments[segments.length - 1];
 }

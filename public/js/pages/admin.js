@@ -78,7 +78,7 @@ async function viewAllSites() {
             moreDetailsButton.id = 'fetch-site-data';
             moreDetailsButton.textContent = 'More Details';
             moreDetailsButton.addEventListener('click', () => {
-                const route = `/api/site-dashboard/${key}`;
+                const route = `/api/site-dashboard/${key}?adminId=${getCurrentAdmin()}&referrer=adminPage`;
                 window.location.href = route;
             })
             cardHeading.appendChild(siteName);
