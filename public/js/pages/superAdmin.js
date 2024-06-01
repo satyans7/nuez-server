@@ -1,12 +1,13 @@
-import { 
-    getAllConsumers, 
-    getAllAdmins, 
-    getAllApprovedRequests, 
-    getAllRejectedRequests, 
-    getAllPendingRequests, 
-    postRequesttoRoleChange, 
-    postapproveRoleChange, 
-    postrejectRoleChange 
+import {
+    getAllConsumers,
+    getAllAdmins,
+    getAllApprovedRequests,
+    getAllRejectedRequests,
+    getAllPendingRequests,
+    postRequesttoRoleChange,
+    postapproveRoleChange,
+    postrejectRoleChange,
+    getUserSiteMapping
 } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
@@ -28,24 +29,34 @@ const rejectedTableBody = document.getElementById('rejected-table-body')
 
 
 // Function to disable the 'Request for Role change' button
-function disableRequestButton(button) {
+function disableRequestButton(button, msg) {
     button.disabled = true;
-    button.textContent = 'Request Sent'; // Optionally change button text
+    button.style.cursor = 'not-allowed'
+    button.style.background = 'gray'
+    button.textContent = msg; // Optionally change button text
 }
 
 // Function to enable the 'Request for Role change' button
-function enableRequestButton(button) {
+function enableRequestButton(button, msg) {
     button.disabled = false;
-    button.textContent = 'Request for Role change'; // Optionally reset button text
+    button.textContent = msg; // Optionally reset button text
 }
 
 // Function to update the 'Request for Role change' button state
 async function updateRequestButtonState(requestButton, id) {
+    const admintosite = await getUserSiteMapping();
+    console.log(admintosite)
     const pendingRequests = await getAllPendingRequests();
     if (pendingRequests[id] && pendingRequests[id].requestStatus === 'pending') {
-        disableRequestButton(requestButton);
+        const msg = 'Request Sent';
+        disableRequestButton(requestButton, msg);
+    } else if (admintosite[id] && admintosite[id].length > 0) {
+        const msg = 'Already have sites'
+        disableRequestButton(requestButton, msg);
+
     } else {
-        enableRequestButton(requestButton);
+        const msg = 'Request for Role Change';
+        enableRequestButton(requestButton, msg);
     }
 }
 
