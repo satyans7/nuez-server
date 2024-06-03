@@ -266,11 +266,11 @@
     "registrationDate": "2023-06-22"
   },
   "device_39": {
-    "name": "Watermeter_ThirtyNine",
-    "location": "Sports Stadium",
-    "totalConsumption": "3500 liters",
-    "status": "Active",
-    "registrationDate": "2023-06-25"
+    "name": "Hello",
+    "location": "World",
+    "totalConsumption": "undefined",
+    "status": "undefined",
+    "registrationDate": "undefined"
   },
   "device_40": {
     "name": "Watermeter_Forty",

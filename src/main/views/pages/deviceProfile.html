@@ -1,3 +1,4 @@
+<!-- deviceProfile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,8 +21,31 @@
         <p id="device-registrationDate"></p>
         <hr>
         <div class="button-container">
+            
+        </div>
         </div>
     </div>
+
+    <!-- Edit Profile Form -->
+    <form id="editProfileForm" style="display: none;">
+        <label for="deviceId">Device ID:</label>
+        <input type="text" id="deviceId" name="deviceId" readonly>
+    
+        <label for="deviceName">Device Name:</label>
+        <input type="text" id="deviceName" name="deviceName">
+    
+        <label for="deviceLocation">Device Location:</label>
+        <input type="text" id="deviceLocation" name="deviceLocation">
+    
+        <input type="hidden" id="deviceTotalConsumption" name="deviceTotalConsumption">
+        <input type="hidden" id="deviceStatus" name="deviceStatus">
+        <input type="hidden" id="deviceRegistrationDate" name="deviceRegistrationDate">
+    
+        <input type="checkbox" id="confirmCheckbox" required>
+        <label for="confirmCheckbox">Are you sure you want to update the above details?</label>
+    
+        <button type="submit">Update</button>
+    </form>
 </div>
 
 <script type="module" src="/js/pages/deviceProfile.js"></script>

@@ -119,3 +119,15 @@ export async function getAllAdminKeys() {
     const data = await response.json();
     return Object.keys(data); // Return the keys (user IDs) from the response
 }
+
+//device profile update
+/*export async function updateDeviceData(id, request) {
+    console.log(`updating details for device with id: ${id}`);
+    await controller.updateDevice(id,request);
+}
+*/
+//device profile update
+export async function updateDeviceData(id, request) {
+    console.log(`updating details for device with id: ${id}`);
+    await controller.updateDevice(id, request);
+}

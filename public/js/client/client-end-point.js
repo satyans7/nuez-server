@@ -99,6 +99,10 @@ export function getApiToUpdateSiteData(id){
   return `${AEP_TO_PUT_SITE}/${id}`;
 }
 
+export function getApiToPutDevice(id){
+  return `${AEP_TO_PUT_DEVICE}/${id}`;
+}
+
 
 //ADMIN PAGE ADMIN_TO_SITE_MAPPING
 export function getApiToFetchAdminSiteMapping() {
@@ -139,7 +143,22 @@ export async function fetchPost(url, data) {
 
 
 
+/*export async function fetchPut(url, data) {
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response.json();
+}
+*/
 export async function fetchPut(url, data) {
+  console.log('PUT request URL:', url);
+  console.log('PUT request data:', data);
+
   const response = await fetch(url, {
     method: "PUT",
     headers: {

@@ -61,3 +61,54 @@ body, html {
 .button-container button:hover {
     background-color: #2980b9; /* Hover color */
 }
+
+
+form#editProfileForm {
+    background-color: #ffffff; /* Form background color */
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form#editProfileForm label {
+    display: block;
+    margin-bottom: 8px;
+    color: #0a0a65; /* Label color */
+    font-weight: bold;
+}
+
+form#editProfileForm input[type="text"],
+form#editProfileForm input[type="checkbox"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form#editProfileForm input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+form#editProfileForm label[for="confirmCheckbox"] {
+    display: inline-block;
+    vertical-align: middle;
+    color: #0a0a65; /* Checkbox label color */
+}
+
+form#editProfileForm button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #3498db; /* Button background color */
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form#editProfileForm button[type="submit"]:hover {
+    background-color: #2980b9; /* Hover color */
+}

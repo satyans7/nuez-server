@@ -133,3 +133,19 @@ export async function getConsumerToDeviceMapping() {
     const api = cep.getApiToFetchConsumerDeviceMapping();
     return await cep.fetchDataFromServer(api);
 }
+
+//device profile update
+/*export async function updateDevice(id,data) {
+   const api= await cep.getApiToPutDevice(id);
+   cep.fetchPut(api,data);
+   console.log(id);
+}
+*/
+//device profile update
+export async function updateDevice(id, data) {
+    const api = await cep.getApiToPutDevice(id);
+    console.log('PUT request API:', api);
+    cep.fetchPut(api, data);
+    console.log('Device ID:', id);
+ }
+ 
