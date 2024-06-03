@@ -30,7 +30,7 @@ const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
 const AEP_TO_FETCH_CONSUMERS_TO_DEVICES = "/api/consumer/consumertodevice";
 
 const AEP_TO_PUT_SITE = "/api/admin/sites";
-const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
+const AEP_TO_PUT_DEVICE= "/api/admin/devices";
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
