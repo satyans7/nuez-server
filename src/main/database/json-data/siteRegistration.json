@@ -1,15 +1,14 @@
- {
-      "site_1": {
-          "name": "Site One",
-          "location": "Location One"
-      },
-      "site_2": {
-          
-          "name": "Site Two",
-          "location": "Location Two"
-      },
-      "site_3": {
-          "name": "Site Three",
-          "location": "Location Three"
-      }
+{
+  "site_1": {
+    "name": "Site mumbai",
+    "location": "Location One"
+  },
+  "site_2": {
+    "name": "Site Two",
+    "location": "Location Two"
+  },
+  "site_3": {
+    "name": "Site Three",
+    "location": "Location Three"
   }
+}

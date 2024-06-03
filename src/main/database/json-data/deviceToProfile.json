@@ -1,7 +1,7 @@
 {
   "device_1": {
     "name": "Watermeter_One",
-    "location": "Residential Area",
+    "location": "Residential Area Mumbai",
     "totalConsumption": "1200 liters",
     "status": "Active",
     "registrationDate": "2023-01-20"
@@ -489,6 +489,4 @@
     "status": "Active",
     "registrationDate": "2023-09-28"
   }
- 
 }
-

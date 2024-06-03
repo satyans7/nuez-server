@@ -29,6 +29,9 @@ const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
 
 const AEP_TO_FETCH_CONSUMERS_TO_DEVICES = "/api/consumer/consumertodevice";
 
+const AEP_TO_PUT_SITE = "/api/admin/sites/:id";
+const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
+
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
@@ -131,6 +134,18 @@ export async function fetchPost(url, data) {
 }
 
 
+
+export async function fetchPut(url, data) {
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response.json();
+}
 
 
 export async function fetchDataFromServer(api) {

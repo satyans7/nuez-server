@@ -291,6 +291,17 @@ async fetchAllSites() {
     let data=await dbController.fetchAllSiteToConsumer();
     return data;
   }
+
+
+  async putSite(req,res) {
+    
+    await dbController.putSite(req,res);
+  }
+
+  async putDevice(req,res) {
+
+    await dbController.putDevice(req,res);
+  }
   
 }
 

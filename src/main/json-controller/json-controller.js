@@ -267,10 +267,53 @@ class JsonController {
     return db;
   }
 
+ 
+
+async putSite(req,res){
+  const siteId = req.params.id;
+const { name, location } = req.body;
+
+  try {
+    let sites = await this.readDatabase(SITE_DATA);
+
+    if (!sites[siteId]) {
+        return res.status(404).send({ error: 'Site not found' });
+    }
+        sites[siteId].name = name;
+        sites[siteId].location = location;
+
+    await this.writeDatabase(SITE_DATA,sites);
+
+    res.send({ message: 'Site updated successfully', site: sites[siteId] });
+} catch (error) {
+    res.status(500).send({ error: 'An error occurred while updating the site' });
+}
 
 }
 
 
+async putDevice(req,res){
+  const deviceId = req.params.id;
+const { name,location,totalConsumption,status,registrationDate } = req.body;
 
+  try {
+    let devices = await this.readDatabase(DEVICE_DATA);
 
+    if (!devices[deviceId]) {
+        return res.status(404).send({ error: 'Site not found' });
+    }
+        devices[deviceId].name = name;
+        devices[deviceId].location = location;
+        devices[deviceId].totalConsumption = totalConsumption;
+        devices[deviceId].status = status;
+        devices[deviceId].registrationDate=registrationDate;
+    await this.writeDatabase(DEVICE_DATA,devices);
+
+    res.send({ message: 'Site updated successfully', device: devices[deviceId] });
+} catch (error) {
+    res.status(500).send({ error: 'An error occurred while updating the site' });
+}
+
+}
+}
 module.exports = new JsonController();

@@ -51,6 +51,9 @@ module.exports = function (app) {
   const AEP_TO_FETCH_CONSUMERS_TO_DEVICES="/api/consumer/consumertodevice";
   
 
+  const AEP_TO_PUT_SITE = "/api/admin/sites/:id";
+const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
+
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -216,6 +219,19 @@ module.exports = function (app) {
 
 
 
+
+  app.put(AEP_TO_PUT_SITE,async(req,res)=>{
+    await controller.putSite(req,res);
+    res.sendStatus(200);
+  });
+
+
+
+  app.put(AEP_TO_PUT_DEVICE,async(req,res)=>{
+    await controller.putDevice(req,res);
+    res.sendStatus(200);
+
+  });
 };
 
 

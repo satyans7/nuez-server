@@ -161,7 +161,18 @@ async fetchAllSites() {
   }
 
 
-}
+
+
+  async putSite(req,res) {
+      await jsonController.putSite(req,res);
+    }
+
+
+  async putDevice(req,res) {
+        await jsonController.putDevice(req,res);
+      }
+  }
+
 
 
 
