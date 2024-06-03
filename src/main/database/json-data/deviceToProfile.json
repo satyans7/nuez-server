@@ -268,13 +268,13 @@
   "device_39": {
     "name": "Hello",
     "location": "World",
-    "totalConsumption": "undefined",
-    "status": "undefined",
-    "registrationDate": "undefined"
+    "totalConsumption": "200 liters",
+    "status": "Under maintenance",
+    "registrationDate": "2024-05-23"
   },
   "device_40": {
-    "name": "Watermeter_Forty",
-    "location": "Warehouse",
+    "name": "Forty",
+    "location": "Garage",
     "totalConsumption": "2800 liters",
     "status": "Active",
     "registrationDate": "2023-06-28"
