@@ -64,7 +64,8 @@ body {
     cursor: pointer;
 }
 
-.all-devices, .all-consumers {
+.all-devices,
+.all-consumers {
     display: flex;
     flex-wrap: wrap;
     gap: 18px;
@@ -72,6 +73,7 @@ body {
     overflow-y: auto;
     margin-top: 20px;
 }
+
 .card {
     background-color: #fff;
     border-radius: 8px;
@@ -142,12 +144,25 @@ body {
 }
 
 .form-container label,
-.form-container input,
 .form-container button {
-    margin-bottom: 10px;
     font-size: 16px;
     font-weight: 600;
+    margin-bottom: 10px;
+
 }
+
+#register-device-form input,
+#deregister-device-form input{
+    margin-bottom: 15px;
+}
+
+.form-container input {
+    height: 40px;
+    padding: 0 5px;
+    font-size: 15px;
+}
+
+
 
 .form-container button {
     background-color: #2c3e50;

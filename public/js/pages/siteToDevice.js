@@ -1,4 +1,4 @@
-import { getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping } from '../client/client.js';
+import { getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
 const allConsumerContainer = document.querySelector('#consumer-list');
@@ -10,15 +10,21 @@ const headingText = document.getElementById('heading');
 const currentSite = document.getElementById('site-id');
 const deviceTab = document.getElementById('device-tab');
 const consumerTab = document.getElementById('consumer-tab');
+const editBtn = document.getElementById('edit-profile');
+const editTab = document.getElementById('edit-form-container');
+const updateBtn = document.getElementById('update-button');
+const site = getCurrentSite();
 
 const title = document.createElement('h1');
-title.textContent = `Welcome, ${getCurrentSite()}`;
+title.textContent = `Welcome, ${site}`;
 headingText.appendChild(title);
 
 const currentid = document.createElement('h1');
-currentid.textContent = `Id : ${getCurrentSite()}`;
+currentid.textContent = `Id : ${site}`;
 currentSite.appendChild(currentid);
 
+
+await viewAlldevices();
 registerBtn.addEventListener('click', () => {
     toggleVisibility('register');
 });
@@ -27,16 +33,19 @@ deregisterBtn.addEventListener('click', () => {
     toggleVisibility('deregister');
 });
 
+editBtn.addEventListener('click', async() =>{
+    await setForm()
+    toggleVisibility('edit');
+})
+updateBtn.addEventListener('click', async()=>{
+    await updateSiteInfo()
+})
 deviceTab.addEventListener('click', async () => {
     await viewAlldevices();
 });
 
 consumerTab.addEventListener('click', async () => {
     await viewAllconsumers();
-});
-
-document.addEventListener('DOMContentLoaded', async () => {
-    await viewAlldevices();
 });
 
 function getCurrentSite() {
@@ -52,29 +61,39 @@ function toggleVisibility(section) {
     allConsumerContainer.style.display = 'none';
     registerTab.style.display = 'none';
     deregisterTab.style.display = 'none';
+    editTab.style.display = 'none';
 
     if (section === 'register') {
         registerTab.style.display = 'block';
     } else if (section === 'deregister') {
         deregisterTab.style.display = 'block';
+    }else if(section === 'edit'){
+        editTab.style.display = 'block'
     }
+}
+
+
+async function setForm() {
+    const val = await getSitesData();
+    let currentSitename = document.getElementById('edit-name');
+    currentSitename.value = val[site].name;
+    let currentSiteLocation = document.getElementById('edit-location');
+    currentSiteLocation.value = val[site].location;
 }
 
 async function viewAlldevices() {
     toggleVisibility();
     alldevicesContainer.style.display = 'flex';
-
-    const SiteId = getCurrentSite();
     const devicesData = await getDevicesData();
     const sitesdevicesMapping = await getSiteDeviceMapping();
 
-    if (!sitesdevicesMapping[SiteId]) {
-        console.error(`No devices found for Site ID: ${SiteId}`);
+    if (!sitesdevicesMapping[site]) {
+        console.error(`No devices found for Site ID: ${site}`);
         alldevicesContainer.innerHTML = '<p>No devices found for this site.</p>';
         return;
     }
 
-    const devices = sitesdevicesMapping[SiteId];
+    const devices = sitesdevicesMapping[site];
     alldevicesContainer.innerHTML = '';
 
     devices.forEach(key => {
@@ -125,18 +144,16 @@ function createDeviceCard(device, key) {
 async function viewAllconsumers() {
     toggleVisibility();
     allConsumerContainer.style.display = 'flex';
-
-    const SiteId = getCurrentSite();
     const consumersData = await getAllConsumers();
     const sitesconsumersMapping = await getSiteConsumerMapping();
 
-    if (!sitesconsumersMapping[SiteId]) {
-        console.error(`No consumers found for Site ID: ${SiteId}`);
+    if (!sitesconsumersMapping[site]) {
+        console.error(`No consumers found for Site ID: ${site}`);
         allConsumerContainer.innerHTML = '<p>No consumers found for this site.</p>';
         return;
     }
 
-    const consumers = sitesconsumersMapping[SiteId];
+    const consumers = sitesconsumersMapping[site];
     allConsumerContainer.innerHTML = '';
 
     consumers.forEach(key => {
@@ -185,10 +202,20 @@ function createConsumerCard(consumer, key) {
 
     return consumerCard;
 }
-function getCurrentAdmin() {
-    const fullUrl = window.location.href;
-    const url = new URL(fullUrl);
-    const pathname = url.pathname;
-    const segments = pathname.split('/');
-    return segments[segments.length - 1];
+
+async function updateSiteInfo(){
+    const val = await getSitesData()
+    const newData = {
+        name: document.getElementById('edit-name').value,
+        location: document.getElementById('edit-location').value
+    }
+    try {
+        const response = await updateSiteDataOnServer(newData, site);
+        alert(response.message);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        alert('Error in Updating Info. Please try again.');
+    }
+    setForm();
+
 }

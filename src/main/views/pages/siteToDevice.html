@@ -12,10 +12,10 @@
 
     <div class="sidebar">
         <div id="site-id"></div>
-        <a href="#dashboard" id="dashboard-link">Dashboard</a>
-        <a href="#users" id="users-link">Users</a>
-        <a href="#settings" id="settings-link">Settings</a>
-        <a href="#logout" id="logout-link">Logout</a>
+        <a href="#" id="device-tab">All Devices</a>
+        <a href="#" id="consumer-tab">All Consumers</a>
+        <a href="#" id="edit-profile">Edit Profile</a>
+        <a href="#" id="logout-link">Logout</a>
     </div>
 
     <div class="main-content">
@@ -29,38 +29,39 @@
         </div>
 
         <div id="main-container" class="container">
-            <div class="tabs">
-                <button id="device-tab">All Devices</button>
-                <button id="consumer-tab">All Consumers</button>
-            </div>
             <div id="device-list" class="all-devices">
-
             </div>
             <div id="consumer-list" class="all-consumers">
-
             </div>
-
-
         </div>
-
-
-        <div id="register-form-container" class="form-container" style="display: none;">
-            <form id="device-form">
-                <label for="device-id">Device ID:</label>
-                <input type="text" id="device-id" name="device-id" required>
+        <div id="edit-form-container" class="form-container" >
+            <form id="edit-userForm">
+                <label for="edit-name">Name:</label>
+                <input type="text" id="edit-name" value="Current Name"><br><br>
+                <label for="edit-location">Location:</label>
+                <input type="text" id="edit-location" value="Current Location"><br><br>
+                <button type="submit" id="update-button">Update</button>
+            </form>
+        </div>
+        
+        <div id="register-form-container" class="form-container">
+            <form id="register-device-form">
+                <label for="register-device-id">Device ID:</label>
+                <input type="text" id="register-device-id" name="register-device-id" required>
                 <button type="submit">Register</button>
-                <button type="button" id="cancel-button">Cancel</button>
+                <button type="button" id="register-cancel-button" class="cancel-button">Cancel</button>
             </form>
         </div>
-        <div id="deregister-form-container" class="form-container" style="display: none;">
-            <form id="device-form">
-                <label for="device-id">Device ID:</label>
-                <input type="text" id="device-id" name="device-id" required>
+        
+        <div id="deregister-form-container" class="form-container">
+            <form id="deregister-device-form">
+                <label for="deregister-device-id">Device ID:</label>
+                <input type="text" id="deregister-device-id" name="deregister-device-id" required>
                 <button type="submit">De-register</button>
-                <button type="button" id="cancel-button">Cancel</button>
+                <button type="button" id="deregister-cancel-button" class="cancel-button">Cancel</button>
             </form>
         </div>
-    </div>
+
 
     <script type="module" src="/js/pages/siteToDevice.js"></script>
 

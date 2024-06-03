@@ -99,6 +99,13 @@ export async function getSiteConsumerMapping() {
     return await controller.getSiteToConsumerMapping();
 }
 
+
+//Updating site info
+export async function updateSiteDataOnServer(data, id){
+    return await controller.updateSiteDataOnServer(data, id);
+
+}
+
 //Consumer
 export async function getConsumerDeviceMapping() {
     const data =  await controller.getConsumerToDeviceMapping();

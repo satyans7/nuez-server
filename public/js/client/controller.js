@@ -121,6 +121,11 @@ export async function getSiteToConsumerMapping() {
     return await cep.fetchDataFromServer(api);
 }
 
+export async function updateSiteDataOnServer(data, id){
+    const api = cep.getApiToUpdateSiteData(id);
+    return await cep.fetchPut(api, data);
+}
+
 
 //Consumer
 

@@ -29,7 +29,7 @@ const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
 
 const AEP_TO_FETCH_CONSUMERS_TO_DEVICES = "/api/consumer/consumertodevice";
 
-const AEP_TO_PUT_SITE = "/api/admin/sites/:id";
+const AEP_TO_PUT_SITE = "/api/admin/sites";
 const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
 
 export function getApiToRegisterUser() {
@@ -93,6 +93,10 @@ export function getApiToGenerateOTP() {
 }
 export function getApiToVerifyOTP() {
   return AEP_TO_VERIFY_OTP;
+}
+
+export function getApiToUpdateSiteData(id){
+  return `${AEP_TO_PUT_SITE}/${id}`;
 }
 
 
