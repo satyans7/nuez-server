@@ -302,6 +302,14 @@ async fetchAllSites() {
 
     await dbController.putDevice(req,res);
   }
+
+  async registerSite(req, res){
+    await dbController.registerSite(req, res)
+  }
+
+  async registerDevice(req, res) {
+    await dbController.registerDevice(req, res)
+  }
   
 }
 

@@ -54,6 +54,9 @@ module.exports = function (app) {
   const AEP_TO_PUT_SITE = "/api/admin/sites/:id";
 const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
 
+  const AEP_TO_REGISTER_SITE = "/api/admin/registersite/:id"
+  const AEP_TO_REGISTER_DEVICE = "/api/admin/registerdevice/:id"
+
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -232,6 +235,14 @@ const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
     res.sendStatus(200);
 
   });
+
+  app.post(AEP_TO_REGISTER_SITE, async(req, res) =>{
+    await controller.registerSite(req, res);
+  })
+
+  app.post(AEP_TO_REGISTER_DEVICE, async (req, res) => {
+    await controller.registerDevice(req, res);
+  })
 };
 
 
