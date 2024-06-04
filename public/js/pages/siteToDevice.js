@@ -1,4 +1,5 @@
-import { getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer } from '../client/client.js';
+import {
+    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
 const allConsumerContainer = document.querySelector('#consumer-list');
@@ -14,7 +15,7 @@ const editBtn = document.getElementById('edit-profile');
 const editTab = document.getElementById('edit-form-container');
 const updateBtn = document.getElementById('update-button');
 const site = getCurrentSite();
-
+const deregisterForm= document.getElementById('deregister-device-form');
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${site}`;
 headingText.appendChild(title);
@@ -23,8 +24,8 @@ const currentid = document.createElement('h1');
 currentid.textContent = `Id : ${site}`;
 currentSite.appendChild(currentid);
 
-
 await viewAlldevices();
+
 registerBtn.addEventListener('click', () => {
     toggleVisibility('register');
 });
@@ -33,13 +34,15 @@ deregisterBtn.addEventListener('click', () => {
     toggleVisibility('deregister');
 });
 
-editBtn.addEventListener('click', async() =>{
-    await setForm()
+editBtn.addEventListener('click', async () => {
+    await setForm();
     toggleVisibility('edit');
-})
-updateBtn.addEventListener('click', async()=>{
-    await updateSiteInfo()
-})
+});
+
+updateBtn.addEventListener('click', async () => {
+    await updateSiteInfo();
+});
+
 deviceTab.addEventListener('click', async () => {
     await viewAlldevices();
 });
@@ -67,11 +70,10 @@ function toggleVisibility(section) {
         registerTab.style.display = 'block';
     } else if (section === 'deregister') {
         deregisterTab.style.display = 'block';
-    }else if(section === 'edit'){
-        editTab.style.display = 'block'
+    } else if (section === 'edit') {
+        editTab.style.display = 'block';
     }
 }
-
 
 async function setForm() {
     const val = await getSitesData();
@@ -184,7 +186,7 @@ function createConsumerCard(consumer, key) {
         const adminId = getCurrentAdmin();
         const route = `/api/consumer-dashboard/${key}?adminId=${adminId}`;
         console.log(`Redirecting to: ${route}`);  // Log the route for debugging
-        window.location.href = route;  // Ensure the redirection logic is execut
+        window.location.href = route;  // Ensure the redirection logic is executed
     });
 
     cardHeading.appendChild(consumerName);
@@ -202,15 +204,13 @@ function createConsumerCard(consumer, key) {
 
     return consumerCard;
 }
-
-function getCurrentAdmin() {
-    const url = new URL(window.location.href);
-    const searchParams = new URLSearchParams(url.search);
+function getCurrentAdmin(){
+    const url= new URL(window.location.href);
+    const searchParams= new URLSearchParams(url.search);
     return searchParams.get('adminId');
-  }
-  
-async function updateSiteInfo(){
-    const val = await getSitesData()
+}
+async function updateSiteInfo() {
+    const val = await getSitesData();
     const newData = {
         name: document.getElementById('edit-name').value,
         location: document.getElementById('edit-location').value
@@ -223,7 +223,47 @@ async function updateSiteInfo(){
         alert('Error in Updating Info. Please try again.');
     }
     setForm();
-
 }
 
+/*document.getElementById('deregister-device-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
 
+    const deviceId = document.getElementById('deregister-device-id').value; 
+
+    
+    const sitesDeviceMapping = await getSiteDeviceMapping();
+    if (sitesDeviceMapping[site].includes(deviceId)) {
+        try {
+            const response = await deleteSiteToDeviceMapping(site);
+            alert(`Device ID ${deviceId} deregistered successfully.`);
+            await viewAlldevices();
+        } catch (error) {
+            console.error('Error deregistering device:', error);
+            alert(`Error in deregistering device: ${error.message}`);
+        }
+    } else {
+        alert(`No device with ID ${deviceId} found.`);
+    }
+});
+*/
+document.getElementById('deregister-device-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+  
+    const deviceId = document.getElementById('deregister-device-id').value;
+    const device={
+        device: deviceId
+    }
+
+  
+    try {
+      const response = await deleteSiteToDeviceMapping(site,device);
+      viewAlldevices();
+    alert(response.message);
+    deregisterForm.reset();
+    
+    } catch (error) {
+      console.error('Error deregistering device:', error);
+      alert(`${error.message}`);
+    }
+  });
+  

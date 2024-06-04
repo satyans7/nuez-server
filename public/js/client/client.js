@@ -135,6 +135,6 @@ export async function updateDeviceData(id, request) {
 
 
 //DELETE SITE DEVICE MAPPING
-export async function deleteSiteToDeviceMapping(siteId,deviceId){
-    return await controller.deleteSiteToDeviceMapping(siteId,deviceId);
-}
+export async function deleteSiteToDeviceMapping(id,request) {
+    return await controller.deleteSiteToDeviceMapping(id,request);
+  }
