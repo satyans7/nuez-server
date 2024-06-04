@@ -134,7 +134,19 @@ export async function updateDeviceData(id, request) {
 }
 
 
+export async function registerSite(data,id)
+{
+    
+    return await controller.registerSite(data,id);
+}
+
+export async function registerDevice(data,id)
+{
+    return await controller.registerDevice(data,id);
+}
+
 //DELETE SITE DEVICE MAPPING
 export async function deleteSiteToDeviceMapping(siteId,deviceId){
     return await controller.deleteSiteToDeviceMapping(siteId,deviceId);
 }
+

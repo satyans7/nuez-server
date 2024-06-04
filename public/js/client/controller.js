@@ -162,3 +162,21 @@ export async function updateDevice(id, data) {
         throw new Error(`Failed to delete site-device mapping: ${response.message || 'Unknown error'}`);
     }
 }
+
+export async function registerSite(data,id) {
+    const api = cep.getApiToRegisterSite(id);
+    const response = await cep.fetchPost(api,data);
+
+    if (response && response.success) {
+        return response;
+    } else {
+        throw new Error(`Failed to delete site-device mapping: ${response.message || 'Unknown error'}`);
+    }
+}
+
+export async function registerDevice(data,id) {
+    const api = cep.getApiToRegisterDevice(id);
+    const response = await cep.fetchPost(api,data);
+        return response;
+    
+}

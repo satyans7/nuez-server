@@ -328,7 +328,7 @@ class JsonController {
         return res.status(400).json({ message: "Site already registered under another admin" });
       }
 
-      if (data[user]) {
+     else if (data[user]) {
         if (!data[user].find(s => s === site)) {
           data[user].push(site);
           await this.writeDatabase(ADMIN_TO_SITE_DATA, data);
@@ -381,7 +381,7 @@ class JsonController {
         return res.status(400).json({ message: "Device already registered under another site" });
       }
 
-      if (data[site]) {
+     else  if (data[site]) {
         if (!data[site].find(d => d === device)) {
           data[site].push(device);
           await this.writeDatabase(SITE_TO_DEVICE_DATA, data);
