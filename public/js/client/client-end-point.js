@@ -33,7 +33,7 @@ const AEP_TO_PUT_SITE = "/api/admin/sites";
 const AEP_TO_PUT_DEVICE= "/api/admin/devices";
 
 //deregister
-const AEP_TO_DELETE_SITE_DEVICE_MAPPING = "/api/admin/deletesitetodevice";
+const AEP_TO_DELETE_SITE_DEVICE_MAPPING = "";
 
 
 export function getApiToRegisterUser() {
