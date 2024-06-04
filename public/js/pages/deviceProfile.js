@@ -3,9 +3,11 @@ import { getDevicesData, updateDeviceData } from "../client/client.js";
 function editProfile() {
     // Functionality to edit the device profile
     console.log("Edit Profile clicked");
+   
 
     const form = document.getElementById('editProfileForm');
-    form.style.display = 'block';
+    form.style.display = 'block'; // Display the overlay
+    form.classList.add('overlay-content');
     const deviceId = getCurrentDevice();
     const deviceName = document.getElementById('device-name').innerText.split(': ')[1];
     const deviceLocation = document.getElementById('device-location').innerText.split(': ')[1];
@@ -87,9 +89,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault(); // Prevent default form submission
         saveProfile();
     });
+
+    const cancelButton = document.getElementById('cancelButton');
+    cancelButton.addEventListener('click', function() {
+        const form = document.getElementById('editProfileForm');
+        form.style.display = 'none'; // New: Hide the form when cancel is clicked
+    });
 });
 
-function saveProfile() {
+async function saveProfile() {
     // Get the form data
     const deviceId = document.getElementById('deviceId').value;
     const deviceName = document.getElementById('deviceName').value;
@@ -113,9 +121,16 @@ function saveProfile() {
         // Log the data being sent
         console.log('Updating device profile with data:', updatedData);
 
-        // Call the controller function to update the device profile
-        updateDeviceData(deviceId, updatedData);
+        // wait for details to be uodated
+       await updateDeviceData(deviceId, updatedData);
+
+       const form = document.getElementById('editProfileForm');
+        form.style.display = 'none'; // Hide the form after update
+
+        window.location.reload(); // Reload the page to show updated data
     } else {
         console.log('Please confirm that you want to update the details.');
     }
+
+
 }

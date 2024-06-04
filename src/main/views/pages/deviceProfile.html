@@ -27,7 +27,7 @@
     </div>
 
     <!-- Edit Profile Form -->
-    <form id="editProfileForm" style="display: none;">
+    <form id="editProfileForm" class="overlay" style="display: none;">
         <label for="deviceId">Device ID:</label>
         <input type="text" id="deviceId" name="deviceId" readonly>
     
@@ -45,6 +45,7 @@
         <label for="confirmCheckbox">Are you sure you want to update the above details?</label>
     
         <button type="submit">Update</button>
+        <button type="button" id="cancelButton">Cancel</button>
     </form>
 </div>
 
