@@ -1,19 +1,25 @@
 import { getDevicesData, updateDeviceData } from "../client/client.js";
 
+// Function to handle profile editing
 function editProfile() {
-    // Functionality to edit the device profile
     console.log("Edit Profile clicked");
 
     const form = document.getElementById('editProfileForm');
-    form.style.display = 'block';
+    form.style.display = 'block'; // Display the overlay
+    form.classList.add('overlay-content');
+
     const deviceId = getCurrentDevice();
+    populateFormWithDeviceData(deviceId);
+}
+
+// Function to populate the form with device data
+function populateFormWithDeviceData(deviceId) {
     const deviceName = document.getElementById('device-name').innerText.split(': ')[1];
     const deviceLocation = document.getElementById('device-location').innerText.split(': ')[1];
     const deviceTotalConsumption = document.getElementById('device-totalConsumption').innerText.split(': ')[1];
     const deviceStatus = document.getElementById('device-status').innerText.split(': ')[1];
     const deviceRegistrationDate = document.getElementById('device-registrationDate').innerText.split(': ')[1];
 
-    // Populate the form
     document.getElementById('deviceId').value = deviceId;
     document.getElementById('deviceName').value = deviceName;
     document.getElementById('deviceLocation').value = deviceLocation;
@@ -22,75 +28,77 @@ function editProfile() {
     document.getElementById('deviceRegistrationDate').value = deviceRegistrationDate;
 }
 
+// Function to delete a device
 function deleteDevice() {
-    // Functionality to delete the device
     console.log("Delete Device clicked");
+    // Add your delete logic here
 }
 
+// Function to get the current device ID from the URL
 function getCurrentDevice() {
-    const fullUrl = window.location.href;
-    const url = new URL(fullUrl);
-    const pathname = url.pathname;
-    const segments = pathname.split('/');
-    const deviceId = segments[segments.length - 1];
-    return deviceId;
+    const url = new URL(window.location.href);
+    const segments = url.pathname.split('/');
+    return segments[segments.length - 1];
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    // Select the 'device-id' element
-    const deviceIDElement = document.getElementById('device-id');
-    // Set the text content to 'DEVICE ID: ' followed by the fetched device ID
-    deviceIDElement.textContent = `DEVICE ID: ${getCurrentDevice()}`;
-
+// Function to initialize the device profile page
+async function initializeProfilePage() {
+    document.getElementById('device-id').textContent = `DEVICE ID: ${getCurrentDevice()}`;
     const currentId = getCurrentDevice();
     const devicesData = await getDevicesData();
     const particularDeviceData = devicesData[currentId];
-    console.log(particularDeviceData);
 
     if (particularDeviceData) {
-        const deviceCard = document.getElementById('device-card');
-
-        // Create button container
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'button-container';
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit Profile';
-        editButton.onclick = editProfile;
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete Device';
-        deleteButton.onclick = deleteDevice;
-
-        // Append buttons to the container
-        buttonContainer.appendChild(editButton);
-        buttonContainer.appendChild(deleteButton);
-
-        const deviceNameElement = document.getElementById('device-name');
-        deviceNameElement.textContent = `Name: ${particularDeviceData.name}`;
-        const deviceLocationElement = document.getElementById('device-location');
-        deviceLocationElement.textContent = `Location: ${particularDeviceData.location}`;
-        const deviceConsumptionElement = document.getElementById('device-totalConsumption');
-        deviceConsumptionElement.textContent = `Total Consumption: ${particularDeviceData.totalConsumption}`;
-        const deviceStatusElement = document.getElementById('device-status');
-        deviceStatusElement.textContent = `Status: ${particularDeviceData.status}`;
-        const deviceRegistrationDateElement = document.getElementById('device-registrationDate');
-        deviceRegistrationDateElement.textContent = `Registration Date: ${particularDeviceData.registrationDate}`;
-
-        deviceCard.appendChild(buttonContainer);
+        populateDeviceCard(particularDeviceData);
+        addEditDeleteButtons();
     } else {
-        // Handle case when no data is found for the deviceId
         console.error('Device data not found for ID:', currentId);
     }
 
-    // Handle form submission
+    setupFormSubmission();
+}
+
+// Function to populate the device card with data
+function populateDeviceCard(data) {
+    document.getElementById('device-name').textContent = `Name: ${data.name}`;
+    document.getElementById('device-location').textContent = `Location: ${data.location}`;
+    document.getElementById('device-totalConsumption').textContent = `Total Consumption: ${data.totalConsumption}`;
+    document.getElementById('device-status').textContent = `Status: ${data.status}`;
+    document.getElementById('device-registrationDate').textContent = `Registration Date: ${data.registrationDate}`;
+}
+
+// Function to add Edit and Delete buttons to the device card
+function addEditDeleteButtons() {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
+
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit Profile';
+    editButton.onclick = editProfile;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete Device';
+    deleteButton.onclick = deleteDevice;
+
+    buttonContainer.appendChild(editButton);
+    buttonContainer.appendChild(deleteButton);
+
+    document.getElementById('device-card').appendChild(buttonContainer);
+}
+
+// Function to setup form submission
+function setupFormSubmission() {
     const form = document.getElementById('editProfileForm');
     form.addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent default form submission
         saveProfile();
     });
-});
 
-function saveProfile() {
-    // Get the form data
+    document.getElementById('cancelButton').addEventListener('click', closeForm);
+}
+
+// Function to handle form submission and save profile
+async function saveProfile() {
     const deviceId = document.getElementById('deviceId').value;
     const deviceName = document.getElementById('deviceName').value;
     const deviceLocation = document.getElementById('deviceLocation').value;
@@ -99,9 +107,7 @@ function saveProfile() {
     const deviceRegistrationDate = document.getElementById('deviceRegistrationDate').value;
     const confirmCheckbox = document.getElementById('confirmCheckbox');
 
-    // Check if the user has confirmed the update
     if (confirmCheckbox.checked) {
-        // Prepare the data to send to the server
         const updatedData = {
             name: deviceName,
             location: deviceLocation,
@@ -110,12 +116,20 @@ function saveProfile() {
             registrationDate: deviceRegistrationDate
         };
 
-        // Log the data being sent
         console.log('Updating device profile with data:', updatedData);
+        await updateDeviceData(deviceId, updatedData);
 
-        // Call the controller function to update the device profile
-        updateDeviceData(deviceId, updatedData);
+        closeForm();
+        window.location.reload(); // Reload the page to show updated data
     } else {
         console.log('Please confirm that you want to update the details.');
     }
 }
+
+// Function to close the form
+function closeForm() {
+    document.getElementById('editProfileForm').style.display = 'none'; // Hide the form when cancel is clicked
+}
+
+// Initialize the profile page once the DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeProfilePage);
