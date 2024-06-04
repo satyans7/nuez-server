@@ -9,8 +9,8 @@ const ADMIN_TO_SITE_DATA = path.join(__dirname, "../database/json-data/adminToSi
 const SITE_DATA = path.join(__dirname, "../database/json-data/siteRegistration.json");
 const SITE_TO_DEVICE_DATA = path.join(__dirname, "../database/json-data/siteToDevices.json")
 const DEVICE_DATA = path.join(__dirname, "../database/json-data/deviceToProfile.json")
-const CONSUMER_TO_DEVICE_DATA =path.join(__dirname, "../database/json-data/consumerToDevices.json");
-const SITE_TO_CONSUMER_DATA= path.join(__dirname, "../database/json-data/siteToConsumer.json");
+const CONSUMER_TO_DEVICE_DATA = path.join(__dirname, "../database/json-data/consumerToDevices.json");
+const SITE_TO_CONSUMER_DATA = path.join(__dirname, "../database/json-data/siteToConsumer.json");
 const OTPEMAIL = path.join(__dirname, "../database/json-data/otp-email.json");
 
 class JsonController {
@@ -192,37 +192,37 @@ class JsonController {
     }
   }
 
-  async saveotpemail(otp,email){
+  async saveotpemail(otp, email) {
     const data = {}
-      data[email]=otp;
-    
-    await this.writeDatabase(OTPEMAIL,data);
+    data[email] = otp;
+
+    await this.writeDatabase(OTPEMAIL, data);
     console.log(`${email} otp has been saved successfully`)
     return email;
   }
-  async updateotpemail(otp,email){
-    const data =await this.readDatabase(OTPEMAIL);
-     data[email]=otp;
-    await this.writeDatabase(OTPEMAIL,data);
+  async updateotpemail(otp, email) {
+    const data = await this.readDatabase(OTPEMAIL);
+    data[email] = otp;
+    await this.writeDatabase(OTPEMAIL, data);
     console.log(`${email} otp has been updated successfully`)
     return email;
   }
-  
-  async isOTPRequested(email){
+
+  async isOTPRequested(email) {
     const data = await this.readDatabase(OTPEMAIL);
-    if(data[email])return 1;
+    if (data[email]) return 1;
     return 0;
   }
 
-  async findOTPByEmail(email){
-    const data =await this.readDatabase(OTPEMAIL);
+  async findOTPByEmail(email) {
+    const data = await this.readDatabase(OTPEMAIL);
     return await data[email];
   }
-   
-  async deleteOTPByEmail(email){
-    const data =await this.readDatabase(OTPEMAIL);
+
+  async deleteOTPByEmail(email) {
+    const data = await this.readDatabase(OTPEMAIL);
     delete data[email];
-    await this.writeDatabase(OTPEMAIL,data);
+    await this.writeDatabase(OTPEMAIL, data);
   }
 
 
@@ -256,64 +256,123 @@ class JsonController {
   }
 
   //fetch consumer to device mapping
-  async fetchConsumerToDevice(){
-    const db =await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+  async fetchConsumerToDevice() {
+    const db = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
     return db;
   }
 
   //fetch site to consumer mapping
-  async fetchSiteToConsumer(){
-    const db =await this.readDatabase(SITE_TO_CONSUMER_DATA);
+  async fetchSiteToConsumer() {
+    const db = await this.readDatabase(SITE_TO_CONSUMER_DATA);
     return db;
   }
 
- 
 
-async putSite(req,res){
-  const siteId = req.params.id;
-const { name, location } = req.body;
 
-  try {
-    let sites = await this.readDatabase(SITE_DATA);
+  async putSite(req, res) {
+    const siteId = req.params.id;
+    const { name, location } = req.body;
 
-    if (!sites[siteId]) {
+    try {
+      let sites = await this.readDatabase(SITE_DATA);
+
+      if (!sites[siteId]) {
         return res.status(404).send({ error: 'Site not found' });
+      }
+      sites[siteId].name = name;
+      sites[siteId].location = location;
+
+      await this.writeDatabase(SITE_DATA, sites);
+
+      res.send({ message: 'Site updated successfully', site: sites[siteId] });
+    } catch (error) {
+      res.status(500).send({ error: 'An error occurred while updating the site' });
     }
-        sites[siteId].name = name;
-        sites[siteId].location = location;
 
-    await this.writeDatabase(SITE_DATA,sites);
-
-    res.send({ message: 'Site updated successfully', site: sites[siteId] });
-} catch (error) {
-    res.status(500).send({ error: 'An error occurred while updating the site' });
-}
-
-}
+  }
 
 
-async putDevice(req,res){
-  const deviceId = req.params.id;
-const { name,location,totalConsumption,status,registrationDate } = req.body;
+  async putDevice(req, res) {
+    const deviceId = req.params.id;
+    const { name, location, totalConsumption, status, registrationDate } = req.body;
 
-  try {
-    let devices = await this.readDatabase(DEVICE_DATA);
+    try {
+      let devices = await this.readDatabase(DEVICE_DATA);
 
-    if (!devices[deviceId]) {
+      if (!devices[deviceId]) {
         return res.status(404).send({ error: 'Site not found' });
+      }
+      devices[deviceId].name = name;
+      devices[deviceId].location = location;
+      devices[deviceId].totalConsumption = totalConsumption;
+      devices[deviceId].status = status;
+      devices[deviceId].registrationDate = registrationDate;
+      await this.writeDatabase(DEVICE_DATA, devices);
+
+      res.send({ message: 'Site updated successfully', device: devices[deviceId] });
+    } catch (error) {
+      res.status(500).send({ error: 'An error occurred while updating the site' });
     }
-        devices[deviceId].name = name;
-        devices[deviceId].location = location;
-        devices[deviceId].totalConsumption = totalConsumption;
-        devices[deviceId].status = status;
-        devices[deviceId].registrationDate=registrationDate;
-    await this.writeDatabase(DEVICE_DATA,devices);
 
-    res.send({ message: 'Site updated successfully', device: devices[deviceId] });
-} catch (error) {
-    res.status(500).send({ error: 'An error occurred while updating the site' });
-}
+  }
 
-}
+  async registerSite(req, res) {
+    const user = req.params.id;
+    const site = req.body.site;
+
+
+    try {
+      let data = await this.readDatabase(ADMIN_TO_SITE_DATA);
+
+      if (Object.values(data).find(sites => sites.find(s => s === site))) {
+        return res.status(400).json({ message: "Site already registered under another admin" });
+      }
+
+      if (data[user]) {
+        if (!data[user].find(s => s === site)) {
+          data[user].push(site);
+          await this.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          return res.status(200).json({ message: "Site registered successfully", data });
+        } else {
+          return res.status(400).json({ message: "Site already exists" });
+        }
+      } else {
+        return res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+
+  async registerDevice(req, res) {
+    const site = req.params.id;
+    const device = req.body.device;
+
+
+    try {
+      let data = await this.readDatabase(SITE_TO_DEVICE_DATA);
+
+      if (Object.values(data).find(devices => devices.find(d => d === device))) {
+        return res.status(400).json({ message: "Device already registered under another site" });
+      }
+
+      if (data[site]) {
+        if (!data[site].find(d => d === device)) {
+          data[site].push(device);
+          await this.writeDatabase(SITE_TO_DEVICE_DATA, data);
+          return res.status(200).json({ message: "Device registered successfully", data });
+        } else {
+          return res.status(400).json({ message: "Device already exists" });
+        }
+      } else {
+        return res.status(404).json({ message: "Site not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
 }
 module.exports = new JsonController();

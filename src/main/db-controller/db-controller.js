@@ -171,6 +171,13 @@ async fetchAllSites() {
   async putDevice(req,res) {
         await jsonController.putDevice(req,res);
       }
+
+  async registerSite(req, res){
+    await jsonController.registerSite(req, res);
+  }
+  async registerDevice(req, res) {
+    await jsonController.registerDevice(req, res);
+  }
   }
 
 

@@ -1,7 +1,18 @@
 {
-  "user_1": ["site_1", "site_2","site_5"],
-  "user_2": ["site_3", "site_4"],
-  "user_3": [ "site_6"]
+  "user_1": [
+    "site_1",
+    "site_2",
+    "site_5",
+    "site_9"
+  ],
+  "user_2": [
+    "site_3",
+    "site_4",
+    "site_10",
+    "site_8"
+  ],
+  "user_3": [
+    "site_6",
+    "site_7"
+  ]
 }
-
-  
