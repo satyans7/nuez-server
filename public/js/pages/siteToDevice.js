@@ -1,5 +1,5 @@
 import {
-    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping } from '../client/client.js';
+    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping ,registerDevice} from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
 const allConsumerContainer = document.querySelector('#consumer-list');
@@ -28,7 +28,23 @@ await viewAlldevices();
 
 registerBtn.addEventListener('click', () => {
     toggleVisibility('register');
+    const button = document.getElementById('register-id');
+button.addEventListener('click', async(event) => {
+    event.preventDefault();
+    const deviceid= document.getElementById('register-device-id').value;
+    const siteid= getCurrentSite();
+    const devicedata= {
+        "device" : deviceid
+    };
+        const jsonResponse = await registerDevice(devicedata,siteid);
+  
+        alert(jsonResponse.message);
+          form.reset();  
+
+})
+
 });
+
 
 deregisterBtn.addEventListener('click', () => {
     toggleVisibility('deregister');

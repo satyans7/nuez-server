@@ -1,4 +1,4 @@
-import { getSitesData, getUserSiteMapping } from '../client/client.js';
+import { getSitesData, getUserSiteMapping,registerDevice,registerSite } from '../client/client.js';
 
 const allSitesContainer = document.querySelector('.all-sites');
 const registerTab = document.getElementById('register-form-container');
@@ -22,6 +22,19 @@ registerBtn.addEventListener('click', () => {
     allSitesContainer.style.display = 'none';
     deregisterTab.style.display = 'none';
     registerTab.style.display = 'block';
+
+    const form = document.getElementById('register-site-form');
+    form.addEventListener('submit', async(event) =>{
+        event.preventDefault();
+        const user = getCurrentAdmin();
+        const ob = {
+            site : document.getElementById('site-id').value
+        }
+
+        const res = await registerSite(ob, user);
+        alert(res.message);
+        form.reset();        
+    })
 })
 
 deregisterBtn.addEventListener('click', () => {
