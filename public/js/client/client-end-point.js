@@ -32,6 +32,10 @@ const AEP_TO_FETCH_CONSUMERS_TO_DEVICES = "/api/consumer/consumertodevice";
 const AEP_TO_PUT_SITE = "/api/admin/sites";
 const AEP_TO_PUT_DEVICE= "/api/admin/devices";
 
+//deregister
+const AEP_TO_DELETE_SITE_DEVICE_MAPPING = "";
+
+
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
@@ -129,6 +133,12 @@ export function getApiToFetchConsumerDeviceMapping() {
   return AEP_TO_FETCH_CONSUMERS_TO_DEVICES;  //MAPPING CONSUMER->DEVICE
 }
 
+//delete a device
+export function getApiToDeleteSiteDeviceMapping(siteId, deviceId) {
+  return `${AEP_TO_DELETE_SITE_DEVICE_MAPPING}/${siteId}/${deviceId}`;
+}
+
+
 export async function fetchPost(url, data) {
   const response = await fetch(url, {
     method: "POST",
@@ -165,6 +175,17 @@ export async function fetchPut(url, data) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
+  });
+
+  return response.json();
+}
+
+export async function fetchDelete(url) {
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    }
   });
 
   return response.json();

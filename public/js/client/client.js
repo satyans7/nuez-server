@@ -113,6 +113,7 @@ export async function getConsumerDeviceMapping() {
     return data
 }
 
+
 //
 export async function getAllAdminKeys() {
     const response = await controller.fetchAllAdminsFromServer();
@@ -129,5 +130,11 @@ export async function getAllAdminKeys() {
 //device profile update
 export async function updateDeviceData(id, request) {
     console.log(`updating details for device with id: ${id}`);
-    await controller.updateDevice(id, request);
+   return await controller.updateDevice(id, request);
+}
+
+
+//DELETE SITE DEVICE MAPPING
+export async function deleteSiteToDeviceMapping(siteId,deviceId){
+    return await controller.deleteSiteToDeviceMapping(siteId,deviceId);
 }

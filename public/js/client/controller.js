@@ -149,3 +149,16 @@ export async function updateDevice(id, data) {
     console.log('Device ID:', id);
  }
  
+ export async function deleteSiteToDeviceMapping(siteId, deviceId) {
+    const api = cep.getApiToDeleteSiteDeviceMapping(siteId, deviceId);
+
+    // Make a DELETE request to the API endpoint
+    const response = await cep.fetchDelete(api);
+
+    // Check if the response is successful
+    if (response && response.success) {
+        return response;
+    } else {
+        throw new Error(`Failed to delete site-device mapping: ${response.message || 'Unknown error'}`);
+    }
+}
