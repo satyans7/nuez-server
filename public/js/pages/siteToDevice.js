@@ -203,6 +203,12 @@ function createConsumerCard(consumer, key) {
     return consumerCard;
 }
 
+function getCurrentAdmin() {
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    return searchParams.get('adminId');
+  }
+  
 async function updateSiteInfo(){
     const val = await getSitesData()
     const newData = {
@@ -219,3 +225,5 @@ async function updateSiteInfo(){
     setForm();
 
 }
+
+
