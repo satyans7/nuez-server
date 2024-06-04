@@ -7,30 +7,30 @@ class DbController {
     return data;
   }
 
-  async saveotpemail(otp,email){
-    return await jsonController.saveotpemail(email,otp);
+  async saveotpemail(otp, email) {
+    return await jsonController.saveotpemail(email, otp);
   }
 
-  async updateotpemail(otp,email){
-    return await jsonController.updateotpemail(email,otp);
+  async updateotpemail(otp, email) {
+    return await jsonController.updateotpemail(email, otp);
   }
 
-  async deleteOTPByEmail(email){
+  async deleteOTPByEmail(email) {
     return await jsonController.deleteOTPByEmail(email);
   }
-   
-  async isOTPRequested(email){
+
+  async isOTPRequested(email) {
     return await jsonController.isOTPRequested(email);
   }
-  async findOTPByEmail(email){
+  async findOTPByEmail(email) {
     return await jsonController.findOTPByEmail(email);
   }
 
-  
+
   async isEmailReserved(email) {
     return await jsonController.isEmailReserved(email);
   }
-  
+
   async postUserDataToServer(user) {
     const isReserved = await this.isEmailReserved(user.email);
     if (isReserved) {
@@ -81,16 +81,16 @@ class DbController {
 
   async isEmailReserved(email) {
     return await jsonController.isEmailReserved(email);
-}
+  }
 
-  
+
 
   async deleteReqByUserId(userId) {
     return await jsonController.deleteReqByUserId(userId);
   }
 
-  async addResponseToLog(delUser, userData,timeStamp) {
-    await jsonController.addResponseToLog(delUser, userData,timeStamp);
+  async addResponseToLog(delUser, userData, timeStamp) {
+    await jsonController.addResponseToLog(delUser, userData, timeStamp);
   }
 
   async roleChange(userId) {
@@ -101,16 +101,16 @@ class DbController {
     // console.log(typeof(email));
     const users = await this.fetchAllUsers()
     // console.log(users);
-    for(let userId in  users ){
+    for (let userId in users) {
       // console.log(userId)
-      if(users[userId].email===email){
+      if (users[userId].email === email) {
         // console.log("matched")
-        let newobj= users[userId];
+        let newobj = users[userId];
         // let newobj={
         //   _id:userId,
         //   ...newo
         // }
-        newobj["_id"]=userId;
+        newobj["_id"] = userId;
         console.log(newobj);
         return newobj;
       }
@@ -119,24 +119,24 @@ class DbController {
   }
 
   //////////////FOR TEST PURPOSE USE THIS/////////////
-  async test(data){
+  async test(data) {
     await jsonController.postUserDataToServer(data);
   }
 
 
-// ADMIN_TO_SITE_MAPPING
-  async  fetchAllAdminToSite() {
+  // ADMIN_TO_SITE_MAPPING
+  async fetchAllAdminToSite() {
     let data = await jsonController.fetchAllAdminToSite();
     return data;
   }
 
-//fetch all sites
-async fetchAllSites() {
-  let data = await jsonController.fetchAllSites();
-  return data;
-}
+  //fetch all sites
+  async fetchAllSites() {
+    let data = await jsonController.fetchAllSites();
+    return data;
+  }
 
-// Site to device mapping
+  // Site to device mapping
 
   async fetchAllSitetoDevice() {
     let data = await jsonController.fetchAllSitetoDevice();
@@ -149,36 +149,46 @@ async fetchAllSites() {
     return data;
   }
   //consumer to device mapping
-  async fetchAllConsumertoDevice(){
-    let data =await jsonController.fetchConsumerToDevice();
+  async fetchAllConsumertoDevice() {
+    let data = await jsonController.fetchConsumerToDevice();
     return data;
   }
 
   //site to consumer mapping
-  async fetchAllSiteToConsumer(){
-    let data=await jsonController.fetchSiteToConsumer();
+  async fetchAllSiteToConsumer() {
+    let data = await jsonController.fetchSiteToConsumer();
     return data;
   }
 
 
 
 
-  async putSite(req,res) {
-      await jsonController.putSite(req,res);
-    }
+  async putSite(req, res) {
+    await jsonController.putSite(req, res);
+  }
 
 
-  async putDevice(req,res) {
-        await jsonController.putDevice(req,res);
-      }
+  async putDevice(req, res) {
+    await jsonController.putDevice(req, res);
+  }
 
-  async registerSite(req, res){
+  async registerSite(req, res) {
     await jsonController.registerSite(req, res);
+  }
+
+  async deregisterSite(req, res) {
+    await jsonController.deregisterSite(req, res);
+
   }
   async registerDevice(req, res) {
     await jsonController.registerDevice(req, res);
   }
+
+  async deregisterDevice(req, res) {
+    await jsonController.deregisterDevice(req, res);
+
   }
+}
 
 
 

@@ -345,6 +345,29 @@ class JsonController {
     }
   }
 
+  async deregisterSite(req, res) {
+    const user = req.params.id;
+    const site = req.body.site;
+    let data = await this.readDatabase(ADMIN_TO_SITE_DATA);
+    try {
+      if (data[user]) {
+        const siteIndex = data[user].findIndex(s => s === site);
+        if (siteIndex > -1) {
+          data[user].splice(siteIndex, 1);
+          await this.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          return res.status(200).json({ message: "Site deleted successfully", data });
+        } else {
+          return res.status(400).json({ message: "Site not found for this user" });
+        }
+      } else {
+        return res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
 
   async registerDevice(req, res) {
     const site = req.params.id;
@@ -374,5 +397,32 @@ class JsonController {
       return res.status(500).json({ message: "Internal server error" });
     }
   }
+
+  async deregisterDevice(req, res) {
+    const site = req.params.id;
+    const device = req.body.device;
+    let data = await this.readDatabase(SITE_TO_DEVICE_DATA);
+    try {
+      if (data[site]) {
+        const deviceIndex = data[site].findIndex(d => d === device);
+        if (deviceIndex > -1) {
+          data[site].splice(deviceIndex, 1);
+          await this.writeDatabase(SITE_TO_DEVICE_DATA, data);
+          return res.status(200).json({ message: "Device deleted successfully", data });
+        } else {
+          return res.status(400).json({ message: "Device not found for this site" });
+        }
+      } else {
+        return res.status(404).json({ message: "Site not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+  }
+
+
+
 }
 module.exports = new JsonController();

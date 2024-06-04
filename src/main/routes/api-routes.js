@@ -55,7 +55,9 @@ module.exports = function (app) {
 const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
 
   const AEP_TO_REGISTER_SITE = "/api/admin/registersite/:id"
+  const AEP_TO_DEREGISTER_SITE = "/api/admin/deregistersite/:id"
   const AEP_TO_REGISTER_DEVICE = "/api/admin/registerdevice/:id"
+  const AEP_TO_DEREGISTER_DEVICE = "/api/admin/deregisterdevice/:id"
 
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -239,9 +241,16 @@ const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
   app.post(AEP_TO_REGISTER_SITE, async(req, res) =>{
     await controller.registerSite(req, res);
   })
+  app.delete(AEP_TO_DEREGISTER_SITE, async (req, res) => {
+    await controller.deregisterSite(req, res);
+  })
 
   app.post(AEP_TO_REGISTER_DEVICE, async (req, res) => {
     await controller.registerDevice(req, res);
+  })
+
+  app.delete(AEP_TO_DEREGISTER_DEVICE, async(req, res) =>{
+    await controller.deregisterDevice(req, res);
   })
 };
 

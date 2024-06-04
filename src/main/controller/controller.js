@@ -1,6 +1,6 @@
 const dbController = require("../db-controller/db-controller");
 const authController = require("../auth-controller/auth-controller");
-const otpGeneratorUtility=require("../utils/otp-generator")
+const otpGeneratorUtility = require("../utils/otp-generator")
 const ntpClient = require('ntp-client');
 class Controller {
   //////////// FETCHING SAMPLE DATA///////////////////////////////////////////////
@@ -15,31 +15,31 @@ class Controller {
     try {
       const email = req.body.email;
 
-         // Check if email is reserved
-         const isReserved = await dbController.isEmailReserved(email);
+      // Check if email is reserved
+      const isReserved = await dbController.isEmailReserved(email);
 
-         if (isReserved) {
-           
-             return res.status(400).json({ success: false, message: 'Username already exists' });
-         }
-  
+      if (isReserved) {
+
+        return res.status(400).json({ success: false, message: 'Username already exists' });
+      }
+
       // Validate email uniqueness
       const isUnique = await this.validateUniquenessOfUserName(email);
-  
+
       if (isUnique) {
-        
+
         return res.status(400).json({ success: false, message: 'Username already exists' });
       } else {
         // Register the new user
         const newUserId = await dbController.postUserDataToServer(req.body);
         // console.log('New user registered:', newUser);
-  
+
         // Additional handling for admin role
         console.log(req.body.role);
         if (req.body.role === 'admin') {
           await dbController.postUserRequestToServer(newUserId, req.body.role);
         }
-  
+
         return res.status(201).json({ success: true, message: 'Successfully registered' });
       }
     } catch (error) {
@@ -50,26 +50,26 @@ class Controller {
 
 
   /////////////////////AUTHENTICATE USER/////////////////////////
-//isko mt chedna
+  //isko mt chedna
   async authenticateUser(formData) {
     try {
-        let authResult = await authController.authenticateUser(formData);
-        console.log("authResult")
-        if (authResult.success) {
-            if (authResult.route) {
-                // Handle special case for reserved emails
-                return { success: true, route: authResult.route, message: authResult.message };
-            } else {
-                let route = `/api/${authResult.role}-dashboard/${authResult._id}`;
-                return { success: true, route: route, message: 'Logged In Successfully' };
-            }
+      let authResult = await authController.authenticateUser(formData);
+      console.log("authResult")
+      if (authResult.success) {
+        if (authResult.route) {
+          // Handle special case for reserved emails
+          return { success: true, route: authResult.route, message: authResult.message };
         } else {
-            return { success: false, route: 'null', message: 'Invalid username or password!!!' };
+          let route = `/api/${authResult.role}-dashboard/${authResult._id}`;
+          return { success: true, route: route, message: 'Logged In Successfully' };
         }
+      } else {
+        return { success: false, route: 'null', message: 'Invalid username or password!!!' };
+      }
     } catch (error) {
-        return { success: false, route: 'null', message: 'Internal Server Error' };
+      return { success: false, route: 'null', message: 'Internal Server Error' };
     }
-}
+  }
   ///////////////////////////////////////UNUSED/////////////////////////////////////////////////////
   async updateProfileOfUser() {
     let data = await dbController.fetchSampleDataFromServer();
@@ -81,12 +81,12 @@ class Controller {
   }
   ////////////////-----------------------------------------------------------------///////////////////
 
-  
+
   //////////////////////////SEND A REQ FOR ROLE CHANGE///////////////////////////////////////////////
   async requestRoleChange(req) {
     let userId = req.body._id;
     // const user = await dbController.fetchUserById(userId);
-   
+
     const reqRole = req.body.reqRole;
     await dbController.requestRoleChange(userId, reqRole);
   }
@@ -96,7 +96,7 @@ class Controller {
     const userId = req.body._id;
     const delUser = await dbController.deleteReqByUserId(userId);
     const timeStamp = await this.getTimeAndDate();
-    await dbController.addResponseToLog(delUser, req.body,timeStamp);
+    await dbController.addResponseToLog(delUser, req.body, timeStamp);
     if (action === "approved") {
       await dbController.roleChange(userId);
     }
@@ -118,19 +118,19 @@ class Controller {
     //   return await ntpTime.toLocaleString();
     // } catch (error) {
     //   console.error('Error fetching time from NTP:', error);
-      const localTime = new Date();
-      console.log('Using local time:', localTime);
-      return localTime.toLocaleString();
-    
+    const localTime = new Date();
+    console.log('Using local time:', localTime);
+    return localTime.toLocaleString();
+
   }
   //////////////////////////////////////////FIND USER BY EMAIL///////////////////
   async findUserByEmail(email) {
     // console.log(typeof(email));
     const users = await this.fetchAllUsers()
     // console.log(users);
-    for(let userId in  users ){
+    for (let userId in users) {
       // console.log(userId)
-      if(users[userId].email===email){
+      if (users[userId].email === email) {
         // console.log("matched")
         return users[userId]
       }
@@ -141,11 +141,11 @@ class Controller {
   async validateUniquenessOfUserName(username) {
     const user = await this.findUserByEmail(username);
     // console.log(user);
-    const size=Object.keys(user).length
-    if(size){
+    const size = Object.keys(user).length
+    if (size) {
       return true;
     }
-    else{
+    else {
       return false;
     }
   }
@@ -157,52 +157,54 @@ class Controller {
   ////////////////////////////FETCH ALL ADMIN INFO/////////////////////////////////
   async fetchAllAdminInfo() {
     let data = await dbController.fetchAllUsers();
-    
-    const newObject={};
-    let ids=Object.keys(data);
+
+    const newObject = {};
+    let ids = Object.keys(data);
     ids.forEach(id => {
       const user = data[id];
-      if(user.role==='admin'){
-      newObject[id] = {
+      if (user.role === 'admin') {
+        newObject[id] = {
           name: user.name,
           email: user.email,
-          role: user.role 
-      };}
-  });
+          role: user.role
+        };
+      }
+    });
     return newObject;
   }
   //////////////////////////////FETCH ALL CONSUMER INFO/////////////////////////////
-  async fetchAllConsumerInfo(){
+  async fetchAllConsumerInfo() {
     let data = await dbController.fetchAllUsers();
-    
-    const newObject={};
-    let ids=Object.keys(data);
+
+    const newObject = {};
+    let ids = Object.keys(data);
     ids.forEach(id => {
       const user = data[id];
-      if(user.role==='consumer'){
-      newObject[id] = {
+      if (user.role === 'consumer') {
+        newObject[id] = {
           name: user.name,
           email: user.email,
-          role: user.role 
-      };}
-  });
+          role: user.role
+        };
+      }
+    });
     return newObject;
   }
   //////////////////////////FETCH ALL ROLE CHANGE REQ///////////////////////////////
   async fetchRoleChangeReq() {
     let data = await dbController.fetchRoleChangeReq();
-    const newObject={};
-    let ids=Object.keys(data);
+    const newObject = {};
+    let ids = Object.keys(data);
     ids.forEach(id => {
       const user = data[id];
       newObject[id] = {
-          name: user.name,
-          currentRole: user.currentRole,
-          requestedRole: user.requestedRole,
-          requestStatus: user.requestStatus
-      
+        name: user.name,
+        currentRole: user.currentRole,
+        requestedRole: user.requestedRole,
+        requestStatus: user.requestStatus
+
       };
-  });
+    });
     return newObject;
   }
   /////////////////////////FETCH THE APPROVED LOG/////////////////////////
@@ -221,38 +223,38 @@ class Controller {
     return data;
   }
 
- 
+
   ///////////TESTING CONTROLLER///////////
-  async test (){
+  async test() {
     return await this.postUserRequestToServer();
   }
 
-  async OTPGenerationAndStorage(email){
-   const otp =otpGeneratorUtility.generateOTP();
-    await authController.sendVerificationEmail(email,otp);
-    const OTPAlreadyRequested=await dbController.isOTPRequested(email);
-     if(OTPAlreadyRequested){
-      return await dbController.updateotpemail(email,otp);
-     }
-     else return await dbController.saveotpemail(email,otp);
+  async OTPGenerationAndStorage(email) {
+    const otp = otpGeneratorUtility.generateOTP();
+    await authController.sendVerificationEmail(email, otp);
+    const OTPAlreadyRequested = await dbController.isOTPRequested(email);
+    if (OTPAlreadyRequested) {
+      return await dbController.updateotpemail(email, otp);
+    }
+    else return await dbController.saveotpemail(email, otp);
   }
-  async OTPVerification(email,providedotp){
-    const authResult= await authController.verifyOTP(email,providedotp);
+  async OTPVerification(email, providedotp) {
+    const authResult = await authController.verifyOTP(email, providedotp);
     if (authResult.success) {
-          await dbController.deleteOTPByEmail(email);
-          let route = `/api/${authResult.role}-dashboard`;
-          return { success: true, route: route, message: 'Logged In Successfully' };
-      }
-   else {
+      await dbController.deleteOTPByEmail(email);
+      let route = `/api/${authResult.role}-dashboard`;
+      return { success: true, route: route, message: 'Logged In Successfully' };
+    }
+    else {
       return { success: false, route: 'null', message: 'Invalid username or password!!!' };
+    }
   }
- }
-  
-  
 
-// const obj = new Controller();
-// obj.OTPGenerationAndStorage("priyansu.iitism@gmail.com");
-// obj.OTPVerification("priyansu.iitism@gmail.com","Wz8pRT");
+
+
+  // const obj = new Controller();
+  // obj.OTPGenerationAndStorage("priyansu.iitism@gmail.com");
+  // obj.OTPVerification("priyansu.iitism@gmail.com","Wz8pRT");
 
   //ADMIN_TO_SITE_MAPPING
   async fetchAllAdminToSite() {
@@ -260,13 +262,13 @@ class Controller {
     return data;
   }
 
-//Fetch all sites
-async fetchAllSites() {
-  let data = await dbController.fetchAllSites();
-  return data;
-}
+  //Fetch all sites
+  async fetchAllSites() {
+    let data = await dbController.fetchAllSites();
+    return data;
+  }
 
-// Site to device mapping
+  // Site to device mapping
 
   async fetchAllSiteToDevice() {
     let data = await dbController.fetchAllSitetoDevice();
@@ -282,35 +284,45 @@ async fetchAllSites() {
 
   //fetch all consumer to device
   async fetchAllConsumerToDevice() {
-    let data =await dbController.fetchAllConsumertoDevice();
+    let data = await dbController.fetchAllConsumertoDevice();
     return data;
   }
 
   //fetch all site to consumer
-  async fetchAllSiteToConsumer(){
-    let data=await dbController.fetchAllSiteToConsumer();
+  async fetchAllSiteToConsumer() {
+    let data = await dbController.fetchAllSiteToConsumer();
     return data;
   }
 
 
-  async putSite(req,res) {
-    
-    await dbController.putSite(req,res);
+  async putSite(req, res) {
+
+    await dbController.putSite(req, res);
   }
 
-  async putDevice(req,res) {
+  async putDevice(req, res) {
 
-    await dbController.putDevice(req,res);
+    await dbController.putDevice(req, res);
   }
 
-  async registerSite(req, res){
+  async registerSite(req, res) {
     await dbController.registerSite(req, res)
   }
 
-  async registerDevice(req, res) {
-    await dbController.registerDevice(req, res)
+  async deregisterSite(req, res) {
+    await dbController.deregisterSite(req, res);
+
   }
-  
+
+  async registerDevice(req, res) {
+    await dbController.registerDevice(req, res);
+  }
+
+  async deregisterDevice(req, res) {
+    await dbController.deregisterDevice(req, res);
+
+  }
+
 }
 
 module.exports = new Controller();
