@@ -181,3 +181,21 @@ export async function deregisterSite(id,data){
 
     return response;
 }
+
+
+//register consumer to device mapping
+export async function registerConsumerDevice(data,id) {
+    const api = cep.getApiToRegisterConsumerDeviceMapping(id);
+    const response = await cep.fetchPost(api,data);
+        return response;
+    
+}
+
+//deregister consumer to device mapping
+export async function deregisterConsumerDevice(id,data){
+    const api= cep.getApiToDeregisterConsumerDeviceMapping(id);
+    const response = await cep.fetchDelete(api,data);
+    console.log(response);
+
+    return response;
+}

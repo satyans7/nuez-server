@@ -28,6 +28,24 @@
         <div id="device-list" class="all-devices"></div>
     </div>
 
+    <div id="register-form-container" class="form-container" style="display: none;">
+        <form id="register-consumer-device-form">
+            <label for="register-device-id">Device ID:</label>
+            <input type="text" id="register-device-id" name="device-id" required>
+            <button type="submit">Register</button>
+            <button type="button" id="cancel-register-button">Cancel</button>
+        </form>
+    </div>
+
+    <div id="deregister-form-container" class="form-container" style="display: none;">
+        <form id="deregister-consumer-device-form">
+            <label for="deregister-device-id">Device ID:</label>
+            <input type="text" id="deregister-device-id" name="device-id" required>
+            <button type="submit">Deregister</button>
+            <button type="button" id="cancel-deregister-button">Cancel</button>
+        </form>
+    </div>
+
     <script type="module" src="/js/pages/consumer.js"></script>
 
 </body>
