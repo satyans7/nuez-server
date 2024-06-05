@@ -188,6 +188,15 @@ class DbController {
     await jsonController.deregisterDevice(req, res);
 
   }
+
+  async registerConsumerToDeviceMapping(req, res) {
+    await jsonController.registerConsumerToDeviceMapping(req, res);
+  }
+
+  async deregisterConsumerToDeviceMapping(req, res) {
+    await jsonController.deregisterConsumerToDeviceMapping(req, res);
+
+  }
 }
 
 

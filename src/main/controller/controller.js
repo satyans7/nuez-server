@@ -323,6 +323,14 @@ class Controller {
 
   }
 
+  async registerConsumerToDeviceMapping(req, res) {
+    await dbController.registerConsumerToDeviceMapping(req, res);
+  }
+
+  async deregisterConsumerToDeviceMapping(req, res) {
+    await dbController.deregisterConsumerToDeviceMapping(req, res);
+  }
+
 }
 
 module.exports = new Controller();

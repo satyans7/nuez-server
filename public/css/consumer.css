@@ -47,21 +47,28 @@ body {
     margin: 0;
 }
 
-.button-group {
+#button-container {
+    margin-top: 20px;
     display: flex;
+    justify-content: center;
     gap: 10px;
 }
 
-.header button {
-    background-color: white;
-    color: #2c3e50;
+#register-consumer-device,
+#deregister-consumer-device {
+    background-color: #2c3e50;
+    color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    height: 40px;
     font-weight: 600;
     font-size: medium;
     cursor: pointer;
+}
+
+#register-consumer-device:hover,
+#deregister-consumer-device:hover {
+    background-color: #34495e;
 }
 
 .all-devices {
@@ -78,7 +85,6 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    padding-top: 5px;
     flex: 1;
     min-width: 30%;
     max-width: 30%;
@@ -102,26 +108,38 @@ body {
     cursor: pointer;
 }
 
-#button-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+.form-container {
+    width: 50%;
+    margin: auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 5%;
 }
 
-#register-consumer,
-#deregister-consumer {
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container label,
+.form-container input,
+.form-container button {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.form-container button {
     background-color: #2c3e50;
     color: white;
-    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    margin-right: 10px;
-    font-weight: 600;
-    font-size: medium;
+    padding: 10px;
     cursor: pointer;
 }
 
-#register-consumer:hover,
-#deregister-consumer:hover {
+.form-container button:hover {
     background-color: #34495e;
 }

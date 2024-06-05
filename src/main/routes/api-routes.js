@@ -59,6 +59,9 @@ const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
   const AEP_TO_REGISTER_DEVICE = "/api/admin/registerdevice/:id"
   const AEP_TO_DEREGISTER_DEVICE = "/api/admin/deregisterdevice/:id"
 
+  const AEP_TO_REGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/registerconsumertodevice/:id";
+const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsumertodevice/:id";
+
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -252,7 +255,19 @@ const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
   app.delete(AEP_TO_DEREGISTER_DEVICE, async(req, res) =>{
     await controller.deregisterDevice(req, res);
   })
+
+  app.post(AEP_TO_REGISTER_CONSUMER_TO_DEVICE_MAPPING, async(req, res) =>{
+    await controller.registerConsumerToDeviceMapping(req, res);
+  })
+
+  app.delete(AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING, async(req, res) =>{
+    await controller.deregisterConsumerToDeviceMapping(req, res);
+  })
 };
+
+
+
+
 
 
 

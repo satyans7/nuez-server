@@ -423,6 +423,60 @@ class JsonController {
   }
 
 
+  async registerConsumerToDeviceMapping(req, res) {
+    const consumer = req.params.id;
+    const device = req.body.device;
+
+
+    try {
+      let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+
+      if (Object.values(data).find(devices => devices.find(d => d === device))) {
+        return res.status(400).json({ message: "Device already registered under another site" });
+      }
+
+     else  if (data[consumer]) {
+        if (!data[consumer].find(d => d === device)) {
+          data[consumer].push(device);
+          await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
+          return res.status(200).json({ message: "Device registered successfully", data });
+        } else {
+          return res.status(400).json({ message: "Device already exists" });
+        }
+      } else {
+        return res.status(404).json({ message: "Site not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+
+  async deregisterConsumerToDeviceMapping(req, res) {
+    const consumer = req.params.id;
+    const device = req.body.device;
+    let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+    try {
+      if (data[consumer]) {
+        const deviceIndex = data[consumer].findIndex(d => d === device);
+        if (deviceIndex > -1) {
+          data[consumer].splice(deviceIndex, 1);
+          await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
+          return res.status(200).json({ message: "Device deleted successfully", data });
+        } else {
+          return res.status(400).json({ message: "Device not found for this site" });
+        }
+      } else {
+        return res.status(404).json({ message: "Site not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+  }
+
 
 }
 module.exports = new JsonController();
