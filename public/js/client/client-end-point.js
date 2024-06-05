@@ -153,6 +153,10 @@ export function getApiToRegisterDevice(id)
   return  `${AEP_TO_REGISTER_DEVICE}/${id}`;
 }
 
+export function getApiToDeregisterSite(id){
+  return `${AEP_TO_DEREGISTER_SITE}/${id}`;
+}
+
 export async function fetchPost(url, data) {
   const response = await fetch(url, {
     method: "POST",
@@ -166,19 +170,6 @@ export async function fetchPost(url, data) {
 }
 
 
-
-/*export async function fetchPut(url, data) {
-  const response = await fetch(url, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  return response.json();
-}
-*/
 export async function fetchPut(url, data) {
   console.log('PUT request URL:', url);
   console.log('PUT request data:', data);

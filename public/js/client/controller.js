@@ -173,3 +173,11 @@ export async function registerDevice(data,id) {
         return response;
     
 }
+
+export async function deregisterSite(id,data){
+    const api= cep.getApiToDeregisterSite(id);
+    const response = await cep.fetchDelete(api,data);
+    console.log(response);
+
+    return response;
+}

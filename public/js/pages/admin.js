@@ -1,4 +1,4 @@
-import { getSitesData, getUserSiteMapping,registerDevice,registerSite } from '../client/client.js';
+import { getSitesData, getUserSiteMapping,registerDevice,registerSite,deregisterSite } from '../client/client.js';
 
 const allSitesContainer = document.querySelector('.all-sites');
 const registerTab = document.getElementById('register-form-container');
@@ -8,6 +8,7 @@ const deregisterBtn = document.getElementById('deregister-site-button');
 const viewSitesBtn = document.getElementById('view-site-button')
 const headingText = document.getElementById('heading');
 const currentAdmin = document.getElementById('admin-id')
+const deregisterform= document.getElementById('deregister-site-form')
 
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${getCurrentAdmin()}`
@@ -41,6 +42,29 @@ deregisterBtn.addEventListener('click', () => {
     allSitesContainer.style.display = 'none';
     registerTab.style.display = 'none';
     deregisterTab.style.display = 'block';
+   
+    document.getElementById('deregister-site-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+      
+        const siteId = document.getElementById('deregister-site-id').value;
+        const user= getCurrentAdmin();
+        console.log(siteId);
+        const object={
+            site: siteId
+        }
+    
+        try {
+          const response = await deregisterSite(user,object);
+          viewAllSites();
+        alert(response.message);
+        deregisterform.reset();
+        
+        } catch (error) {
+          console.error('Error deregistering site:', error);
+          alert(`${error.message}`);
+        }
+      });
+
 })
 
 viewSitesBtn.addEventListener('click', async () => {

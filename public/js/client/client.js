@@ -149,3 +149,10 @@ export async function registerDevice(data,id)
 export async function deleteSiteToDeviceMapping(id,request) {
     return await controller.deleteSiteToDeviceMapping(id,request);
   }
+
+export async function deregisterSite(id,data)
+{
+    const response= await controller.deregisterSite(id,data);
+    
+    return response;
+}
