@@ -159,12 +159,7 @@ export async function updateDevice(id, data) {
 export async function registerSite(data,id) {
     const api = cep.getApiToRegisterSite(id);
     const response = await cep.fetchPost(api,data);
-
-    if (response && response.success) {
-        return response;
-    } else {
-        throw new Error(`Failed to delete site-device mapping: ${response.message || 'Unknown error'}`);
-    }
+    return response;
 }
 
 export async function registerDevice(data,id) {

@@ -18,7 +18,7 @@ const currentid = document.createElement('h1');
 currentid.textContent = `Id : ${getCurrentAdmin()}`
 currentAdmin.appendChild(currentid)
 
-
+//REGISTER SITE
 registerBtn.addEventListener('click', () => {
     allSitesContainer.style.display = 'none';
     deregisterTab.style.display = 'none';
@@ -33,11 +33,21 @@ registerBtn.addEventListener('click', () => {
         }
 
         const res = await registerSite(ob, user);
+        viewAllSites();
         alert(res.message);
         form.reset();        
     })
 })
 
+  //when cancel button is clicked on register form 
+  document.getElementById('register-cancel-button').addEventListener('click', () => {
+    deregisterTab.style.display = 'none';
+    allSitesContainer.style.display = 'block';
+    registerTab.style.display = 'block';
+    viewAllSites();
+});
+
+//DEREGISTER SITE
 deregisterBtn.addEventListener('click', () => {
     allSitesContainer.style.display = 'none';
     registerTab.style.display = 'none';
@@ -64,6 +74,14 @@ deregisterBtn.addEventListener('click', () => {
           alert(`${error.message}`);
         }
       });
+
+      //when cancel button is clicked
+      document.getElementById('deregister-cancel-button').addEventListener('click', () => {
+        deregisterTab.style.display = 'none';
+        allSitesContainer.style.display = 'block';
+        registerTab.style.display = 'block';
+        viewAllSites();
+    });
 
 })
 
