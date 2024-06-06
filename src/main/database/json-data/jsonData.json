@@ -5,19 +5,19 @@
     "password": "password123",
     "role": "admin"
   },
-  "user_2":{
+  "user_2": {
     "name": "Bob Smith",
     "email": "bob.smith@example.com",
     "password": "password123",
     "role": "admin"
   },
-  "user_3":{
+  "user_3": {
     "name": "Nikhil Priyadarshan",
     "email": "nikhilpriyadarshan1234@gmail.com",
     "password": "12345678",
     "role": "admin"
   },
-  "user_4":{
+  "user_4": {
     "name": "Pankaj Sharma",
     "email": "oyeeitspankaj@gmail.com",
     "password": "12345678",
@@ -83,7 +83,6 @@
     "password": "thor123",
     "role": "consumer"
   },
-
   "user_17": {
     "name": "Elena Petrova",
     "email": "elena.petrova@example.com",
@@ -137,6 +136,11 @@
     "email": "aisha@example.com",
     "password": "aisha123",
     "role": "consumer"
+  },
+  "user_26": {
+    "name": "Brahma",
+    "email": "brahma@gmail.com",
+    "password": "12345",
+    "role": "admin"
   }
-
 }
