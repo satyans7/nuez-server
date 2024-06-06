@@ -1,36 +1,35 @@
 {
-    "site_1": [
-      "user_4",
-      "user_5",
-      "user_6",
-      "user_7"
-    ],
-    "site_2": [
-      "user_8",
-      "user_9",
-      "user_10",
-      "user_11",
-      "user_12",
-      "user_13"
-      
-    ],
-    "site_3": [
-      "user_14",
-      "user_15"
-    ],
-    "site_4": [
-      "user_16",
-      "user_17",
-      "user_18",
-      "user_19"
-    ],
-    "site_5": [
-      "user_20",
-      "user_21",
-      "user_22"
-    ],
-    "site_6": [
-      "user_23",
-      "user_24"
-    ]
+  "site_1": [
+    "user_4",
+    "user_5",
+    "user_6",
+    "user_7"
+  ],
+  "site_2": [
+    "user_8",
+    "user_9",
+    "user_10",
+    "user_11",
+    "user_12",
+    "user_13"
+  ],
+  "site_3": [
+    "user_14",
+    "user_15"
+  ],
+  "site_4": [
+    "user_16",
+    "user_17",
+    "user_18",
+    "user_19"
+  ],
+  "site_5": [
+    "user_20",
+    "user_21",
+    "user_22"
+  ],
+  "site_6": [
+    "user_23",
+    "user_24"
+  ]
 }

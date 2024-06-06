@@ -478,5 +478,60 @@ class JsonController {
   }
 
 
+
+  async registerConsumer(req, res) {
+    const site = req.params.id;
+    const consumer = req.body.consumer;
+
+
+    try {
+      let data = await this.readDatabase(SITE_TO_CONSUMER_DATA);
+
+      if (Object.values(data).find(consumers => consumers.find(c => c === consumer))) {
+        return res.status(400).json({ message: "Consumer already registered under another site" });
+      }
+
+     else if (data[site]) {
+        if (!data[site].find(c => c === consumer) ){
+          data[site].push(consumer);
+          await this.writeDatabase(SITE_TO_CONSUMER_DATA, data);
+          return res.status(200).json({ message: "Consumer registered successfully", data });
+        } else {
+          return res.status(400).json({ message: "Consumer already exists" });
+        }
+      } else {
+        return res.status(404).json({ message: "Site does  not exists" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  async deregisterConsumer(req, res) {
+    const site = req.params.id;
+    const consumer = req.body.consumer;
+    let data = await this.readDatabase( SITE_TO_CONSUMER_DATA);
+    try {
+      if (data[site]) {
+        const consumerIndex = data[site].findIndex(c => c === consumer);
+        if (consumerIndex > -1) {
+          data[site].splice(consumerIndex, 1);
+          await this.writeDatabase(SITE_TO_CONSUMER_DATA, data);
+          return res.status(200).json({ message: "Consumer deleted successfully", data });
+        } else {
+          return res.status(400).json({ message: "Consumer not found for this site" });
+        }
+      } else {
+        return res.status(404).json({ message: "Site does  not exists" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+
+
 }
 module.exports = new JsonController();

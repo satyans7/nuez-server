@@ -331,6 +331,16 @@ class Controller {
     await dbController.deregisterConsumerToDeviceMapping(req, res);
   }
 
+  async registerConsumer(req, res) {
+    await dbController.registerConsumer(req, res);
+  }
+
+  async deregisterConsumer(req, res) {
+    await dbController.deregisterConsumer(req, res);
+
+  }
+
+
 }
 
 module.exports = new Controller();
