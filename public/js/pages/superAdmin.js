@@ -111,8 +111,10 @@ async function loadUsersTable() {
                     }
                 });
                 goToButton.addEventListener('click', () => {
-                    window.location.href = `/api/consumer-dashboard/${id}`;
+                    const adminId = 'superadmin';
+                    window.location.href = `/api/consumer-dashboard/${id}?adminId=${adminId}`;
                 });
+                
                 actionCell.appendChild(requestButton);
                 actionCell.appendChild(goToButton);
                 row.appendChild(nameCell);
