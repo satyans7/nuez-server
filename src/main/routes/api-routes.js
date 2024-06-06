@@ -267,7 +267,6 @@ const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsume
   app.delete(AEP_TO_DEREGISTER_CONSUMER, async(req, res) =>{
     await controller.deregisterConsumer(req, res);
   })
-};
 
   app.post(AEP_TO_REGISTER_CONSUMER_TO_DEVICE_MAPPING, async(req, res) =>{
     await controller.registerConsumerToDeviceMapping(req, res);
