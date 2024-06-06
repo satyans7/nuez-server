@@ -233,15 +233,12 @@ const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsume
 
   app.put(AEP_TO_PUT_SITE,async(req,res)=>{
     await controller.putSite(req,res);
-    res.sendStatus(200);
   });
 
 
 
   app.put(AEP_TO_PUT_DEVICE,async(req,res)=>{
     await controller.putDevice(req,res);
-    res.sendStatus(200);
-
   });
 
   app.post(AEP_TO_REGISTER_SITE, async(req, res) =>{
