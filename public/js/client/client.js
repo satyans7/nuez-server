@@ -109,7 +109,7 @@ export async function updateSiteDataOnServer(data, id){
 //Consumer
 export async function getConsumerDeviceMapping() {
     const data =  await controller.getConsumerToDeviceMapping();
-    console.log(data)
+ //   console.log(data)
     return data
 }
 

@@ -1,5 +1,5 @@
 import {
-    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping ,registerDevice} from '../client/client.js';
+    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping ,registerDevice, getConsumerDeviceMapping } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
 const allConsumerContainer = document.querySelector('#consumer-list');
@@ -16,6 +16,9 @@ const editTab = document.getElementById('edit-form-container');
 const updateBtn = document.getElementById('update-button');
 const site = getCurrentSite();
 const deregisterForm= document.getElementById('deregister-device-form');
+const unassignedDevicesLink = document.getElementById('unassigned-devices-link');
+const unassignedDevicesContainer = document.getElementById('unassigned-devices-list');
+
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${site}`;
 headingText.appendChild(title);
@@ -81,6 +84,7 @@ function toggleVisibility(section) {
     registerTab.style.display = 'none';
     deregisterTab.style.display = 'none';
     editTab.style.display = 'none';
+    unassignedDevicesContainer.style.display = 'none'; // Hide unassigned devices container
 
     if (section === 'register') {
         registerTab.style.display = 'block';
@@ -88,6 +92,8 @@ function toggleVisibility(section) {
         deregisterTab.style.display = 'block';
     } else if (section === 'edit') {
         editTab.style.display = 'block';
+    } else if (section === 'unassigned-devices') { // New section
+        unassignedDevicesContainer.style.display = 'block';
     }
 }
 
@@ -283,3 +289,94 @@ document.getElementById('deregister-device-form').addEventListener('submit', asy
     }
   });
   
+
+
+// UNASSIGNED DEVICES
+
+unassignedDevicesLink.addEventListener('click', async () => {
+    toggleVisibility('unassigned-devices');
+    await viewUnassignedDevices();
+});
+
+async function viewUnassignedDevices() {
+    const siteToDeviceMapping = await getSiteDeviceMapping(); // Get device mapping for the current site
+    const consumerToDeviceMapping = await getConsumerDeviceMapping(); // Get consumer device mapping for all users
+    const siteConsumerMapping = await getSiteConsumerMapping(); // Get consumer mapping for the current site
+
+    unassignedDevicesContainer.innerHTML = ''; // Clear previous content
+
+    const devices = siteToDeviceMapping[site] || []; // Get devices for the current site
+
+    // Create the table structure
+    const table = document.createElement('table');
+    table.id = 'unassigned-devices-table';
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
+    // Create the table header row
+    const headerRow = document.createElement('tr');
+    const deviceIdHeader = document.createElement('th');
+    deviceIdHeader.textContent = 'Device ID';
+    const actionHeader = document.createElement('th');
+    actionHeader.textContent = 'Action';
+
+    headerRow.appendChild(deviceIdHeader);
+    headerRow.appendChild(actionHeader);
+    thead.appendChild(headerRow);
+
+    // Iterate through the devices and create table rows for unassigned devices
+    devices.forEach((deviceId, index) => {
+        if (!isDeviceAssigned(deviceId, consumerToDeviceMapping, siteConsumerMapping)) {
+            const row = createUnassignedDeviceRow(deviceId, index);
+            tbody.appendChild(row);
+        }
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    unassignedDevicesContainer.appendChild(table);
+}
+
+function isDeviceAssigned(deviceId, consumerToDeviceMapping, siteConsumerMapping) {
+    const consumers = siteConsumerMapping[site] || []; // Get consumers of the current site
+
+    // Iterate over the consumers and check if the device is assigned to any of them
+    for (const consumerId of consumers) {
+        if (consumerToDeviceMapping[consumerId]?.includes(deviceId)) {
+            return true; // Device is assigned to a consumer of the current site
+        }
+    }
+    return false; // Device is not assigned to any consumer of the current site
+}
+
+function createUnassignedDeviceRow(deviceId, index) {
+    const row = document.createElement('tr');
+    row.id = `unassigned-device-row-${index}`;
+
+    const deviceIdCell = document.createElement('td');
+    deviceIdCell.id = `unassigned-device-id-${index}`;
+    deviceIdCell.textContent = deviceId;
+    row.appendChild(deviceIdCell);
+
+    const actionCell = document.createElement('td');
+    actionCell.id = `unassigned-device-action-${index}`;
+    const assignButton = document.createElement('button');
+    assignButton.id = `assign-button-${index}`; // Ensure this ID matches the CSS
+    assignButton.textContent = 'Assign';
+    assignButton.addEventListener('click', () => {
+        // Implement assign functionality here
+    });
+
+    const deleteButton = document.createElement('button');
+    deleteButton.id = `delete-button-${index}`; // Ensure this ID matches the CSS
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', () => {
+        // Implement delete functionality here
+    });
+
+    actionCell.appendChild(assignButton);
+    actionCell.appendChild(deleteButton);
+    row.appendChild(actionCell);
+
+    return row;
+}
