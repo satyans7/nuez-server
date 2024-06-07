@@ -49,6 +49,7 @@ class JsonController {
   postUserDataToServer = (user) => {
     try {
       const data = this.readDatabase(USER_DATA);
+      const map = this.readDatabase(CONSUMER_TO_DEVICE_DATA);
       const hasUser = Object.keys(data).length > 0;
       const usersIds = Object.keys(data);
       let lastUserId;
@@ -65,8 +66,10 @@ class JsonController {
 
       newUser.role = 'consumer';
       data[newUserId] = newUser;
+      map[newUserId] = [];
 
       this.writeDatabase(USER_DATA, data);
+      this.writeDatabase(CONSUMER_TO_DEVICE_DATA, map);
 
       console.log(`${newUser.name} successfully registered`);
       return newUserId;
@@ -172,14 +175,24 @@ class JsonController {
 
   async roleChange(userId) {
     const data = await this.readDatabase(USER_DATA);
+    const AdminMap = await this.readDatabase(ADMIN_TO_SITE_DATA);
+    const ConsumerMap = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+
     if (data[userId].role === "consumer") {
       data[userId].role = "admin"
+      delete ConsumerMap[userId];
+      AdminMap[userId] = [];
     }
     else {
       data[userId].role = "consumer"
+      delete AdminMap[userId];
+      ConsumerMap[userId] = [];
+
     }
 
     await this.writeDatabase(USER_DATA, data);
+    await this.writeDatabase(ADMIN_TO_SITE_DATA, AdminMap);
+    await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, ConsumerMap);
   }
 
   async isEmailReserved(email) {
