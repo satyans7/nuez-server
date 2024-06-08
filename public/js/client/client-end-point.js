@@ -46,6 +46,9 @@ const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsume
 const AEP_TO_REGISTER_CONSUMER = "/api/admin/registerconsumer";
 const AEP_TO_DEREGISTER_CONSUMER = "/api/admin/deregisterconsumer";
 
+//Assign a device to user
+const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoconsumer";
+
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
@@ -182,6 +185,11 @@ export function getApiToDeregisterConsumer(id){
   return `${AEP_TO_DEREGISTER_CONSUMER}/${id}`;
 }
 
+export function getApiToAssignDeviceToConsumer(id)
+{
+  return `${AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER}/${id}`;
+}
+
 
 export async function fetchPost(url, data) {
   const response = await fetch(url, {
@@ -220,6 +228,17 @@ export async function fetchDelete(url,data) {
     body: JSON.stringify(data),
   });
 
+  return response.json();
+}
+
+export async function fetchPatch(url,data){
+  const response= await fetch(url, {
+    method:"PATCH",
+    headers:{
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
   return response.json();
 }
 

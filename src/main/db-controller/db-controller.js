@@ -204,7 +204,10 @@ class DbController {
 
   async deregisterConsumer(req, res) {
     await jsonController.deregisterConsumer(req, res);
+  }
 
+  async AssignDevicetoConsumer(req,res){
+    await jsonController.AssignDevicetoConsumer(req,res);
   }
 }
 

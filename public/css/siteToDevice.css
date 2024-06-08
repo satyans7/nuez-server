@@ -225,3 +225,76 @@ body {
 #unassigned-devices-table button:hover {
     opacity: 0.8;
 }
+
+
+/* SEARCH USER */
+.user-search-container {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e6f0ff; /* Adjusted background color with a bluish tone */
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #020d1b; /* Adjusted border color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    z-index: 999;
+}
+
+.user-search-container label {
+    font-weight: bold;
+}
+
+#user-search-input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #b3c7e2; /* Adjusted border color */
+    border-radius: 5px;
+}
+
+#user-list {
+    list-style-type: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #b3c7e2; /* Adjusted border color */
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#user-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#user-list li:hover {
+    background-color: #d9e6ff; /* Adjusted hover background color */
+}
+
+#assign-user-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#assign-user-btn:hover {
+    background-color: #45a049; /* Adjusted hover background color */
+    opacity: 0.8;
+}
+
+/* Cancel search button */
+#cancel-search-btn {
+    cursor: pointer;
+    font-size: 20px;
+    display: block; /* Ensures it takes full width */
+    margin: 0 auto; /* Centers the button horizontally */
+    text-align: center; /* Centers the content within the button */
+    width: fit-content; /* Sets width to content width */
+}

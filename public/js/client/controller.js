@@ -194,3 +194,12 @@ export async function deregisterConsumerDevice(id,data){
 
     return response;
 }
+
+
+//assign device to user
+export async function assignDeviceToUser(id,data){
+    const api=cep.getApiToAssignDeviceToConsumer(id);
+    const response= await cep.fetchPatch(api,data);
+    
+    return response;
+}

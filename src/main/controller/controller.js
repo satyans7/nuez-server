@@ -340,6 +340,10 @@ class Controller {
 
   }
 
+  async AssignDevicetoConsumer(req, res) {
+
+    await dbController.AssignDevicetoConsumer(req, res);
+  }
 
 }
 

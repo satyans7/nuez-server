@@ -544,6 +544,36 @@ class JsonController {
     }
   }
 
+  
+  async AssignDevicetoConsumer(req, res) {
+    const userId = req.params.id;
+    const deviceId = req.body.device;
+
+    try {
+        let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+
+        if (data[userId]) {
+            if (!data[userId].includes(deviceId)) {
+                data[userId].push(deviceId);
+                await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
+                return res.status(200).json({ message: 'Device assigned to consumer successfully.' });
+            } else {
+                return res.status(400).json({ message: 'Device already assigned to consumer.' });
+            }
+        } else {
+            // Create a new entry for the userId and assign the deviceId
+            data[userId] = [deviceId];
+            // Write the updated data back to the JSON file
+            await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
+            // Respond with success message
+            return res.status(200).json({ message: 'Device assigned to consumer successfully.' });
+        }
+    } catch (error) {
+
+        console.error('Error assigning device to consumer:', error);
+        return res.status(500).json({ error: 'Internal server error.' });
+    }
+}
 
 
 }

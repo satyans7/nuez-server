@@ -170,3 +170,10 @@ export async function deregisterConsumerDeviceMapping(id,data)
     const response= await controller.deregisterConsumerDevice(id,data);
     return response;
 }
+
+//assign a device to an existing user
+export async function assignDeviceToUser(id,data)
+{
+    const response= await controller.assignDeviceToUser(id,data);
+    return response;
+}

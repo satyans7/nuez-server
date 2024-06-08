@@ -1,5 +1,6 @@
+
 import {
-    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping ,registerDevice, getConsumerDeviceMapping } from '../client/client.js';
+    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping ,registerDevice, getConsumerDeviceMapping, assignDeviceToUser } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
 const allConsumerContainer = document.querySelector('#consumer-list');
@@ -18,6 +19,10 @@ const site = getCurrentSite();
 const deregisterForm= document.getElementById('deregister-device-form');
 const unassignedDevicesLink = document.getElementById('unassigned-devices-link');
 const unassignedDevicesContainer = document.getElementById('unassigned-devices-list');
+document.getElementById('user-search-input').addEventListener('input', filterUsers);
+document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
+document.getElementById('assign-user-btn').addEventListener('click', assignUser);
+const form=document.getElementById('register-device-form');
 
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${site}`;
@@ -40,7 +45,7 @@ button.addEventListener('click', async(event) => {
         "device" : deviceid
     };
         const jsonResponse = await registerDevice(devicedata,siteid);
-  
+        viewAlldevices();
         alert(jsonResponse.message);
           form.reset();  
 
@@ -247,27 +252,8 @@ async function updateSiteInfo() {
     setForm();
 }
 
-/*document.getElementById('deregister-device-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
 
-    const deviceId = document.getElementById('deregister-device-id').value; 
-
-    
-    const sitesDeviceMapping = await getSiteDeviceMapping();
-    if (sitesDeviceMapping[site].includes(deviceId)) {
-        try {
-            const response = await deleteSiteToDeviceMapping(site);
-            alert(`Device ID ${deviceId} deregistered successfully.`);
-            await viewAlldevices();
-        } catch (error) {
-            console.error('Error deregistering device:', error);
-            alert(`Error in deregistering device: ${error.message}`);
-        }
-    } else {
-        alert(`No device with ID ${deviceId} found.`);
-    }
-});
-*/
+//DEREGISTER DEVICE
 document.getElementById('deregister-device-form').addEventListener('submit', async (event) => {
     event.preventDefault();
   
@@ -337,7 +323,7 @@ async function viewUnassignedDevices() {
     unassignedDevicesContainer.appendChild(table);
 }
 
-function isDeviceAssigned(deviceId, consumerToDeviceMapping, siteConsumerMapping) {
+function isDeviceAssigned(deviceId, consumerToDeviceMapping, siteConsumerMapping, site) {
     const consumers = siteConsumerMapping[site] || []; // Get consumers of the current site
 
     // Iterate over the consumers and check if the device is assigned to any of them
@@ -346,8 +332,22 @@ function isDeviceAssigned(deviceId, consumerToDeviceMapping, siteConsumerMapping
             return true; // Device is assigned to a consumer of the current site
         }
     }
-    return false; // Device is not assigned to any consumer of the current site
+
+    // Check if the device is assigned to any users mapped to other sites
+    for (const otherSite of Object.keys(siteConsumerMapping)) {
+        if (otherSite !== site) {
+            const otherSiteConsumers = siteConsumerMapping[otherSite] || [];
+            for (const consumerId of otherSiteConsumers) {
+                if (consumerToDeviceMapping[consumerId]?.includes(deviceId)) {
+                    return true; // Device is assigned to a consumer of another site
+                }
+            }
+        }
+    }
+
+    return false; // Device is not assigned to any consumer of the current site or other sites
 }
+
 
 function createUnassignedDeviceRow(deviceId, index) {
     const row = document.createElement('tr');
@@ -365,6 +365,7 @@ function createUnassignedDeviceRow(deviceId, index) {
     assignButton.textContent = 'Assign';
     assignButton.addEventListener('click', () => {
         // Implement assign functionality here
+        showUserSearch(deviceId);
     });
 
     const deleteButton = document.createElement('button');
@@ -379,4 +380,91 @@ function createUnassignedDeviceRow(deviceId, index) {
     row.appendChild(actionCell);
 
     return row;
+}
+
+
+//SEARCH 
+let selectedDeviceId;
+let users=[];
+
+async function showUserSearch(deviceId){
+    selectedDeviceId = deviceId;
+    document.getElementById('user-search-container').style.display='block';
+    const currentSite= await getCurrentSite();
+    const siteConsumerMapping= await getSiteConsumerMapping();
+    users= siteConsumerMapping[currentSite] || [];
+    populateUserList(users);
+
+    // Add event listener for clicking outside the search box
+    document.addEventListener('click', handleClickOutside, true);
+}
+
+function populateUserList(userList){
+    const userListElem=document.getElementById('user-list');
+    userListElem.innerHTML='';
+    userList.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent=user;
+        li.onclick=() => selectedUser(user);
+        userListElem.appendChild(li);
+    });
+}
+
+function selectedUser(user){
+    document.getElementById('user-search-input').value=user;
+    document.getElementById('user-list').innerHTML='';
+}
+
+function filterUsers() {
+    const query = document.getElementById('user-search-input').value.toLowerCase(); // ADDED
+    const filteredUsers = users.filter(user => user.toLowerCase().includes(query)); // ADDED
+    populateUserList(filteredUsers); // ADDED
+}
+
+async function assignUser() {
+    const selectedUser = document.getElementById('user-search-input').value;
+    const consumerToDeviceMapping= await getConsumerDeviceMapping();
+    if (selectedUser) {
+        if (selectedDeviceId) {
+            // Check if the user already exists in the mapping
+            if (consumerToDeviceMapping[selectedUser]) {
+                // Check if the device is already assigned to the user
+                if (!consumerToDeviceMapping[selectedUser].includes(selectedDeviceId)) {
+                    // Add the device to the existing user without modifying the existing mappings
+                    consumerToDeviceMapping[selectedUser].push(selectedDeviceId);
+                } else {
+                    alert(`Device ${selectedDeviceId} is already assigned to user ${selectedUser}.`);
+                    return; // Exit the function if the device is already assigned to the user
+                }
+            } 
+
+            alert(`Assigning user ${selectedUser} to device ${selectedDeviceId}`);
+
+            // Make API call to update backend (if needed)
+            const obj ={
+                device: selectedDeviceId
+            }
+            await assignDeviceToUser(selectedUser,obj);
+            viewUnassignedDevices();
+            document.getElementById('user-search-container').style.display = 'none';
+            document.removeEventListener('click', handleClickOutside, true);
+        } else {
+            alert('Please select a device.');
+        }
+    } else {
+        alert('Please select a user to assign.');
+    }
+}
+
+
+function handleClickOutside(event){
+    const userSearchContainer= document.getElementById('user-search-container');
+    if(!userSearchContainer.contains(event.target)){
+        cancelSearch();
+    }
+}
+
+function cancelSearch(){
+    document.getElementById('user-search-container').style.display = 'none';
+    document.removeEventListener('click', handleClickOutside, true);
 }
