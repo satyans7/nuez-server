@@ -98,8 +98,6 @@ async function loadUsersTable() {
                 const actionCell = document.createElement('td');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = 'Request for Role change';
-                const goToButton = document.createElement('button');
-                goToButton.textContent = 'Go to';
                 const request = {
                     _id: id,
                     reqRole: "admin"
@@ -110,13 +108,13 @@ async function loadUsersTable() {
                         await handleRequestRoleChange(id, requestButton, request);
                     }
                 });
-                goToButton.addEventListener('click', () => {
+                nameCell.addEventListener('click', () => {
                     const adminId = 'superadmin';
                     window.location.href = `/api/consumer-dashboard/${id}?adminId=${adminId}`;
                 });
+                nameCell.style.cursor = "pointer";
                 
                 actionCell.appendChild(requestButton);
-                actionCell.appendChild(goToButton);
                 row.appendChild(nameCell);
                 row.appendChild(emailCell);
                 row.appendChild(actionCell);
@@ -167,8 +165,6 @@ async function loadAdminsTable() {
                 const actionCell = document.createElement('td');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = 'Request for Role change';
-                const goToButton = document.createElement('button');
-                goToButton.textContent = 'Go to';
                 const request = {
                     _id: id,
                     reqRole: "consumer"
@@ -179,11 +175,11 @@ async function loadAdminsTable() {
                         await handleRequestRoleChange(id, requestButton, request);
                     }
                 });
-                goToButton.addEventListener('click', () => {
+                nameCell.addEventListener('click', () => {
                     window.location.href = `/api/admin-dashboard/${id}`;
                 });
+                nameCell.style.cursor = "pointer"
                 actionCell.appendChild(requestButton);
-                actionCell.appendChild(goToButton);
                 row.appendChild(nameCell);
                 row.appendChild(emailCell);
                 row.appendChild(actionCell);
