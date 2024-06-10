@@ -31,11 +31,25 @@
     <div id="register-form-container" class="form-container" style="display: none;">
         <form id="register-consumer-device-form">
             <label for="register-device-id">Device ID:</label>
-            <input type="text" id="register-device-id" name="device-id" required>
-            <button type="submit">Register</button>
-            <button type="button" id="cancel-register-button">Cancel</button>
+            <input type="text" id="register-device-id" name="register-device-id" required>
+    
+            <label for="device-name">Name:</label>
+            <input type="text" id="device-name" name="device-name" required>
+    
+            <label for="device-type">Location:</label>
+            <input type="text" id="device-location" name="device-location" required>
+
+            <label for="device-type">Total Consumption:</label>
+            <input type="text" id="device-total-consumption" name="device-total-consumption" required>
+    
+            <label for="device-status">Status:</label>
+            <input type="text" id="device-status" name="device-status" required>
+    
+            <button type="submit" id="register-id">Register</button>
+            <button type="button" id="register-cancel-button" class="cancel-button">Cancel</button>
         </form>
     </div>
+    
 
     <div id="deregister-form-container" class="form-container" style="display: none;">
         <form id="deregister-consumer-device-form">

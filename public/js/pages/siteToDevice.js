@@ -279,6 +279,11 @@ registerDeviceForm.addEventListener('submit', async (event) =>{
 
 })
 
+document.getElementById('register-cancel-button').addEventListener('click', () => {
+    registerDeviceForm.display='none';
+    viewAlldevices();
+});
+
 
 //DEREGISTER DEVICE
 deregisterDeviceForm.addEventListener('submit', async (event) => {
@@ -298,6 +303,11 @@ deregisterDeviceForm.addEventListener('submit', async (event) => {
       console.error('Error deregistering device:', error);
       alert(`${error.message}`);
     }
+});
+
+document.getElementById('deregister-cancel-button').addEventListener('click', () => {
+    deregisterDeviceForm.display='none';
+    viewAlldevices();
 });
   
 // REGISTER CONSUMER

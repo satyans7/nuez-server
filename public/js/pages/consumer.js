@@ -1,4 +1,4 @@
-import { getDevicesData, getConsumerDeviceMapping, getAllAdmins,registerConsumerDeviceMapping,deregisterConsumerDeviceMapping } from '../client/client.js';
+import { getDevicesData, getConsumerDeviceMapping, getAllAdmins,registerConsumerDeviceMapping,deregisterConsumerDeviceMapping ,postDeviceData} from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('.all-devices');
 const headingText = document.getElementById('heading');
@@ -58,26 +58,57 @@ function showAdminButtons() {
     buttonContainer.appendChild(registerButton);
     buttonContainer.appendChild(deregisterButton);
     
-
-     // Handle form submission for registration
-     document.getElementById('register-consumer-device-form').addEventListener('submit', async (event) => {
+  //handle form submission for registration
+    document.getElementById('register-consumer-device-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const consumer = getCurrentId();
+        const deviceId = document.getElementById('register-device-id').value;
+        const deviceName = document.getElementById('device-name').value;
+        const deviceLocation = document.getElementById('device-location').value;
+        const deviceTotalConsumption = document.getElementById('device-total-consumption').value;
+        const deviceStatus = document.getElementById('device-status').value;
+    
         const ob = {
-            device: document.getElementById('register-device-id').value
+            device: deviceId
         };
-
+    
         try {
             const res = await registerConsumerDeviceMapping(ob, consumer);
             alert(res.message);
             document.getElementById('register-consumer-device-form').reset();
             document.getElementById('register-form-container').style.display = 'none';
-            await viewAlldevices();  // Refresh the devices view
+    
+            // Create a device profile with user inputs
+            await createDeviceProfile(deviceId, deviceName, deviceLocation, deviceTotalConsumption, deviceStatus);
+    
+            // Refresh the devices view
+            await viewAlldevices();
         } catch (error) {
             console.error('Error registering device:', error);
             alert(`Error: ${error.message}`);
         }
     });
+    
+    // Function to create a device profile with user inputs and registration date
+    async function createDeviceProfile(deviceId, name, location, totalConsumption, status) {
+        const deviceProfile = {
+            id: deviceId,
+            name: name,
+            location: location,
+            totalConsumption: totalConsumption,
+            status: status,
+            registrationDate: new Date().toISOString() // Adding registration date
+        };
+    
+        try {
+            // Post the device data to the server
+            await postDeviceData(deviceId, deviceProfile);
+            console.log(`Device profile for ${deviceId} created successfully.`);
+        } catch (error) {
+            console.error('Error creating device profile:', error);
+        }
+    }
+}
 
     // Handle form submission for deregistration
     document.getElementById('deregister-consumer-device-form').addEventListener('submit', async (event) => {
@@ -108,7 +139,7 @@ function showAdminButtons() {
     document.getElementById('cancel-deregister-button').addEventListener('click', () => {
         document.getElementById('deregister-form-container').style.display = 'none';
     });
-}
+
 
 async function viewAlldevices() {
     const ConsumerId = getCurrentId();

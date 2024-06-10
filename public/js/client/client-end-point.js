@@ -48,6 +48,7 @@ const AEP_TO_DEREGISTER_CONSUMER = "/api/admin/deregisterconsumer";
 
 //Assign a device to user
 const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoconsumer";
+const AEP_TO_POST_DEVICE="/api/admin/newdevice";
 
 
 export function getApiToRegisterUser() {
@@ -119,6 +120,10 @@ export function getApiToUpdateSiteData(id){
 
 export function getApiToPutDevice(id){
   return `${AEP_TO_PUT_DEVICE}/${id}`;
+}
+
+export function getApiToPostDevice(id){
+  return `${AEP_TO_POST_DEVICE}/${id}`;
 }
 
 

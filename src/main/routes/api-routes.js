@@ -66,6 +66,7 @@ const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
 const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsumertodevice/:id";
 
 const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoconsumer/:id";
+ const AEP_TO_POST_DEVICE="/api/admin/newdevice/:id";
 
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -277,6 +278,10 @@ const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoc
 
   app.patch(AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER,async(req,res)=>{
     await controller.AssignDevicetoConsumer(req,res);
+  });
+
+  app.post(AEP_TO_POST_DEVICE,async(req,res)=>{
+    await controller.postDevice(req,res);
   });
 
 };

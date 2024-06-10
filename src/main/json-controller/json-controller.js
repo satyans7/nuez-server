@@ -575,6 +575,37 @@ class JsonController {
     }
 }
 
+async postDevice(req, res) {
+  const deviceId = req.params.id;
+  const { id, name, location, totalConsumption, status, registrationDate } = req.body;
+
+  try {
+    let devices = await this.readDatabase(DEVICE_DATA);
+
+    if (devices[deviceId]) {
+      return res.status(400).send({ error: 'Device Profile Already Exists' }); // 400 for bad request
+    }
+
+    // Initialize the device profile if it doesn't exist
+    devices[deviceId] = {
+      id: id,
+      name: name,
+      location: location,
+      totalConsumption: totalConsumption,
+      status: status,
+      registrationDate: registrationDate
+    };
+
+    await this.writeDatabase(DEVICE_DATA, devices);
+
+    res.send({ message: 'Device registered successfully', device: devices[deviceId] });
+  } catch (error) {
+    console.error('Error registering device:', error); // Log the error for debugging
+    res.status(500).send({ error: 'An error occurred while registering the device' });
+  }
+}
+
+
 
 }
 module.exports = new JsonController();

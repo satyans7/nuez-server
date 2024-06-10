@@ -216,3 +216,11 @@ export async function assignDeviceToUser(id,data){
     
     return response;
 }
+
+//post device
+export async function postDevice(id, data) {
+    const api = await cep.getApiToPostDevice(id);
+    console.log('POST request API:', api);
+    cep.fetchPost(api, data);
+    console.log('Device ID:', id);
+ }

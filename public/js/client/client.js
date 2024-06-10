@@ -121,12 +121,7 @@ export async function getAllAdminKeys() {
     return Object.keys(data); // Return the keys (user IDs) from the response
 }
 
-//device profile update
-/*export async function updateDeviceData(id, request) {
-    console.log(`updating details for device with id: ${id}`);
-    await controller.updateDevice(id,request);
-}
-*/
+
 //device profile update
 export async function updateDeviceData(id, request) {
     console.log(`updating details for device with id: ${id}`);
@@ -187,4 +182,11 @@ export async function assignDeviceToUser(id,data)
 {
     const response= await controller.assignDeviceToUser(id,data);
     return response;
+}
+
+
+//device profile creation
+export async function postDeviceData(id, request) {
+    console.log(`Posting details for device with id: ${id}`);
+   return await controller.postDevice(id, request);
 }

@@ -345,6 +345,11 @@ class Controller {
     await dbController.AssignDevicetoConsumer(req, res);
   }
 
+  async postDevice(req, res) {
+
+    await dbController.postDevice(req, res);
+  }
+
 }
 
 module.exports = new Controller();

@@ -209,6 +209,10 @@ class DbController {
   async AssignDevicetoConsumer(req,res){
     await jsonController.AssignDevicetoConsumer(req,res);
   }
+
+  async postDevice(req, res) {
+    await jsonController.postDevice(req, res);
+  }
 }
 
 
