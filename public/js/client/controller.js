@@ -168,6 +168,19 @@ export async function registerDevice(data,id) {
         return response;
     
 }
+//site to sonsumer
+
+export async function registerConsumer(id, data) {
+    const api = cep.getApiToRegisterConsumer(id);
+    return await cep.fetchPost(api, data);
+}
+
+export async function deregisterConsumer(id, data) {
+    const api = cep.getApiToDeregisterConsumer(id);
+    const res =  await cep.fetchDelete(api, data);
+    console.log(res)
+    return res;
+}
 
 export async function deregisterSite(id,data){
     const api= cep.getApiToDeregisterSite(id);

@@ -145,6 +145,15 @@ export async function registerDevice(data,id)
     return await controller.registerDevice(data,id);
 }
 
+//Site to consumer
+export async function registerConsumer(id, data) {
+    return await controller.registerConsumer(id, data);
+}
+
+export async function deregisterConsumer(id, data) {
+    return await controller.deregisterConsumer(id, data);
+}
+
 //DELETE SITE DEVICE MAPPING
 export async function deleteSiteToDeviceMapping(id,request) {
     return await controller.deleteSiteToDeviceMapping(id,request);
@@ -156,6 +165,8 @@ export async function deregisterSite(id,data)
 
     return response;
 }
+
+
 
 
 //register consumer device mapping

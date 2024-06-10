@@ -1,11 +1,15 @@
 
 import {
-    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping ,registerDevice, getConsumerDeviceMapping, assignDeviceToUser } from '../client/client.js';
+    getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping ,registerDevice, getConsumerDeviceMapping, assignDeviceToUser, 
+    deregisterConsumer,
+    registerConsumer} from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
 const allConsumerContainer = document.querySelector('#consumer-list');
 const registerTab = document.getElementById('register-form-container');
 const deregisterTab = document.getElementById('deregister-form-container');
+const deregisterConsumerTab = document.getElementById('deregister-consumer-container')
+const registerConsumerTab = document.getElementById('register-consumer-container')
 const registerBtn = document.getElementById('register-device-button');
 const deregisterBtn = document.getElementById('deregister-device-button');
 const headingText = document.getElementById('heading');
@@ -16,13 +20,15 @@ const editBtn = document.getElementById('edit-profile');
 const editTab = document.getElementById('edit-form-container');
 const updateBtn = document.getElementById('update-button');
 const site = getCurrentSite();
-const deregisterForm= document.getElementById('deregister-device-form');
+const deregisterDeviceForm= document.getElementById('deregister-device-form');
+const registerDeviceForm = document.getElementById('register-device-form');
+const registerConsumerForm = document.getElementById('register-consumer-form');
+const deregisterConsumerForm = document.getElementById('deregister-consumer-form');
 const unassignedDevicesLink = document.getElementById('unassigned-devices-link');
 const unassignedDevicesContainer = document.getElementById('unassigned-devices-list');
 document.getElementById('user-search-input').addEventListener('input', filterUsers);
 document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
 document.getElementById('assign-user-btn').addEventListener('click', assignUser);
-const form=document.getElementById('register-device-form');
 
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${site}`;
@@ -32,31 +38,17 @@ const currentid = document.createElement('h1');
 currentid.textContent = `Id : ${site}`;
 currentSite.appendChild(currentid);
 
-await viewAlldevices();
-
-registerBtn.addEventListener('click', () => {
-    toggleVisibility('register');
-    const button = document.getElementById('register-id');
-button.addEventListener('click', async(event) => {
-    event.preventDefault();
-    const deviceid= document.getElementById('register-device-id').value;
-    const siteid= getCurrentSite();
-    const devicedata= {
-        "device" : deviceid
-    };
-        const jsonResponse = await registerDevice(devicedata,siteid);
-        viewAlldevices();
-        alert(jsonResponse.message);
-          form.reset();  
+document.addEventListener('DOMContentLoaded', async()=>{
+    await viewAlldevices();
+    registerBtn.addEventListener('click', () => {
+        toggleVisibility('register');
+    });
+    deregisterBtn.addEventListener('click', () => {
+        toggleVisibility('deregister');
+    });
 
 })
 
-});
-
-
-deregisterBtn.addEventListener('click', () => {
-    toggleVisibility('deregister');
-});
 
 editBtn.addEventListener('click', async () => {
     await setForm();
@@ -69,10 +61,24 @@ updateBtn.addEventListener('click', async () => {
 
 deviceTab.addEventListener('click', async () => {
     await viewAlldevices();
+    registerBtn.addEventListener('click', () => {
+        toggleVisibility('register');
+    });
+
+    deregisterBtn.addEventListener('click', () => {
+        toggleVisibility('deregister');
+    });
 });
 
 consumerTab.addEventListener('click', async () => {
     await viewAllconsumers();
+    registerBtn.addEventListener('click', () => {
+        toggleVisibility('register-consumer');   
+    });
+
+    deregisterBtn.addEventListener('click', () => {
+        toggleVisibility('deregister-consumer');        
+    });
 });
 
 function getCurrentSite() {
@@ -89,12 +95,19 @@ function toggleVisibility(section) {
     registerTab.style.display = 'none';
     deregisterTab.style.display = 'none';
     editTab.style.display = 'none';
+    registerConsumerTab.style.display = 'none';
+    deregisterConsumerTab.style.display = 'none';
+
     unassignedDevicesContainer.style.display = 'none'; // Hide unassigned devices container
 
     if (section === 'register') {
         registerTab.style.display = 'block';
     } else if (section === 'deregister') {
         deregisterTab.style.display = 'block';
+    }else if(section === 'register-consumer'){
+        registerConsumerTab.style.display = 'block';
+    } else if (section === 'deregister-consumer') {
+        deregisterConsumerTab.style.display = 'block';
     } else if (section === 'edit') {
         editTab.style.display = 'block';
     } else if (section === 'unassigned-devices') { // New section
@@ -252,29 +265,74 @@ async function updateSiteInfo() {
     setForm();
 }
 
+// REGISTER DEVICE
+registerDeviceForm.addEventListener('submit', async (event) =>{
+    event.preventDefault();
+    const deviceid = document.getElementById('register-device-id').value;
+    const devicedata = {
+        "device": deviceid
+    };
+    const jsonResponse = await registerDevice(devicedata, site);
+    viewAlldevices();
+    alert(jsonResponse.message);
+    registerDeviceForm.reset();
+
+})
+
 
 //DEREGISTER DEVICE
-document.getElementById('deregister-device-form').addEventListener('submit', async (event) => {
+deregisterDeviceForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-  
     const deviceId = document.getElementById('deregister-device-id').value;
+    console.log(deviceId)
     const device={
         device: deviceId
     }
-
-  
     try {
       const response = await deleteSiteToDeviceMapping(site,device);
       viewAlldevices();
     alert(response.message);
-    deregisterForm.reset();
+    deregisterDeviceForm.reset();
     
     } catch (error) {
       console.error('Error deregistering device:', error);
       alert(`${error.message}`);
     }
-  });
+});
   
+// REGISTER CONSUMER
+registerConsumerForm.addEventListener('submit', async (event) =>{
+    event.preventDefault();
+    const consumerId = document.getElementById('register-consumer-id').value;
+    const consumer = {
+        consumer : consumerId
+    };
+    console.log(consumer)
+    const jsonResponse = await registerConsumer(site, consumer);
+    viewAllconsumers();
+    alert(jsonResponse.message);
+    registerConsumerForm.reset();
+})
+
+// DEREGISTER CONSUMER
+deregisterConsumerForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const consumerId = document.getElementById('deregister-consumer-id').value;
+    const consumer = {
+        consumer: consumerId
+    }
+    try {
+        const response = await deregisterConsumer(site, consumer);
+        viewAllconsumers();
+        alert(response.message);
+        deregisterConsumerForm.reset();
+
+    } catch (error) {
+        console.error('Error deregistering consumer:', error);
+        alert(`${error.message}`);
+    }
+})
+
 
 
 // UNASSIGNED DEVICES

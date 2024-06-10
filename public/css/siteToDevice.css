@@ -151,6 +151,8 @@ body {
 
 }
 
+#deregister-consumer-form input,
+#register-consumer-form input,
 #register-device-form input,
 #deregister-device-form input{
     margin-bottom: 15px;
