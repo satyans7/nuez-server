@@ -8,7 +8,8 @@ import {
     postapproveRoleChange,
     postrejectRoleChange,
     getUserSiteMapping,
-    getConsumerDeviceMapping
+    getConsumerDeviceMapping,
+    getSitesData
 } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
@@ -16,14 +17,17 @@ const adminsTab = document.getElementById('admins-tab');
 const approvedTab = document.getElementById('approved-tab');
 const rejectedTab = document.getElementById('rejected-tab');
 const pendingTab = document.getElementById('pending-tab');
+const sitesTab = document.getElementById('sites-tab')
 const usersList = document.getElementById('user-list');
 const adminList = document.getElementById('admin-list');
+const siteList = document.getElementById('site-list');
 const approvedList = document.getElementById('approved-list');
 const rejectedList = document.getElementById('rejected-list');
 const pendingList = document.getElementById('pending-list');
 const allLists = document.getElementsByClassName('list');
 const usersTableBody = document.getElementById('users-table-body')
 const adminsTableBody = document.getElementById('admins-table-body')
+const sitesTableBody = document.getElementById('sites-table-body');
 const pendingTableBody = document.getElementById('pending-table-body')
 const approvedTableBody = document.getElementById('approved-table-body')
 const rejectedTableBody = document.getElementById('rejected-table-body')
@@ -192,6 +196,44 @@ async function loadAdminsTable() {
         adminsTableBody.appendChild(row);
     }
 }
+
+
+sitesTab.addEventListener('click', async() =>{
+    hideAllLists();
+    siteList.style.display = 'block';
+    await loadSitesTable();
+})
+
+async function loadSitesTable(){
+    let data = await getSitesData();
+    console.log(data)
+    sitesTableBody.innerHTML = '';
+    let ids = Object.keys(data);
+    if (ids && ids.length > 0) {
+        ids.forEach(async id => {
+            let site = data[id];
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            nameCell.textContent = site.name;
+            const locationCell = document.createElement('td');
+            locationCell.textContent = site.location;
+            nameCell.addEventListener('click', () => {
+                window.location.href = `/api/site-dashboard/${id}`;
+            });
+            nameCell.style.cursor = "pointer";
+            row.appendChild(nameCell);
+            row.appendChild(locationCell);
+            sitesTableBody.appendChild(row);
+            
+        });
+    } else {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="2">No sites available</td>`;
+        sitesTableBody.appendChild(row);
+    }
+
+}
+
 
 async function requestRoleChange(id, req) {
     try {
