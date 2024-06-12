@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const bodyParser = require('body-parser');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const PUBLIC = "public";
 const VIEW = "src/main/views";
 const HOME = "index.html";
