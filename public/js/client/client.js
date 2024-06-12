@@ -190,3 +190,7 @@ export async function postDeviceData(id, request) {
     console.log(`Posting details for device with id: ${id}`);
    return await controller.postDevice(id, request);
 }
+
+export async function syncFirmwareData(){
+    await controller.syncFirmwareData();
+}

@@ -1,6 +1,7 @@
 const path = require('path');
 const controller = require("../controller/controller.js");
-
+const fs = require('fs');
+const simpleGit = require('simple-git');
 module.exports = function (app) {
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
@@ -67,7 +68,7 @@ const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsume
 
 const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoconsumer/:id";
  const AEP_TO_POST_DEVICE="/api/admin/newdevice/:id";
-
+const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -284,6 +285,50 @@ const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoc
     await controller.postDevice(req,res);
   });
 
+
+  const localRepoPath = path.join(__dirname ,'../local-repo');
+  const githubRepoUrl = 'https://github.com/priyansu1703/testFile';
+  const updateRepo = async () => {
+    const git = simpleGit();
+  
+    if (!fs.existsSync(localRepoPath)) {
+      // Clone the repository if it doesn't exist
+      console.log('Cloning the repository...');
+      await git.clone(githubRepoUrl, localRepoPath);
+    } else {
+      // Pull the latest changes if the repository exists
+      console.log('Pulling the latest changes...');
+      await git.cwd(localRepoPath);
+      await git.pull();
+    }
+  };
+  
+  // Zip the folder
+  const zipFolder = (source, out) => {
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    const stream = fs.createWriteStream(out);
+  
+    return new Promise((resolve, reject) => {
+      archive
+        .directory(source, false)
+        .on('error', err => reject(err))
+        .pipe(stream);
+  
+      stream.on('close', () => resolve());
+      archive.finalize();
+    });
+  };
+  
+  // Define a route for the button click to update the repository
+  app.get(AEP_TO_SYNC_FIRMWARE_DATA, async (req, res) => {
+    try {
+      await updateRepo();
+      res.send('Repository updated successfully!');
+    } catch (error) {
+      console.error('Error updating repository:', error);
+      res.status(500).send('Error updating repository');
+    }
+  });
 };
 
 

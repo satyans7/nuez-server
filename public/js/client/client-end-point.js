@@ -50,7 +50,7 @@ const AEP_TO_DEREGISTER_CONSUMER = "/api/admin/deregisterconsumer";
 const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoconsumer";
 const AEP_TO_POST_DEVICE="/api/admin/newdevice";
 
-
+const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
@@ -194,7 +194,9 @@ export function getApiToAssignDeviceToConsumer(id)
 {
   return `${AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER}/${id}`;
 }
-
+export function getApiToSyncFirmware() {
+  return AEP_TO_SYNC_FIRMWARE_DATA; 
+}
 
 export async function fetchPost(url, data) {
   const response = await fetch(url, {

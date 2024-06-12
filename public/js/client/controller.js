@@ -224,3 +224,8 @@ export async function postDevice(id, data) {
     cep.fetchPost(api, data);
     console.log('Device ID:', id);
  }
+
+ export async function syncFirmwareData(){
+    const api=cep.getApiToSyncFirmware();
+    cep.fetchDataFromServer(api);
+ }

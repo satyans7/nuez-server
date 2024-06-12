@@ -9,7 +9,8 @@ import {
     postrejectRoleChange,
     getUserSiteMapping,
     getConsumerDeviceMapping,
-    getSitesData
+    getSitesData,
+    syncFirmwareData
 } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
@@ -32,7 +33,10 @@ const pendingTableBody = document.getElementById('pending-table-body')
 const approvedTableBody = document.getElementById('approved-table-body')
 const rejectedTableBody = document.getElementById('rejected-table-body')
 
-
+const administrationTab = document.getElementById('administration-tab')
+const administrationList = document.getElementById('administration-list')   
+const firmwareSyncBtn =document.getElementById('syncFirmware')
+const sourceCodeSyncBtn =document.getElementById('syncSourceCode')
 // Function to disable the 'Request for Role change' button
 function disableRequestButton(button, msg) {
     button.disabled = true;
@@ -380,3 +384,17 @@ async function rejectRoleChange(id) {
     }
     pendingTabDisplay();
 }
+
+administrationTab.addEventListener('click', async () => {
+    hideAllLists();
+     administrationList.style.display = 'block';
+     firmwareSyncBtn.addEventListener('click', async () => {
+        const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+        if (userConfirmed) {
+            await syncFirmwareData();
+        }
+    });
+     sourceCodeSyncBtn.addEventListener('click',async()=>{
+        
+     }) 
+});
