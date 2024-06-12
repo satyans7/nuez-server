@@ -10,7 +10,8 @@ import {
     getUserSiteMapping,
     getConsumerDeviceMapping,
     getSitesData,
-    syncFirmwareData
+    syncFirmwareData,
+    sendFirmwareToSites
 } from '../client/client.js';
 
 const usersTab = document.getElementById('users-tab');
@@ -37,6 +38,7 @@ const administrationTab = document.getElementById('administration-tab')
 const administrationList = document.getElementById('administration-list')   
 const firmwareSyncBtn =document.getElementById('syncFirmware')
 const sourceCodeSyncBtn =document.getElementById('syncSourceCode')
+const firmwareToSitesBtn =document.getElementById('firmwareToSitesBtn')
 // Function to disable the 'Request for Role change' button
 function disableRequestButton(button, msg) {
     button.disabled = true;
@@ -230,11 +232,19 @@ async function loadSitesTable(){
             sitesTableBody.appendChild(row);
             
         });
+        firmwareToSitesBtn.addEventListener("click", async ()=>{
+            await sendFirmwareToSites();
+            alert("btn clicked")
+        })
+
+        
     } else {
         const row = document.createElement('tr');
         row.innerHTML = `<td colspan="2">No sites available</td>`;
         sitesTableBody.appendChild(row);
     }
+
+
 
 }
 

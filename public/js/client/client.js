@@ -194,3 +194,7 @@ export async function postDeviceData(id, request) {
 export async function syncFirmwareData(){
     await controller.syncFirmwareData();
 }
+
+export async function sendFirmwareToSites(){
+    await controller.sendFirmwareToSites();
+}
