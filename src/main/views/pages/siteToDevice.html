@@ -15,14 +15,14 @@
         <a href="#" id="device-tab">All Devices</a>
         <a href="#" id="consumer-tab">All Consumers</a>
         <a href="#" id="edit-profile">Edit Profile</a>
-        <a href="#" id="unassigned-devices-link">Unassigned Devices</a> <!-- Add this line -->
+        <a href="#" id="unassigned-devices-link">Unassigned Devices</a>
+        <a href="#" id="firmware-version-link">Firmware Version</a> <!-- Added Firmware Version Tab -->
         <a href="#" id="logout-link">Logout</a>
     </div>
 
     <div class="main-content">
         <div class="header">
-            <div id="heading">
-            </div>
+            <div id="heading"></div>
             <div class="button-group">
                 <button id="register-device-button">Register</button>
                 <button id="deregister-device-button">Deregister</button>
@@ -30,12 +30,24 @@
         </div>
 
         <div id="main-container" class="container">
-            <div id="device-list" class="all-devices">
+            <div id="device-list" class="all-devices"></div>
+            <div id="consumer-list" class="all-consumers"></div>
+            <div id="unassigned-devices-list" class="unassigned-devices"></div>
+            <div id="firmware-version-list" class="firmware-version" style="display:none;">
+                <table id="firmware-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="firmware-table-body">
+                        <!-- Device IDs will be populated here -->
+                    </tbody>
+                </table>
             </div>
-            <div id="consumer-list" class="all-consumers">
-            </div>
-            <div id="unassigned-devices-list" class="unassigned-devices"></div> 
         </div>
+
         <div id="user-search-container" class="user-search-container" style="display:none;">
             <label for="user-search-input">Search User:</label>
             <input type="text" id="user-search-input" placeholder="Type to search...">
@@ -45,9 +57,8 @@
             <button id="assign-user-btn">Assign</button>
             <span id="cancel-search-btn">&#x2716;</span> <!-- Close Button -->
         </div>
-        
-        
-        <div id="edit-form-container" class="form-container" >
+
+        <div id="edit-form-container" class="form-container">
             <form id="edit-userForm">
                 <label for="edit-name">Name:</label>
                 <input type="text" id="edit-name" value="Current Name"><br><br>
@@ -56,16 +67,16 @@
                 <button type="submit" id="update-button">Update</button>
             </form>
         </div>
-        
+
         <div id="register-form-container" class="form-container">
             <form id="register-device-form">
                 <label for="register-device-id">Device ID:</label>
                 <input type="text" id="register-device-id" name="register-device-id" required>
-                <button type="submit" id ="register-id">Register</button>
+                <button type="submit" id="register-id">Register</button>
                 <button type="button" id="register-cancel-button" class="cancel-button">Cancel</button>
             </form>
         </div>
-        
+
         <div id="register-consumer-container" class="form-container">
             <form id="register-consumer-form">
                 <label for="register-consumer-id">Consumer ID:</label>
@@ -91,8 +102,8 @@
             </form>
         </div>
 
-
     <script type="module" src="/js/pages/siteToDevice.js"></script>
+    <script src="/js/firmwareVersion.js"></script> <!-- Added Script for Firmware Version -->
 
 </body>
 

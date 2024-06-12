@@ -29,6 +29,7 @@ const unassignedDevicesContainer = document.getElementById('unassigned-devices-l
 document.getElementById('user-search-input').addEventListener('input', filterUsers);
 document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
 document.getElementById('assign-user-btn').addEventListener('click', assignUser);
+const firmwareVersionContainer = document.getElementById('firmware-version-list');
 
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${site}`;
@@ -90,28 +91,34 @@ function getCurrentSite() {
 }
 
 function toggleVisibility(section) {
-    alldevicesContainer.style.display = 'none';
-    allConsumerContainer.style.display = 'none';
-    registerTab.style.display = 'none';
-    deregisterTab.style.display = 'none';
-    editTab.style.display = 'none';
-    registerConsumerTab.style.display = 'none';
-    deregisterConsumerTab.style.display = 'none';
+    const sections = [
+        alldevicesContainer, 
+        allConsumerContainer, 
+        registerTab, 
+        deregisterTab, 
+        editTab, 
+        registerConsumerTab, 
+        deregisterConsumerTab, 
+        unassignedDevicesContainer, 
+        firmwareVersionContainer
+    ];
 
-    unassignedDevicesContainer.style.display = 'none'; // Hide unassigned devices container
+    sections.forEach(container => container.style.display = 'none');
 
     if (section === 'register') {
         registerTab.style.display = 'block';
     } else if (section === 'deregister') {
         deregisterTab.style.display = 'block';
-    }else if(section === 'register-consumer'){
+    } else if (section === 'register-consumer') {
         registerConsumerTab.style.display = 'block';
     } else if (section === 'deregister-consumer') {
         deregisterConsumerTab.style.display = 'block';
     } else if (section === 'edit') {
         editTab.style.display = 'block';
-    } else if (section === 'unassigned-devices') { // New section
+    } else if (section === 'unassigned-devices') {
         unassignedDevicesContainer.style.display = 'block';
+    } else if (section === 'firmware-version') {
+        firmwareVersionContainer.style.display = 'block';
     }
 }
 
@@ -535,4 +542,59 @@ function handleClickOutside(event){
 function cancelSearch(){
     document.getElementById('user-search-container').style.display = 'none';
     document.removeEventListener('click', handleClickOutside, true);
+}
+
+
+
+//
+// Add an event listener to the firmware version link/button
+document.getElementById('firmware-version-link').addEventListener('click', function() {
+    toggleVisibility('firmware-version');
+    fetchDeviceIdsWithFirmware(); // Fetch device IDs and their firmware versions
+});
+
+
+// Function to fetch device IDs and their firmware versions
+function fetchDeviceIdsWithFirmware() {
+    getSiteDeviceMapping().then(siteDeviceMapping => {
+        const currentSiteId = getCurrentSite();
+        const deviceIds = siteDeviceMapping[currentSiteId] || [];
+        const tbody = document.getElementById('firmware-table-body');
+        tbody.innerHTML = ''; // Clear any existing rows
+        // Create header row for firmware versions
+        const headerRow = document.createElement('tr');
+        const deviceIdHeaderCell = document.createElement('th');
+        deviceIdHeaderCell.textContent = 'Device ID';
+        headerRow.appendChild(deviceIdHeaderCell);
+        const firmwareHeaderCell = document.createElement('th');
+        firmwareHeaderCell.textContent = 'Firmware Version';
+        headerRow.appendChild(firmwareHeaderCell);
+        tbody.appendChild(headerRow);
+        // Iterate through device IDs to fetch and display firmware versions
+        deviceIds.forEach(deviceId => {
+            const row = document.createElement('tr');
+            const deviceIdCell = document.createElement('td');
+            deviceIdCell.textContent = deviceId;
+            row.appendChild(deviceIdCell);
+            // Fetch firmware version for each device ID
+            fetchFirmwareVersion(deviceId).then(firmwareVersion => {
+                const firmwareCell = document.createElement('td');
+                firmwareCell.textContent = firmwareVersion;
+                row.appendChild(firmwareCell);
+            });
+            tbody.appendChild(row);
+        });
+    });
+}
+
+// Function to fetch firmware version for a device
+function fetchFirmwareVersion(deviceId) {
+    // Mock implementation, replace with actual data fetching logic
+    return new Promise(resolve => {
+        setTimeout(() => {
+            // Simulating fetching firmware version
+            const firmwareVersion = '1.0.0'; // Replace with actual firmware version
+            resolve(firmwareVersion);
+        }, 1000);
+    });
 }
