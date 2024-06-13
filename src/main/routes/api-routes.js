@@ -322,7 +322,7 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
     console.log("api called")
   })
   
-  const client = mqtt.connect('mqtt://localhost', {
+  const client = mqtt.connect('mqtt://192.168.33.250', {
     port: 1883,
     username: 'nuez',
     password: 'emqx@nuez'
