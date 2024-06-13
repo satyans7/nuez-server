@@ -300,3 +300,30 @@ body {
     text-align: center; /* Centers the content within the button */
     width: fit-content; /* Sets width to content width */
 }
+
+
+/*Firmware table*/
+/* Styles for the firmware table */
+#firmware-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#firmware-table th,
+#firmware-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#firmware-table th {
+    background-color: #f2f2f2;
+}
+
+#firmware-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#firmware-table tr:hover {
+    background-color: #ddd;
+}

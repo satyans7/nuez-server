@@ -29,6 +29,7 @@ const unassignedDevicesContainer = document.getElementById('unassigned-devices-l
 document.getElementById('user-search-input').addEventListener('input', filterUsers);
 document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
 document.getElementById('assign-user-btn').addEventListener('click', assignUser);
+const firmwareVersionContainer = document.getElementById('firmware-version-list');
 
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${site}`;
@@ -90,28 +91,34 @@ function getCurrentSite() {
 }
 
 function toggleVisibility(section) {
-    alldevicesContainer.style.display = 'none';
-    allConsumerContainer.style.display = 'none';
-    registerTab.style.display = 'none';
-    deregisterTab.style.display = 'none';
-    editTab.style.display = 'none';
-    registerConsumerTab.style.display = 'none';
-    deregisterConsumerTab.style.display = 'none';
+    const sections = [
+        alldevicesContainer, 
+        allConsumerContainer, 
+        registerTab, 
+        deregisterTab, 
+        editTab, 
+        registerConsumerTab, 
+        deregisterConsumerTab, 
+        unassignedDevicesContainer, 
+        firmwareVersionContainer
+    ];
 
-    unassignedDevicesContainer.style.display = 'none'; // Hide unassigned devices container
+    sections.forEach(container => container.style.display = 'none');
 
     if (section === 'register') {
         registerTab.style.display = 'block';
     } else if (section === 'deregister') {
         deregisterTab.style.display = 'block';
-    }else if(section === 'register-consumer'){
+    } else if (section === 'register-consumer') {
         registerConsumerTab.style.display = 'block';
     } else if (section === 'deregister-consumer') {
         deregisterConsumerTab.style.display = 'block';
     } else if (section === 'edit') {
         editTab.style.display = 'block';
-    } else if (section === 'unassigned-devices') { // New section
+    } else if (section === 'unassigned-devices') {
         unassignedDevicesContainer.style.display = 'block';
+    } else if (section === 'firmware-version') {
+        firmwareVersionContainer.style.display = 'block';
     }
 }
 

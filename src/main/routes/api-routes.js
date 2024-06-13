@@ -70,6 +70,7 @@ const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsume
 const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoconsumer/:id";
  const AEP_TO_POST_DEVICE="/api/admin/newdevice/:id";
 const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
+const AEP_TO_SEND_FIRMWARE ="/send-firmware"
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -304,21 +305,6 @@ const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
     }
   };
   
-  // Zip the folder
-  const zipFolder = (source, out) => {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    const stream = fs.createWriteStream(out);
-  
-    return new Promise((resolve, reject) => {
-      archive
-        .directory(source, false)
-        .on('error', err => reject(err))
-        .pipe(stream);
-  
-      stream.on('close', () => resolve());
-      archive.finalize();
-    });
-  };
   
   // Define a route for the button click to update the repository
   app.get(AEP_TO_SYNC_FIRMWARE_DATA, async (req, res) => {
@@ -330,6 +316,11 @@ const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
       res.status(500).send('Error updating repository');
     }
   });
+
+  app.get(AEP_TO_SEND_FIRMWARE,async(req,res)=>{
+    // res.send("api called");
+    console.log("api called")
+  })
   
   const client = mqtt.connect('mqtt://localhost', {
     port: 1883,
