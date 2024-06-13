@@ -111,7 +111,6 @@ class DbController {
         //   ...newo
         // }
         newobj["_id"] = userId;
-        console.log(newobj);
         return newobj;
       }
     }

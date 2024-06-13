@@ -11,7 +11,7 @@ class authController {
         const isReserved = await dbController.isEmailReserved(email);
 
         if (isReserved && password === 'password') {
-            return { success: true, route: '/superAdmin.html', message: 'Logged In Successfully as Super Admin' };
+                      return { success: true, route: '/superAdmin.html', message: 'Logged In Successfully as Super Admin' };
         }
 
         // Fetch the user from the database
@@ -44,9 +44,9 @@ class authController {
       const otp = await dbController.findOTPByEmail(email)
       if(otp===providedotp){
         const user = await dbController.findUserByEmail(email);
-        return { success: true, role: user.role, message: 'Logged In Successfully' };
+        return { success: true, user: user, message: 'Logged In Successfully' };
       }
-      else return { success: false, role: "null", message: 'WRONG OTP!!! TRY AGAIN' };
+      else return { success: false, user:undefined, message: 'WRONG OTP!!! TRY AGAIN' };
      }
 }
 module.exports = new authController();

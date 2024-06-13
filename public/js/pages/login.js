@@ -33,6 +33,18 @@ document.addEventListener('DOMContentLoaded',()=>
 })
 document.addEventListener('DOMContentLoaded',()=>
   { document.getElementById("otplogin").addEventListener("click",()=>{
-        window.location.href="./loginviaotp"
+        window.location.href="/loginviaotp"
   })
   })
+
+  document.addEventListener('DOMContentLoaded',()=>
+    { document.getElementById("logout-link").addEventListener("click",()=>{
+          window.location.href="/logout"
+    })
+    })
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('google').addEventListener('click', function(event) {
+        window.location.href='/auth/google'
+    })
+  });
