@@ -2,6 +2,7 @@ const path = require('path');
 const controller = require("../controller/controller.js");
 const fs = require('fs');
 const simpleGit = require('simple-git');
+const mqtt = require('mqtt');
 module.exports = function (app) {
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
@@ -329,6 +330,170 @@ const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
       res.status(500).send('Error updating repository');
     }
   });
+  
+  const client = mqtt.connect('mqtt://localhost', {
+    port: 1883,
+    username: 'nuez',
+    password: 'emqx@nuez'
+  });
+  
+  // Subscribe to the firmware topic
+  const firmwareTopic = 'firmware';
+  client.on('connect', () => {
+    console.log('Connected to MQTT broker');
+    client.subscribe(firmwareTopic, (err) => {
+      if (err) {
+        console.error(`Failed to subscribe to ${firmwareTopic}:`, err);
+      } else {
+        console.log(`Subscribed to ${firmwareTopic}`);
+      }
+    });
+  });
+  
+  client.on('message', (topic, message) => {
+    if (topic === firmwareTopic) {
+      console.log(`Received message from ${firmwareTopic}:`, message.toString());
+    }
+  });
+  
+  // Route to publish firmware version
+  app.get('/sendFirmware', (req, res) => {
+    const firmwareFilePath = path.join(__dirname, 'local-repo', 'firmware.txt');
+    fs.readFile(firmwareFilePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Failed to read firmware.txt:', err);
+        res.status(500).send('Failed to read firmware version.');
+        return;
+      }
+  
+      client.publish(firmwareTopic, data, (err) => {
+        if (err) {
+          console.error('Failed to publish firmware version:', err);
+          res.status(500).send('Failed to publish firmware version.');
+          return;
+        }
+  
+        res.send('Firmware version sent successfully.');
+      });
+    });
+    
+  });
+  const filePath=path.join(__dirname ,'../local-repo/ota2.ino.bin')
+
+  app.get('/send-file', async (req, res) => {
+    try {
+      // Read the binary file
+      fs.readFile(filePath, async (err, fileContent) => {
+        if (err) {
+          console.error('Error reading file:', err);
+          res.status(500).send('Error reading file');
+          return;
+        }
+  
+        // Convert the data to a Blob
+        const blob = new Blob([fileContent], { type: 'application/octet-stream' });
+  
+        res.setHeader('Content-Type', 'application/octet-stream');
+        res.setHeader('Content-Disposition', `attachment; filename=${path.basename(filePath)}`);
+  
+        // Convert Blob to ArrayBuffer synchronously using await
+        try {
+          const buffer = await blob.arrayBuffer();
+          res.send(Buffer.from(buffer));
+        } catch (error) {
+          console.error('Error sending file:', error);
+          res.status(500).send('Error sending file');
+        }
+      });
+    } catch (error) {
+      console.error('Error sending file:', error);
+      res.status(500).send('Error sending file');
+    }
+  });
+
+  app.post('/publish-message/:site_id', async (req, res) => {
+    const site_id = req.params.site_id; // Correctly access site_id from req.params
+    console.log(site_id)
+    if (!site_id) {
+        return res.status(400).json({ error: 'Site ID is required' });
+    }
+
+    try {
+        // Publish the message to the MQTT topic
+        client.publish(site_id, 'hi');
+        res.status(200).json({ message: 'Message published successfully' });
+    } catch (error) {
+        console.error('Error publishing message:', error);
+        res.status(500).json({ error: 'Failed to publish message' });
+    }
+});
+
+app.post('/version', async (req, res) => {
+  try {
+    const deviceVersions = req.body;
+
+    // Read the JSON file containing device data
+    const filePath=path.join(__dirname ,'../database/json-data/deviceToProfile.json')// Update the path to your JSON file
+    const rawData = fs.readFileSync(filePath);
+    const deviceData = JSON.parse(rawData);
+    
+    // Update the version of each device
+    deviceVersions.forEach(({ device_id, version }) => {
+      if (deviceData.hasOwnProperty(device_id)) {
+        deviceData[device_id].version = version;
+      }
+    });
+
+    // Write the updated device data back to the JSON file
+    fs.writeFileSync(filePath, JSON.stringify(deviceData, null, 2));
+
+    console.log('Device versions updated successfully');
+    res.status(200).json({ message: 'Device versions updated successfully' });
+  } catch (error) {
+    console.error('Error updating device versions:', error);
+    res.status(500).json({ error: 'Failed to update device versions' });
+  }
+});
+
+
+app.post('/intimate-all', async (req, res) => {
+  try {
+      const { message } = req.body;
+
+      // Publish the message to the "site_1/intimate" topic
+      client.publish('site_1/intimate', message);
+
+      res.status(200).json({ message: 'Intimate message sent to all devices' });
+  } catch (error) {
+      console.error('Error intimating all devices:', error);
+      res.status(500).json({ error: 'Failed to intimate all devices' });
+  }
+});
+
+
+app.post('/intimate-all-sites', (req, res) => {
+  const { message } = req.body;
+
+  if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+  }
+
+  try {
+      client.publish('firmware', message, (err) => {
+          if (err) {
+              console.error('Error publishing message:', err);
+              return res.status(500).json({ error: 'Failed to intimate all sites' });
+          }
+
+          console.log('Intimate message sent to all sites');
+          res.status(200).json({ message: 'Intimate message sent to all sites' });
+      });
+  } catch (error) {
+      console.error('Error intimating all devices:', error);
+      res.status(500).json({ error: 'Failed to intimate all sites' });
+  }
+});
+
 };
 
 

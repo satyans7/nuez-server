@@ -398,3 +398,27 @@ administrationTab.addEventListener('click', async () => {
         
      }) 
 });
+
+
+// Add this to your existing JavaScript
+
+document.getElementById('intimate-all-btn').addEventListener('click', async () => {
+    try {
+        const response = await fetch('/intimate-all-sites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: 'intimate' })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to intimate all sites');
+        }
+
+        alert('All sites intimated successfully!');
+    } catch (error) {
+        console.error('Error intimating all sites:', error);
+        alert('Error intimating all sites. Please try again.');
+    }
+});
