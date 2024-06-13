@@ -1,5 +1,9 @@
 import { getSitesData, getUserSiteMapping,registerDevice,registerSite,deregisterSite } from '../client/client.js';
-
+document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('logout-link').addEventListener("click",(event)=>{
+        window.location.href="/logout"
+    })
+});
 const allSitesContainer = document.querySelector('.all-sites');
 const registerTab = document.getElementById('register-form-container');
 const deregisterTab = document.getElementById('deregister-form-container');

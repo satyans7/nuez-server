@@ -1,14 +1,17 @@
 const path = require('path');
 const controller = require("../controller/controller.js");
-
+const fs = require('fs');
+const simpleGit = require('simple-git');
+const mqtt = require('mqtt');
 module.exports = function (app) {
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
     const data = await controller.fetchSampleDataFromServer();
-    console.log(data);
     res.send(data);
   });
-
+   const permForAdmin="admin";
+   const permForConsumer="consumer";
+   const permForSuperAdmin="superAdmin";
 
   const ADMINPAGE = path.join(__dirname, '../views/pages', 'admin.html');
   const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
@@ -22,6 +25,7 @@ module.exports = function (app) {
   const PRIVATE_AEP_TO_SITES = "/api/site-dashboard/:id";
   const PRIVATE_AEP_TO_DEVICEPROFILE="/api/device-profile/:id";
 
+  
   //public
 
   const AEP_TO_REGISTER_A_USER = "/api/user/register";
@@ -54,6 +58,10 @@ module.exports = function (app) {
   const AEP_TO_PUT_SITE = "/api/admin/sites/:id";
 const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
 
+
+
+const AEP_TO_FETCH_USER_DATA_FROM_GOOGLEAUTH= "/api/fetchDataFromGoogle"
+
   const AEP_TO_REGISTER_SITE = "/api/admin/registersite/:id"
   const AEP_TO_DEREGISTER_SITE = "/api/admin/deregistersite/:id"
   const AEP_TO_REGISTER_DEVICE = "/api/admin/registerdevice/:id"
@@ -67,7 +75,8 @@ const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING="/api/admin/deregisterconsume
 
 const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoconsumer/:id";
  const AEP_TO_POST_DEVICE="/api/admin/newdevice/:id";
-
+const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
+const AEP_TO_SEND_FIRMWARE ="/send-firmware"
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -121,7 +130,6 @@ const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoc
 
   /////////////SEND A ROLE CHANGE REQ/////////////////////////
   app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, async (req, res) => {
-    console.log("hello");
     await controller.requestRoleChange(req);
     res.sendStatus(200); // Sending a status to indicate success
   });
@@ -134,15 +142,15 @@ const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoc
 
 
   ////////////PROTECTED ROUTES FOR PAGES RENDERING//////////////////
-  app.get(PRIVATE_AEP_TO_ADMINROUTE, (req, res) => {
+  app.get(PRIVATE_AEP_TO_ADMINROUTE,controller.roleAuthenticatorIdSensitive(permForAdmin), (req, res) => {
     res.sendFile(ADMINPAGE);
   });
 
-  app.get(PRIVATE_AEP_TO_CONSUMERROUTE, (req, res) => {
+  app.get(PRIVATE_AEP_TO_CONSUMERROUTE, controller.roleAuthenticatorIdSensitive(permForConsumer),(req, res) => {
     res.sendFile(CONSUMERPAGE);
   });
 
-  app.get('/superAdmin.html', (req, res) => {
+  app.get('/superAdmin',(req, res) => {
     res.sendFile(SUPERADMINPAGE);
   });
 
@@ -161,12 +169,8 @@ const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoc
   });
 
   app.post(AEP_TO_VERIFY_OTP, async (req, res) => {
-    const data =await controller.OTPVerification(req.body.email,req.body.otp );
-    if (data.success) {
-      return res.status(200).json(data);
-    } else {
-      return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
-    }
+    const data =await controller.OTPVerification(req,res,req.body.email,req.body.otp );
+      // return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
   });
 
   ///////////TESTING ROUTES////////////////
@@ -284,7 +288,221 @@ const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER="/api/admin/assigndevicetoc
     await controller.postDevice(req,res);
   });
 
+
+  const localRepoPath = path.join(__dirname ,'../local-repo');
+  const githubRepoUrl = 'https://github.com/priyansu1703/testFile';
+  const updateRepo = async () => {
+    const git = simpleGit();
+  
+    if (!fs.existsSync(localRepoPath)) {
+      // Clone the repository if it doesn't exist
+      console.log('Cloning the repository...');
+      await git.clone(githubRepoUrl, localRepoPath);
+    } else {
+      // Pull the latest changes if the repository exists
+      console.log('Pulling the latest changes...');
+      await git.cwd(localRepoPath);
+      await git.pull();
+    }
+  };
+  
+  
+  // Define a route for the button click to update the repository
+  app.get(AEP_TO_SYNC_FIRMWARE_DATA, async (req, res) => {
+    try {
+      await updateRepo();
+      res.send('Repository updated successfully!');
+    } catch (error) {
+      console.error('Error updating repository:', error);
+      res.status(500).send('Error updating repository');
+    }
+  });
+
+  app.get(AEP_TO_SEND_FIRMWARE,async(req,res)=>{
+    // res.send("api called");
+    console.log("api called")
+  })
+  
+  const client = mqtt.connect('mqtt://192.168.33.250', {
+    port: 1883,
+    username: 'nuez',
+    password: 'emqx@nuez'
+  });
+  
+  // Subscribe to the firmware topic
+  const firmwareTopic = 'firmware';
+  client.on('connect', () => {
+    console.log('Connected to MQTT broker');
+    client.subscribe(firmwareTopic, (err) => {
+      if (err) {
+        console.error(`Failed to subscribe to ${firmwareTopic}:`, err);
+      } else {
+        console.log(`Subscribed to ${firmwareTopic}`);
+      }
+    });
+  });
+  
+  client.on('message', (topic, message) => {
+    if (topic === firmwareTopic) {
+      console.log(`Received message from ${firmwareTopic}:`, message.toString());
+    }
+  });
+  
+  // Route to publish firmware version
+  app.get('/sendFirmware', (req, res) => {
+    const firmwareFilePath = path.join(__dirname, 'local-repo', 'firmware.txt');
+    fs.readFile(firmwareFilePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Failed to read firmware.txt:', err);
+        res.status(500).send('Failed to read firmware version.');
+        return;
+      }
+  
+      client.publish(firmwareTopic, data, (err) => {
+        if (err) {
+          console.error('Failed to publish firmware version:', err);
+          res.status(500).send('Failed to publish firmware version.');
+          return;
+        }
+  
+        res.send('Firmware version sent successfully.');
+      });
+    });
+    
+  });
+  const filePath=path.join(__dirname ,'../local-repo/ota2.ino.bin')
+
+  app.get('/send-file', async (req, res) => {
+    try {
+      // Read the binary file
+      fs.readFile(filePath, async (err, fileContent) => {
+        if (err) {
+          console.error('Error reading file:', err);
+          res.status(500).send('Error reading file');
+          return;
+        }
+  
+        // Convert the data to a Blob
+        const blob = new Blob([fileContent], { type: 'application/octet-stream' });
+  
+        res.setHeader('Content-Type', 'application/octet-stream');
+        res.setHeader('Content-Disposition', `attachment; filename=${path.basename(filePath)}`);
+  
+        // Convert Blob to ArrayBuffer synchronously using await
+        try {
+          const buffer = await blob.arrayBuffer();
+          res.send(Buffer.from(buffer));
+        } catch (error) {
+          console.error('Error sending file:', error);
+          res.status(500).send('Error sending file');
+        }
+      });
+    } catch (error) {
+      console.error('Error sending file:', error);
+      res.status(500).send('Error sending file');
+    }
+  });
+
+  app.post('/publish-message/:site_id', async (req, res) => {
+    const site_id = req.params.site_id; // Correctly access site_id from req.params
+    console.log(site_id)
+    if (!site_id) {
+        return res.status(400).json({ error: 'Site ID is required' });
+    }
+
+    try {
+        // Publish the message to the MQTT topic
+        client.publish(site_id, 'hi');
+        res.status(200).json({ message: 'Message published successfully' });
+    } catch (error) {
+        console.error('Error publishing message:', error);
+        res.status(500).json({ error: 'Failed to publish message' });
+    }
+});
+
+app.post('/version', async (req, res) => {
+  try {
+    const deviceVersions = req.body;
+
+    // Read the JSON file containing device data
+    const filePath=path.join(__dirname ,'../database/json-data/deviceToProfile.json')// Update the path to your JSON file
+    const rawData = fs.readFileSync(filePath);
+    const deviceData = JSON.parse(rawData);
+    
+    // Update the version of each device
+    deviceVersions.forEach(({ device_id, version }) => {
+      if (deviceData.hasOwnProperty(device_id)) {
+        deviceData[device_id].version = version;
+      }
+    });
+
+    // Write the updated device data back to the JSON file
+    fs.writeFileSync(filePath, JSON.stringify(deviceData, null, 2));
+
+    console.log('Device versions updated successfully');
+    res.status(200).json({ message: 'Device versions updated successfully' });
+  } catch (error) {
+    console.error('Error updating device versions:', error);
+    res.status(500).json({ error: 'Failed to update device versions' });
+  }
+});
+
+
+app.post('/intimate-all', async (req, res) => {
+  try {
+      const { message } = req.body;
+
+      // Publish the message to the "site_1/intimate" topic
+      client.publish('site_1/intimate', message);
+
+      res.status(200).json({ message: 'Intimate message sent to all devices' });
+  } catch (error) {
+      console.error('Error intimating all devices:', error);
+      res.status(500).json({ error: 'Failed to intimate all devices' });
+  }
+});
+
+
+app.post('/intimate-all-sites', (req, res) => {
+  const { message } = req.body;
+
+  if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+  }
+
+  try {
+      client.publish('firmware', message, (err) => {
+          if (err) {
+              console.error('Error publishing message:', err);
+              return res.status(500).json({ error: 'Failed to intimate all sites' });
+          }
+
+          console.log('Intimate message sent to all sites');
+          res.status(200).json({ message: 'Intimate message sent to all sites' });
+      });
+  } catch (error) {
+      console.error('Error intimating all devices:', error);
+      res.status(500).json({ error: 'Failed to intimate all sites' });
+  }
+});
+app.get(AEP_TO_FETCH_USER_DATA_FROM_GOOGLEAUTH,(req, res) => {
+  let userData={
+    name: "",
+    email: ""
+  };
+  if(req.user){
+    userData.name=req.user.name,
+    userData.email=req.user.email
+  }
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+  })
+  res.json(userData || {});
+});
 };
+
 
 
 

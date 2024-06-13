@@ -30,10 +30,10 @@ const unassignedDevicesContainer = document.getElementById('unassigned-devices-l
 document.getElementById('user-search-input').addEventListener('input', filterUsers);
 document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
 document.getElementById('assign-user-btn').addEventListener('click', assignUser);
+const firmwareVersionContainer = document.getElementById('firmware-version-list');
 
 const maintenanceTab = document.getElementById('device-maintenance-tab')
 const maintenanceDevicesContainer = document.getElementById('maintenance-devices-list')
-
 const title = document.createElement('h1');
 title.textContent = `Welcome, ${site}`;
 headingText.appendChild(title);
@@ -96,15 +96,20 @@ function getCurrentSite() {
 }
 
 function toggleVisibility(section) {
-    alldevicesContainer.style.display = 'none';
-    allConsumerContainer.style.display = 'none';
-    registerTab.style.display = 'none';
-    deregisterTab.style.display = 'none';
-    editTab.style.display = 'none';
-    registerConsumerTab.style.display = 'none';
-    deregisterConsumerTab.style.display = 'none';
-    maintenanceDevicesContainer.style.display = 'none';
-    unassignedDevicesContainer.style.display = 'none'; // Hide unassigned devices container
+    const sections = [
+        alldevicesContainer, 
+        allConsumerContainer, 
+        registerTab, 
+        deregisterTab, 
+        editTab, 
+        registerConsumerTab, 
+        deregisterConsumerTab, 
+        unassignedDevicesContainer, 
+        firmwareVersionContainer,
+        maintenanceDevicesContainer
+    ];
+
+    sections.forEach(container => container.style.display = 'none');
 
     if (section === 'register') {
         registerTab.style.display = 'block';
@@ -116,8 +121,10 @@ function toggleVisibility(section) {
         deregisterConsumerTab.style.display = 'block';
     } else if (section === 'edit') {
         editTab.style.display = 'block';
-    } else if (section === 'unassigned-devices') { // New section
+    } else if (section === 'unassigned-devices') {
         unassignedDevicesContainer.style.display = 'block';
+    } else if (section === 'firmware-version') {
+        firmwareVersionContainer.style.display = 'block';
     }
 }
 
@@ -598,4 +605,132 @@ function handleClickOutside(event) {
 function cancelSearch() {
     document.getElementById('user-search-container').style.display = 'none';
     document.removeEventListener('click', handleClickOutside, true);
+}
+document.addEventListener('DOMContentLoaded', async () => {
+    // Other initialization code...
+
+    document.getElementById('firmware-link').addEventListener('click', async () => {
+        toggleVisibility('firmware');
+        await fetchDeviceVersions();
+    });
+
+    document.getElementById('upgrade-all-versions').addEventListener('click', async () => {
+        await upgradeAllDeviceVersions();
+    });
+    document.getElementById('intimate-all').addEventListener('click', async () => {
+        await intimateAll();
+    });
+
+    // Other event listeners...
+});
+
+async function fetchDeviceVersions() {
+    try {
+        // Fetch devices and their versions
+        const devicesData = await getDevicesData();
+        const versions = Object.keys(devicesData).map((deviceId) => {
+            const device = devicesData[deviceId];
+            return { id: deviceId, name: device.name, version: device.version };
+        });
+
+        // Display versions in a table
+        displayDeviceVersions(versions);
+    } catch (error) {
+        console.error('Error fetching device versions:', error);
+        alert('Error fetching device versions. Please try again.');
+    }
+}
+
+async function upgradeAllDeviceVersions() {
+    try {
+        // Fetch devices and their versions
+        const devicesData = await getDevicesData();
+        const deviceIds = Object.keys(devicesData);
+        const site_id = getCurrentSite();
+        const response = await fetch(`/publish-message/${site_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ deviceIds })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to upgrade device versions');
+        }
+
+        // Wait for 2 seconds before refreshing the device versions
+        setTimeout(async () => {
+            // Refresh the device versions after upgrade
+            await fetchDeviceVersions();
+            alert('All device versions upgraded successfully!');
+        }, 2000);
+    } catch (error) {
+        console.error('Error upgrading device versions:', error);
+        alert('Error upgrading device versions. Please try again.');
+    }
+}
+
+function displayDeviceVersions(versions) {
+    const tableContainer = document.getElementById('device-versions-container');
+    tableContainer.innerHTML = ''; // Clear previous content
+
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
+    // Create table headers
+    const headers = ['Device ID', 'Device Name', 'Version'];
+    const headerRow = document.createElement('tr');
+    headers.forEach(headerText => {
+        const header = document.createElement('th');
+        header.textContent = headerText;
+        headerRow.appendChild(header);
+    });
+    thead.appendChild(headerRow);
+
+    // Populate table rows with device versions
+    versions.forEach(device => {
+        const row = document.createElement('tr');
+
+        const deviceIdCell = document.createElement('td');
+        deviceIdCell.textContent = device.id;
+        row.appendChild(deviceIdCell);
+
+        const deviceNameCell = document.createElement('td');
+        deviceNameCell.textContent = device.name;
+        row.appendChild(deviceNameCell);
+
+        const versionCell = document.createElement('td');
+        versionCell.textContent = device.version;
+        row.appendChild(versionCell);
+
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    tableContainer.appendChild(table);
+}
+
+
+async function intimateAll() {
+    try {
+        const response = await fetch('/intimate-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: 'intimate' })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to intimate all devices');
+        }
+
+        alert('All devices intimated successfully!');
+    } catch (error) {
+        console.error('Error intimating all devices:', error);
+        alert('Error intimating all devices. Please try again.');
+    }
 }

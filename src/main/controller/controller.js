@@ -2,7 +2,12 @@ const dbController = require("../db-controller/db-controller");
 const authController = require("../auth-controller/auth-controller");
 const otpGeneratorUtility = require("../utils/otp-generator")
 const ntpClient = require('ntp-client');
+const passport = require("../auth-controller/passport")
+const {roleAuthenticatorIdSensitive,roleAuthenticatorIdInSensitive} = require("../middlewares/auth")
+
 class Controller {
+  passport=passport;
+  // roleAuthenticator=roleAuthenticator;
   //////////// FETCHING SAMPLE DATA///////////////////////////////////////////////
   async fetchSampleDataFromServer() {
     let data = await dbController.fetchSampleDataFromServer();
@@ -238,19 +243,32 @@ class Controller {
     }
     else return await dbController.saveotpemail(email, otp);
   }
-  async OTPVerification(email, providedotp) {
+  async OTPVerification(req,res,email, providedotp) {
     const authResult = await authController.verifyOTP(email, providedotp);
     if (authResult.success) {
-      await dbController.deleteOTPByEmail(email);
-      let route = `/api/${authResult.role}-dashboard`;
-      return { success: true, route: route, message: 'Logged In Successfully' };
-    }
-    else {
-      return { success: false, route: 'null', message: 'Invalid username or password!!!' };
-    }
+          await dbController.deleteOTPByEmail(email);
+          let user={
+            user_id:authResult.user._id,
+            name:authResult.user.name,
+            email:authResult.user.email,
+            role:authResult.user.role
+        }
+          let route = `/`;
+          req.login(user, (err) => {
+            if (err) {
+              return next(err);
+            }
+            return res.status(200).send({success: true, route: route, message: 'Logged in successfully!!' });
+          });
+        
+          
+      }
+   else {
+      return  res.status(401).send( {success: false, route: 'null', message: 'Invalid OTP!!!' });
   }
-
-
+ }
+  
+  
 
   // const obj = new Controller();
   // obj.OTPGenerationAndStorage("priyansu.iitism@gmail.com");
@@ -350,6 +368,9 @@ class Controller {
     await dbController.postDevice(req, res);
   }
 
+////////////////AUTHORIZE_USER//////////////////////////////////
+roleAuthenticatorIdInSensitive=roleAuthenticatorIdInSensitive;
+ roleAuthenticatorIdSensitive=roleAuthenticatorIdSensitive ;
 }
 
 module.exports = new Controller();

@@ -6,17 +6,20 @@
     "role": "admin"
   },
   "user_2": {
+  "user_2": {
     "name": "Bob Smith",
     "email": "bob.smith@example.com",
     "password": "password123",
     "role": "admin"
   },
   "user_3": {
+  "user_3": {
     "name": "Nikhil Priyadarshan",
     "email": "nikhilpriyadarshan1234@gmail.com",
     "password": "12345678",
     "role": "admin"
   },
+  "user_4": {
   "user_4": {
     "name": "Pankaj Sharma",
     "email": "oyeeitspankaj@gmail.com",
@@ -141,6 +144,13 @@
     "name": "Brahma",
     "email": "brahma@gmail.com",
     "password": "12345",
+    "role": "admin"
+  }
+  },
+  "user_26": {
+    "name": "Pankaj",
+    "email": "pankajsharma.iitism@gmail.com",
+    "password": "password",
     "role": "admin"
   }
 }

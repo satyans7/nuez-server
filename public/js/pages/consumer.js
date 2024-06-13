@@ -1,5 +1,9 @@
 import { getDevicesData, getConsumerDeviceMapping, getAllAdmins,registerConsumerDeviceMapping,deregisterConsumerDeviceMapping ,postDeviceData} from '../client/client.js';
-
+document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('logout-link').addEventListener("click",(event)=>{
+        window.location.href="/logout"
+    })
+});
 const alldevicesContainer = document.querySelector('.all-devices');
 const headingText = document.getElementById('heading');
 const currentConsumer = document.getElementById('consumer-id');
