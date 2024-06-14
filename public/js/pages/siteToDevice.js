@@ -276,40 +276,98 @@ maintenanceTab.addEventListener('click', async () => {
 })
 
 async function viewMaintenanceDevices() {
-
+    // Fetch device data and site-device mappings
     const devicesData = await getDevicesData();
     const sitesdevicesMapping = await getSiteDeviceMapping();
+
+    // Create table elements
     const maintenanceTable = document.createElement('table');
     maintenanceTable.id = 'maintenance-devices-table';
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
+    // Create and append header row
     const headerRow = document.createElement('tr');
     const deviceIdHeader = document.createElement('th');
     deviceIdHeader.textContent = 'Device Name';
     const actionHeader = document.createElement('th');
     actionHeader.textContent = 'Action';
+    const reasonHeader = document.createElement('th');
+    reasonHeader.textContent = 'Reason';
 
     headerRow.appendChild(deviceIdHeader);
     headerRow.appendChild(actionHeader);
+    headerRow.appendChild(reasonHeader);
     thead.appendChild(headerRow);
 
+    // Get devices for the site
     const devices = sitesdevicesMapping[site];
     maintenanceDevicesContainer.innerHTML = '';
 
     devices.forEach(key => {
         const device = devicesData[key];
         if (device) {
+            // Create row for each device
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             nameCell.textContent = device.name;
-            const actionCell = document.createElement('td');
-            const requestButton = document.createElement('button');
-            requestButton.textContent = 'Enter Maintenance';
 
-            actionCell.appendChild(requestButton);
+            // Create action cell with two buttons
+            const actionCell = document.createElement('td');
+            const enterMaintenanceButton = document.createElement('button');
+            enterMaintenanceButton.textContent = 'Enter Maintenance';
+            enterMaintenanceButton.style.cursor = 'pointer';
+            const exitMaintenanceButton = document.createElement('button');
+            exitMaintenanceButton.textContent = 'Exit Maintenance';
+            exitMaintenanceButton.style.background = 'red';
+            exitMaintenanceButton.disabled = true; 
+            exitMaintenanceButton.style.cursor = 'not-allowed'
+
+
+            actionCell.appendChild(enterMaintenanceButton);
+            actionCell.appendChild(exitMaintenanceButton);
+
+            const reasonCell = document.createElement('td');
+            const reasonDropdown = document.createElement('select');
+            const option1 = document.createElement('option');
+            option1.value = '';
+            option1.textContent = 'Select Reason';
+            const option2 = document.createElement('option');
+            option2.value = 'Battery Change';
+            option2.textContent = 'Battery Change';
+            const option3 = document.createElement('option');
+            option3.value = 'Device Damage';
+            option3.textContent = 'Device Damage';
+
+            reasonDropdown.appendChild(option1);
+            reasonDropdown.appendChild(option2);
+            reasonDropdown.appendChild(option3);
+            reasonCell.appendChild(reasonDropdown);
+
+            enterMaintenanceButton.addEventListener('click', () => {
+                if (reasonDropdown.value === '') {
+                    alert('Please select a reason before entering maintenance.');
+                } else {
+                    alert(`${device.name} is under maintenance now.`);
+                    exitMaintenanceButton.disabled = false; 
+                    exitMaintenanceButton.style.cursor = 'pointer';
+                    enterMaintenanceButton.disabled = true;
+                    enterMaintenanceButton.style.cursor = 'not-allowed';
+                }
+            });
+
+            exitMaintenanceButton.addEventListener('click', () => {
+                confirm(`Do you want to exit the maintenance mode?`);
+                enterMaintenanceButton.disabled = false;
+                enterMaintenanceButton.style.cursor = 'pointer';
+                exitMaintenanceButton.disabled = true;
+                exitMaintenanceButton.style.cursor = 'not-allowed'
+                reasonDropdown.value = "";
+            });
+
             row.appendChild(nameCell);
             row.appendChild(actionCell);
+            row.appendChild(reasonCell);
             tbody.appendChild(row);
         }
     });
@@ -317,8 +375,9 @@ async function viewMaintenanceDevices() {
     maintenanceTable.appendChild(thead);
     maintenanceTable.appendChild(tbody);
     maintenanceDevicesContainer.appendChild(maintenanceTable);
-
 }
+
+
 
 // EDIT PROFILE ----------------------------------------------------------------------------------//
 
