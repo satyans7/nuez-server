@@ -59,7 +59,6 @@ app.use(controller.passport.session());
 // Define routes
 app.get("/", (req, res) => {
     if(req.isAuthenticated()){
-    console.log(req)
     res.redirect(`/api/${req.user.role}-dashboard/user_${req.user.user_id.substr(5)}`)
   }
   else res.sendFile(path.join(__dirname, VIEW, HOME));
