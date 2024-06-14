@@ -452,7 +452,7 @@ try {
   });
   
 
-  const filePath=path.join(__dirname ,'../local-repo/ota2.ino.bin')
+  const filePath=path.join(__dirname ,'../local-repo/firmware.ino.bin')
 
   app.get('/send-file', async (req, res) => {
     try {
