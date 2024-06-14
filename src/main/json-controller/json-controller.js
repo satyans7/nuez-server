@@ -9,8 +9,8 @@ const ADMIN_TO_SITE_DATA = path.join(__dirname, "../database/json-data/adminToSi
 const SITE_DATA = path.join(__dirname, "../database/json-data/siteRegistration.json");
 const SITE_TO_DEVICE_DATA = path.join(__dirname, "../database/json-data/siteToDevices.json")
 const DEVICE_DATA = path.join(__dirname, "../database/json-data/deviceToProfile.json")
-const CONSUMER_TO_DEVICE_DATA = path.join(__dirname, "../database/json-data/consumerToDevices.json");
-const SITE_TO_CONSUMER_DATA = path.join(__dirname, "../database/json-data/siteToConsumer.json");
+const CONSUMER_TO_DEVICE_DATA =path.join(__dirname, "../database/json-data/consumerToDevices.json");
+const SITE_TO_CONSUMER_DATA= path.join(__dirname, "../database/json-data/siteToConsumer.json");
 const OTPEMAIL = path.join(__dirname, "../database/json-data/otp-email.json");
 
 class JsonController {
@@ -49,7 +49,6 @@ class JsonController {
   postUserDataToServer = (user) => {
     try {
       const data = this.readDatabase(USER_DATA);
-      const map = this.readDatabase(CONSUMER_TO_DEVICE_DATA);
       const hasUser = Object.keys(data).length > 0;
       const usersIds = Object.keys(data);
       let lastUserId;
@@ -66,10 +65,8 @@ class JsonController {
 
       newUser.role = 'consumer';
       data[newUserId] = newUser;
-      map[newUserId] = [];
 
       this.writeDatabase(USER_DATA, data);
-      this.writeDatabase(CONSUMER_TO_DEVICE_DATA, map);
 
       console.log(`${newUser.name} successfully registered`);
       return newUserId;
@@ -175,24 +172,14 @@ class JsonController {
 
   async roleChange(userId) {
     const data = await this.readDatabase(USER_DATA);
-    const AdminMap = await this.readDatabase(ADMIN_TO_SITE_DATA);
-    const ConsumerMap = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
-
     if (data[userId].role === "consumer") {
       data[userId].role = "admin"
-      delete ConsumerMap[userId];
-      AdminMap[userId] = [];
     }
     else {
       data[userId].role = "consumer"
-      delete AdminMap[userId];
-      ConsumerMap[userId] = [];
-
     }
 
     await this.writeDatabase(USER_DATA, data);
-    await this.writeDatabase(ADMIN_TO_SITE_DATA, AdminMap);
-    await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, ConsumerMap);
   }
 
   async isEmailReserved(email) {
@@ -205,37 +192,37 @@ class JsonController {
     }
   }
 
-  async saveotpemail(otp, email) {
+  async saveotpemail(otp,email){
     const data = {}
-    data[email] = otp;
-
-    await this.writeDatabase(OTPEMAIL, data);
+      data[email]=otp;
+    
+    await this.writeDatabase(OTPEMAIL,data);
     console.log(`${email} otp has been saved successfully`)
     return email;
   }
-  async updateotpemail(otp, email) {
-    const data = await this.readDatabase(OTPEMAIL);
-    data[email] = otp;
-    await this.writeDatabase(OTPEMAIL, data);
+  async updateotpemail(otp,email){
+    const data =await this.readDatabase(OTPEMAIL);
+     data[email]=otp;
+    await this.writeDatabase(OTPEMAIL,data);
     console.log(`${email} otp has been updated successfully`)
     return email;
   }
-
-  async isOTPRequested(email) {
+  
+  async isOTPRequested(email){
     const data = await this.readDatabase(OTPEMAIL);
-    if (data[email]) return 1;
+    if(data[email])return 1;
     return 0;
   }
 
-  async findOTPByEmail(email) {
-    const data = await this.readDatabase(OTPEMAIL);
+  async findOTPByEmail(email){
+    const data =await this.readDatabase(OTPEMAIL);
     return await data[email];
   }
-
-  async deleteOTPByEmail(email) {
-    const data = await this.readDatabase(OTPEMAIL);
+   
+  async deleteOTPByEmail(email){
+    const data =await this.readDatabase(OTPEMAIL);
     delete data[email];
-    await this.writeDatabase(OTPEMAIL, data);
+    await this.writeDatabase(OTPEMAIL,data);
   }
 
 
@@ -269,343 +256,64 @@ class JsonController {
   }
 
   //fetch consumer to device mapping
-  async fetchConsumerToDevice() {
-    const db = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+  async fetchConsumerToDevice(){
+    const db =await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
     return db;
   }
 
   //fetch site to consumer mapping
-  async fetchSiteToConsumer() {
-    const db = await this.readDatabase(SITE_TO_CONSUMER_DATA);
+  async fetchSiteToConsumer(){
+    const db =await this.readDatabase(SITE_TO_CONSUMER_DATA);
     return db;
   }
 
+ 
 
+async putSite(req,res){
+  const siteId = req.params.id;
+const { name, location } = req.body;
 
-  async putSite(req, res) {
-    const siteId = req.params.id;
-    const { name, location } = req.body;
+  try {
+    let sites = await this.readDatabase(SITE_DATA);
 
-    try {
-      let sites = await this.readDatabase(SITE_DATA);
-
-      if (!sites[siteId]) {
+    if (!sites[siteId]) {
         return res.status(404).send({ error: 'Site not found' });
-      }
-      sites[siteId].name = name;
-      sites[siteId].location = location;
-
-      await this.writeDatabase(SITE_DATA, sites);
-
-      res.send({ message: 'Site updated successfully', site: sites[siteId] });
-    } catch (error) {
-      res.status(500).send({ error: 'An error occurred while updating the site' });
     }
+        sites[siteId].name = name;
+        sites[siteId].location = location;
 
-  }
+    await this.writeDatabase(SITE_DATA,sites);
 
-
-  async putDevice(req, res) {
-    const deviceId = req.params.id;
-    const { name, location, totalConsumption, status, registrationDate } = req.body;
-
-    try {
-      let devices = await this.readDatabase(DEVICE_DATA);
-
-      if (!devices[deviceId]) {
-        return res.status(404).send({ error: 'Site not found' });
-      }
-      devices[deviceId].name = name;
-      devices[deviceId].location = location;
-      devices[deviceId].totalConsumption = totalConsumption;
-      devices[deviceId].status = status;
-      devices[deviceId].registrationDate = registrationDate;
-      await this.writeDatabase(DEVICE_DATA, devices);
-
-      res.send({ message: 'Site updated successfully', device: devices[deviceId] });
-    } catch (error) {
-      res.status(500).send({ error: 'An error occurred while updating the site' });
-    }
-
-  }
-
-  async registerSite(req, res) {
-    const user = req.params.id;
-    const site = req.body.site;
-
-
-    try {
-      let data = await this.readDatabase(ADMIN_TO_SITE_DATA);
-
-      if (Object.values(data).find(sites => sites.find(s => s === site))) {
-        return res.status(400).json({ message: "Site already registered under another admin" });
-      }
-
-     else if (data[user]) {
-        if (!data[user].find(s => s === site)) {
-          data[user].push(site);
-          await this.writeDatabase(ADMIN_TO_SITE_DATA, data);
-          return res.status(200).json({ message: "Site registered successfully", data });
-        } else {
-          return res.status(400).json({ message: "Site already exists" });
-        }
-      } else {
-        return res.status(404).json({ message: "User not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
-  async deregisterSite(req, res) {
-    const user = req.params.id;
-    const site = req.body.site;
-    let data = await this.readDatabase(ADMIN_TO_SITE_DATA);
-    try {
-      if (data[user]) {
-        const siteIndex = data[user].findIndex(s => s === site);
-        if (siteIndex > -1) {
-          data[user].splice(siteIndex, 1);
-          await this.writeDatabase(ADMIN_TO_SITE_DATA, data);
-          return res.status(200).json({ message: "Site deleted successfully", data });
-        } else {
-          return res.status(400).json({ message: "Site not found for this user" });
-        }
-      } else {
-        return res.status(404).json({ message: "User not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
-
-  async registerDevice(req, res) {
-    const site = req.params.id;
-    const device = req.body.device;
-
-
-    try {
-      let data = await this.readDatabase(SITE_TO_DEVICE_DATA);
-
-      if (Object.values(data).find(devices => devices.find(d => d === device))) {
-        return res.status(400).json({ message: "Device already registered under another site" });
-      }
-
-     else  if (data[site]) {
-        if (!data[site].find(d => d === device)) {
-          data[site].push(device);
-          await this.writeDatabase(SITE_TO_DEVICE_DATA, data);
-          return res.status(200).json({ message: "Device registered successfully", data });
-        } else {
-          return res.status(400).json({ message: "Device already exists" });
-        }
-      } else {
-        return res.status(404).json({ message: "Site not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
-  async deregisterDevice(req, res) {
-    const site = req.params.id;
-    const device = req.body.device;
-    let data = await this.readDatabase(SITE_TO_DEVICE_DATA);
-    try {
-      if (data[site]) {
-        const deviceIndex = data[site].findIndex(d => d === device);
-        if (deviceIndex > -1) {
-          data[site].splice(deviceIndex, 1);
-          await this.writeDatabase(SITE_TO_DEVICE_DATA, data);
-          return res.status(200).json({ message: "Device deleted successfully", data });
-        } else {
-          return res.status(400).json({ message: "Device not found for this site" });
-        }
-      } else {
-        return res.status(404).json({ message: "Site not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-
-  }
-
-
-  async registerConsumerToDeviceMapping(req, res) {
-    const consumer = req.params.id;
-    const device = req.body.device;
-
-
-    try {
-      let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
-
-      if (Object.values(data).find(devices => devices.find(d => d === device))) {
-        return res.status(400).json({ message: "Device already registered under another site" });
-      }
-
-     else  if (data[consumer]) {
-        if (!data[consumer].find(d => d === device)) {
-          data[consumer].push(device);
-          await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
-          return res.status(200).json({ message: "Device registered successfully", data });
-        } else {
-          return res.status(400).json({ message: "Device already exists" });
-        }
-      } else {
-        return res.status(404).json({ message: "Site not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
-
-  async deregisterConsumerToDeviceMapping(req, res) {
-    const consumer = req.params.id;
-    const device = req.body.device;
-    let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
-    try {
-      if (data[consumer]) {
-        const deviceIndex = data[consumer].findIndex(d => d === device);
-        if (deviceIndex > -1) {
-          data[consumer].splice(deviceIndex, 1);
-          await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
-          return res.status(200).json({ message: "Device deleted successfully", data });
-        } else {
-          return res.status(400).json({ message: "Device not found for this site" });
-        }
-      } else {
-        return res.status(404).json({ message: "Site not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-
-  }
-
-
-
-  async registerConsumer(req, res) {
-    const site = req.params.id;
-    const consumer = req.body.consumer;
-
-
-    try {
-      let data = await this.readDatabase(SITE_TO_CONSUMER_DATA);
-
-      if (Object.values(data).find(consumers => consumers.find(c => c === consumer))) {
-        return res.status(400).json({ message: "Consumer already registered under another site" });
-      }
-
-     else if (data[site]) {
-        if (!data[site].find(c => c === consumer) ){
-          data[site].push(consumer);
-          await this.writeDatabase(SITE_TO_CONSUMER_DATA, data);
-          return res.status(200).json({ message: "Consumer registered successfully", data });
-        } else {
-          return res.status(400).json({ message: "Consumer already exists" });
-        }
-      } else {
-        return res.status(404).json({ message: "Site does  not exists" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
-  async deregisterConsumer(req, res) {
-    const site = req.params.id;
-    const consumer = req.body.consumer;
-    let data = await this.readDatabase( SITE_TO_CONSUMER_DATA);
-    try {
-      if (data[site]) {
-        const consumerIndex = data[site].findIndex(c => c === consumer);
-        if (consumerIndex > -1) {
-          data[site].splice(consumerIndex, 1);
-          await this.writeDatabase(SITE_TO_CONSUMER_DATA, data);
-          return res.status(200).json({ message: "Consumer deleted successfully", data });
-        } else {
-          return res.status(400).json({ message: "Consumer not found for this site" });
-        }
-      } else {
-        return res.status(404).json({ message: "Site does  not exists" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
-  
-  async AssignDevicetoConsumer(req, res) {
-    const userId = req.params.id;
-    const deviceId = req.body.device;
-
-    try {
-        let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
-
-        if (data[userId]) {
-            if (!data[userId].includes(deviceId)) {
-                data[userId].push(deviceId);
-                await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
-                return res.status(200).json({ message: 'Device assigned to consumer successfully.' });
-            } else {
-                return res.status(400).json({ message: 'Device already assigned to consumer.' });
-            }
-        } else {
-            // Create a new entry for the userId and assign the deviceId
-            data[userId] = [deviceId];
-            // Write the updated data back to the JSON file
-            await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
-            // Respond with success message
-            return res.status(200).json({ message: 'Device assigned to consumer successfully.' });
-        }
-    } catch (error) {
-
-        console.error('Error assigning device to consumer:', error);
-        return res.status(500).json({ error: 'Internal server error.' });
-    }
+    res.send({ message: 'Site updated successfully', site: sites[siteId] });
+} catch (error) {
+    res.status(500).send({ error: 'An error occurred while updating the site' });
 }
 
-async postDevice(req, res) {
+}
+
+
+async putDevice(req,res){
   const deviceId = req.params.id;
-  const { id, name, location, totalConsumption, status, registrationDate } = req.body;
+const { name,location,totalConsumption,status,registrationDate } = req.body;
 
   try {
     let devices = await this.readDatabase(DEVICE_DATA);
 
-    if (devices[deviceId]) {
-      return res.status(400).send({ error: 'Device Profile Already Exists' }); // 400 for bad request
+    if (!devices[deviceId]) {
+        return res.status(404).send({ error: 'Site not found' });
     }
+        devices[deviceId].name = name;
+        devices[deviceId].location = location;
+        devices[deviceId].totalConsumption = totalConsumption;
+        devices[deviceId].status = status;
+        devices[deviceId].registrationDate=registrationDate;
+    await this.writeDatabase(DEVICE_DATA,devices);
 
-    // Initialize the device profile if it doesn't exist
-    devices[deviceId] = {
-      id: id,
-      name: name,
-      location: location,
-      totalConsumption: totalConsumption,
-      status: status,
-      registrationDate: registrationDate
-    };
-
-    await this.writeDatabase(DEVICE_DATA, devices);
-
-    res.send({ message: 'Device registered successfully', device: devices[deviceId] });
-  } catch (error) {
-    console.error('Error registering device:', error); // Log the error for debugging
-    res.status(500).send({ error: 'An error occurred while registering the device' });
-  }
+    res.send({ message: 'Site updated successfully', device: devices[deviceId] });
+} catch (error) {
+    res.status(500).send({ error: 'An error occurred while updating the site' });
 }
 
-
-
+}
 }
 module.exports = new JsonController();

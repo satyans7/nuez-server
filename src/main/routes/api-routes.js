@@ -84,12 +84,12 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
   });
   ////////LOGIN A USER / AUTHENTICATE/////////
   app.post(AEP_TO_AUTHENTICATE_A_USER, async (req, res) => {
-    const data = await controller.authenticateUser(req.body);
-    if (data.success) {
-      return res.json(data);
-    } else {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
+    const data = await controller.authenticateUser(req,res,req.body);
+    // if (data.success) {
+    //   return res.json(data);
+    // } else {
+    //   return res.status(401).json({ message: 'Invalid email or password' });
+    // }
   });
   //////////////////////////////////////////FETCH DATA//////////////////////////////////////////////////
 

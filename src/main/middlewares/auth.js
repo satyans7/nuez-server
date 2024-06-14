@@ -1,5 +1,6 @@
 const roleAuthenticatorIdSensitive = (requiredRole) => {
   return (req, res, next) => {
+    console.log(req)
     if(req.user.email=== "admin@nueztpl.co.in" || req.user.email==="superadmin@nueztpl.co.in") 
       next();
     if(requiredRole==="consumer" && req.user.role==="admin"){
@@ -11,7 +12,7 @@ const roleAuthenticatorIdSensitive = (requiredRole) => {
       let id = req.params.id;
      
      let isauthorized=false;
-     if(requiredRole===req.user.role && user_id.substr(5)===id){
+     if(requiredRole===req.user.role && user_id.substr(5)===id.substr(5)){
        isauthorized=true;
      }
      if(isauthorized)

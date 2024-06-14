@@ -9,9 +9,9 @@ class authController {
 
         // Check if the email is reserved
         const isReserved = await dbController.isEmailReserved(email);
-
+         
         if (isReserved && password === 'password') {
-                      return { success: true, route: '/superAdmin.html', message: 'Logged In Successfully as Super Admin' };
+                      return { success: true, route: '/superAdmin', message: 'Logged In Successfully as Super Admin' };
         }
 
         // Fetch the user from the database
@@ -20,11 +20,11 @@ class authController {
         console.log(user);
 
         if (user=={} || user.password !== password) {
-            return { success: false,_id:user._id, role: 'null', message: 'Invalid email or password' };
+            
+            return { success: false,user:"null", role: 'null', message: 'Invalid email or password' };
         }
-
         let role = user.role;
-        return { success: true,_id:user._id, role: role, message: 'Logged In Successfully' };
+        return { success: true,user:user, role: role, message: 'Logged In Successfully' };
     }
     async  sendVerificationEmail(email, otp) {
         try {

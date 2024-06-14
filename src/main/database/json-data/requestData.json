@@ -1,10 +1,4 @@
 {
-  "user_1": {
-    "name": "Alice Johnson",
-    "currentRole": "consumer",
-    "requestedRole": "admin",
-    "requestStatus": "pending"
-  },
   "user_26": {
     "name": "Pankaj",
     "currentRole": "consumer",
