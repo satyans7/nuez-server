@@ -322,6 +322,7 @@ async function viewMaintenanceDevices() {
             exitMaintenanceButton.style.background = 'red';
             exitMaintenanceButton.disabled = true; 
             exitMaintenanceButton.style.cursor = 'not-allowed'
+            exitMaintenanceButton.style.opacity = 0.5
 
 
             actionCell.appendChild(enterMaintenanceButton);
@@ -336,8 +337,8 @@ async function viewMaintenanceDevices() {
             option2.value = 'Battery Change';
             option2.textContent = 'Battery Change';
             const option3 = document.createElement('option');
-            option3.value = 'Device Damage';
-            option3.textContent = 'Device Damage';
+            option3.value = 'Firmware Upgrade';
+            option3.textContent = 'Firmware Upgrade';
 
             reasonDropdown.appendChild(option1);
             reasonDropdown.appendChild(option2);
@@ -351,18 +352,24 @@ async function viewMaintenanceDevices() {
                     alert(`${device.name} is under maintenance now.`);
                     exitMaintenanceButton.disabled = false; 
                     exitMaintenanceButton.style.cursor = 'pointer';
+                    exitMaintenanceButton.style.opacity = 1;
                     enterMaintenanceButton.disabled = true;
                     enterMaintenanceButton.style.cursor = 'not-allowed';
+                    enterMaintenanceButton.style.opacity = 0.5;
                 }
             });
 
             exitMaintenanceButton.addEventListener('click', () => {
-                confirm(`Do you want to exit the maintenance mode?`);
-                enterMaintenanceButton.disabled = false;
-                enterMaintenanceButton.style.cursor = 'pointer';
-                exitMaintenanceButton.disabled = true;
-                exitMaintenanceButton.style.cursor = 'not-allowed'
-                reasonDropdown.value = "";
+                if(confirm(`Do you want to exit the maintenance mode?`)){
+                    enterMaintenanceButton.disabled = false;
+                    enterMaintenanceButton.style.cursor = 'pointer';
+                    enterMaintenanceButton.style.opacity = 1;
+                    exitMaintenanceButton.disabled = true;
+                    exitMaintenanceButton.style.cursor = 'not-allowed'
+                    exitMaintenanceButton.style.opacity = 0.5
+                    reasonDropdown.value = "";
+                }
+                
             });
 
             row.appendChild(nameCell);
