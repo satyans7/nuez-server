@@ -14,3 +14,4 @@ trial.html
 !.vscode/launch.json
 !.vscode/extensions.json
 local-repo/
+sessionStore.js/
