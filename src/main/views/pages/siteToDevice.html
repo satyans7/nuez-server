@@ -13,8 +13,8 @@
     <div class="sidebar">
         <div id="site-id"></div>
         <a href="#" id="device-tab">All Devices</a>
-        <a href="#" id="device-maintenance-tab">Maintenance</a>
         <a href="#" id="consumer-tab">All Consumers</a>
+        <a href="#" id="device-maintenance-tab">Maintenance</a>
         <a href="#" id="edit-profile">Edit Profile</a>
         <a href="#" id="unassigned-devices-link">Unassigned Devices</a> <!-- Add this line -->
         <a href="#" id="firmware-link">Firmware</a>
@@ -24,30 +24,24 @@
     <div class="main-content">
         <div class="header">
             <div id="heading"></div>
-            <div class="button-group">
-                <button id="register-device-button">Register</button>
-                <button id="deregister-device-button">Deregister</button>
+            <div id="button-grp" class="button-group" style="display:none;">
+                <button id="register-button">Register</button>
+                <button id="deregister-button">Deregister</button>
             </div>
         </div>
 
         <div id="main-container" class="container">
             <div id="device-list" class="all-devices"></div>
+            <div id="maintenance-devices-list" class="maintenance-devices"></div>
             <div id="consumer-list" class="all-consumers"></div>
             <div id="unassigned-devices-list" class="unassigned-devices"></div>
             <div id="firmware-version-list" class="firmware-version" style="display:none;">
-                <table id="firmware-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="firmware-table-body">
-                        <!-- Device IDs will be populated here -->
-                    </tbody>
-                </table>
+                <div id="device-versions-container">
+                    <!-- Device versions table will be displayed here -->
+                </div>
+                <button id="upgrade-all-versions">Upgrade All Versions</button>
+                <button id="intimate-all">Intimate All</button>
             </div>
-            <div id="maintenance-devices-list" class="maintenance-devices"></div>
         </div>
 
         <div id="user-search-container" class="user-search-container" style="display:none;">
@@ -60,7 +54,7 @@
             <span id="cancel-search-btn">&#x2716;</span> <!-- Close Button -->
         </div>
 
-        <div id="edit-form-container" class="form-container">
+        <div id="edit-form-container" class="form-container" style="display:none;">
             <form id="edit-userForm">
                 <label for="edit-name">Name:</label>
                 <input type="text" id="edit-name" value="Current Name"><br><br>
@@ -70,16 +64,7 @@
             </form>
         </div>
 
-        <div id="register-form-container" class="form-container">
-            <form id="register-device-form">
-                <label for="register-device-id">Device ID:</label>
-                <input type="text" id="register-device-id" name="register-device-id" required>
-                <button type="submit" id="register-id">Register</button>
-                <button type="button" id="register-cancel-button" class="cancel-button">Cancel</button>
-            </form>
-        </div>
-
-        <div id="register-consumer-container" class="form-container">
+        <div id="register-container" class="form-container" style="display:none;">
             <form id="register-consumer-form">
                 <label for="register-consumer-id">Consumer ID:</label>
                 <input type="text" id="register-consumer-id" name="register-consumer-id" required>
@@ -87,23 +72,7 @@
                 <button type="button" id="register-consumer-cancel-button" class="cancel-button">Cancel</button>
             </form>
         </div>
-        <div id="firmware-container" class="container">
-            <div id="device-versions-container">
-                
-                <!-- Device versions table will be displayed here -->
-            </div>
-            <button id="upgrade-all-versions">Upgrade All Versions</button>
-            <button id="intimate-all">Intimate All</button>
-        </div>
-        <div id="deregister-form-container" class="form-container">
-            <form id="deregister-device-form">
-                <label for="deregister-device-id">Device ID:</label>
-                <input type="text" id="deregister-device-id" name="deregister-device-id" required>
-                <button type="submit">De-register</button>
-                <button type="button" id="deregister-cancel-button" class="cancel-button">Cancel</button>
-            </form>
-        </div>
-        <div id="deregister-consumer-container" class="form-container">
+        <div id="deregister-container" class="form-container" style="display:none;">
             <form id="deregister-consumer-form">
                 <label for="deregister-consumer-id">Consumer ID:</label>
                 <input type="text" id="deregister-consumer-id" name="deregister-consumer-id" required>
@@ -112,8 +81,8 @@
             </form>
         </div>
 
-    <script type="module" src="/js/pages/siteToDevice.js"></script>
-    <script src="/js/firmwareVersion.js"></script> <!-- Added Script for Firmware Version -->
+        <script type="module" src="/js/pages/siteToDevice.js"></script>
+        <script src="/js/firmwareVersion.js"></script> <!-- Added Script for Firmware Version -->
 
 </body>
 

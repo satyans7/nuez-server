@@ -7,12 +7,11 @@ import {
 
 const alldevicesContainer = document.querySelector('#device-list');
 const allConsumerContainer = document.querySelector('#consumer-list');
-const registerTab = document.getElementById('register-form-container');
-const deregisterTab = document.getElementById('deregister-form-container');
-const deregisterConsumerTab = document.getElementById('deregister-consumer-container')
-const registerConsumerTab = document.getElementById('register-consumer-container')
-const registerBtn = document.getElementById('register-device-button');
-const deregisterBtn = document.getElementById('deregister-device-button');
+const deregisterConsumerTab = document.getElementById('deregister-container')
+const registerConsumerTab = document.getElementById('register-container')
+const registerBtn = document.getElementById('register-button');
+const deregisterBtn = document.getElementById('deregister-button');
+const btnGroup = document.getElementById('button-grp')
 const headingText = document.getElementById('heading');
 const currentSite = document.getElementById('site-id');
 const deviceTab = document.getElementById('device-tab');
@@ -20,74 +19,18 @@ const consumerTab = document.getElementById('consumer-tab');
 const editBtn = document.getElementById('edit-profile');
 const editTab = document.getElementById('edit-form-container');
 const updateBtn = document.getElementById('update-button');
-const site = getCurrentSite();
-const deregisterDeviceForm = document.getElementById('deregister-device-form');
-const registerDeviceForm = document.getElementById('register-device-form');
 const registerConsumerForm = document.getElementById('register-consumer-form');
 const deregisterConsumerForm = document.getElementById('deregister-consumer-form');
 const unassignedDevicesLink = document.getElementById('unassigned-devices-link');
 const unassignedDevicesContainer = document.getElementById('unassigned-devices-list');
-document.getElementById('user-search-input').addEventListener('input', filterUsers);
-document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
-document.getElementById('assign-user-btn').addEventListener('click', assignUser);
-const firmwareVersionContainer = document.getElementById('firmware-version-list');
-
 const maintenanceTab = document.getElementById('device-maintenance-tab')
 const maintenanceDevicesContainer = document.getElementById('maintenance-devices-list')
-const title = document.createElement('h1');
-title.textContent = `Welcome, ${site}`;
-headingText.appendChild(title);
+const firmwareVersionContainer = document.getElementById('firmware-version-list');
 
-const currentid = document.createElement('h1');
-currentid.textContent = `Id : ${site}`;
-currentSite.appendChild(currentid);
+// Current Site Id
+const site = getCurrentSiteId();
 
-document.addEventListener('DOMContentLoaded', async () => {
-    await viewAlldevices();
-    registerBtn.addEventListener('click', () => {
-        toggleVisibility('register');
-    });
-    deregisterBtn.addEventListener('click', () => {
-        toggleVisibility('deregister');
-    });
-
-})
-
-
-editBtn.addEventListener('click', async () => {
-    await setForm();
-    toggleVisibility('edit');
-});
-
-updateBtn.addEventListener('click', async () => {
-    await updateSiteInfo();
-});
-
-deviceTab.addEventListener('click', async () => {
-    await viewAlldevices();
-    registerBtn.addEventListener('click', () => {
-        toggleVisibility('register');
-    });
-
-    deregisterBtn.addEventListener('click', () => {
-        toggleVisibility('deregister');
-    });
-});
-
-
-
-consumerTab.addEventListener('click', async () => {
-    await viewAllconsumers();
-    registerBtn.addEventListener('click', () => {
-        toggleVisibility('register-consumer');
-    });
-
-    deregisterBtn.addEventListener('click', () => {
-        toggleVisibility('deregister-consumer');
-    });
-});
-
-function getCurrentSite() {
+function getCurrentSiteId() {
     const fullUrl = window.location.href;
     const url = new URL(fullUrl);
     const pathname = url.pathname;
@@ -95,46 +38,53 @@ function getCurrentSite() {
     return segments[segments.length - 1];
 }
 
-function toggleVisibility(section) {
+// Setting site Info
+
+async function setInfo() {
+    const title = document.createElement('h1');
+    const siteInfo = await getSitesData();
+    title.textContent = `Welcome, ${siteInfo[site].name}`;
+    headingText.appendChild(title);
+
+    const currentid = document.createElement('h1');
+    currentid.textContent = `Id : ${site}`;
+    currentSite.appendChild(currentid);
+
+}
+
+// On loading 
+
+document.addEventListener('DOMContentLoaded', async () => {
+    toggleVisibility();
+    await setInfo();
+    await viewAlldevices();
+})
+
+
+//Toggle visibility
+
+function toggleVisibility() {
     const sections = [
-        alldevicesContainer, 
-        allConsumerContainer, 
-        registerTab, 
-        deregisterTab, 
-        editTab, 
-        registerConsumerTab, 
-        deregisterConsumerTab, 
-        unassignedDevicesContainer, 
+        alldevicesContainer,
+        allConsumerContainer,
+        editTab,
+        registerConsumerTab,
+        deregisterConsumerTab,
+        unassignedDevicesContainer,
         firmwareVersionContainer,
-        maintenanceDevicesContainer
+        maintenanceDevicesContainer,
+        btnGroup
     ];
 
     sections.forEach(container => container.style.display = 'none');
-
-    if (section === 'register') {
-        registerTab.style.display = 'block';
-    } else if (section === 'deregister') {
-        deregisterTab.style.display = 'block';
-    } else if (section === 'register-consumer') {
-        registerConsumerTab.style.display = 'block';
-    } else if (section === 'deregister-consumer') {
-        deregisterConsumerTab.style.display = 'block';
-    } else if (section === 'edit') {
-        editTab.style.display = 'block';
-    } else if (section === 'unassigned-devices') {
-        unassignedDevicesContainer.style.display = 'block';
-    } else if (section === 'firmware-version') {
-        firmwareVersionContainer.style.display = 'block';
-    }
 }
 
-async function setForm() {
-    const val = await getSitesData();
-    let currentSitename = document.getElementById('edit-name');
-    currentSitename.value = val[site].name;
-    let currentSiteLocation = document.getElementById('edit-location');
-    currentSiteLocation.value = val[site].location;
-}
+
+// All Devices tab (Default) --------------------------------------------------------------------------//
+
+deviceTab.addEventListener('click', async () => {
+    await viewAlldevices();
+});
 
 async function viewAlldevices() {
     toggleVisibility();
@@ -161,7 +111,6 @@ async function viewAlldevices() {
         }
     });
 }
-
 
 
 function createDeviceCard(device, key) {
@@ -197,6 +146,26 @@ function createDeviceCard(device, key) {
 
     return deviceCard;
 }
+
+
+
+// ALL CONSUMERS TAB ----------------------------------------------------------------------------//
+
+consumerTab.addEventListener('click', async () => {
+    await viewAllconsumers();
+    btnGroup.style.display = 'flex';
+    registerBtn.addEventListener('click', () => {
+        toggleVisibility();
+        registerConsumerTab.style.display = 'block';
+        btnGroup.style.display = 'flex';
+    });
+    deregisterBtn.addEventListener('click', () => {
+        toggleVisibility();
+        deregisterConsumerTab.style.display = 'block';
+        btnGroup.style.display = 'flex';
+    });
+});
+
 
 async function viewAllconsumers() {
     toggleVisibility();
@@ -259,73 +228,13 @@ function createConsumerCard(consumer, key) {
 
     return consumerCard;
 }
+
 function getCurrentAdmin() {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
     return searchParams.get('adminId');
 }
-async function updateSiteInfo() {
-    const val = await getSitesData();
-    const newData = {
-        name: document.getElementById('edit-name').value,
-        location: document.getElementById('edit-location').value
-    }
-    try {
-        const response = await updateSiteDataOnServer(newData, site);
-        alert(response.message);
-    } catch (error) {
-        console.error('Error updating user:', error);
-        alert('Error in Updating Info. Please try again.');
-    }
-    setForm();
-}
 
-// REGISTER DEVICE
-registerDeviceForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const deviceid = document.getElementById('register-device-id').value;
-    const devicedata = {
-        "device": deviceid
-    };
-    const jsonResponse = await registerDevice(devicedata, site);
-    viewAlldevices();
-    alert(jsonResponse.message);
-    registerDeviceForm.reset();
-
-})
-
-document.getElementById('register-cancel-button').addEventListener('click', () => {
-    registerDeviceForm.display = 'none';
-    viewAlldevices();
-});
-
-
-//DEREGISTER DEVICE
-deregisterDeviceForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const deviceId = document.getElementById('deregister-device-id').value;
-    console.log(deviceId)
-    const device = {
-        device: deviceId
-    }
-    try {
-        const response = await deleteSiteToDeviceMapping(site, device);
-        viewAlldevices();
-        alert(response.message);
-        deregisterDeviceForm.reset();
-
-    } catch (error) {
-        console.error('Error deregistering device:', error);
-        alert(`${error.message}`);
-    }
-});
-
-document.getElementById('deregister-cancel-button').addEventListener('click', () => {
-    deregisterDeviceForm.display = 'none';
-    viewAlldevices();
-});
-
-// REGISTER CONSUMER
 registerConsumerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const consumerId = document.getElementById('register-consumer-id').value;
@@ -339,7 +248,6 @@ registerConsumerForm.addEventListener('submit', async (event) => {
     registerConsumerForm.reset();
 })
 
-// DEREGISTER CONSUMER
 deregisterConsumerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const consumerId = document.getElementById('deregister-consumer-id').value;
@@ -358,7 +266,8 @@ deregisterConsumerForm.addEventListener('submit', async (event) => {
     }
 })
 
-//Maintenance 
+
+// DEVICE MAINTENANCE TAB----------------------------------------------------------------------------------------//
 
 maintenanceTab.addEventListener('click', async () => {
     toggleVisibility();
@@ -375,7 +284,6 @@ async function viewMaintenanceDevices() {
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
-    // Create the table header row
     const headerRow = document.createElement('tr');
     const deviceIdHeader = document.createElement('th');
     deviceIdHeader.textContent = 'Device Name';
@@ -388,7 +296,6 @@ async function viewMaintenanceDevices() {
 
     const devices = sitesdevicesMapping[site];
     maintenanceDevicesContainer.innerHTML = '';
-
 
     devices.forEach(key => {
         const device = devicesData[key];
@@ -413,12 +320,52 @@ async function viewMaintenanceDevices() {
 
 }
 
+// EDIT PROFILE ----------------------------------------------------------------------------------//
 
 
-// UNASSIGNED DEVICES
+editBtn.addEventListener('click', async () => {
+    await setForm();
+    toggleVisibility();
+    editTab.style.display = 'block';
+    updateBtn.addEventListener('click', async () => {
+        await updateSiteInfo();
+    });
+});
+
+async function setForm() {
+    const val = await getSitesData();
+    let currentSitename = document.getElementById('edit-name');
+    currentSitename.value = val[site].name;
+    let currentSiteLocation = document.getElementById('edit-location');
+    currentSiteLocation.value = val[site].location;
+}
+
+async function updateSiteInfo() {
+    const newData = {
+        name: document.getElementById('edit-name').value,
+        location: document.getElementById('edit-location').value
+    }
+    try {
+        const response = await updateSiteDataOnServer(newData, site);
+        alert(response.message);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        alert('Error in Updating Info. Please try again.');
+    }
+    setForm();
+}
+
+
+// UNASSIGNED DEVICES ----------------------------------------------------------------------------//
+
+
+document.getElementById('user-search-input').addEventListener('input', filterUsers);
+document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
+document.getElementById('assign-user-btn').addEventListener('click', assignUser);
 
 unassignedDevicesLink.addEventListener('click', async () => {
-    toggleVisibility('unassigned-devices');
+    toggleVisibility();
+    unassignedDevicesContainer.style.display = 'block';
     await viewUnassignedDevices();
 });
 
@@ -528,9 +475,8 @@ let users = [];
 async function showUserSearch(deviceId) {
     selectedDeviceId = deviceId;
     document.getElementById('user-search-container').style.display = 'block';
-    const currentSite = await getCurrentSite();
     const siteConsumerMapping = await getSiteConsumerMapping();
-    users = siteConsumerMapping[currentSite] || [];
+    users = siteConsumerMapping[site] || [];
     populateUserList(users);
 
     // Add event listener for clicking outside the search box
@@ -606,22 +552,21 @@ function cancelSearch() {
     document.getElementById('user-search-container').style.display = 'none';
     document.removeEventListener('click', handleClickOutside, true);
 }
-document.addEventListener('DOMContentLoaded', async () => {
-    // Other initialization code...
 
-    document.getElementById('firmware-link').addEventListener('click', async () => {
-        toggleVisibility('firmware');
-        await fetchDeviceVersions();
-    });
 
+// FIRMWARE ------------------------------------------------------------------------------------------------//
+
+
+document.getElementById('firmware-link').addEventListener('click', async () => {
+    toggleVisibility();
+    firmwareVersionContainer.style.display = 'block';
+    await fetchDeviceVersions();
     document.getElementById('upgrade-all-versions').addEventListener('click', async () => {
         await upgradeAllDeviceVersions();
     });
     document.getElementById('intimate-all').addEventListener('click', async () => {
         await intimateAll();
     });
-
-    // Other event listeners...
 });
 
 async function fetchDeviceVersions() {
@@ -646,8 +591,7 @@ async function upgradeAllDeviceVersions() {
         // Fetch devices and their versions
         const devicesData = await getDevicesData();
         const deviceIds = Object.keys(devicesData);
-        const site_id = getCurrentSite();
-        const response = await fetch(`/publish-message/${site_id}`, {
+        const response = await fetch(`/publish-message/${site}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
