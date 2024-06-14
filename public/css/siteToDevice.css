@@ -209,8 +209,7 @@ body {
     background-color: #f9f9f9;
 }
 
-#unassigned-devices-table tr:hover ,
-#maintenance-devices-table tr:hover{
+#unassigned-devices-table tr:hover{
     background-color: #ddd;
 }
 
@@ -230,8 +229,7 @@ body {
     margin-right: 0; /* Remove right margin for delete button */
 }
 
-#unassigned-devices-table button:hover ,
-#maintenance-devices-table button:hover{
+#unassigned-devices-table button:hover{
     opacity: 0.8;
 }
 

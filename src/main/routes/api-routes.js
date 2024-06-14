@@ -323,7 +323,7 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
     console.log("api called")
   })
   
-  const siteIdsFilePath = path.join(__dirname ,'../database/json-data/siteRegistration.json');
+const siteIdsFilePath = path.join(__dirname ,'../database/json-data/siteRegistration.json');
 // Files to store IDs and mappings
 const deviceIdsFilePath = path.join(__dirname ,'../database/json-data/deviceToProfile.json');
 const siteToDeviceFilePath = path.join(__dirname ,'../database/json-data/siteToDevices.json');
