@@ -546,7 +546,7 @@ app.post('/intimate-all', async (req, res) => {
 
 
 app.post('/intimate-all-sites', (req, res) => {
-  const firmwareFilePath = path.join(__dirname, '../version', 'firmware.txt');
+  const firmwareFilePath = path.join(__dirname, '../local-repo', 'version.json');
     fs.readFile(firmwareFilePath, 'utf8', (err, data) => {
       if (err) {
         console.error('Failed to read firmware.txt:', err);
