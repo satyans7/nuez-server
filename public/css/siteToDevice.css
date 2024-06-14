@@ -178,7 +178,7 @@ body {
 
 
 /* Styles for Unassigned Devices Table */
-#unassigned-devices-table {
+#unassigned-devices-table, #maintenance-devices-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -189,27 +189,33 @@ body {
 }
 
 #unassigned-devices-table th,
-#unassigned-devices-table td {
+#unassigned-devices-table td,
+#maintenance-devices-table th,
+#maintenance-devices-table td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
 }
 
-#unassigned-devices-table th {
+#unassigned-devices-table th,
+#maintenance-devices-table th {
     background-color: #2c3e50;
     color: white;
     font-weight: 600;
 }
 
-#unassigned-devices-table tr:nth-child(even) {
+#unassigned-devices-table tr:nth-child(even), 
+#maintenance-devices-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-#unassigned-devices-table tr:hover {
+#unassigned-devices-table tr:hover ,
+#maintenance-devices-table tr:hover{
     background-color: #ddd;
 }
 
-#unassigned-devices-table button {
+#unassigned-devices-table button, 
+#maintenance-devices-table button {
     background-color: #4CAF50;
     color: white;
     padding: 8px 12px;
@@ -224,7 +230,8 @@ body {
     margin-right: 0; /* Remove right margin for delete button */
 }
 
-#unassigned-devices-table button:hover {
+#unassigned-devices-table button:hover ,
+#maintenance-devices-table button:hover{
     opacity: 0.8;
 }
 

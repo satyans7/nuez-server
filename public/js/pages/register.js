@@ -28,3 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
     });
 });
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('google').addEventListener('click', function(event) {
+        window.location.href='/auth/google'
+    })
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch user data from the server
+    fetch('/api/fetchDataFromGoogle')
+      .then(response => response.json())
+      .then(user => {
+        // Populate the form fields with user data
+        document.getElementById('fname').value = user.name || '';
+        document.getElementById('email').value = user.email || '';
+      })
+      .catch(error => console.error('Error fetching user data:', error));
+  });

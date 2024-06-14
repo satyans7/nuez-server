@@ -7,10 +7,11 @@ module.exports = function (app) {
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
     const data = await controller.fetchSampleDataFromServer();
-    console.log(data);
     res.send(data);
   });
-
+   const permForAdmin="admin";
+   const permForConsumer="consumer";
+   const permForSuperAdmin="superAdmin";
 
   const ADMINPAGE = path.join(__dirname, '../views/pages', 'admin.html');
   const CONSUMERPAGE = path.join(__dirname, '../views/pages', 'consumer.html');
@@ -24,6 +25,7 @@ module.exports = function (app) {
   const PRIVATE_AEP_TO_SITES = "/api/site-dashboard/:id";
   const PRIVATE_AEP_TO_DEVICEPROFILE="/api/device-profile/:id";
 
+  
   //public
 
   const AEP_TO_REGISTER_A_USER = "/api/user/register";
@@ -56,6 +58,10 @@ module.exports = function (app) {
   const AEP_TO_PUT_SITE = "/api/admin/sites/:id";
 const AEP_TO_PUT_DEVICE= "/api/admin/devices/:id";
 
+
+
+const AEP_TO_FETCH_USER_DATA_FROM_GOOGLEAUTH= "/api/fetchDataFromGoogle"
+
   const AEP_TO_REGISTER_SITE = "/api/admin/registersite/:id"
   const AEP_TO_DEREGISTER_SITE = "/api/admin/deregistersite/:id"
   const AEP_TO_REGISTER_DEVICE = "/api/admin/registerdevice/:id"
@@ -78,12 +84,12 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
   });
   ////////LOGIN A USER / AUTHENTICATE/////////
   app.post(AEP_TO_AUTHENTICATE_A_USER, async (req, res) => {
-    const data = await controller.authenticateUser(req.body);
-    if (data.success) {
-      return res.json(data);
-    } else {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
+    const data = await controller.authenticateUser(req,res,req.body);
+    // if (data.success) {
+    //   return res.json(data);
+    // } else {
+    //   return res.status(401).json({ message: 'Invalid email or password' });
+    // }
   });
   //////////////////////////////////////////FETCH DATA//////////////////////////////////////////////////
 
@@ -124,7 +130,6 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
 
   /////////////SEND A ROLE CHANGE REQ/////////////////////////
   app.post(AEP_TO_REQUEST_FOR_ROLE_CHANGE, async (req, res) => {
-    console.log("hello");
     await controller.requestRoleChange(req);
     res.sendStatus(200); // Sending a status to indicate success
   });
@@ -137,15 +142,15 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
 
 
   ////////////PROTECTED ROUTES FOR PAGES RENDERING//////////////////
-  app.get(PRIVATE_AEP_TO_ADMINROUTE, (req, res) => {
+  app.get(PRIVATE_AEP_TO_ADMINROUTE,controller.roleAuthenticatorIdSensitive(permForAdmin), (req, res) => {
     res.sendFile(ADMINPAGE);
   });
 
-  app.get(PRIVATE_AEP_TO_CONSUMERROUTE, (req, res) => {
+  app.get(PRIVATE_AEP_TO_CONSUMERROUTE, controller.roleAuthenticatorIdSensitive(permForConsumer),(req, res) => {
     res.sendFile(CONSUMERPAGE);
   });
 
-  app.get('/superAdmin.html', (req, res) => {
+  app.get('/superAdmin',(req, res) => {
     res.sendFile(SUPERADMINPAGE);
   });
 
@@ -164,12 +169,8 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
   });
 
   app.post(AEP_TO_VERIFY_OTP, async (req, res) => {
-    const data =await controller.OTPVerification(req.body.email,req.body.otp );
-    if (data.success) {
-      return res.status(200).json(data);
-    } else {
-      return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
-    }
+    const data =await controller.OTPVerification(req,res,req.body.email,req.body.otp );
+      // return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
   });
 
   ///////////TESTING ROUTES////////////////
@@ -565,6 +566,23 @@ app.post('/intimate-all-sites', (req, res) => {
     });
 });
 
+
+app.get(AEP_TO_FETCH_USER_DATA_FROM_GOOGLEAUTH,(req, res) => {
+  let userData={
+    name: "",
+    email: ""
+  };
+  if(req.user){
+    userData.name=req.user.name,
+    userData.email=req.user.email
+  }
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+  })
+  res.json(userData || {});
+});
 };
 
 
