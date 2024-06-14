@@ -322,6 +322,36 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
     console.log("api called")
   })
   
+  const siteIdsFilePath = path.join(__dirname ,'../database/json-data/siteRegistration.json');
+// Files to store IDs and mappings
+const deviceIdsFilePath = path.join(__dirname ,'../database/json-data/deviceToProfile.json');
+const siteToDeviceFilePath = path.join(__dirname ,'../database/json-data/siteToDevices.json');
+
+let deviceIds = {};
+let siteIds = {};
+let siteToDevice = {};
+
+// Load IDs and mappings from the JSON files into memory
+try {
+  if (fs.existsSync(deviceIdsFilePath)) {
+    const data = fs.readFileSync(deviceIdsFilePath, "utf8");
+    deviceIds = JSON.parse(data);
+  }
+
+  if (fs.existsSync(siteIdsFilePath)) {
+    const data = fs.readFileSync(siteIdsFilePath, "utf8");
+    siteIds = JSON.parse(data);
+  }
+
+  if (fs.existsSync(siteToDeviceFilePath)) {
+    const data = fs.readFileSync(siteToDeviceFilePath, "utf8");
+    siteToDevice = JSON.parse(data);
+  }
+} catch (error) {
+  console.error("Error loading JSON files:", error);
+}
+
+
   const client = mqtt.connect('mqtt://192.168.33.250', {
     port: 1883,
     username: 'nuez',
@@ -339,36 +369,88 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
         console.log(`Subscribed to ${firmwareTopic}`);
       }
     });
+    client.subscribe("device-data", (err) => {
+      if (err) {
+        console.error("Error subscribing to device-data topic:", err);
+      } else {
+        console.log("Subscribed to device-data topic.");
+      }
+    });
   });
   
   client.on('message', (topic, message) => {
     if (topic === firmwareTopic) {
       console.log(`Received message from ${firmwareTopic}:`, message.toString());
     }
-  });
+    if (topic === "device-data") {
+      
+      try {
+        const deviceData = JSON.parse(message.toString());
+        const siteId = deviceData.site_id;
+        const deviceId = deviceData.device_id;
   
-  // Route to publish firmware version
-  app.get('/sendFirmware', (req, res) => {
-    const firmwareFilePath = path.join(__dirname, 'local-repo', 'firmware.txt');
-    fs.readFile(firmwareFilePath, 'utf8', (err, data) => {
-      if (err) {
-        console.error('Failed to read firmware.txt:', err);
-        res.status(500).send('Failed to read firmware version.');
-        return;
-      }
+        // Check if the site ID is already in memory
+        if (!siteIds[siteId]) {
+          // Add new site ID to memory with an empty object
+          siteIds[siteId] = {};
   
-      client.publish(firmwareTopic, data, (err) => {
-        if (err) {
-          console.error('Failed to publish firmware version:', err);
-          res.status(500).send('Failed to publish firmware version.');
-          return;
+          // Update the JSON file with the new site ID
+          fs.writeFile(siteIdsFilePath, JSON.stringify(siteIds, null, 2), (err) => {
+            if (err) {
+              console.error("Error saving site ID to file:", err);
+            } else {
+              console.log("New site ID added and saved to file:", siteId);
+            }
+          });
+        } else {
+          console.log("Site ID already exists:", siteId);
         }
   
-        res.send('Firmware version sent successfully.');
-      });
-    });
-    
+        // Check if the device ID is already in memory
+        if (!deviceIds[deviceId]) {
+          // Add new device ID to memory with an empty object
+          deviceIds[deviceId] = {};
+  
+          // Update the JSON file with the new device ID
+          fs.writeFile(deviceIdsFilePath, JSON.stringify(deviceIds, null, 2), (err) => {
+            if (err) {
+              console.error("Error saving device ID to file:", err);
+            } else {
+              console.log("New device ID added and saved to file:", deviceId);
+            }
+          });
+        } else {
+          console.log("Device ID already exists:", deviceId);
+        }
+  
+        // Check if the site ID exists in the siteToDevice mapping
+        if (!siteToDevice[siteId]) {
+          // Initialize a new array for the site ID
+          siteToDevice[siteId] = [];
+        }
+  
+        // Add the device ID to the site ID's list if it doesn't already exist
+        if (!siteToDevice[siteId].includes(deviceId)) {
+          siteToDevice[siteId].push(deviceId);
+  
+          // Update the JSON file with the new mapping
+          fs.writeFile(siteToDeviceFilePath, JSON.stringify(siteToDevice, null, 2), (err) => {
+            if (err) {
+              console.error("Error saving site and device mapping to file:", err);
+            } else {
+              console.log(`New device ID (${deviceId}) added for site ID (${siteId}) and saved to file.`);
+            }
+          });
+        } else {
+          console.log(`Device ID (${deviceId}) already exists for site ID (${siteId}).`);
+        }
+      } catch (error) {
+        console.error("Error parsing MQTT message:", error);
+      }
+    }
   });
+  
+
   const filePath=path.join(__dirname ,'../local-repo/ota2.ino.bin')
 
   app.get('/send-file', async (req, res) => {
@@ -411,7 +493,7 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
 
     try {
         // Publish the message to the MQTT topic
-        client.publish(site_id, 'hi');
+        client.publish(site_id, 'fetch versions from devices');
         res.status(200).json({ message: 'Message published successfully' });
     } catch (error) {
         console.error('Error publishing message:', error);
@@ -463,29 +545,32 @@ app.post('/intimate-all', async (req, res) => {
 
 
 app.post('/intimate-all-sites', (req, res) => {
-  const { message } = req.body;
-
-  if (!message) {
-      return res.status(400).json({ error: 'Message is required' });
-  }
-
-  try {
-      client.publish('firmware', message, (err) => {
-          if (err) {
-              console.error('Error publishing message:', err);
-              return res.status(500).json({ error: 'Failed to intimate all sites' });
-          }
-
-          console.log('Intimate message sent to all sites');
-          res.status(200).json({ message: 'Intimate message sent to all sites' });
+  const firmwareFilePath = path.join(__dirname, '../version', 'firmware.txt');
+    fs.readFile(firmwareFilePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Failed to read firmware.txt:', err);
+        res.status(500).send('Failed to read firmware version.');
+        return;
+      }
+  
+      client.publish(firmwareTopic, data, (err) => {
+        if (err) {
+          console.error('Failed to publish firmware version:', err);
+          res.status(500).send('Failed to publish firmware version.');
+          return;
+        }
+  
+        res.send('Firmware version sent successfully.');
       });
-  } catch (error) {
-      console.error('Error intimating all devices:', error);
-      res.status(500).json({ error: 'Failed to intimate all sites' });
-  }
+    });
 });
 
 };
+
+
+
+
+
 
 
 
