@@ -16,3 +16,5 @@ trial.html
 !.vscode/extensions.json
 local-repo/
 sessionStore.js/
+firmwareScript.sh
+sourceCodeScript.sh
