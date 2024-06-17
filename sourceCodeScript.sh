@@ -7,4 +7,3 @@ update_repo(){
 }
 # Run the update function
 update_repo
-#testing done and working
