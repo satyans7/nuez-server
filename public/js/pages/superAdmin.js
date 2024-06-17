@@ -11,6 +11,7 @@ import {
     getConsumerDeviceMapping,
     getSitesData,
     syncFirmwareData,
+    syncSourceCode,
     sendFirmwareToSites
 } from '../client/client.js';
 
@@ -403,9 +404,15 @@ administrationTab.addEventListener('click', async () => {
         if (userConfirmed) {
             await syncFirmwareData();
         }
+        alert("Firmware update complete. Please visit the relevant site-page to apply the updated firmware.");
+
     });
      sourceCodeSyncBtn.addEventListener('click',async()=>{
-        
+        const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+        if (userConfirmed) {
+            await syncSourceCode();
+        }
+        alert("SERVER HAS BEEN UPDATED")
      }) 
 });
 

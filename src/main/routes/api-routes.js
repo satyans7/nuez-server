@@ -28,6 +28,7 @@ module.exports = function (app) {
     "deviceProfile.html"
   );
   const FIRMWARESYNC = path.join(__dirname, "../../../firmwareScript.sh");
+  const SOURCECODESYNC = path.join(__dirname, "../../../sourceCodeScript.sh");
 
   //private
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard/:id";
@@ -85,6 +86,7 @@ module.exports = function (app) {
     "/api/admin/assigndevicetoconsumer/:id";
   const AEP_TO_POST_DEVICE = "/api/admin/newdevice/:id";
   const AEP_TO_SYNC_FIRMWARE_DATA = "/api/sync-firmware";
+  const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
   const AEP_TO_SEND_FIRMWARE = "/send-firmware";
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -635,6 +637,21 @@ module.exports = function (app) {
 
   app.get(AEP_TO_SYNC_FIRMWARE_DATA, (req, res) => {
     exec(FIRMWARESYNC, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        res.status(500).send(`Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        res.status(500).send(`stderr: ${stderr}`);
+        return;
+      }
+      res.send(`stdout: ${stdout}`);
+    });
+  });
+  app.get(AEP_TO_SYNC_SOURCECODE, (req, res) => {
+    exec(SOURCECODESYNC, (error, stdout, stderr) => {
       if (error) {
         console.error(`exec error: ${error}`);
         res.status(500).send(`Error: ${error.message}`);
