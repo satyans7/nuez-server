@@ -332,3 +332,24 @@ body {
 #firmware-table tr:hover {
     background-color: #ddd;
 }
+
+
+.register-search-results,
+.deregister-search-results {
+    margin: 10px 0;
+    border-radius: 10px;
+    overflow-y: scroll;
+    max-height: 40vh;
+
+}
+
+.search-result {
+    cursor: pointer;
+    padding: 5px;
+
+}
+
+.search-result:hover {
+    background-color: rgb(165, 164, 164);
+
+}
