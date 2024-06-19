@@ -406,7 +406,7 @@ async function viewMaintenanceDevices() {
             reasonDropdown.appendChild(option3);
             reasonCell.appendChild(reasonDropdown);
 
-            enterMaintenanceButton.addEventListener('click', () => {
+            enterMaintenanceButton.addEventListener('click',() => {
                 if (reasonDropdown.value === '') {
                     alert('Please select a reason before entering maintenance.');
                 } else {

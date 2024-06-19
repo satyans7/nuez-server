@@ -4,6 +4,8 @@ const fs = require("fs");
 const simpleGit = require("simple-git");
 const mqtt = require("mqtt");
 const { exec } = require("child_process");
+const SUPERADMIN = "/superAdmin"
+
 module.exports = function (app) {
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
@@ -165,7 +167,7 @@ module.exports = function (app) {
     }
   );
 
-  app.get("/superAdmin", (req, res) => {
+  app.get(SUPERADMIN,(req, res) => {
     res.sendFile(SUPERADMINPAGE);
   });
 
@@ -375,7 +377,7 @@ module.exports = function (app) {
   } catch (error) {
     console.error("Error loading JSON files:", error);
   }
-
+let deviceStatus=[]
   const client = mqtt.connect("mqtt://192.168.33.250", {
     port: 1883,
     username: "nuez",
@@ -398,6 +400,13 @@ module.exports = function (app) {
         console.error("Error subscribing to device-data topic:", err);
       } else {
         console.log("Subscribed to device-data topic.");
+      }
+    });
+    client.subscribe("device-status", (err) => {
+      if (err) {
+        console.error("Error subscribing to device-status topic:", err);
+      } else {
+        console.log("Subscribed to device-status topic.");
       }
     });
   });
@@ -492,6 +501,10 @@ module.exports = function (app) {
       } catch (error) {
         console.error("Error parsing MQTT message:", error);
       }
+    }
+    if(topic==="device-status"){
+      const deviceStatusReceived= JSON.parse(message.toString());
+      deviceStatus=deviceStatusReceived;
     }
   });
 
@@ -665,4 +678,52 @@ module.exports = function (app) {
       res.send(`stdout: ${stdout}`);
     });
   });
+  ////Enter maintenance Mode
+app.post('/api/enterMaintenance',async (req, res) => {
+  const data=req.body.data;
+  data.forEach(async(deviceData)=>{
+ // Log maintenance mode entry
+ console.log(`Device ${deviceData.deviceId} entering  maintenance mode due to ${deviceData.reason}.`);
+
+ // Publish MQTT message to enter maintenance mode
+ await client.publish(`maintenance/${deviceData.siteId}`, JSON.stringify({ "maintenanceMode": "enter", "reason": deviceData.reason , "deviceId":deviceData.deviceId}));
+  });
+  // devices.set(deviceId, MAINTENANCE);
+  res.json({message:'Entered maintenance mode.'});
+});
+
+// Exit maintenance mode route
+app.post('/api/exitMaintenance', async(req, res) => {
+  const data=req.body.data;
+  data.forEach(async(deviceData)=>{
+ // Log maintenance mode exit
+ console.log(`Device ${deviceData.deviceId} exiting  maintenance mode due to ${deviceData.reason}.`);
+
+ // Publish MQTT message to exit maintenance mode
+ await client.publish(`maintenance/${deviceData.siteId}`, JSON.stringify({ "maintenanceMode": "exit", "reason": deviceData.reason , "deviceId":deviceData.deviceId}));
+  });
+  // devices.set(deviceId, OPERATIONAL);
+  res.json({message:'Exited maintenance mode.'});
+});
+
+
+app.post('/deviceStatus',async(req,res)=>{
+ deviceData ={
+  siteId:"site_1",
+  deviceId:"device_1",
+  reason :"battery"
+ }
+  await client.publish(`device-status/${deviceData.siteId}`, JSON.stringify({ "maintenanceMode": "exit", "reason": deviceData.reason , "deviceId":deviceData.deviceId}));
+
+  setTimeout(()=>{
+    res.json(deviceStatus)
+  }, 5000);
+})
+
+
+
+
+
+
+
 };
