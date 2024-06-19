@@ -239,3 +239,4 @@ export async function postDevice(id, data) {
     cep.fetchDataFromServer(api);
 
  }
+

@@ -201,3 +201,4 @@ export async function syncSourceCode(){
 export async function sendFirmwareToSites(){
     await controller.sendFirmwareToSites();
 }
+
