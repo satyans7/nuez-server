@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const session = require("express-session");
 const controller = require("./src/main/controller/controller");
 const env = require('dotenv');
-// const FileStore = require('session-file-store')(session);
+const FileStore = require('session-file-store')(session);
 
 const PORT = process.env.PORT || 4000;
 const PUBLIC = "public";
@@ -28,6 +28,7 @@ env.config();
 // start the session 
 app.use(
   session({
+    store: new FileStore({ path: sessionStore, logFn: function() {} }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
@@ -58,10 +59,6 @@ app.use(controller.passport.session());
 // Define routes
 app.get("/", (req, res) => {
     if(req.isAuthenticated()){
-      if(req.user.role==="superAdmin"){
-        res.sendFile(path.join(__dirname, VIEW, SUPERADMIN));
-      }
-    else 
     res.redirect(`/api/${req.user.role}-dashboard/user_${req.user.user_id.substr(5)}`)
   }
   else res.sendFile(path.join(__dirname, VIEW, HOME));

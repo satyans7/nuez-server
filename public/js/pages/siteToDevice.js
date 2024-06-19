@@ -2,7 +2,7 @@
 import {
     getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping, registerDevice, getConsumerDeviceMapping, assignDeviceToUser,
     deregisterConsumer,
-    registerConsumer,enterMaintenance,exitMaintenance
+    registerConsumer
 } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
@@ -406,12 +406,10 @@ async function viewMaintenanceDevices() {
             reasonDropdown.appendChild(option3);
             reasonCell.appendChild(reasonDropdown);
 
-            enterMaintenanceButton.addEventListener('click',() => {
+            enterMaintenanceButton.addEventListener('click', () => {
                 if (reasonDropdown.value === '') {
                     alert('Please select a reason before entering maintenance.');
                 } else {
-                    // let data = {siteId:site,deviceId:key,reason:reasonDropdown.value};
-                    // const datareceived=await enterMaintenance(data);
                     alert(`${device.name} is under maintenance now.`);
                     exitMaintenanceButton.disabled = false;
                     exitMaintenanceButton.style.cursor = 'pointer';

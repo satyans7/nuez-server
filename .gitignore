@@ -5,6 +5,8 @@
 .env
 node_modules/
 trial.html
+# src/
+.src/main/database/json-data/sessionStore/*
 # Ignore all .vscode files
 .history/*
 .vscode/*
