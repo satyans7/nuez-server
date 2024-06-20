@@ -22,36 +22,98 @@ const currentid = document.createElement('h1');
 currentid.textContent = `Id : ${getCurrentAdmin()}`
 currentAdmin.appendChild(currentid)
 
+
 //REGISTER SITE
+
+function populateSearchContainer(data, searchResultsContainer, siteIdInput){
+    data.forEach(val => {
+        if (val.substring(0, 4) === 'site') {
+            const row = document.createElement('div');
+            row.className = 'search-result';
+            row.textContent = val;
+            row.addEventListener('click', () => {
+                siteIdInput.value = row.textContent;
+                const allResults = searchResultsContainer.getElementsByClassName("search-result");
+                for (let result of allResults) {
+                    result.style.display = "none";
+                }
+            });
+            searchResultsContainer.appendChild(row);
+        }
+    });
+
+    // Filter search results based on input value
+    siteIdInput.addEventListener("input", function () {
+        const filter = siteIdInput.value.toLowerCase();
+        const searchResults = searchResultsContainer.getElementsByClassName("search-result");
+
+        if (filter === "") {
+            // Show all results if input is cleared
+            for (let result of searchResults) {
+                result.style.display = "";
+            }
+        } else {
+            // Filter results based on input
+            for (let result of searchResults) {
+                const text = result.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    result.style.display = "";
+                } else {
+                    result.style.display = "none";
+                }
+            }
+        }
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const searchResultsContainer = document.querySelector(".register-search-results");
+    const siteIdInput = document.getElementById("site-id");
+    const data = await getSitesData();
+    const ids = Object.keys(data);
+    populateSearchContainer(ids, searchResultsContainer, siteIdInput);
+});
+
 registerBtn.addEventListener('click', () => {
     allSitesContainer.style.display = 'none';
     deregisterTab.style.display = 'none';
     registerTab.style.display = 'block';
-
     const form = document.getElementById('register-site-form');
-    form.addEventListener('submit', async(event) =>{
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const user = getCurrentAdmin();
         const ob = {
-            site : document.getElementById('site-id').value
+            site: document.getElementById('site-id').value
         }
 
         const res = await registerSite(ob, user);
         viewAllSites();
         alert(res.message);
-        form.reset();        
-    })
-})
-
-  //when cancel button is clicked on register form 
-  document.getElementById('register-cancel-button').addEventListener('click', () => {
-    deregisterTab.style.display = 'none';
-    allSitesContainer.style.display = 'block';
-    registerTab.style.display = 'block';
-    viewAllSites();
+        form.reset();
+    }); 
+    
+    document.getElementById('register-cancel-button').addEventListener('click', () => {
+        deregisterTab.style.display = 'none';
+        allSitesContainer.style.display = 'block';
+        registerTab.style.display = 'block';
+        viewAllSites();
+    });
 });
 
+
+
 //DEREGISTER SITE
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const searchResultsContainer = document.querySelector(".deregister-search-results");
+    const siteIdInput = document.getElementById("deregister-site-id");
+    const user = getCurrentAdmin();
+    const sites = await getUserSiteMapping();
+    const ids = sites[user];
+    populateSearchContainer(ids, searchResultsContainer, siteIdInput);
+});
+
 deregisterBtn.addEventListener('click', () => {
     allSitesContainer.style.display = 'none';
     registerTab.style.display = 'none';
@@ -89,10 +151,9 @@ deregisterBtn.addEventListener('click', () => {
 
 })
 
-viewSitesBtn.addEventListener('click', async () => {
+viewSitesBtn.addEventListener('click', async() => {
     await viewAllSites();
 })
-
 document.addEventListener('DOMContentLoaded', async () => {
     await viewAllSites();
 

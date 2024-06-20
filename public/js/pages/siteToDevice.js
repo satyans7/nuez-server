@@ -151,7 +151,7 @@ function createDeviceCard(device, key) {
 
 // ALL CONSUMERS TAB ----------------------------------------------------------------------------//
 
-consumerTab.addEventListener('click', async () => {
+async function toggleConsumerTab() {
     await viewAllconsumers();
     btnGroup.style.display = 'flex';
     registerBtn.addEventListener('click', () => {
@@ -164,6 +164,9 @@ consumerTab.addEventListener('click', async () => {
         deregisterConsumerTab.style.display = 'block';
         btnGroup.style.display = 'flex';
     });
+}
+consumerTab.addEventListener('click', async () => {
+    await toggleConsumerTab();
 });
 
 
@@ -235,6 +238,56 @@ function getCurrentAdmin() {
     return searchParams.get('adminId');
 }
 
+
+
+function populateSearchContainer(data, searchResultsContainer, siteIdInput) {
+    data.forEach(val => {
+        if (val.substring(0, 4) === 'user') {
+            const row = document.createElement('div');
+            row.className = 'search-result';
+            row.textContent = val;
+            row.addEventListener('click', () => {
+                siteIdInput.value = row.textContent;
+                const allResults = searchResultsContainer.getElementsByClassName("search-result");
+                for (let result of allResults) {
+                    result.style.display = "none";
+                }
+            });
+            searchResultsContainer.appendChild(row);
+        }
+    });
+
+    // Filter search results based on input value
+    siteIdInput.addEventListener("input", function () {
+        const filter = siteIdInput.value.toLowerCase();
+        const searchResults = searchResultsContainer.getElementsByClassName("search-result");
+
+        if (filter === "") {
+            // Show all results if input is cleared
+            for (let result of searchResults) {
+                result.style.display = "";
+            }
+        } else {
+            // Filter results based on input
+            for (let result of searchResults) {
+                const text = result.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    result.style.display = "";
+                } else {
+                    result.style.display = "none";
+                }
+            }
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const searchResultsContainer = document.querySelector(".register-search-results");
+    const siteIdInput = document.getElementById("register-consumer-id");
+    const data = await getAllConsumers();
+    const ids = Object.keys(data);
+    populateSearchContainer(ids, searchResultsContainer, siteIdInput);
+})
 registerConsumerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const consumerId = document.getElementById('register-consumer-id').value;
@@ -243,11 +296,19 @@ registerConsumerForm.addEventListener('submit', async (event) => {
     };
     console.log(consumer)
     const jsonResponse = await registerConsumer(site, consumer);
-    viewAllconsumers();
+    await toggleConsumerTab()
     alert(jsonResponse.message);
     registerConsumerForm.reset();
 })
 
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const searchResultsContainer = document.querySelector(".deregister-search-results");
+    const siteIdInput = document.getElementById("deregister-consumer-id");
+    const data = await getSiteConsumerMapping();
+    const ids = data[site];
+    populateSearchContainer(ids, searchResultsContainer, siteIdInput);
+})
 deregisterConsumerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const consumerId = document.getElementById('deregister-consumer-id').value;
@@ -256,7 +317,7 @@ deregisterConsumerForm.addEventListener('submit', async (event) => {
     }
     try {
         const response = await deregisterConsumer(site, consumer);
-        viewAllconsumers();
+        await toggleConsumerTab();
         alert(response.message);
         deregisterConsumerForm.reset();
 
@@ -345,7 +406,7 @@ async function viewMaintenanceDevices() {
             reasonDropdown.appendChild(option3);
             reasonCell.appendChild(reasonDropdown);
 
-            enterMaintenanceButton.addEventListener('click', () => {
+            enterMaintenanceButton.addEventListener('click',() => {
                 if (reasonDropdown.value === '') {
                     alert('Please select a reason before entering maintenance.');
                 } else {
