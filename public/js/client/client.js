@@ -202,3 +202,17 @@ export async function sendFirmwareToSites(){
     await controller.sendFirmwareToSites();
 }
 
+//Maintenance
+
+export async function getDeviceStatus(object){
+    return await controller.getDeviceStatus(object);
+}
+
+export async function enterMaintenance(object){
+    return await controller.enterMaintenance(object);
+}
+
+export async function exitMaintenance(object){
+    return await controller.exitMaintenance(object);
+}
+
