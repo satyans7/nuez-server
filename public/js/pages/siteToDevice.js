@@ -320,7 +320,7 @@ async function viewMaintenanceDevices() {
             const exitMaintenanceButton = document.createElement('button');
             exitMaintenanceButton.textContent = 'Exit Maintenance';
             exitMaintenanceButton.style.background = 'red';
-            exitMaintenanceButton.disabled = true; 
+            exitMaintenanceButton.disabled = true;
             exitMaintenanceButton.style.cursor = 'not-allowed'
             exitMaintenanceButton.style.opacity = 0.5
 
@@ -350,7 +350,7 @@ async function viewMaintenanceDevices() {
                     alert('Please select a reason before entering maintenance.');
                 } else {
                     alert(`${device.name} is under maintenance now.`);
-                    exitMaintenanceButton.disabled = false; 
+                    exitMaintenanceButton.disabled = false;
                     exitMaintenanceButton.style.cursor = 'pointer';
                     exitMaintenanceButton.style.opacity = 1;
                     enterMaintenanceButton.disabled = true;
@@ -360,7 +360,7 @@ async function viewMaintenanceDevices() {
             });
 
             exitMaintenanceButton.addEventListener('click', () => {
-                if(confirm(`Do you want to exit the maintenance mode?`)){
+                if (confirm(`Do you want to exit the maintenance mode?`)) {
                     enterMaintenanceButton.disabled = false;
                     enterMaintenanceButton.style.cursor = 'pointer';
                     enterMaintenanceButton.style.opacity = 1;
@@ -369,7 +369,7 @@ async function viewMaintenanceDevices() {
                     exitMaintenanceButton.style.opacity = 0.5
                     reasonDropdown.value = "";
                 }
-                
+
             });
 
             row.appendChild(nameCell);
@@ -657,7 +657,7 @@ async function upgradeAllDeviceVersions() {
         // Fetch devices and their versions
         const devicesData = await getDevicesData();
         const deviceIds = Object.keys(devicesData);
-        const response = await fetch(`/publish-message/${site}`, {
+        const response = await fetch(`/${site}/fetch-device-versions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -666,15 +666,15 @@ async function upgradeAllDeviceVersions() {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to upgrade device versions');
+            throw new Error('Fail to upgrade device versions');
         }
 
         // Wait for 2 seconds before refreshing the device versions
-        setTimeout(async () => {
+        setTimeout(() => {
             // Refresh the device versions after upgrade
-            await fetchDeviceVersions();
+             fetchDeviceVersions();
             alert('All device versions upgraded successfully!');
-        }, 2000);
+        }, 10000);
     } catch (error) {
         console.error('Error upgrading device versions:', error);
         alert('Error upgrading device versions. Please try again.');
@@ -726,12 +726,11 @@ function displayDeviceVersions(versions) {
 
 async function intimateAll() {
     try {
-        const response = await fetch('/intimate-all', {
+        const response = await fetch(`/${site}/intimate-all-devices`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: 'intimate' })
+            }
         });
 
         if (!response.ok) {
