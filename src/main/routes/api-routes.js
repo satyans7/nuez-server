@@ -5,7 +5,8 @@ const simpleGit = require("simple-git");
 const mqtt = require("mqtt");
 const { exec } = require("child_process");
 const SUPERADMIN = "/superAdmin"
-
+MAINTENANCE_ENTER ="enter"
+MAINTENANCE_EXIT = "exit"
 module.exports = function (app) {
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
@@ -377,7 +378,7 @@ module.exports = function (app) {
   } catch (error) {
     console.error("Error loading JSON files:", error);
   }
-let deviceStatus=[]
+let deviceStatus={}
   const client = mqtt.connect("mqtt://192.168.33.250", {
     port: 1883,
     username: "nuez",
@@ -402,7 +403,7 @@ let deviceStatus=[]
         console.log("Subscribed to device-data topic.");
       }
     });
-    client.subscribe("device-status", (err) => {
+    client.subscribe("device-status-info/#", (err) => {
       if (err) {
         console.error("Error subscribing to device-status topic:", err);
       } else {
@@ -502,9 +503,12 @@ let deviceStatus=[]
         console.error("Error parsing MQTT message:", error);
       }
     }
-    if(topic==="device-status"){
+    const topic_device_status_info=topic.substring(0,topic.indexOf("/"));
+    const topic_site_id = topic.substring(topic.indexOf("/")+1);
+    // console.log(topic_device_status_info,topic_site_id)
+    if(topic_device_status_info==="device-status-info"){
       const deviceStatusReceived= JSON.parse(message.toString());
-      deviceStatus=deviceStatusReceived;
+      deviceStatus[topic_site_id]=deviceStatusReceived;
     }
   });
 
@@ -678,45 +682,34 @@ let deviceStatus=[]
       res.send(`stdout: ${stdout}`);
     });
   });
-  ////Enter maintenance Mode
-app.post('/api/enterMaintenance',async (req, res) => {
-  const data=req.body.data;
-  data.forEach(async(deviceData)=>{
- // Log maintenance mode entry
- console.log(`Device ${deviceData.deviceId} entering  maintenance mode due to ${deviceData.reason}.`);
+ 
+////////////////////// Maintenance Mode///////////////////////////////////////
+async function maintenance_service(site_id,list_of_ids,action){
+   // Publish MQTT message to enter/exit maintenance mode
+  await client.publish(`maintenance/${site_id}`, JSON.stringify({list_of_ids:list_of_ids,action:action}));
+}
 
- // Publish MQTT message to enter maintenance mode
- await client.publish(`maintenance/${deviceData.siteId}`, JSON.stringify({ "maintenanceMode": "enter", "reason": deviceData.reason , "deviceId":deviceData.deviceId}));
-  });
-  // devices.set(deviceId, MAINTENANCE);
+//// Enter Maintenance Mode
+app.post('/api/maintenance/enter',async (req, res) => {
+  const list_of_ids=req.body.devicesId;
+  const site_id = req.body.siteId;
+  maintenance_service(site_id,list_of_ids,MAINTENANCE_ENTER);
   res.json({message:'Entered maintenance mode.'});
 });
 
 // Exit maintenance mode route
-app.post('/api/exitMaintenance', async(req, res) => {
-  const data=req.body.data;
-  data.forEach(async(deviceData)=>{
- // Log maintenance mode exit
- console.log(`Device ${deviceData.deviceId} exiting  maintenance mode due to ${deviceData.reason}.`);
-
- // Publish MQTT message to exit maintenance mode
- await client.publish(`maintenance/${deviceData.siteId}`, JSON.stringify({ "maintenanceMode": "exit", "reason": deviceData.reason , "deviceId":deviceData.deviceId}));
-  });
-  // devices.set(deviceId, OPERATIONAL);
+app.post('/api/maintenance/exit', async(req, res) => {
+  const list_of_ids=req.body.devicesId;
+  const site_id = req.body.siteId;
+  maintenance_service(site_id,list_of_ids,MAINTENANCE_EXIT);
   res.json({message:'Exited maintenance mode.'});
 });
 
-
-app.post('/deviceStatus',async(req,res)=>{
- deviceData ={
-  siteId:"site_1",
-  deviceId:"device_1",
-  reason :"battery"
- }
-  await client.publish(`device-status/${deviceData.siteId}`, JSON.stringify({ "maintenanceMode": "exit", "reason": deviceData.reason , "deviceId":deviceData.deviceId}));
-
+app.post('/api/device-status',async(req,res)=>{
+  const {site_id}=req.body;
+  await client.publish(`device-status-query/${site_id}`, JSON.stringify({"query":"send_device_status_info"} ));
   setTimeout(()=>{
-    res.json(deviceStatus)
+    res.json(deviceStatus[site_id])
   }, 5000);
 })
 
