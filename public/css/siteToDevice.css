@@ -385,32 +385,36 @@ body {
     height: 63vh;
     display: flex;
     align-items: baseline;
+    overflow-y: scroll;
     
 }
 
-#enter-maintenance-container{
+#all-maintenance-devices-container{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+
+#enter-maintenance-container, #exit-maintenance-container{
     padding: 0 2rem;
     width: 100%;
    display: flex;
    justify-content: space-between;
     
 }
-#enter-maintenance-container button{
+#enter-maintenance-container button, #exit-maintenance-container button{
     height: 35px;
     margin-top: auto;
 }
 
-.operational-mode-devices{
+.operational-mode-devices, .maintenance-mode-devices{
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 60%;
 }  
 
-.enter-maintenance-container button{
-    
-    height: 1.5rem;
-}
 .selected-devices{
     display: flex;
     flex-direction: column;

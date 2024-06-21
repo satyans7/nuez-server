@@ -2,7 +2,9 @@
 import {
     getDevicesData, getSiteDeviceMapping, getAllConsumers, getSiteConsumerMapping, getSitesData, updateSiteDataOnServer, deleteSiteToDeviceMapping, registerDevice, getConsumerDeviceMapping, assignDeviceToUser,
     deregisterConsumer,
-    registerConsumer
+    registerConsumer,
+    enterMaintenance,
+    exitMaintenance
 } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
@@ -334,7 +336,7 @@ maintenanceTab.addEventListener('click', async () => {
     toggleVisibility();
     maintenanceDevicesContainer.style.display = 'block';
     toggleMaintenanceTabs();
-    allModesContainer.style.display = 'flex';
+    await loadAllModesTable();
 })
 
 const allModesBtn = document.getElementById('all-maintenance-devices')
@@ -345,99 +347,217 @@ const allModesContainer = document.getElementById('all-maintenance-devices-conta
 const enterMaintenanceContainer = document.getElementById('enter-maintenance-container')
 const exitMaintenanceContainer = document.getElementById('exit-maintenance-container')
 
-function toggleMaintenanceTabs(){
+const allModesTableBody = document.getElementById('all-mode-table-body');
+
+function toggleMaintenanceTabs() {
     const sections = [
-       allModesContainer,
-       enterMaintenanceContainer,
-       exitMaintenanceContainer
+        allModesContainer,
+        enterMaintenanceContainer,
+        exitMaintenanceContainer
     ];
 
     sections.forEach(container => container.style.display = 'none');
 }
 
-allModesBtn.addEventListener('click', () => {
+
+const deviceStatus = {
+    "SWM::AIL:GBP:LIE:AEI": "OPERATIONAL",
+    "SWM::AIL:GBP:LIM:AMM": "OPERATIONAL",
+    "SWM::MIC:OBI:PAK:LLM": "MAINTENANCE",
+    "SWM::MIC:OBI:PAE:PGA": "OPERATIONAL",
+    "SWM::MIC:OBI:PAJ:CJE": "OPERATIONAL",
+    "SWM::AIL:GBP:LIE:MGI": "MAINTENANCE",
+    "SWM::MIC:OBI:PBO:HGI": "OPERATIONAL",
+    "SWM::AIL:GBP:LIE:LAI": "OPERATIONAL"
+}
+
+allModesBtn.addEventListener('click', async () => {
     toggleMaintenanceTabs();
+    await loadAllModesTable();
+})
+
+async function loadAllModesTable() {
     allModesContainer.style.display = 'flex';
-})
+    let ids = Object.keys(deviceStatus);
+    allModesTableBody.innerHTML = '';
+    ids.forEach(id => {
+        const status = deviceStatus[id];
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        nameCell.textContent = id;
+        const statusCell = document.createElement('td');
+        statusCell.textContent = status;
+        if (status === 'MAINTENANCE') statusCell.style.color = 'red';
+        else statusCell.style.color = 'green';
+        row.appendChild(nameCell);
+        row.appendChild(statusCell);
+        allModesTableBody.appendChild(row);
+    })
+}
 
-enterMaintenanceBtn.addEventListener('click', () => {
+enterMaintenanceBtn.addEventListener('click', async () => {
     toggleMaintenanceTabs();
-    enterMaintenanceContainer.style.display = 'flex';
-})
+    await loadOperationalModeTable();
+    document.getElementById('moveSelectedButton').addEventListener('click', moveselectedOperationalItems);
+    document.getElementById('sendSelectedButton').addEventListener('click', sendselectedOperationalItems);
 
-exitMaintenanceBtn.addEventListener('click', () => {
-    toggleMaintenanceTabs();
-    exitMaintenanceContainer.style.display = 'flex';
 })
-
-const existingData = [
-    { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' },
-    { id: 3, name: 'Item 3' }
-];
 
 const operationalTableBody = document.getElementById('operational-mode-table-body');
-const selectedDeviceList = document.getElementById('selected-device-list');
-const selectedItems = new Set();
+const selectedOperationalDeviceList = document.getElementById('selected-device-list-1');
+const selectedOperationalItems = new Set();
 
-function populateOperationalModeTable() {
-    operationalTableBody.innerHTML = ''; 
-    existingData.forEach(data => {
-        const row = document.createElement('tr');
-        row.onclick = () => toggleSelect(data, row);
-
-        const idCell = document.createElement('td');
-        idCell.textContent = data.id;
-        row.appendChild(idCell);
-
-        const nameCell = document.createElement('td');
-        nameCell.textContent = data.name;
-        row.appendChild(nameCell);
-
-        operationalTableBody.appendChild(row);
+async function loadOperationalModeTable() {
+    enterMaintenanceContainer.style.display = 'flex';
+    let ids = Object.keys(deviceStatus);
+    operationalTableBody.innerHTML = '';
+    ids.forEach(id => {
+        const status = deviceStatus[id];
+        if (status === 'OPERATIONAL') {
+            const row = document.createElement('tr');
+            row.onclick = () => toggleSelectOperational(id, row);
+            const idCell = document.createElement('td');
+            idCell.textContent = id;
+            row.appendChild(idCell);
+            operationalTableBody.appendChild(row);
+        }
     });
 }
 
-function toggleSelect(data, row) {
-    if (selectedItems.has(data)) {
-        selectedItems.delete(data);
+function toggleSelectOperational(data, row) {
+    if (selectedOperationalItems.has(data)) {
+        selectedOperationalItems.delete(data);
         row.classList.remove('selected');
     } else {
-        selectedItems.add(data);
+        selectedOperationalItems.add(data);
         row.classList.add('selected');
     }
 }
 
-
-function moveSelectedItems() {
-    selectedItems.forEach(data => {
+async function moveselectedOperationalItems() {
+    selectedOperationalItems.forEach(data => {
         const listItem = document.createElement('li');
-        listItem.textContent = data.name;
+        listItem.textContent = data;
         const removeButton = document.createElement('button');
         removeButton.textContent = 'Remove';
         removeButton.onclick = () => removeSelectedItem(data, listItem);
         listItem.appendChild(removeButton);
-        selectedDeviceList.appendChild(listItem);
-        const index = existingData.findIndex(item => item.id === data.id);
-        if (index > -1) {
-            existingData.splice(index, 1);
+        selectedOperationalDeviceList.appendChild(listItem);
+
+        deviceStatus[data] = 'MAINTENANCE';
+    });
+    selectedOperationalItems.clear();
+    await loadOperationalModeTable();
+}
+
+async function removeSelectedItem(data, listItem) {
+    selectedOperationalDeviceList.removeChild(listItem);
+    deviceStatus[data] = 'OPERATIONAL';
+    await loadOperationalModeTable();
+}
+
+async function sendselectedOperationalItems() {
+    const selectedArray = Array.from(selectedOperationalDeviceList.children).map(item => {
+        return { id: item.textContent.replace('Remove', '').trim() };
+    });
+
+    const object = {
+        "site_id": site,
+        "devices_id": selectedArray
+    }
+
+    await enterMaintenance(object);
+    console.log(object)
+    selectedOperationalDeviceList.innerHTML = '';
+    await loadOperationalModeTable();
+
+
+}
+
+exitMaintenanceBtn.addEventListener('click', async() => {
+    toggleMaintenanceTabs();
+    await loadMaintenanceModeTable();
+    document.getElementById('moveSelectedButton-2').addEventListener('click', moveselectedMaintenanceItems);
+    document.getElementById('sendSelectedButton-2').addEventListener('click', sendselectedMaintenanceItems);
+})
+
+const maintenanceModeTableBody = document.getElementById('maintenance-mode-table-body');
+const selectedMaintenanceDeviceList = document.getElementById('selected-device-list-2');
+const selectedMaintenanceItems = new Set();
+
+async function loadMaintenanceModeTable() {
+    exitMaintenanceContainer.style.display = 'flex';
+    let ids = Object.keys(deviceStatus);
+    maintenanceModeTableBody.innerHTML = '';
+    ids.forEach(id => {
+        const status = deviceStatus[id];
+        if (status === 'MAINTENANCE') {
+            const row = document.createElement('tr');
+            row.onclick = () => toggleSelectMaintenance(id, row);
+            const idCell = document.createElement('td');
+            idCell.textContent = id;
+            row.appendChild(idCell);
+            maintenanceModeTableBody.appendChild(row);
         }
     });
-    selectedItems.clear();
-    populateOperationalModeTable();
 }
 
-function removeSelectedItem(data, listItem) {
-    selectedDeviceList.removeChild(listItem);
-    if (!existingData.some(item => item.id === data.id)) {
-        existingData.push(data);
+
+function toggleSelectMaintenance(data, row) {
+    if (selectedMaintenanceItems.has(data)) {
+        selectedMaintenanceItems.delete(data);
+        row.classList.remove('selected');
+    } else {
+        selectedMaintenanceItems.add(data);
+        row.classList.add('selected');
     }
-    populateOperationalModeTable(); 
 }
 
-document.getElementById('moveSelectedButton').addEventListener('click', moveSelectedItems);
-// Initial population of the data table
-populateOperationalModeTable();
+async function moveselectedMaintenanceItems() {
+    selectedMaintenanceItems.forEach(data => {
+        const listItem = document.createElement('li');
+        listItem.textContent = data;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = () => removeSelectedItemMaintenance(data, listItem);
+        listItem.appendChild(removeButton);
+        selectedMaintenanceDeviceList.appendChild(listItem);
+
+        deviceStatus[data] = 'OPERATIONAL';
+    });
+    selectedMaintenanceItems.clear();
+    await loadMaintenanceModeTable();
+}
+
+async function removeSelectedItemMaintenance(data, listItem) {
+    selectedMaintenanceDeviceList.removeChild(listItem);
+    deviceStatus[data] = 'MAINTENANCE';
+    await loadMaintenanceModeTable();
+}
+
+async function sendselectedMaintenanceItems() {
+    const selectedArray = Array.from(selectedMaintenanceDeviceList.children).map(item => {
+        return { id: item.textContent.replace('Remove', '').trim() };
+    });
+
+    const object = {
+        "site_id": site,
+        "devices_id": selectedArray
+    }
+
+    await exitMaintenance(object);
+    console.log(object)
+    selectedMaintenanceDeviceList.innerHTML = '';
+    await loadMaintenanceModeTable();
+
+
+}
+
+
+
+
+
+
 
 
 
@@ -727,7 +847,7 @@ async function upgradeAllDeviceVersions() {
         // Wait for 2 seconds before refreshing the device versions
         setTimeout(() => {
             // Refresh the device versions after upgrade
-             fetchDeviceVersions();
+            fetchDeviceVersions();
             alert('All device versions upgraded successfully!');
         }, 10000);
     } catch (error) {
