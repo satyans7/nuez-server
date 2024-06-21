@@ -420,7 +420,10 @@ module.exports = function (app) {
         // Check if the site ID is already in memory
         if (!siteIds[siteId]) {
           // Add new site ID to memory with an empty object
-          siteIds[siteId] = {};
+          siteIds[siteId] = {
+            "name":siteId,
+            "location":"default"
+          };
 
           // Update the JSON file with the new site ID
           fs.writeFile(
@@ -441,7 +444,10 @@ module.exports = function (app) {
         // Check if the device ID is already in memory
         if (!deviceIds[deviceId]) {
           // Add new device ID to memory with an empty object
-          deviceIds[deviceId] = {};
+          deviceIds[deviceId] = {
+            "name":deviceId,
+            "location":"default"
+          };
 
           // Update the JSON file with the new device ID
           fs.writeFile(
@@ -676,13 +682,21 @@ module.exports = function (app) {
     // Publish MQTT message to enter/exit maintenance mode
     await client.publish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }));
   }
+  async function device_status_query(site_id){
+    await client.publish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }));
+  }
 
   //// Enter Maintenance Mode
   app.post('/api/maintenance/enter', async (req, res) => {
     const list_of_ids = req.body.devicesId;
     const site_id = req.body.siteId;
     maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
-    res.json({ message: 'Entered maintenance mode.' });
+    setTimeout(() => {
+      device_status_query(site_id);
+      }, 1000);
+    setTimeout(() => {
+        res.json(deviceStatus[site_id])
+      }, 7000);
   });
 
   // Exit maintenance mode route
@@ -690,12 +704,17 @@ module.exports = function (app) {
     const list_of_ids = req.body.devicesId;
     const site_id = req.body.siteId;
     maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
-    res.json({ message: 'Exited maintenance mode.' });
+    setTimeout(() => {
+    device_status_query(site_id);
+    }, 1000);
+    setTimeout(() => {
+      res.json(deviceStatus[site_id])
+    }, 7000);
   });
 
   app.post('/api/device-status', async (req, res) => {
     const { site_id } = req.body;
-    await client.publish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }));
+    device_status_query(site_id);
     setTimeout(() => {
       res.json(deviceStatus[site_id])
     }, 5000);
