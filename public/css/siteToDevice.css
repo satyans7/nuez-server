@@ -332,3 +332,118 @@ body {
 #firmware-table tr:hover {
     background-color: #ddd;
 }
+
+
+.register-search-results,
+.deregister-search-results {
+    margin: 10px 0;
+    border-radius: 10px;
+    overflow-y: scroll;
+    max-height: 40vh;
+
+}
+
+.search-result {
+    cursor: pointer;
+    padding: 5px;
+
+}
+
+.search-result:hover {
+    background-color: rgb(165, 164, 164);
+
+}
+
+
+
+/* Maintenance */
+
+.maintenance-action-tabs{
+    background-color: white;
+    padding: 1rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.maintenance-action-tabs button{
+    background-color: #2c3e50;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: white;
+}
+
+
+#maintenance-container{
+    background-color: white;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+    height: 63vh;
+    display: flex;
+    align-items: baseline;
+    
+}
+
+#enter-maintenance-container{
+    padding: 0 2rem;
+    width: 100%;
+   display: flex;
+   justify-content: space-between;
+    
+}
+#enter-maintenance-container button{
+    height: 35px;
+    margin-top: auto;
+}
+
+.operational-mode-devices{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 60%;
+}  
+
+.enter-maintenance-container button{
+    
+    height: 1.5rem;
+}
+.selected-devices{
+    display: flex;
+    flex-direction: column;
+}
+
+
+table {
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ccc;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+}
+
+.selected-device-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.selected-device-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+tr.selected {
+    background-color: #d3d3d3;
+}

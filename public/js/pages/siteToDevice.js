@@ -151,7 +151,7 @@ function createDeviceCard(device, key) {
 
 // ALL CONSUMERS TAB ----------------------------------------------------------------------------//
 
-consumerTab.addEventListener('click', async () => {
+async function toggleConsumerTab() {
     await viewAllconsumers();
     btnGroup.style.display = 'flex';
     registerBtn.addEventListener('click', () => {
@@ -164,6 +164,9 @@ consumerTab.addEventListener('click', async () => {
         deregisterConsumerTab.style.display = 'block';
         btnGroup.style.display = 'flex';
     });
+}
+consumerTab.addEventListener('click', async () => {
+    await toggleConsumerTab();
 });
 
 
@@ -235,6 +238,56 @@ function getCurrentAdmin() {
     return searchParams.get('adminId');
 }
 
+
+
+function populateSearchContainer(data, searchResultsContainer, siteIdInput) {
+    data.forEach(val => {
+        if (val.substring(0, 4) === 'user') {
+            const row = document.createElement('div');
+            row.className = 'search-result';
+            row.textContent = val;
+            row.addEventListener('click', () => {
+                siteIdInput.value = row.textContent;
+                const allResults = searchResultsContainer.getElementsByClassName("search-result");
+                for (let result of allResults) {
+                    result.style.display = "none";
+                }
+            });
+            searchResultsContainer.appendChild(row);
+        }
+    });
+
+    // Filter search results based on input value
+    siteIdInput.addEventListener("input", function () {
+        const filter = siteIdInput.value.toLowerCase();
+        const searchResults = searchResultsContainer.getElementsByClassName("search-result");
+
+        if (filter === "") {
+            // Show all results if input is cleared
+            for (let result of searchResults) {
+                result.style.display = "";
+            }
+        } else {
+            // Filter results based on input
+            for (let result of searchResults) {
+                const text = result.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    result.style.display = "";
+                } else {
+                    result.style.display = "none";
+                }
+            }
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const searchResultsContainer = document.querySelector(".register-search-results");
+    const siteIdInput = document.getElementById("register-consumer-id");
+    const data = await getAllConsumers();
+    const ids = Object.keys(data);
+    populateSearchContainer(ids, searchResultsContainer, siteIdInput);
+})
 registerConsumerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const consumerId = document.getElementById('register-consumer-id').value;
@@ -243,11 +296,19 @@ registerConsumerForm.addEventListener('submit', async (event) => {
     };
     console.log(consumer)
     const jsonResponse = await registerConsumer(site, consumer);
-    viewAllconsumers();
+    await toggleConsumerTab()
     alert(jsonResponse.message);
     registerConsumerForm.reset();
 })
 
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const searchResultsContainer = document.querySelector(".deregister-search-results");
+    const siteIdInput = document.getElementById("deregister-consumer-id");
+    const data = await getSiteConsumerMapping();
+    const ids = data[site];
+    populateSearchContainer(ids, searchResultsContainer, siteIdInput);
+})
 deregisterConsumerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const consumerId = document.getElementById('deregister-consumer-id').value;
@@ -256,7 +317,7 @@ deregisterConsumerForm.addEventListener('submit', async (event) => {
     }
     try {
         const response = await deregisterConsumer(site, consumer);
-        viewAllconsumers();
+        await toggleConsumerTab();
         alert(response.message);
         deregisterConsumerForm.reset();
 
@@ -272,117 +333,111 @@ deregisterConsumerForm.addEventListener('submit', async (event) => {
 maintenanceTab.addEventListener('click', async () => {
     toggleVisibility();
     maintenanceDevicesContainer.style.display = 'block';
-    await viewMaintenanceDevices();
+    toggleMaintenanceTabs();
+    allModesContainer.style.display = 'flex';
 })
 
-async function viewMaintenanceDevices() {
-    // Fetch device data and site-device mappings
-    const devicesData = await getDevicesData();
-    const sitesdevicesMapping = await getSiteDeviceMapping();
+const allModesBtn = document.getElementById('all-maintenance-devices')
+const enterMaintenanceBtn = document.getElementById('enter-maintenance')
+const exitMaintenanceBtn = document.getElementById('exit-maintenance')
 
-    // Create table elements
-    const maintenanceTable = document.createElement('table');
-    maintenanceTable.id = 'maintenance-devices-table';
-    const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
+const allModesContainer = document.getElementById('all-maintenance-devices-container')
+const enterMaintenanceContainer = document.getElementById('enter-maintenance-container')
+const exitMaintenanceContainer = document.getElementById('exit-maintenance-container')
 
-    // Create and append header row
-    const headerRow = document.createElement('tr');
-    const deviceIdHeader = document.createElement('th');
-    deviceIdHeader.textContent = 'Device Name';
-    const actionHeader = document.createElement('th');
-    actionHeader.textContent = 'Action';
-    const reasonHeader = document.createElement('th');
-    reasonHeader.textContent = 'Reason';
+function toggleMaintenanceTabs(){
+    const sections = [
+       allModesContainer,
+       enterMaintenanceContainer,
+       exitMaintenanceContainer
+    ];
 
-    headerRow.appendChild(deviceIdHeader);
-    headerRow.appendChild(actionHeader);
-    headerRow.appendChild(reasonHeader);
-    thead.appendChild(headerRow);
+    sections.forEach(container => container.style.display = 'none');
+}
 
-    // Get devices for the site
-    const devices = sitesdevicesMapping[site];
-    maintenanceDevicesContainer.innerHTML = '';
+allModesBtn.addEventListener('click', () => {
+    toggleMaintenanceTabs();
+    allModesContainer.style.display = 'flex';
+})
 
-    devices.forEach(key => {
-        const device = devicesData[key];
-        if (device) {
-            // Create row for each device
-            const row = document.createElement('tr');
-            const nameCell = document.createElement('td');
-            nameCell.textContent = device.name;
+enterMaintenanceBtn.addEventListener('click', () => {
+    toggleMaintenanceTabs();
+    enterMaintenanceContainer.style.display = 'flex';
+})
 
-            // Create action cell with two buttons
-            const actionCell = document.createElement('td');
-            const enterMaintenanceButton = document.createElement('button');
-            enterMaintenanceButton.textContent = 'Enter Maintenance';
-            enterMaintenanceButton.style.cursor = 'pointer';
-            const exitMaintenanceButton = document.createElement('button');
-            exitMaintenanceButton.textContent = 'Exit Maintenance';
-            exitMaintenanceButton.style.background = 'red';
-            exitMaintenanceButton.disabled = true; 
-            exitMaintenanceButton.style.cursor = 'not-allowed'
-            exitMaintenanceButton.style.opacity = 0.5
+exitMaintenanceBtn.addEventListener('click', () => {
+    toggleMaintenanceTabs();
+    exitMaintenanceContainer.style.display = 'flex';
+})
+
+const existingData = [
+    { id: 1, name: 'Item 1' },
+    { id: 2, name: 'Item 2' },
+    { id: 3, name: 'Item 3' }
+];
+
+const operationalTableBody = document.getElementById('operational-mode-table-body');
+const selectedDeviceList = document.getElementById('selected-device-list');
+const selectedItems = new Set();
+
+function populateOperationalModeTable() {
+    operationalTableBody.innerHTML = ''; 
+    existingData.forEach(data => {
+        const row = document.createElement('tr');
+        row.onclick = () => toggleSelect(data, row);
+
+        const idCell = document.createElement('td');
+        idCell.textContent = data.id;
+        row.appendChild(idCell);
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = data.name;
+        row.appendChild(nameCell);
+
+        operationalTableBody.appendChild(row);
+    });
+}
+
+function toggleSelect(data, row) {
+    if (selectedItems.has(data)) {
+        selectedItems.delete(data);
+        row.classList.remove('selected');
+    } else {
+        selectedItems.add(data);
+        row.classList.add('selected');
+    }
+}
 
 
-            actionCell.appendChild(enterMaintenanceButton);
-            actionCell.appendChild(exitMaintenanceButton);
-
-            const reasonCell = document.createElement('td');
-            const reasonDropdown = document.createElement('select');
-            const option1 = document.createElement('option');
-            option1.value = '';
-            option1.textContent = 'Select Reason';
-            const option2 = document.createElement('option');
-            option2.value = 'Battery Change';
-            option2.textContent = 'Battery Change';
-            const option3 = document.createElement('option');
-            option3.value = 'Firmware Upgrade';
-            option3.textContent = 'Firmware Upgrade';
-
-            reasonDropdown.appendChild(option1);
-            reasonDropdown.appendChild(option2);
-            reasonDropdown.appendChild(option3);
-            reasonCell.appendChild(reasonDropdown);
-
-            enterMaintenanceButton.addEventListener('click', () => {
-                if (reasonDropdown.value === '') {
-                    alert('Please select a reason before entering maintenance.');
-                } else {
-                    alert(`${device.name} is under maintenance now.`);
-                    exitMaintenanceButton.disabled = false; 
-                    exitMaintenanceButton.style.cursor = 'pointer';
-                    exitMaintenanceButton.style.opacity = 1;
-                    enterMaintenanceButton.disabled = true;
-                    enterMaintenanceButton.style.cursor = 'not-allowed';
-                    enterMaintenanceButton.style.opacity = 0.5;
-                }
-            });
-
-            exitMaintenanceButton.addEventListener('click', () => {
-                if(confirm(`Do you want to exit the maintenance mode?`)){
-                    enterMaintenanceButton.disabled = false;
-                    enterMaintenanceButton.style.cursor = 'pointer';
-                    enterMaintenanceButton.style.opacity = 1;
-                    exitMaintenanceButton.disabled = true;
-                    exitMaintenanceButton.style.cursor = 'not-allowed'
-                    exitMaintenanceButton.style.opacity = 0.5
-                    reasonDropdown.value = "";
-                }
-                
-            });
-
-            row.appendChild(nameCell);
-            row.appendChild(actionCell);
-            row.appendChild(reasonCell);
-            tbody.appendChild(row);
+function moveSelectedItems() {
+    selectedItems.forEach(data => {
+        const listItem = document.createElement('li');
+        listItem.textContent = data.name;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = () => removeSelectedItem(data, listItem);
+        listItem.appendChild(removeButton);
+        selectedDeviceList.appendChild(listItem);
+        const index = existingData.findIndex(item => item.id === data.id);
+        if (index > -1) {
+            existingData.splice(index, 1);
         }
     });
-
-    maintenanceTable.appendChild(thead);
-    maintenanceTable.appendChild(tbody);
-    maintenanceDevicesContainer.appendChild(maintenanceTable);
+    selectedItems.clear();
+    populateOperationalModeTable();
 }
+
+function removeSelectedItem(data, listItem) {
+    selectedDeviceList.removeChild(listItem);
+    if (!existingData.some(item => item.id === data.id)) {
+        existingData.push(data);
+    }
+    populateOperationalModeTable(); 
+}
+
+document.getElementById('moveSelectedButton').addEventListener('click', moveSelectedItems);
+// Initial population of the data table
+populateOperationalModeTable();
 
 
 
@@ -657,7 +712,7 @@ async function upgradeAllDeviceVersions() {
         // Fetch devices and their versions
         const devicesData = await getDevicesData();
         const deviceIds = Object.keys(devicesData);
-        const response = await fetch(`/publish-message/${site}`, {
+        const response = await fetch(`/${site}/fetch-device-versions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -666,15 +721,15 @@ async function upgradeAllDeviceVersions() {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to upgrade device versions');
+            throw new Error('Fail to upgrade device versions');
         }
 
         // Wait for 2 seconds before refreshing the device versions
-        setTimeout(async () => {
+        setTimeout(() => {
             // Refresh the device versions after upgrade
-            await fetchDeviceVersions();
+             fetchDeviceVersions();
             alert('All device versions upgraded successfully!');
-        }, 2000);
+        }, 10000);
     } catch (error) {
         console.error('Error upgrading device versions:', error);
         alert('Error upgrading device versions. Please try again.');
@@ -726,12 +781,11 @@ function displayDeviceVersions(versions) {
 
 async function intimateAll() {
     try {
-        const response = await fetch('/intimate-all', {
+        const response = await fetch(`/${site}/intimate-all-devices`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: 'intimate' })
+            }
         });
 
         if (!response.ok) {

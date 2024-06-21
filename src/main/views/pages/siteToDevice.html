@@ -32,7 +32,42 @@
 
         <div id="main-container" class="container">
             <div id="device-list" class="all-devices"></div>
-            <div id="maintenance-devices-list" class="maintenance-devices"></div>
+            <div id="maintenance-devices-list" class="maintenance-devices">
+                <div id="maintenance-action-tabs" class="maintenance-action-tabs">
+                    <button id="all-maintenance-devices">All Devices</button>
+                    <button id="enter-maintenance">Operational Mode</button>
+                    <button id="exit-maintenance">Maintenance Mode</button>
+                </div>
+                <div id="maintenance-container">
+                    <div id="all-maintenance-devices-container">All devices with their modes</div>
+                    <div id="enter-maintenance-container">
+                        <div class="operational-mode-devices">
+                            <h2>Devices in Operational Mode</h2>
+                            <table id="operational-mode-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="operational-mode-table-body">
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        <button id="moveSelectedButton">Add</button>
+                        <div class="selected-devices">
+                            <h2>Selected Devices</h2>
+                            <ul class="selected-device-list" id="selected-device-list">
+                                
+                            </ul>
+                            <button id="sendSelectedButton">Enter Maintenance</button>
+                        </div>
+                    </div>
+                    <div id="exit-maintenance-container">All devices in maintenance mode</div>
+                </div>
+
+            </div>
             <div id="consumer-list" class="all-consumers"></div>
             <div id="unassigned-devices-list" class="unassigned-devices"></div>
             <div id="firmware-version-list" class="firmware-version" style="display:none;">
@@ -68,6 +103,7 @@
             <form id="register-consumer-form">
                 <label for="register-consumer-id">Consumer ID:</label>
                 <input type="text" id="register-consumer-id" name="register-consumer-id" required>
+                <div class="register-search-results"></div>
                 <button type="submit" id="register-consumer-btn">Register</button>
                 <button type="button" id="register-consumer-cancel-button" class="cancel-button">Cancel</button>
             </form>
@@ -76,6 +112,7 @@
             <form id="deregister-consumer-form">
                 <label for="deregister-consumer-id">Consumer ID:</label>
                 <input type="text" id="deregister-consumer-id" name="deregister-consumer-id" required>
+                <div class="deregister-search-results"></div>
                 <button type="submit">De-register</button>
                 <button type="button" id="deregister-consumer-cancel-button" class="cancel-button">Cancel</button>
             </form>

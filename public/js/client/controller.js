@@ -239,3 +239,23 @@ export async function postDevice(id, data) {
     cep.fetchDataFromServer(api);
 
  }
+
+//Maintenance
+
+export async function getDeviceStatus(object){
+    const api = cep.getApiTogetDeviceStatus();
+    const res = await cep.fetchPost(api, object);
+    return res;
+}
+
+export async function enterMaintenance(object){
+    const api = cep.getApiToEnterMaintenance();
+    const res = await cep.fetchPost(api, object);
+    return res;
+}
+
+export async function exitMaintenance(object){
+    const api = cep.getApiToExitMaintenance();
+    const res = await cep.fetchPost(api, object);
+    return res;
+}

@@ -53,6 +53,12 @@ const AEP_TO_POST_DEVICE="/api/admin/newdevice";
 const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
 const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
 const AEP_TO_SEND_FIRMWARE ="/send-firmware"
+
+//Maintenance
+const AEP_TO_GET_DEVICE_STATUS = "/api/device-status"
+const AEP_TO_ENTER_MAINTENANCE = "/api/maintenance/enter"
+const AEP_TO_EXIT_MAINTENANCE = "/api/maintenance/exit"
+
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
@@ -207,6 +213,19 @@ export function getApiToSendFirmwareToSites() {
   return AEP_TO_SEND_FIRMWARE; 
 }
 
+export function getApiTogetDeviceStatus(){
+  return AEP_TO_GET_DEVICE_STATUS;
+}
+
+export function getApiToEnterMaintenance(){
+  return AEP_TO_ENTER_MAINTENANCE;
+}
+
+export function getApiToExitMaintenance(){
+  return AEP_TO_EXIT_MAINTENANCE;
+}
+
+
 export async function fetchPost(url, data) {
   const response = await fetch(url, {
     method: "POST",
@@ -257,8 +276,6 @@ export async function fetchPatch(url,data){
   });
   return response.json();
 }
-
-
 export async function fetchDataFromServer(api) {
   try {
     const response = await fetch(api);
@@ -272,3 +289,5 @@ export async function fetchDataFromServer(api) {
     return null;
   }
 }
+
+
