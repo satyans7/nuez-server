@@ -269,9 +269,11 @@ approvedTab.addEventListener('click', async () => {
 async function loadApprovedTable() {
     console.log("fetching approved requests");
     let data = await getAllApprovedRequests();
+    let ids = Object.keys(data);
     approvedTableBody.innerHTML = '';
-    if (data && data.length > 0) {
-        data.forEach(user => {
+    if (ids && ids.length > 0) {
+        ids.forEach(id => {
+            const user = data[id];
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             nameCell.textContent = user.name;
@@ -301,9 +303,11 @@ rejectedTab.addEventListener('click', async () => {
 async function loadRejectedTable() {
     console.log("fetching rejected requests");
     let data = await getAllRejectedRequests();
+    let ids = Object.keys(data);
     rejectedTableBody.innerHTML = '';
-    if (data && data.length > 0) {
-        data.forEach(user => {
+    if (ids && ids.length > 0) {
+        ids.forEach(id => {
+            const user = data[id];
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
             nameCell.textContent = user.name;
