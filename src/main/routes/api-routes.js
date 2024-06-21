@@ -379,7 +379,7 @@ module.exports = function (app) {
     console.error("Error loading JSON files:", error);
   }
   let deviceStatus = {}
-  const client = mqtt.connect("mqtt://localhost", {
+  const client = mqtt.connect("mqtt://192.168.33.250", {
     port: 1883,
     username: "nuez",
     password: "emqx@nuez",
