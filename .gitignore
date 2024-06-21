@@ -18,3 +18,5 @@ local-repo/
 sessionStore.js/
 firmwareScript.sh
 sourceCodeScript.sh
+dataDeleteScript.sh
+database/
