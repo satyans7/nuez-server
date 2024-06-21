@@ -310,31 +310,31 @@ module.exports = function (app) {
 
   const localRepoPath = path.join(__dirname, '../local-repo');
   const githubRepoUrl = 'https://github.com/priyansu1703/testFile';
-  const updateRepo = async () => {
-    const git = simpleGit();
+  // const updateRepo = async () => {
+  //   const git = simpleGit();
 
-    if (!fs.existsSync(localRepoPath)) {
-      // Clone the repository if it doesn't exist
-      console.log('Cloning the repository...');
-      await git.clone(githubRepoUrl, localRepoPath);
-    } else {
-      // Pull the latest changes if the repository exists
-      console.log('Pulling the latest changes...');
-      await git.cwd(localRepoPath);
-      await git.pull();
-    }
-  };
+  //   if (!fs.existsSync(localRepoPath)) {
+  //     // Clone the repository if it doesn't exist
+  //     console.log('Cloning the repository...');
+  //     await git.clone(githubRepoUrl, localRepoPath);
+  //   } else {
+  //     // Pull the latest changes if the repository exists
+  //     console.log('Pulling the latest changes...');
+  //     await git.cwd(localRepoPath);
+  //     await git.pull();
+  //   }
+  // };
 
-  // Define a route for the button click to update the repository
-  app.get(AEP_TO_SYNC_FIRMWARE_DATA, async (req, res) => {
-    try {
-      await updateRepo();
-      res.send('Repository updated successfully!');
-    } catch (error) {
-      console.error('Error updating repository:', error);
-      res.status(500).send('Error updating repository');
-    }
-  });
+  // // Define a route for the button click to update the repository
+  // app.get(AEP_TO_SYNC_FIRMWARE_DATA, async (req, res) => {
+  //   try {
+  //     await updateRepo();
+  //     res.send('Repository updated successfully!');
+  //   } catch (error) {
+  //     console.error('Error updating repository:', error);
+  //     res.status(500).send('Error updating repository');
+  //   }
+  // });
 
   app.get(AEP_TO_SEND_FIRMWARE, async (req, res) => {
     // res.send("api called");
@@ -640,21 +640,21 @@ module.exports = function (app) {
     res.json(userData || {});
   });
 
-  // app.get(AEP_TO_SYNC_FIRMWARE_DATA, (req, res) => {
-  //   exec(FIRMWARESYNC, (error, stdout, stderr) => {
-  //     if (error) {
-  //       console.error(`exec error: ${error}`);
-  //       res.status(500).send(`Error: ${error.message}`);
-  //       return;
-  //     }
-  //     if (stderr) {
-  //       console.error(`stderr: ${stderr}`);
-  //       res.status(500).send(`stderr: ${stderr}`);
-  //       return;
-  //     }
-  //     res.send(`stdout: ${stdout}`);
-  //   });
-  // });
+  app.get(AEP_TO_SYNC_FIRMWARE_DATA, (req, res) => {
+    exec(FIRMWARESYNC, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        res.status(500).send(`Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        res.status(500).send(`stderr: ${stderr}`);
+        return;
+      }
+      res.send(`stdout: ${stdout}`);
+    });
+  });
   app.get(AEP_TO_SYNC_SOURCECODE, (req, res) => {
     exec(SOURCECODESYNC, (error, stdout, stderr) => {
       if (error) {
