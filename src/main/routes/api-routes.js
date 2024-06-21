@@ -5,7 +5,7 @@ const simpleGit = require("simple-git");
 const mqtt = require("mqtt");
 const { exec } = require("child_process");
 const SUPERADMIN = "/superAdmin"
-MAINTENANCE_ENTER ="enter"
+MAINTENANCE_ENTER = "enter"
 MAINTENANCE_EXIT = "exit"
 module.exports = function (app) {
   const AEP_SAMPLE = "/api/sample";
@@ -168,7 +168,7 @@ module.exports = function (app) {
     }
   );
 
-  app.get(SUPERADMIN,(req, res) => {
+  app.get(SUPERADMIN, (req, res) => {
     res.sendFile(SUPERADMINPAGE);
   });
 
@@ -308,7 +308,7 @@ module.exports = function (app) {
     await controller.postDevice(req, res);
   });
 
-  const localRepoPath = path.join(__dirname ,'../local-repo');
+  const localRepoPath = path.join(__dirname, '../local-repo');
   const githubRepoUrl = 'https://github.com/priyansu1703/testFile';
   const updateRepo = async () => {
     const git = simpleGit();
@@ -378,15 +378,15 @@ module.exports = function (app) {
   } catch (error) {
     console.error("Error loading JSON files:", error);
   }
-let deviceStatus={}
-  const client = mqtt.connect("mqtt://192.168.33.250", {
+  let deviceStatus = {}
+  const client = mqtt.connect("mqtt://localhost", {
     port: 1883,
     username: "nuez",
     password: "emqx@nuez",
   });
   client.on("connect", () => {
     console.log("Connected to MQTT broker");
-    
+
     client.subscribe("water-consumption-data", (err) => {
       if (err) {
         console.error("Error subscribing to device-data topic:", err);
@@ -401,10 +401,16 @@ let deviceStatus={}
         console.log("Subscribed to device-status topic.");
       }
     });
+    client.subscribe("device-version-info/#", (err) => {
+      if (err) {
+        console.error("Error subscribing to device-status topic:", err);
+      } else {
+        console.log("Subscribed to device-status topic.");
+      }
+    });
   });
 
   client.on("message", (topic, message) => {
-    if(topic === "")
     if (topic === "water-consumption-data") {
       try {
         const deviceData = JSON.parse(message.toString());
@@ -481,24 +487,48 @@ let deviceStatus={}
             }
           );
         } else {
-         // console.log( `Device ID (${deviceId}) already exists for site ID (${siteId}).`);
+          // console.log( `Device ID (${deviceId}) already exists for site ID (${siteId}).`);
         }
       } catch (error) {
         console.error("Error parsing MQTT message:", error);
       }
     }
-    const topic_device_status_info=topic.substring(0,topic.indexOf("/"));
-    const topic_site_id = topic.substring(topic.indexOf("/")+1);
+    const topic_name_site = topic.substring(0, topic.indexOf("/"));
+    const topic_site_id = topic.substring(topic.indexOf("/") + 1);
     // console.log(topic_device_status_info,topic_site_id)
-    if(topic_device_status_info==="device-status-info"){
-      const deviceStatusReceived= JSON.parse(message.toString());
-      deviceStatus[topic_site_id]=deviceStatusReceived;
+    if (topic_name_site === "device-status-info") {
+      const deviceStatusReceived = JSON.parse(message.toString());
+      deviceStatus[topic_site_id] = deviceStatusReceived;
+    }
+    if (topic_name_site === "device-version-info") {
+      try {
+        const deviceVersionReceived = JSON.parse(message.toString());
+        console.log(deviceVersionReceived);
+    
+        const filePath = path.join(__dirname, "../database/json-data/deviceToProfile.json"); // Update the path to your JSON file
+        const rawData = fs.readFileSync(filePath);
+        const deviceData = JSON.parse(rawData);
+    
+        // Update the version of each device
+        for (const [device_id, version] of Object.entries(deviceVersionReceived)) {
+          if (deviceData.hasOwnProperty(device_id)) {
+            deviceData[device_id].version = version;
+          }
+        }
+    
+        // Write the updated device data back to the JSON file
+        fs.writeFileSync(filePath, JSON.stringify(deviceData, null, 2));
+        console.log("Device versions updated successfully.");
+    
+      } catch (error) {
+        console.error("Error updating device versions:", error);
+      }
     }
   });
 
   const filePath = path.join(__dirname, "../local-repo/firmware.ino.bin");
 
-  app.get("/send-file", async (req, res) => {
+  app.get("/download/firmware", async (req, res) => {
     try {
       // Read the binary file
       fs.readFile(filePath, async (err, fileContent) => {
@@ -537,18 +567,18 @@ let deviceStatus={}
   app.post("/:site_id/intimate-all-devices", async (req, res) => {
     try {
       const site_id = req.params.site_id; // Correctly access site_id from req.params
-    console.log(site_id);
-      const message = {message: 'intimate' }
+      console.log(site_id);
+      const message = { message: 'intimate' }
 
       // Publish the message to the "site_1/intimate" topic
-      client.publish(`intimate-latest-version-info/${site_id}`, message);
+      client.publish(`intimate-latest-version-info/${site_id}`, JSON.stringify(message));
 
       res.status(200).json({ message: "Intimate message sent to all devices" });
     } catch (error) {
       console.error("Error intimating all devices:", error);
-      res.status(500).json({ error: "Failed to intimate all devices" });
-    }
-  });
+      res.status(500).json({ error: "Failed to intimate all devices" });
+    }
+  });
 
   app.post("/:site_id/fetch-device-versions", async (req, res) => {
     const site_id = req.params.site_id; // Correctly access site_id from req.params
@@ -556,7 +586,7 @@ let deviceStatus={}
     if (!site_id) {
       return res.status(400).json({ error: "Site ID is required" });
     }
-  
+
     try {
       // Publish the message to the MQTT topic
       client.publish(`device-version-query/${site_id}`, "fetch versions from devices");
@@ -566,8 +596,8 @@ let deviceStatus={}
       res.status(500).json({ error: "Failed to publish message" });
     }
   });
-  
-  
+
+
 
   app.post("/intimate-all-sites", (req, res) => {
     const firmwareFilePath = path.join(
@@ -640,36 +670,36 @@ let deviceStatus={}
       res.send(`stdout: ${stdout}`);
     });
   });
- 
-////////////////////// Maintenance Mode///////////////////////////////////////
-async function maintenance_service(site_id,list_of_ids,action){
-   // Publish MQTT message to enter/exit maintenance mode
-  await client.publish(`maintenance/${site_id}`, JSON.stringify({list_of_ids:list_of_ids,action:action}));
-}
 
-//// Enter Maintenance Mode
-app.post('/api/maintenance/enter',async (req, res) => {
-  const list_of_ids=req.body.devicesId;
-  const site_id = req.body.siteId;
-  maintenance_service(site_id,list_of_ids,MAINTENANCE_ENTER);
-  res.json({message:'Entered maintenance mode.'});
-});
+  ////////////////////// Maintenance Mode///////////////////////////////////////
+  async function maintenance_service(site_id, list_of_ids, action) {
+    // Publish MQTT message to enter/exit maintenance mode
+    await client.publish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }));
+  }
 
-// Exit maintenance mode route
-app.post('/api/maintenance/exit', async(req, res) => {
-  const list_of_ids=req.body.devicesId;
-  const site_id = req.body.siteId;
-  maintenance_service(site_id,list_of_ids,MAINTENANCE_EXIT);
-  res.json({message:'Exited maintenance mode.'});
-});
+  //// Enter Maintenance Mode
+  app.post('/api/maintenance/enter', async (req, res) => {
+    const list_of_ids = req.body.devicesId;
+    const site_id = req.body.siteId;
+    maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
+    res.json({ message: 'Entered maintenance mode.' });
+  });
 
-app.post('/api/device-status',async(req,res)=>{
-  const {site_id}=req.body;
-  await client.publish(`device-status-query/${site_id}`, JSON.stringify({"query":"send_device_status_info"} ));
-  setTimeout(()=>{
-    res.json(deviceStatus[site_id])
-  }, 5000);
-})
+  // Exit maintenance mode route
+  app.post('/api/maintenance/exit', async (req, res) => {
+    const list_of_ids = req.body.devicesId;
+    const site_id = req.body.siteId;
+    maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
+    res.json({ message: 'Exited maintenance mode.' });
+  });
+
+  app.post('/api/device-status', async (req, res) => {
+    const { site_id } = req.body;
+    await client.publish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }));
+    setTimeout(() => {
+      res.json(deviceStatus[site_id])
+    }, 5000);
+  })
 
 
 
