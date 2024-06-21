@@ -1,3 +1,8 @@
 {
-  
+  "user_1": {
+    "name": "Pankaj",
+    "email": "pankajsharma.iitism@gmail.com",
+    "password": "asdfghjkl",
+    "role": "consumer"
+  }
 }

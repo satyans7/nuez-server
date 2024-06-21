@@ -149,18 +149,16 @@ class JsonController {
     try {
       const data = await this.readDatabase(LOG_DB);
       // const now=new Date();
-      // console.log(now.toLocaleString());
-      // const dateTime=now.toLocaleString();
+      // console.log(now.toLocaleString()); 
 
 
       const newLog = {
-        _id: userData._id,
         name: delUser.name,
         roleRequested: delUser.requestedRole,
         actionTaken: userData.action,
         timeStamp: timeStamp
       }
-      data.push(newLog)
+      data[userData._id]=newLog;
       await this.writeDatabase(LOG_DB, data);
 
       // return newUser;
