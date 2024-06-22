@@ -688,8 +688,9 @@ module.exports = function (app) {
 
   //// Enter Maintenance Mode
   app.post('/api/maintenance/enter', async (req, res) => {
-    const list_of_ids = req.body.devicesId;
-    const site_id = req.body.siteId;
+    const list_of_ids = req.body.devices_id;
+    const site_id = req.body.site_id;
+   
     maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
     setTimeout(() => {
       device_status_query(site_id);
@@ -701,8 +702,8 @@ module.exports = function (app) {
 
   // Exit maintenance mode route
   app.post('/api/maintenance/exit', async (req, res) => {
-    const list_of_ids = req.body.devicesId;
-    const site_id = req.body.siteId;
+    const list_of_ids = req.body.devices_id;
+    const site_id = req.body.site_id;
     maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
     setTimeout(() => {
     device_status_query(site_id);
@@ -717,6 +718,7 @@ module.exports = function (app) {
     device_status_query(site_id);
     setTimeout(() => {
       res.json(deviceStatus[site_id])
+      deviceStatus[site_id]={};
     }, 5000);
   })
 

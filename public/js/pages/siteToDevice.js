@@ -4,7 +4,8 @@ import {
     deregisterConsumer,
     registerConsumer,
     enterMaintenance,
-    exitMaintenance
+    exitMaintenance,
+    getDeviceStatus
 } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
@@ -359,17 +360,19 @@ function toggleMaintenanceTabs() {
     sections.forEach(container => container.style.display = 'none');
 }
 
+const deviceStatus = await getDeviceStatus({"site_id":site})
+// console.log(JSON.stringify(responsee))
 
-const deviceStatus = {
-    "SWM::AIL:GBP:LIE:AEI": "OPERATIONAL",
-    "SWM::AIL:GBP:LIM:AMM": "OPERATIONAL",
-    "SWM::MIC:OBI:PAK:LLM": "MAINTENANCE",
-    "SWM::MIC:OBI:PAE:PGA": "OPERATIONAL",
-    "SWM::MIC:OBI:PAJ:CJE": "OPERATIONAL",
-    "SWM::AIL:GBP:LIE:MGI": "MAINTENANCE",
-    "SWM::MIC:OBI:PBO:HGI": "OPERATIONAL",
-    "SWM::AIL:GBP:LIE:LAI": "OPERATIONAL"
-}
+// const deviceStatus = {
+//     "SWM::MIC:OBI:GHJ:AHA": "OPERATIONAL",
+//     "SWM::AIL:GBP:LIM:AMM": "OPERATIONAL",
+//     "SWM::MIC:OBI:PAK:LLM": "MAINTENANCE",
+//     "SWM::MIC:OBI:PAE:PGA": "OPERATIONAL",
+//     "SWM::MIC:OBI:PAJ:CJE": "OPERATIONAL",
+//     "SWM::AIL:GBP:LIE:MGI": "MAINTENANCE",
+//     "SWM::MIC:OBI:PBO:HGI": "OPERATIONAL",
+//     "SWM::AIL:GBP:LIE:LAI": "OPERATIONAL"
+// }
 
 allModesBtn.addEventListener('click', async () => {
     toggleMaintenanceTabs();
@@ -458,7 +461,7 @@ async function removeSelectedItem(data, listItem) {
 
 async function sendselectedOperationalItems() {
     const selectedArray = Array.from(selectedOperationalDeviceList.children).map(item => {
-        return { id: item.textContent.replace('Remove', '').trim() };
+        return  item.textContent.replace('Remove', '').trim() ;
     });
 
     const object = {
@@ -467,7 +470,6 @@ async function sendselectedOperationalItems() {
     }
 
     await enterMaintenance(object);
-    console.log(object)
     selectedOperationalDeviceList.innerHTML = '';
     await loadOperationalModeTable();
 
@@ -537,7 +539,7 @@ async function removeSelectedItemMaintenance(data, listItem) {
 
 async function sendselectedMaintenanceItems() {
     const selectedArray = Array.from(selectedMaintenanceDeviceList.children).map(item => {
-        return { id: item.textContent.replace('Remove', '').trim() };
+        return item.textContent.replace('Remove', '').trim() ;
     });
 
     const object = {
