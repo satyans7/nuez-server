@@ -3,12 +3,6 @@
     "name": "Pankaj",
     "email": "pankajsharma.iitism@gmail.com",
     "password": "asdfghjkl",
-    "role": "consumer"
-  },
-  "user_2": {
-    "name": "Bp",
-    "email": "bp@gmail.com",
-    "password": "bp123",
     "role": "admin"
   }
 }

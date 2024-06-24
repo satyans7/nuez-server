@@ -1,52 +1,8 @@
-const mailSender = require('../utils/mailSender');
-const dbController = require("../db-controller/db-controller");
-const  mailSenderUtility = require("../utils/mailSender")
-
-class authController {
-    async authenticateUser(formData) {
-        const email = formData.email;
-        const password = formData.password;
-
-        // Check if the email is reserved
-        const isReserved = await dbController.isEmailReserved(email);
-         
-        if (isReserved && password === 'password') {
-                      return { success: true, route: '/superAdmin', message: 'Logged In Successfully as Super Admin' };
-        }
-
-        // Fetch the user from the database
-        console.log("reached here")
-        const user = await dbController.findUserByEmail(email);
-        console.log(user);
-
-        if (user=={} || user.password !== password) {
-            
-            return { success: false,user:"null", role: 'null', message: 'Invalid email or password' };
-        }
-        let role = user.role;
-        return { success: true,user:user, role: role, message: 'Logged In Successfully' };
-    }
-    async  sendVerificationEmail(email, otp) {
-        try {
-          const mailResponse = await mailSenderUtility.mailSender(
-            email,
-            "Verification Email",
-            `<h1>Please confirm your OTP</h1>
-             <p>Here is your OTP code: ${otp}</p>`
-          );
-          console.log("Email sent successfully: ", mailResponse);
-        } catch (error) {
-          console.log("Error occurred while sending email: ", error);
-          throw error;
-        }
-      }
-    async verifyOTP(email,providedotp){
-      const otp = await dbController.findOTPByEmail(email)
-      if(otp===providedotp){
-        const user = await dbController.findUserByEmail(email);
-        return { success: true, user: user, message: 'Logged In Successfully' };
-      }
-      else return { success: false, user:undefined, message: 'WRONG OTP!!! TRY AGAIN' };
-     }
-}
-module.exports = new authController();
+const passwordAuthController = require('./password-auth-controller');
+const otpAuthController = require('./otp-auth-controller');
+const googleAuthController = require("./google-auth-controller")
+module.exports = {
+    passwordAuthController,
+    otpAuthController,
+    googleAuthController
+};

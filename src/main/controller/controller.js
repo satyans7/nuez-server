@@ -1,12 +1,10 @@
 const dbController = require("../db-controller/db-controller");
-const authController = require("../auth-controller/auth-controller");
+const {passwordAuthController,otpAuthController,googleAuthController} = require("../auth-controller/auth-controller");
 const otpGeneratorUtility = require("../utils/otp-generator")
-const ntpClient = require('ntp-client');
-const passport = require("../auth-controller/passport")
 const {roleAuthenticatorIdSensitive,roleAuthenticatorIdInSensitive} = require("../middlewares/auth")
 
 class Controller {
-  passport=passport;
+  passport=googleAuthController;
   // roleAuthenticator=roleAuthenticator;
   //////////// FETCHING SAMPLE DATA///////////////////////////////////////////////
   async fetchSampleDataFromServer() {
@@ -58,7 +56,7 @@ class Controller {
   //isko mt chedna
   async authenticateUser(req,res,formData) {
     try {
-      let authResult = await authController.authenticateUser(formData);
+      let authResult = await passwordAuthController.authenticateUser(formData);
       if (authResult.success) {
         if (authResult.route) {
            // Handle special case for reserved emails
@@ -126,7 +124,7 @@ class Controller {
 
     const reqRole = req.body.reqRole;
     await dbController.requestRoleChange(userId, reqRole);
-  }
+  } 
   ////////////////////////////DELETE THE REQ AND ADD TO LOG////////////////////////////////////////
   async roleChangeResponse(req) {
     const action = req.body.action;
@@ -268,7 +266,7 @@ class Controller {
 
   async OTPGenerationAndStorage(email) {
     const otp = otpGeneratorUtility.generateOTP();
-    await authController.sendVerificationEmail(email, otp);
+    await otpAuthController.sendVerificationEmail(email, otp);
     const OTPAlreadyRequested = await dbController.isOTPRequested(email);
     if (OTPAlreadyRequested) {
       return await dbController.updateotpemail(email, otp);
@@ -276,7 +274,7 @@ class Controller {
     else return await dbController.saveotpemail(email, otp);
   }
   async OTPVerification(req,res,email, providedotp) {
-    const authResult = await authController.verifyOTP(email, providedotp);
+    const authResult = await otpAuthController.verifyOTP(email, providedotp);
     if (authResult.success) {
           await dbController.deleteOTPByEmail(email);
           let user={
