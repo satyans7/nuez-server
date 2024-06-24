@@ -1,6 +1,6 @@
 const roleAuthenticatorIdSensitive = (requiredRole) => {
   return (req, res, next) => {
-    console.log(req)
+
     if(req.user.email=== "admin@nueztpl.co.in" || req.user.email==="superadmin@nueztpl.co.in") 
       next();
     if(requiredRole==="consumer" && req.user.role==="admin"){
@@ -26,6 +26,7 @@ const roleAuthenticatorIdSensitive = (requiredRole) => {
 };
 const roleAuthenticatorIdInSensitive = (requiredRole) => {
   return (req, res, next) => {
+
     if(req.user.email=== "admin@nueztpl.co.in" || req.user.email==="superadmin@nueztpl.co.in") 
       next();
     if(requiredRole==="consumer" && req.user.role==="admin"){
