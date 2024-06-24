@@ -237,6 +237,18 @@ class JsonController {
     return db;
   }
 
+  async fetchAllSitesUnderAdmin(id){
+    const admintosite = await this.fetchAllAdminToSite();
+    const allSites = await this.fetchAllSites();
+    const sites = admintosite[id];
+
+    const data = Object.fromEntries(
+      Object.entries(allSites).filter(([key]) => sites.includes(key))
+    );
+
+    return data;
+  }
+
 
   // site to device mapping
 
@@ -251,6 +263,29 @@ class JsonController {
   async fetchAllDevices() {
     const db = await this.readDatabase(DEVICE_DATA);
     return db;
+  }
+
+  async fetchAllDevicesUnderSite(id){
+    const sitetodevice = await this.fetchAllSitetoDevice();
+    const allDevices = await this.fetchAllDevices();
+    const devices = sitetodevice[id];
+
+    const data = Object.fromEntries(
+      Object.entries(allDevices).filter(([key]) => devices.includes(key))
+    );
+
+    return data;
+  }
+
+  async fetchAllConsumersUnderSite(id){
+    const sitetoconsumer = await this.fetchSiteToConsumer();
+    const allconsumers = await this.fetchAllUsers();
+    const consumers = sitetoconsumer[id];
+
+    const data = Object.fromEntries(
+      Object.entries(allconsumers).filter(([key]) => consumers.includes(key))
+    );
+    return data;
   }
 
   //fetch consumer to device mapping

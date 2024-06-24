@@ -221,6 +221,20 @@ module.exports = function (app) {
     }
   });
 
+  app.get('/api/admin/allsites/:id', async(req, res) => {
+    try {
+      const id = req.params.id;
+      const data = await controller.fetchAllSitesUnderAdmin(id);
+      res.json(data);
+      
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+      
+    }
+  })
+
+
+
   //sites to device mapping
 
   app.get(AEP_TO_FETCH_ALL_SITES_TO_DEVICES, async (req, res) => {
@@ -238,6 +252,30 @@ module.exports = function (app) {
       res.status(500).send("Internal Server Error");
     }
   });
+
+  app.get('/api/admin/alldevices/:id', async(req, res) => {
+    try {
+      const id = req.params.id;
+      const data = await controller.fetchAllDevicesUnderSite(id);
+      res.json(data);
+      
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+      
+    }
+  })
+
+  app.get('/api/admin/allconsumers/:id', async(req, res) => {
+    try {
+      const id = req.params.id;
+      const data = await controller.fetchAllConsumersUnderSite(id);
+      res.json(data);
+      
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+      
+    }
+  })
 
   //consumer to device mapping
   app.get(AEP_TO_FETCH_CONSUMERS_TO_DEVICES, async (req, res) => {

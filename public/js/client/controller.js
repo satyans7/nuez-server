@@ -126,6 +126,19 @@ export async function updateSiteDataOnServer(data, id){
     return await cep.fetchPut(api, data);
 }
 
+export async function getAllSitesUnderAdmin(id){
+    const api = cep.getApiToFetchSitesUnderAdmin(id);
+    return await cep.fetchDataFromServer(api);
+}
+export async function getAllDevicesUnderSite(id){
+    const api = cep.getApiToFetchDevicesUnderSite(id);
+    return await cep.fetchDataFromServer(api);
+}
+export async function getAllConsumersUnderSite(id){
+    const api = cep.getApiToFetchConsumersUnderSite(id);
+    return await cep.fetchDataFromServer(api);
+}
+
 
 //Consumer
 

@@ -5,7 +5,9 @@ import {
     registerConsumer,
     enterMaintenance,
     exitMaintenance,
-    getDeviceStatus
+    getDeviceStatus,
+    getAllDevicesUnderSite,
+    getAllConsumersUnderSite
 } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
@@ -46,7 +48,7 @@ function getCurrentSiteId() {
 async function setInfo() {
     const title = document.createElement('h1');
     const siteInfo = await getSitesData();
-    title.textContent = `Welcome, ${siteInfo[site].name}`;
+    title.textContent = `Welcome, ${siteInfo[site].name || site}`;
     headingText.appendChild(title);
 
     const currentid = document.createElement('h1');
@@ -92,20 +94,19 @@ deviceTab.addEventListener('click', async () => {
 async function viewAlldevices() {
     toggleVisibility();
     alldevicesContainer.style.display = 'flex';
-    const devicesData = await getDevicesData();
-    const sitesdevicesMapping = await getSiteDeviceMapping();
+    const data = await getAllDevicesUnderSite(site);
 
-    if (!sitesdevicesMapping[site]) {
+    if (!data) {
         console.error(`No devices found for Site ID: ${site}`);
         alldevicesContainer.innerHTML = '<p>No devices found for this site.</p>';
         return;
     }
 
-    const devices = sitesdevicesMapping[site];
+    const devices = Object.keys(data);
     alldevicesContainer.innerHTML = '';
 
     devices.forEach(key => {
-        const device = devicesData[key];
+        const device = data[key];
         if (device) {
             const deviceCard = createDeviceCard(device, key);
             alldevicesContainer.appendChild(deviceCard);
@@ -124,7 +125,7 @@ function createDeviceCard(device, key) {
     cardHeading.className = 'card-heading';
 
     const deviceName = document.createElement('h3');
-    deviceName.textContent = device.name;
+    deviceName.textContent = key;
 
     const moreDetailsButton = document.createElement('button');
     moreDetailsButton.id = 'fetch-device-data';
@@ -176,20 +177,19 @@ consumerTab.addEventListener('click', async () => {
 async function viewAllconsumers() {
     toggleVisibility();
     allConsumerContainer.style.display = 'flex';
-    const consumersData = await getAllConsumers();
-    const sitesconsumersMapping = await getSiteConsumerMapping();
+    const data = await getAllConsumersUnderSite(site);
 
-    if (!sitesconsumersMapping[site]) {
+    if (!data) {
         console.error(`No consumers found for Site ID: ${site}`);
         allConsumerContainer.innerHTML = '<p>No consumers found for this site.</p>';
         return;
     }
 
-    const consumers = sitesconsumersMapping[site];
+    const consumers = Object.keys(data);
     allConsumerContainer.innerHTML = '';
 
     consumers.forEach(key => {
-        const consumer = consumersData[key];
+        const consumer = data[key];
         if (consumer) {
             const consumerCard = createConsumerCard(consumer, key);
             allConsumerContainer.appendChild(consumerCard);

@@ -1,4 +1,4 @@
-import { getSitesData, getUserSiteMapping,registerDevice,registerSite,deregisterSite } from '../client/client.js';
+import { getSitesData, getUserSiteMapping,registerDevice,registerSite,deregisterSite, getAllSitesUnderAdmin } from '../client/client.js';
 document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('logout-link').addEventListener("click",(event)=>{
         window.location.href="/logout"
@@ -171,18 +171,18 @@ function getCurrentAdmin() {
 
 
 async function viewAllSites() {
+    
     deregisterTab.style.display = 'none';
     registerTab.style.display = 'none';
     allSitesContainer.style.display = 'flex';
     const AdminId = getCurrentAdmin();
     console.log(AdminId)
-    const sitesData = await getSitesData();
-    const usersSitesMapping = await getUserSiteMapping();
-    let sites = [];
-    sites = usersSitesMapping[AdminId];
+    const val = await getAllSitesUnderAdmin(AdminId)
+    const sites = Object.keys(val);
     allSitesContainer.innerHTML = '';
+    console.log(sites)
     sites.forEach(key => {
-        const site = sitesData[key];
+        const site = val[key];
         if (site) {
             const siteCard = document.createElement('div');
             siteCard.className = 'card';
@@ -198,7 +198,7 @@ async function viewAllSites() {
             moreDetailsButton.id = 'fetch-site-data';
             moreDetailsButton.textContent = 'More Details';
             moreDetailsButton.addEventListener('click', () => {
-                const route = `/api/site-dashboard/${key}?adminId=${getCurrentAdmin()}&referrer=adminPage`;
+                const route = `/api/site-dashboard/${key}?adminId=${AdminId}&referrer=adminPage`;
                 window.location.href = route;
             })
             cardHeading.appendChild(siteName);

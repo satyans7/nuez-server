@@ -85,6 +85,10 @@ export async function getUserSiteMapping() {
     return await controller.getUserToSiteMapping();
 }
 
+export async function getAllSitesUnderAdmin(id){
+    return await controller.getAllSitesUnderAdmin(id);
+}
+
 
 //SITE DEVICE PAGE
 export async function getDevicesData() {
@@ -97,6 +101,13 @@ export async function getSiteDeviceMapping() {
 
 export async function getSiteConsumerMapping() {
     return await controller.getSiteToConsumerMapping();
+}
+
+export async function getAllDevicesUnderSite(id){
+    return await controller.getAllDevicesUnderSite(id);
+}
+export async function getAllConsumersUnderSite(id){
+    return await controller.getAllConsumersUnderSite(id);
 }
 
 
