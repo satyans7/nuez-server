@@ -160,6 +160,17 @@ export function getApiToFetchConsumerDeviceMapping() {
   return AEP_TO_FETCH_CONSUMERS_TO_DEVICES;  //MAPPING CONSUMER->DEVICE
 }
 
+export function getApiToFetchSitesUnderAdmin(id){
+  return `/api/admin/allsites/${id}`;
+}
+
+export function getApiToFetchDevicesUnderSite(id){
+  return `/api/admin/alldevices/${id}`;
+}
+export function getApiToFetchConsumersUnderSite(id){
+  return `/api/admin/allconsumers/${id}`;
+}
+
 //delete a device
 export function getApiToDeleteSiteDeviceMapping(deviceId) {
   return `${AEP_TO_DELETE_SITE_DEVICE_MAPPING}/${deviceId}`;

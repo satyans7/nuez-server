@@ -4,7 +4,10 @@ import {
     deregisterConsumer,
     registerConsumer,
     enterMaintenance,
-    exitMaintenance
+    exitMaintenance,
+    getDeviceStatus,
+    getAllDevicesUnderSite,
+    getAllConsumersUnderSite
 } from '../client/client.js';
 
 const alldevicesContainer = document.querySelector('#device-list');
@@ -45,7 +48,7 @@ function getCurrentSiteId() {
 async function setInfo() {
     const title = document.createElement('h1');
     const siteInfo = await getSitesData();
-    title.textContent = `Welcome, ${siteInfo[site].name}`;
+    title.textContent = `Welcome, ${siteInfo[site].name || site}`;
     headingText.appendChild(title);
 
     const currentid = document.createElement('h1');
@@ -91,20 +94,19 @@ deviceTab.addEventListener('click', async () => {
 async function viewAlldevices() {
     toggleVisibility();
     alldevicesContainer.style.display = 'flex';
-    const devicesData = await getDevicesData();
-    const sitesdevicesMapping = await getSiteDeviceMapping();
+    const data = await getAllDevicesUnderSite(site);
 
-    if (!sitesdevicesMapping[site]) {
+    if (!data) {
         console.error(`No devices found for Site ID: ${site}`);
         alldevicesContainer.innerHTML = '<p>No devices found for this site.</p>';
         return;
     }
 
-    const devices = sitesdevicesMapping[site];
+    const devices = Object.keys(data);
     alldevicesContainer.innerHTML = '';
 
     devices.forEach(key => {
-        const device = devicesData[key];
+        const device = data[key];
         if (device) {
             const deviceCard = createDeviceCard(device, key);
             alldevicesContainer.appendChild(deviceCard);
@@ -123,7 +125,7 @@ function createDeviceCard(device, key) {
     cardHeading.className = 'card-heading';
 
     const deviceName = document.createElement('h3');
-    deviceName.textContent = device.name;
+    deviceName.textContent = key;
 
     const moreDetailsButton = document.createElement('button');
     moreDetailsButton.id = 'fetch-device-data';
@@ -175,20 +177,19 @@ consumerTab.addEventListener('click', async () => {
 async function viewAllconsumers() {
     toggleVisibility();
     allConsumerContainer.style.display = 'flex';
-    const consumersData = await getAllConsumers();
-    const sitesconsumersMapping = await getSiteConsumerMapping();
+    const data = await getAllConsumersUnderSite(site);
 
-    if (!sitesconsumersMapping[site]) {
+    if (!data) {
         console.error(`No consumers found for Site ID: ${site}`);
         allConsumerContainer.innerHTML = '<p>No consumers found for this site.</p>';
         return;
     }
 
-    const consumers = sitesconsumersMapping[site];
+    const consumers = Object.keys(data);
     allConsumerContainer.innerHTML = '';
 
     consumers.forEach(key => {
-        const consumer = consumersData[key];
+        const consumer = data[key];
         if (consumer) {
             const consumerCard = createConsumerCard(consumer, key);
             allConsumerContainer.appendChild(consumerCard);
@@ -359,17 +360,19 @@ function toggleMaintenanceTabs() {
     sections.forEach(container => container.style.display = 'none');
 }
 
+const deviceStatus = await getDeviceStatus({"site_id":site})
+// console.log(JSON.stringify(responsee))
 
-const deviceStatus = {
-    "SWM::AIL:GBP:LIE:AEI": "OPERATIONAL",
-    "SWM::AIL:GBP:LIM:AMM": "OPERATIONAL",
-    "SWM::MIC:OBI:PAK:LLM": "MAINTENANCE",
-    "SWM::MIC:OBI:PAE:PGA": "OPERATIONAL",
-    "SWM::MIC:OBI:PAJ:CJE": "OPERATIONAL",
-    "SWM::AIL:GBP:LIE:MGI": "MAINTENANCE",
-    "SWM::MIC:OBI:PBO:HGI": "OPERATIONAL",
-    "SWM::AIL:GBP:LIE:LAI": "OPERATIONAL"
-}
+// const deviceStatus = {
+//     "SWM::MIC:OBI:GHJ:AHA": "OPERATIONAL",
+//     "SWM::AIL:GBP:LIM:AMM": "OPERATIONAL",
+//     "SWM::MIC:OBI:PAK:LLM": "MAINTENANCE",
+//     "SWM::MIC:OBI:PAE:PGA": "OPERATIONAL",
+//     "SWM::MIC:OBI:PAJ:CJE": "OPERATIONAL",
+//     "SWM::AIL:GBP:LIE:MGI": "MAINTENANCE",
+//     "SWM::MIC:OBI:PBO:HGI": "OPERATIONAL",
+//     "SWM::AIL:GBP:LIE:LAI": "OPERATIONAL"
+// }
 
 allModesBtn.addEventListener('click', async () => {
     toggleMaintenanceTabs();
@@ -458,7 +461,7 @@ async function removeSelectedItem(data, listItem) {
 
 async function sendselectedOperationalItems() {
     const selectedArray = Array.from(selectedOperationalDeviceList.children).map(item => {
-        return { id: item.textContent.replace('Remove', '').trim() };
+        return  item.textContent.replace('Remove', '').trim() ;
     });
 
     const object = {
@@ -467,7 +470,6 @@ async function sendselectedOperationalItems() {
     }
 
     await enterMaintenance(object);
-    console.log(object)
     selectedOperationalDeviceList.innerHTML = '';
     await loadOperationalModeTable();
 
@@ -537,7 +539,7 @@ async function removeSelectedItemMaintenance(data, listItem) {
 
 async function sendselectedMaintenanceItems() {
     const selectedArray = Array.from(selectedMaintenanceDeviceList.children).map(item => {
-        return { id: item.textContent.replace('Remove', '').trim() };
+        return item.textContent.replace('Remove', '').trim() ;
     });
 
     const object = {

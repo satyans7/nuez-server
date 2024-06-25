@@ -221,6 +221,20 @@ module.exports = function (app) {
     }
   });
 
+  app.get('/api/admin/allsites/:id', async(req, res) => {
+    try {
+      const id = req.params.id;
+      const data = await controller.fetchAllSitesUnderAdmin(id);
+      res.json(data);
+      
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+      
+    }
+  })
+
+
+
   //sites to device mapping
 
   app.get(AEP_TO_FETCH_ALL_SITES_TO_DEVICES, async (req, res) => {
@@ -238,6 +252,30 @@ module.exports = function (app) {
       res.status(500).send("Internal Server Error");
     }
   });
+
+  app.get('/api/admin/alldevices/:id', async(req, res) => {
+    try {
+      const id = req.params.id;
+      const data = await controller.fetchAllDevicesUnderSite(id);
+      res.json(data);
+      
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+      
+    }
+  })
+
+  app.get('/api/admin/allconsumers/:id', async(req, res) => {
+    try {
+      const id = req.params.id;
+      const data = await controller.fetchAllConsumersUnderSite(id);
+      res.json(data);
+      
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+      
+    }
+  })
 
   //consumer to device mapping
   app.get(AEP_TO_FETCH_CONSUMERS_TO_DEVICES, async (req, res) => {
@@ -667,8 +705,9 @@ app.get('/api/firmware-versions', (req, res) => {
 
   //// Enter Maintenance Mode
   app.post('/api/maintenance/enter', async (req, res) => {
-    const list_of_ids = req.body.devicesId;
-    const site_id = req.body.siteId;
+    const list_of_ids = req.body.devices_id;
+    const site_id = req.body.site_id;
+   
     maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
     setTimeout(() => {
       device_status_query(site_id);
@@ -680,8 +719,8 @@ app.get('/api/firmware-versions', (req, res) => {
 
   // Exit maintenance mode route
   app.post('/api/maintenance/exit', async (req, res) => {
-    const list_of_ids = req.body.devicesId;
-    const site_id = req.body.siteId;
+    const list_of_ids = req.body.devices_id;
+    const site_id = req.body.site_id;
     maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
     setTimeout(() => {
     device_status_query(site_id);
@@ -696,6 +735,7 @@ app.get('/api/firmware-versions', (req, res) => {
     device_status_query(site_id);
     setTimeout(() => {
       res.json(deviceStatus[site_id])
+      deviceStatus[site_id]={};
     }, 5000);
   })
 

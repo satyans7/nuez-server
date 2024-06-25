@@ -135,6 +135,11 @@ class DbController {
     return data;
   }
 
+  async fetchAllSitesUnderAdmin(id){
+    let data = await jsonController.fetchAllSitesUnderAdmin(id);
+    return data;
+  }
+
   // Site to device mapping
 
   async fetchAllSitetoDevice() {
@@ -147,6 +152,18 @@ class DbController {
     let data = await jsonController.fetchAllDevices();
     return data;
   }
+
+  async fetchAllDevicesUnderSite(id){
+    let data = await jsonController.fetchAllDevicesUnderSite(id);
+    return data;
+  }
+
+  async fetchAllConsumersUnderSite(id){
+    let data = await jsonController.fetchAllConsumersUnderSite(id);
+    return data;
+  }
+
+
   //consumer to device mapping
   async fetchAllConsumertoDevice() {
     let data = await jsonController.fetchConsumerToDevice();

@@ -1,4 +1,10 @@
 {
-  "SITE::FMI:HJM:JHJ:DKM": {},
-  "SITE::NID:KNN:MCK:DPL": {}
+  "SITE::FMI:HJM:JHJ:DKM": {
+    "name": "SITE::FMI:HJM:JHJ:DKM",
+    "location": "default"
+  },
+  "": {
+    "name": "",
+    "location": "default"
+  }
 }
