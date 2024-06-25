@@ -153,7 +153,7 @@ module.exports = function (app) {
 
   ////////////PROTECTED ROUTES FOR PAGES RENDERING//////////////////
   app.get(
-    PRIVATE_AEP_TO_ADMINROUTE,
+    PRIVATE_AEP_TO_ADMINROUTE,controller.isAuthenticated(),
     controller.roleAuthenticatorIdSensitive(permForAdmin),
     (req, res) => {
       res.sendFile(ADMINPAGE);
@@ -161,7 +161,7 @@ module.exports = function (app) {
   );
 
   app.get(
-    PRIVATE_AEP_TO_CONSUMERROUTE,
+    PRIVATE_AEP_TO_CONSUMERROUTE,controller.isAuthenticated(),
     controller.roleAuthenticatorIdSensitive(permForConsumer),
     (req, res) => {
       res.sendFile(CONSUMERPAGE);

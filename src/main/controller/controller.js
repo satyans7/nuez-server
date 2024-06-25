@@ -1,7 +1,7 @@
 const dbController = require("../db-controller/db-controller");
 const {passwordAuthController,otpAuthController,googleAuthController} = require("../auth-controller/auth-controller");
 const otpGeneratorUtility = require("../utils/otp-generator")
-const {roleAuthenticatorIdSensitive,roleAuthenticatorIdInSensitive} = require("../middlewares/auth")
+const {roleAuthenticatorIdSensitive,roleAuthenticatorIdInSensitive,isAuthenticated} = require("../middlewares/auth")
 
 class Controller {
   passport=googleAuthController;
@@ -413,6 +413,7 @@ class Controller {
 ////////////////AUTHORIZE_USER//////////////////////////////////
 roleAuthenticatorIdInSensitive=roleAuthenticatorIdInSensitive;
  roleAuthenticatorIdSensitive=roleAuthenticatorIdSensitive ;
+ isAuthenticated=isAuthenticated;
 }
 
 module.exports = new Controller();
