@@ -310,6 +310,42 @@ module.exports = function (app) {
 
   const localRepoPath = path.join(__dirname, '../local-repo');
   const githubRepoUrl = 'https://github.com/priyansu1703/testFile';
+
+  // Function to read .bin filenames and store them in an array without .bin extension
+function getBinFilenamesWithoutExtension(directoryPath) {
+  return new Promise((resolve, reject) => {
+      fs.readdir(directoryPath, (err, files) => {
+          if (err) {
+              return reject('Unable to scan directory: ' + err);
+          }
+          // Filter out non-.bin files and remove .bin extension
+          const binFiles = files
+              .filter(file => file.endsWith('.bin'))
+              .map(file => path.basename(file, '.bin'));
+
+          resolve(binFiles);
+          console.log(binFiles)
+      });
+  });
+}
+
+// Variable to store bin filenames in memory
+let binFilenamesInMemory = [];
+
+// Initialize and store bin filenames in memory
+async function initializeBinFilenames() {
+  try {
+      binFilenamesInMemory = await getBinFilenamesWithoutExtension(localRepoPath);
+      console.log('Bin filenames without extension stored in memory:', binFilenamesInMemory);
+  } catch (error) {
+      console.error('Error reading bin filenames:', error);
+  }
+}
+
+initializeBinFilenames();
+app.get('/api/firmware-versions', (req, res) => {
+  res.json(binFilenamesInMemory.map((name, id) => ({ id, name })));
+});
   // const updateRepo = async () => {
   //   const git = simpleGit();
 
@@ -341,197 +377,148 @@ module.exports = function (app) {
     console.log("api called");
   });
 
-  const siteIdsFilePath = path.join(
-    __dirname,
-    "../database/json-data/siteRegistration.json"
-  );
-  // Files to store IDs and mappings
-  const deviceIdsFilePath = path.join(
-    __dirname,
-    "../database/json-data/deviceToProfile.json"
-  );
-  const siteToDeviceFilePath = path.join(
-    __dirname,
-    "../database/json-data/siteToDevices.json"
-  );
+  const siteIdsFilePath = path.join(__dirname, "../database/json-data/siteRegistration.json");
+  const deviceIdsFilePath = path.join(__dirname, "../database/json-data/deviceToProfile.json");
+  const siteToDeviceFilePath = path.join(__dirname, "../database/json-data/siteToDevices.json");
+  
 
-  let deviceIds = {};
-  let siteIds = {};
-  let siteToDevice = {};
-
-  // Load IDs and mappings from the JSON files into memory
-  try {
-    if (fs.existsSync(deviceIdsFilePath)) {
-      const data = fs.readFileSync(deviceIdsFilePath, "utf8");
-      deviceIds = JSON.parse(data);
-    }
-
-    if (fs.existsSync(siteIdsFilePath)) {
-      const data = fs.readFileSync(siteIdsFilePath, "utf8");
-      siteIds = JSON.parse(data);
-    }
-
-    if (fs.existsSync(siteToDeviceFilePath)) {
-      const data = fs.readFileSync(siteToDeviceFilePath, "utf8");
-      siteToDevice = JSON.parse(data);
-    }
-  } catch (error) {
-    console.error("Error loading JSON files:", error);
+  
+  const deviceStatus = {};
+  
+  // Utility functions for database operations
+  const readDatabase = (filePath) => {
+    return JSON.parse(fs.readFileSync(filePath));
   }
-  let deviceStatus = {}
+  
+  const writeDatabase = (filePath, data) => {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  }
+    // In-memory storage for site and device data
+    const siteIds =readDatabase(siteIdsFilePath);
+    const deviceIds =readDatabase(deviceIdsFilePath);
+    const siteToDevice =readDatabase(siteToDeviceFilePath);
+  
+  // Function to get the current timestamp from NTP server
+  const fetchNetworkTime = () => {
+    return new Promise((resolve, reject) => {
+      ntpClient.getNetworkTime("pool.ntp.org", 123, (err, date) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(date);
+      });
+    });
+  }
+  
   const client = mqtt.connect("mqtt://192.168.33.250", {
     port: 1883,
     username: "nuez",
     password: "emqx@nuez",
   });
+
+  // Function to subscribe to a topic
+  const subscribeToTopic = (topic) => {
+    client.subscribe(topic, (err) => {
+      if (err) {
+        console.error(`Error subscribing to ${topic} topic:`, err);
+      } else {
+        console.log(`Subscribed to ${topic} topic.`);
+      }
+    });
+  }
+  
+  const handleRegistration = (siteId, deviceId) => {
+    if (!siteIds[siteId]) {
+      siteIds[siteId] = { name: siteId, location: "default" };
+      writeDatabase(siteIdsFilePath, siteIds);
+    }
+  
+    if (!deviceIds[deviceId]) {
+      deviceIds[deviceId] = { name: deviceId, location: "default" };
+      writeDatabase(deviceIdsFilePath, deviceIds);
+    }
+  
+    if (!siteToDevice[siteId]) {
+      siteToDevice[siteId] = [];
+    }
+  
+    if (!siteToDevice[siteId].includes(deviceId)) {
+      siteToDevice[siteId].push(deviceId);
+      writeDatabase(siteToDeviceFilePath, siteToDevice);
+    }
+  }
+
+  
+  // Function to update device data
+  const updateDeviceData = (filePath, dataKey, updateData) => {
+    const rawData = readDatabase(filePath);
+    for (const [device_id, data] of Object.entries(updateData)) {
+      if (rawData.hasOwnProperty(device_id)) {
+        rawData[device_id][dataKey] = data;
+      }
+    }
+    writeDatabase(filePath, rawData);
+    console.log(`Device ${dataKey}s updated successfully.`);
+  }
+  
+  // MQTT client event handlers
   client.on("connect", () => {
     console.log("Connected to MQTT broker");
-
-    client.subscribe("water-consumption-data", (err) => {
-      if (err) {
-        console.error("Error subscribing to device-data topic:", err);
-      } else {
-        console.log("Subscribed to device-data topic.");
-      }
-    });
-    client.subscribe("device-status-info/#", (err) => {
-      if (err) {
-        console.error("Error subscribing to device-status topic:", err);
-      } else {
-        console.log("Subscribed to device-status topic.");
-      }
-    });
-    client.subscribe("device-version-info/#", (err) => {
-      if (err) {
-        console.error("Error subscribing to device-status topic:", err);
-      } else {
-        console.log("Subscribed to device-status topic.");
-      }
-    });
+  
+    // Subscribe to necessary topics
+    const topics = [
+      "water-consumption-data",
+      "device-status-info/#",
+      "device-version-info/#",
+      "device-heartbeat-info/#"
+    ];
+    topics.forEach(subscribeToTopic);
   });
-
-  client.on("message", (topic, message) => {
-    if (topic === "water-consumption-data") {
-      try {
-        const deviceData = JSON.parse(message.toString());
-        const siteId = deviceData.site_id;
-        const deviceId = deviceData.device_id;
-
-        // Check if the site ID is already in memory
-        if (!siteIds[siteId]) {
-          // Add new site ID to memory with an empty object
-          siteIds[siteId] = {
-            "name":siteId,
-            "location":"default"
-          };
-
-          // Update the JSON file with the new site ID
-          fs.writeFile(
-            siteIdsFilePath,
-            JSON.stringify(siteIds, null, 2),
-            (err) => {
-              if (err) {
-                console.error("Error saving site ID to file:", err);
-              } else {
-                //console.log("New site ID added and saved to file:", siteId);
-              }
-            }
+  
+  client.on("message", async (topic, message) => {
+    const [topicName, siteId] = topic.split("/");
+    const parsedMessage = JSON.parse(message.toString());
+  
+    switch (topicName) {
+      case "water-consumption-data":
+        const { site_id, device_id } = parsedMessage;
+        handleRegistration(site_id, device_id);
+        break;
+  
+      case "device-status-info":
+        deviceStatus[siteId] = parsedMessage;
+        updateDeviceData(
+          path.join(__dirname, "../database/json-data/deviceToProfile.json"),
+          "status",
+          parsedMessage
+        );
+        break;
+  
+      case "device-version-info":
+        updateDeviceData(
+          path.join(__dirname, "../database/json-data/deviceToProfile.json"),
+          "version",
+          parsedMessage
+        );
+        break;
+  
+      case "device-heartbeat-info":
+        try {
+          const networkTime = await fetchNetworkTime();
+          updateDeviceData(
+            path.join(__dirname, "../database/json-data/deviceToProfile.json"),
+            "timestamp",
+            { ...parsedMessage, timestamp: networkTime.toISOString() }
           );
-        } else {
-          //console.log("Site ID already exists:", siteId);
+        } catch (error) {
+          console.error("Error fetching network time:", error);
         }
-
-        // Check if the device ID is already in memory
-        if (!deviceIds[deviceId]) {
-          // Add new device ID to memory with an empty object
-          deviceIds[deviceId] = {
-            "name":deviceId,
-            "location":"default"
-          };
-
-          // Update the JSON file with the new device ID
-          fs.writeFile(
-            deviceIdsFilePath,
-            JSON.stringify(deviceIds, null, 2),
-            (err) => {
-              if (err) {
-                console.error("Error saving device ID to file:", err);
-              } else {
-                console.log("New device ID added and saved to file:", deviceId);
-              }
-            }
-          );
-        } else {
-          //console.log("Device ID already exists:", deviceId);
-        }
-
-        // Check if the site ID exists in the siteToDevice mapping
-        if (!siteToDevice[siteId]) {
-          // Initialize a new array for the site ID
-          siteToDevice[siteId] = [];
-        }
-
-        // Add the device ID to the site ID's list if it doesn't already exist
-        if (!siteToDevice[siteId].includes(deviceId)) {
-          siteToDevice[siteId].push(deviceId);
-
-          // Update the JSON file with the new mapping
-          fs.writeFile(
-            siteToDeviceFilePath,
-            JSON.stringify(siteToDevice, null, 2),
-            (err) => {
-              if (err) {
-                console.error(
-                  "Error saving site and device mapping to file:",
-                  err
-                );
-              } else {
-                console.log(
-                  `New device ID (${deviceId}) added for site ID (${siteId}) and saved to file.`
-                );
-              }
-            }
-          );
-        } else {
-          // console.log( `Device ID (${deviceId}) already exists for site ID (${siteId}).`);
-        }
-      } catch (error) {
-        console.error("Error parsing MQTT message:", error);
-      }
-    }
-    const topic_name_site = topic.substring(0, topic.indexOf("/"));
-    const topic_site_id = topic.substring(topic.indexOf("/") + 1);
-    // console.log(topic_device_status_info,topic_site_id)
-    if (topic_name_site === "device-status-info") {
-      const deviceStatusReceived = JSON.parse(message.toString());
-      deviceStatus[topic_site_id] = deviceStatusReceived;
-    }
-    if (topic_name_site === "device-version-info") {
-      try {
-        const deviceVersionReceived = JSON.parse(message.toString());
-        console.log(deviceVersionReceived);
-    
-        const filePath = path.join(__dirname, "../database/json-data/deviceToProfile.json"); // Update the path to your JSON file
-        const rawData = fs.readFileSync(filePath);
-        const deviceData = JSON.parse(rawData);
-    
-        // Update the version of each device
-        for (const [device_id, version] of Object.entries(deviceVersionReceived)) {
-          if (deviceData.hasOwnProperty(device_id)) {
-            deviceData[device_id].version = version;
-          }
-        }
-    
-        // Write the updated device data back to the JSON file
-        fs.writeFileSync(filePath, JSON.stringify(deviceData, null, 2));
-        console.log("Device versions updated successfully.");
-    
-      } catch (error) {
-        console.error("Error updating device versions:", error);
-      }
+        break;
+  
+      default:
+        console.error("Unhandled topic:", topic);
     }
   });
-
   const filePath = path.join(__dirname, "../local-repo/firmware.ino.bin");
 
   app.get("/download/firmware", async (req, res) => {
@@ -574,8 +561,8 @@ module.exports = function (app) {
     try {
       const site_id = req.params.site_id; // Correctly access site_id from req.params
       console.log(site_id);
-      const message = { message: 'intimate' }
-
+      const message = { version:`${req.body.version}` }
+      console.log(message)
       // Publish the message to the "site_1/intimate" topic
       client.publish(`intimate-latest-version-info/${site_id}`, JSON.stringify(message));
 
@@ -588,11 +575,6 @@ module.exports = function (app) {
 
   app.post("/:site_id/fetch-device-versions", async (req, res) => {
     const site_id = req.params.site_id; // Correctly access site_id from req.params
-    console.log(site_id);
-    if (!site_id) {
-      return res.status(400).json({ error: "Site ID is required" });
-    }
-
     try {
       // Publish the message to the MQTT topic
       client.publish(`device-version-query/${site_id}`, "fetch versions from devices");
@@ -607,10 +589,7 @@ module.exports = function (app) {
 
   app.post("/intimate-all-sites", (req, res) => {
     const firmwareFilePath = path.join(
-      __dirname,
-      "../local-repo",
-      "version.json"
-    );
+      __dirname,"../local-repo","version.json");
     fs.readFile(firmwareFilePath, "utf8", (err, data) => {
       if (err) {
         console.error("Failed to read firmware.txt:", err);

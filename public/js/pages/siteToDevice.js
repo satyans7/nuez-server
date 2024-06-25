@@ -797,18 +797,41 @@ function cancelSearch() {
 
 // FIRMWARE ------------------------------------------------------------------------------------------------//
 
-
 document.getElementById('firmware-link').addEventListener('click', async () => {
     toggleVisibility();
     firmwareVersionContainer.style.display = 'block';
     await fetchDeviceVersions();
+    await populateFirmwareDropdown();
     document.getElementById('upgrade-all-versions').addEventListener('click', async () => {
         await upgradeAllDeviceVersions();
     });
     document.getElementById('intimate-all').addEventListener('click', async () => {
-        await intimateAll();
+        const dropdown = document.getElementById('firmware-dropdown');
+        const selectedVersion = dropdown.options[dropdown.selectedIndex].textContent;
+        await intimateAll(selectedVersion);
     });
 });
+
+async function populateFirmwareDropdown() {
+    try {
+        const response = await fetch('/api/firmware-versions');
+        if (!response.ok) {
+            throw new Error('Failed to fetch firmware versions');
+        }
+        const firmwareVersions = await response.json();
+        const dropdown = document.getElementById('firmware-dropdown');
+        dropdown.innerHTML = ''; // Clear previous options
+
+        firmwareVersions.forEach(version => {
+            const option = document.createElement('option');
+            option.value = version.id; // Assuming each version has a unique ID
+            option.textContent = version.name; // Display name of the version
+            dropdown.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching firmware versions:', error);
+    }
+}
 
 async function fetchDeviceVersions() {
     try {
@@ -849,7 +872,7 @@ async function upgradeAllDeviceVersions() {
             // Refresh the device versions after upgrade
             fetchDeviceVersions();
             alert('All device versions upgraded successfully!');
-        }, 10000);
+        }, 7000);
     } catch (error) {
         console.error('Error upgrading device versions:', error);
         alert('Error upgrading device versions. Please try again.');
@@ -898,14 +921,15 @@ function displayDeviceVersions(versions) {
     tableContainer.appendChild(table);
 }
 
-
-async function intimateAll() {
+async function intimateAll(version) {
     try {
+        const message = { version: version };
         const response = await fetch(`/${site}/intimate-all-devices`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(message)
         });
 
         if (!response.ok) {
