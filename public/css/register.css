@@ -4,15 +4,24 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #d9e6eb;
-    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(200, 219, 225);
+    font-family: Arial, sans-serif;
+}
+
+h2{
+    text-align: center;
+    margin-bottom: 33px; 
+    
 }
 .asterisk {
     color: red;
 }
+
 form {
     display: flex;
     flex-direction: column;
+    font-size: 18px;
+    
 }
 .container {
     background-color: white;
@@ -51,6 +60,8 @@ fieldset {
     padding: 10px;
     width: auto;
     display: inline-block;
+    margin-top: 8px;
+    margin-bottom: 19px;
 }
 /* Style for the legend */
 legend.role {
@@ -60,4 +71,12 @@ legend.role {
 }
 div {
     margin-bottom: 5px;
+}
+
+button{
+    margin-bottom: 18px;
+}
+
+#google i{
+    margin-left: 7px;
 }

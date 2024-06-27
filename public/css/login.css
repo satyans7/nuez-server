@@ -1,74 +1,124 @@
-/* Save this file as styles.css */
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+/* Body styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+    background-color: rgb(200, 219, 225);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
+    background-size: cover;
+    
 }
 
+.loginformcs
+{
+    margin: 5% auto 10;
+    
+    
+
+}
+
+.loginformcs h2{
+    margin-top: 100px;
+    margin-bottom: -55px;
+}
+
+/* Form container styles */
+#loginform {
+    background-color: #ffffff;
+    margin: 100px 0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    max-width: 50; /* Ensure form doesn't exceed screen width */
+    text-align: center; /* Center align content */
+    position: relative;
+}
+
+/* Form title styles */
 h2 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: 2000px;
+    
+    padding: -10px 0; /* Adjust padding for spacing */
+    color: #333333;
+    position: relative; /* Position absolutely */
+    top: 0; /* Align to the top */
+    bottom: 90%;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
 }
 
-form {
-    position: relative;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 300px;
-}
 
-form::before {
-    content: "";
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 4px;
-    background-color: #007bff;
-    border-radius: 2px;
+.input-group {
+    
+    flex-direction: column;
+    align-items: flex-start; /* Align labels to the left */
+    width: 100%; /* Ensure the group takes full width */
+    margin-bottom: 10px;
 }
-
-.form-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-label {
-    font-weight: bold;
-    margin-right: 10px;
-    width: 80px; /* Fixed width for labels */
-}
-
+/* Input field styles */
 input[type="text"],
 input[type="password"] {
-    flex: 1;
+    width: calc(100% - 10px);
     padding: 10px;
-    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
     border-radius: 4px;
-    box-sizing: border-box;
+    font-size: 19px;
 }
 
-button[type="submit"] {
+/* Button styles */
+button {
     width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
+    padding: 20px;
+    margin: 10px 0;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    border-radius: 8px;
+    background-color: #01a8ce;
+    color: white;
     font-size: 16px;
+    cursor: pointer;
 }
 
-button[type="submit"]:hover {
-    background-color: #0056b3;
+button:hover {
+    background-color: #05b33f;
+}
+
+/* Additional button styles */
+#otplogin,
+#google {
+    width: 100%;
+    padding: 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    background-color:  #01a8ce; /* Google blue */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    
+}
+#google i{
+    margin-left: 5px;
+}
+
+#otplogin:hover,
+#google:hover {
+    background-color:   #05b33f; /* Darker Google blue */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
 }

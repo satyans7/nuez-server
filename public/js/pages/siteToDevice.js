@@ -886,6 +886,7 @@ function displayDeviceVersions(versions) {
     tableContainer.innerHTML = ''; // Clear previous content
 
     const table = document.createElement('table');
+    table.id = 'firmware-table';
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
