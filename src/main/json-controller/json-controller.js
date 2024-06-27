@@ -226,7 +226,7 @@ class JsonController {
 
 
   // GET ADMIN_TO_SITE_MAPPING
-  async fetchAllAdminToSite() {
+  async   fetchAllAdminToSite() {
     const db = await this.readDatabase(ADMIN_TO_SITE_DATA);
     return db;
   }

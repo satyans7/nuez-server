@@ -6,5 +6,9 @@
   "": {
     "name": "",
     "location": "default"
+  },
+  "SITE::NID:KNN:MCK:DPL": {
+    "name": "SITE::NID:KNN:MCK:DPL",
+    "location": "default"
   }
 }

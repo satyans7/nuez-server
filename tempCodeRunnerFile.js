@@ -1,0 +1,1 @@
+res.sendFile(path.join(__dirname, VIEW, HOME));

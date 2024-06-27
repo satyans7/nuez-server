@@ -3,8 +3,7 @@
     "SWM::MIC:OBI:PAK:LLM",
     "SWM::MMH:LFM:CIL:JGE"
   ],
-  "": [
-    "SWM::MIC:OBI:PAK:LLM",
+  "SITE::NID:KNN:MCK:DPL": [
     "SWM::MMH:LFM:CIL:JGE"
   ]
 }
