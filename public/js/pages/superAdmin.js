@@ -15,431 +15,434 @@ import {
     sendFirmwareToSites
 } from '../client/client.js';
 
-const usersTab = document.getElementById('users-tab');
-const adminsTab = document.getElementById('admins-tab');
-const approvedTab = document.getElementById('approved-tab');
-const rejectedTab = document.getElementById('rejected-tab');
-const pendingTab = document.getElementById('pending-tab');
-const sitesTab = document.getElementById('sites-tab')
-const usersList = document.getElementById('user-list');
-const adminList = document.getElementById('admin-list');
-const siteList = document.getElementById('site-list');
-const approvedList = document.getElementById('approved-list');
-const rejectedList = document.getElementById('rejected-list');
-const pendingList = document.getElementById('pending-list');
-const allLists = document.getElementsByClassName('list');
-const usersTableBody = document.getElementById('users-table-body')
-const adminsTableBody = document.getElementById('admins-table-body')
-const sitesTableBody = document.getElementById('sites-table-body');
-const pendingTableBody = document.getElementById('pending-table-body')
-const approvedTableBody = document.getElementById('approved-table-body')
-const rejectedTableBody = document.getElementById('rejected-table-body')
+export function initializeSuperAdminPanel() {
+    const usersTab = document.getElementById('users-tab');
+    const adminsTab = document.getElementById('admins-tab');
+    const approvedTab = document.getElementById('approved-tab');
+    const rejectedTab = document.getElementById('rejected-tab');
+    const pendingTab = document.getElementById('pending-tab');
+    const sitesTab = document.getElementById('sites-tab')
+    const usersList = document.getElementById('user-list');
+    const adminList = document.getElementById('admin-list');
+    const siteList = document.getElementById('site-list');
+    const approvedList = document.getElementById('approved-list');
+    const rejectedList = document.getElementById('rejected-list');
+    const pendingList = document.getElementById('pending-list');
+    const allLists = document.getElementsByClassName('list');
+    const usersTableBody = document.getElementById('users-table-body')
+    const adminsTableBody = document.getElementById('admins-table-body')
+    const sitesTableBody = document.getElementById('sites-table-body');
+    const pendingTableBody = document.getElementById('pending-table-body')
+    const approvedTableBody = document.getElementById('approved-table-body')
+    const rejectedTableBody = document.getElementById('rejected-table-body')
 
-const administrationTab = document.getElementById('administration-tab')
-const administrationList = document.getElementById('administration-list')   
-const firmwareSyncBtn =document.getElementById('syncFirmware')
-const sourceCodeSyncBtn =document.getElementById('syncSourceCode')
-const firmwareToSitesBtn =document.getElementById('firmwareToSitesBtn')
-// Function to disable the 'Request for Role change' button
-function disableRequestButton(button, msg) {
-    button.disabled = true;
-    button.style.cursor = 'not-allowed'
-    button.style.background = 'gray'
-    button.textContent = msg; // Optionally change button text
-}
-
-// Function to enable the 'Request for Role change' button
-function enableRequestButton(button, msg) {
-    button.disabled = false;
-    button.textContent = msg; // Optionally reset button text
-}
-
-// Function to update the 'Request for Role change' button state
-async function updateRequestButtonState(requestButton, id) {
-    const admintosite = await getUserSiteMapping();
-    const consumertodevice= await getConsumerDeviceMapping();
-    console.log(admintosite)
-    console.log(consumertodevice)
-    const pendingRequests = await getAllPendingRequests();
-    if (pendingRequests[id] && pendingRequests[id].requestStatus === 'pending') {
-        const msg = 'Request Sent';
-        disableRequestButton(requestButton, msg);
-    } else if ((admintosite[id] && admintosite[id].length > 0)  || (consumertodevice[id] && consumertodevice[id].length > 0) ) {
-        const msg = 'Already have sites'
-        disableRequestButton(requestButton, msg);
-
-    } else {
-        const msg = 'Request for Role Change';
-        enableRequestButton(requestButton, msg);
+    const administrationTab = document.getElementById('administration-tab')
+    const administrationList = document.getElementById('administration-list')
+    const firmwareSyncBtn = document.getElementById('syncFirmware')
+    const sourceCodeSyncBtn = document.getElementById('syncSourceCode')
+    const firmwareToSitesBtn = document.getElementById('firmwareToSitesBtn')
+    // Function to disable the 'Request for Role change' button
+    function disableRequestButton(button, msg) {
+        button.disabled = true;
+        button.style.cursor = 'not-allowed'
+        button.style.background = 'gray'
+        button.textContent = msg; // Optionally change button text
     }
-}
 
-// Function to handle 'Request for Role change' button click
-async function handleRequestRoleChange(id, requestButton, request) {
-    try {
-        disableRequestButton(requestButton); // Disable button on click
-        await requestRoleChange(id, request);
-        alert("Request added successfully");
-    } catch (error) {
-        console.log('Error in sending request');
-        enableRequestButton(requestButton); // Re-enable button in case of error
+    // Function to enable the 'Request for Role change' button
+    function enableRequestButton(button, msg) {
+        button.disabled = false;
+        button.textContent = msg; // Optionally reset button text
     }
-}
 
-document.addEventListener('DOMContentLoaded', async () => {
-    hideAllLists();
-    usersList.style.display = 'block';
-    await loadUsersTable();
-});
+    // Function to update the 'Request for Role change' button state
+    async function updateRequestButtonState(requestButton, id) {
+        const admintosite = await getUserSiteMapping();
+        const consumertodevice = await getConsumerDeviceMapping();
+        console.log(admintosite)
+        console.log(consumertodevice)
+        const pendingRequests = await getAllPendingRequests();
+        if (pendingRequests[id] && pendingRequests[id].requestStatus === 'pending') {
+            const msg = 'Request Sent';
+            disableRequestButton(requestButton, msg);
+        } else if ((admintosite[id] && admintosite[id].length > 0) || (consumertodevice[id] && consumertodevice[id].length > 0)) {
+            const msg = 'Already have sites'
+            disableRequestButton(requestButton, msg);
 
-async function loadUsersTable() {
-    console.log("fetching users");
-    let data = await getAllConsumers();
-    usersTableBody.innerHTML = '';
-    let ids = Object.keys(data);
-    if (ids && ids.length > 0) {
-        ids.forEach(async id => {
-            let user = data[id];
-            if (user.role === "consumer") {
+        } else {
+            const msg = 'Request for Role Change';
+            enableRequestButton(requestButton, msg);
+        }
+    }
+
+    // Function to handle 'Request for Role change' button click
+    async function handleRequestRoleChange(id, requestButton, request) {
+        try {
+            disableRequestButton(requestButton); // Disable button on click
+            await requestRoleChange(id, request);
+            alert("Request added successfully");
+        } catch (error) {
+            console.log('Error in sending request');
+            enableRequestButton(requestButton); // Re-enable button in case of error
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        hideAllLists();
+        usersList.style.display = 'block';
+        await loadUsersTable();
+    });
+
+    async function loadUsersTable() {
+        console.log("fetching users");
+        let data = await getAllConsumers();
+        usersTableBody.innerHTML = '';
+        let ids = Object.keys(data);
+        if (ids && ids.length > 0) {
+            ids.forEach(async id => {
+                let user = data[id];
+                if (user.role === "consumer") {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = user.name;
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = user.email;
+                    const actionCell = document.createElement('td');
+                    const requestButton = document.createElement('button');
+                    requestButton.textContent = 'Request for Role change';
+                    const request = {
+                        _id: id,
+                        reqRole: "admin"
+                    }
+                    await updateRequestButtonState(requestButton, id);
+                    requestButton.addEventListener('click', async () => {
+                        if (requestButton.disabled === false) { // Check if request can be sent
+                            await handleRequestRoleChange(id, requestButton, request);
+                        }
+                    });
+                    nameCell.addEventListener('click', () => {
+                        const adminId = 'superadmin';
+                        window.location.href = `/api/consumer-dashboard/${id}?adminId=${adminId}`;
+                    });
+                    nameCell.style.cursor = "pointer";
+
+                    actionCell.appendChild(requestButton);
+                    row.appendChild(nameCell);
+                    row.appendChild(emailCell);
+                    row.appendChild(actionCell);
+                    usersTableBody.appendChild(row);
+                }
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="3">No users available</td>`;
+            usersTableBody.appendChild(row);
+        }
+    }
+
+    // Function to hide all tables
+    function hideAllLists() {
+        for (let i = 0; i < allLists.length; i++) {
+            allLists[i].style.display = 'none';
+        }
+    }
+
+    // On clicking Users Tab
+    usersTab.addEventListener('click', async () => {
+        hideAllLists();
+        usersList.style.display = 'block';
+        await loadUsersTable();
+    });
+
+    adminsTab.addEventListener('click', async () => {
+        hideAllLists();
+        adminList.style.display = 'block';
+        await loadAdminsTable();
+    });
+
+    async function loadAdminsTable() {
+        console.log("fetching admins");
+        let data = await getAllAdmins();
+        adminsTableBody.innerHTML = '';
+        let ids = Object.keys(data);
+        if (ids && ids.length > 0) {
+            ids.forEach(async id => {
+                let user = data[id];
+                if (user.role === "admin") {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = user.name;
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = user.email;
+                    const actionCell = document.createElement('td');
+                    const requestButton = document.createElement('button');
+                    requestButton.textContent = 'Request for Role change';
+                    const request = {
+                        _id: id,
+                        reqRole: "consumer"
+                    }
+                    await updateRequestButtonState(requestButton, id);
+                    requestButton.addEventListener('click', async () => {
+                        if (requestButton.disabled === false) { // Check if request can be sent
+                            await handleRequestRoleChange(id, requestButton, request);
+                        }
+                    });
+                    nameCell.addEventListener('click', () => {
+                        window.location.href = `/api/admin-dashboard/${id}`;
+                    });
+                    nameCell.style.cursor = "pointer"
+                    actionCell.appendChild(requestButton);
+                    row.appendChild(nameCell);
+                    row.appendChild(emailCell);
+                    row.appendChild(actionCell);
+                    adminsTableBody.appendChild(row);
+                }
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="3">No admins available</td>`;
+            adminsTableBody.appendChild(row);
+        }
+    }
+
+
+    sitesTab.addEventListener('click', async () => {
+        hideAllLists();
+        siteList.style.display = 'block';
+        await loadSitesTable();
+    })
+
+    async function loadSitesTable() {
+        let data = await getSitesData();
+        console.log(data)
+        sitesTableBody.innerHTML = '';
+        let ids = Object.keys(data);
+        if (ids && ids.length > 0) {
+            ids.forEach(async id => {
+                let site = data[id];
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
-                nameCell.textContent = user.name;
-                const emailCell = document.createElement('td');
-                emailCell.textContent = user.email;
-                const actionCell = document.createElement('td');
-                const requestButton = document.createElement('button');
-                requestButton.textContent = 'Request for Role change';
-                const request = {
-                    _id: id,
-                    reqRole: "admin"
-                }
-                await updateRequestButtonState(requestButton, id);
-                requestButton.addEventListener('click', async () => {
-                    if (requestButton.disabled === false) { // Check if request can be sent
-                        await handleRequestRoleChange(id, requestButton, request);
-                    }
-                });
+                nameCell.textContent = site.name;
+                const locationCell = document.createElement('td');
+                locationCell.textContent = site.location;
                 nameCell.addEventListener('click', () => {
-                    const adminId = 'superadmin';
-                    window.location.href = `/api/consumer-dashboard/${id}?adminId=${adminId}`;
+                    window.location.href = `/api/site-dashboard/${id}`;
                 });
                 nameCell.style.cursor = "pointer";
-                
-                actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
-                row.appendChild(emailCell);
-                row.appendChild(actionCell);
-                usersTableBody.appendChild(row);
-            }
-        });
-    } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="3">No users available</td>`;
-        usersTableBody.appendChild(row);
-    }
-}
+                row.appendChild(locationCell);
+                sitesTableBody.appendChild(row);
 
-// Function to hide all tables
-function hideAllLists() {
-    for (let i = 0; i < allLists.length; i++) {
-        allLists[i].style.display = 'none';
-    }
-}
-
-// On clicking Users Tab
-usersTab.addEventListener('click', async () => {
-    hideAllLists();
-    usersList.style.display = 'block';
-    await loadUsersTable();
-});
-
-adminsTab.addEventListener('click', async () => {
-    hideAllLists();
-    adminList.style.display = 'block';
-    await loadAdminsTable();
-});
-
-async function loadAdminsTable() {
-    console.log("fetching admins");
-    let data = await getAllAdmins();
-    adminsTableBody.innerHTML = '';
-    let ids = Object.keys(data);
-    if (ids && ids.length > 0) {
-        ids.forEach(async id => {
-            let user = data[id];
-            if (user.role === "admin") {
-                const row = document.createElement('tr');
-                const nameCell = document.createElement('td');
-                nameCell.textContent = user.name;
-                const emailCell = document.createElement('td');
-                emailCell.textContent = user.email;
-                const actionCell = document.createElement('td');
-                const requestButton = document.createElement('button');
-                requestButton.textContent = 'Request for Role change';
-                const request = {
-                    _id: id,
-                    reqRole: "consumer"
-                }
-                await updateRequestButtonState(requestButton, id);
-                requestButton.addEventListener('click', async () => {
-                    if (requestButton.disabled === false) { // Check if request can be sent
-                        await handleRequestRoleChange(id, requestButton, request);
-                    }
-                });
-                nameCell.addEventListener('click', () => {
-                    window.location.href = `/api/admin-dashboard/${id}`;
-                });
-                nameCell.style.cursor = "pointer"
-                actionCell.appendChild(requestButton);
-                row.appendChild(nameCell);
-                row.appendChild(emailCell);
-                row.appendChild(actionCell);
-                adminsTableBody.appendChild(row);
-            }
-        });
-    } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="3">No admins available</td>`;
-        adminsTableBody.appendChild(row);
-    }
-}
-
-
-sitesTab.addEventListener('click', async() =>{
-    hideAllLists();
-    siteList.style.display = 'block';
-    await loadSitesTable();
-})
-
-async function loadSitesTable(){
-    let data = await getSitesData();
-    console.log(data)
-    sitesTableBody.innerHTML = '';
-    let ids = Object.keys(data);
-    if (ids && ids.length > 0) {
-        ids.forEach(async id => {
-            let site = data[id];
-            const row = document.createElement('tr');
-            const nameCell = document.createElement('td');
-            nameCell.textContent = site.name;
-            const locationCell = document.createElement('td');
-            locationCell.textContent = site.location;
-            nameCell.addEventListener('click', () => {
-                window.location.href = `/api/site-dashboard/${id}`;
             });
-            nameCell.style.cursor = "pointer";
-            row.appendChild(nameCell);
-            row.appendChild(locationCell);
+            firmwareToSitesBtn.addEventListener("click", async () => {
+                await sendFirmwareToSites();
+                alert("btn clicked")
+            })
+
+
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="2">No sites available</td>`;
             sitesTableBody.appendChild(row);
-            
-        });
-        firmwareToSitesBtn.addEventListener("click", async ()=>{
-            await sendFirmwareToSites();
-            alert("btn clicked")
-        })
+        }
 
-        
-    } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="2">No sites available</td>`;
-        sitesTableBody.appendChild(row);
+
+
     }
 
 
-
-}
-
-
-async function requestRoleChange(id, req) {
-    try {
-        await postRequesttoRoleChange(id, req);
-        console.log('request sent');
-    } catch (error) {
-        console.log('Error in sending request');
+    async function requestRoleChange(id, req) {
+        try {
+            await postRequesttoRoleChange(id, req);
+            console.log('request sent');
+        } catch (error) {
+            console.log('Error in sending request');
+        }
     }
-}
 
-// Approved Tab
-approvedTab.addEventListener('click', async () => {
-    hideAllLists();
-    approvedList.style.display = 'block';
-    await loadApprovedTable();
-});
+    // Approved Tab
+    approvedTab.addEventListener('click', async () => {
+        hideAllLists();
+        approvedList.style.display = 'block';
+        await loadApprovedTable();
+    });
 
-async function loadApprovedTable() {
-    console.log("fetching approved requests");
-    let data = await getAllApprovedRequests();
-    let ids = Object.keys(data);
-    approvedTableBody.innerHTML = '';
-    if (ids && ids.length > 0) {
-        ids.forEach(id => {
-            const user = data[id];
-            const row = document.createElement('tr');
-            const nameCell = document.createElement('td');
-            nameCell.textContent = user.name;
-            const reqRoleCell = document.createElement('td');
-            reqRoleCell.textContent = user.roleRequested;
-            const timeStampCell = document.createElement('td');
-            timeStampCell.textContent = user.timeStamp;
-            row.appendChild(nameCell);
-            row.appendChild(reqRoleCell);
-            row.appendChild(timeStampCell);
-            approvedTableBody.appendChild(row);
-        });
-    } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="2">No approved requests available</td>`;
-        approvedTableBody.appendChild(row);
-    }
-}
-
-// Rejected Tab
-rejectedTab.addEventListener('click', async () => {
-    hideAllLists();
-    rejectedList.style.display = 'block';
-    await loadRejectedTable();
-});
-
-async function loadRejectedTable() {
-    console.log("fetching rejected requests");
-    let data = await getAllRejectedRequests();
-    let ids = Object.keys(data);
-    rejectedTableBody.innerHTML = '';
-    if (ids && ids.length > 0) {
-        ids.forEach(id => {
-            const user = data[id];
-            const row = document.createElement('tr');
-            const nameCell = document.createElement('td');
-            nameCell.textContent = user.name;
-            const reqRoleCell = document.createElement('td');
-            reqRoleCell.textContent = user.roleRequested;
-            const timeStampCell = document.createElement('td');
-            timeStampCell.textContent = user.timeStamp;
-            row.appendChild(nameCell);
-            row.appendChild(reqRoleCell);
-            row.appendChild(timeStampCell);
-            rejectedTableBody.appendChild(row);
-        });
-    } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="2">No rejected requests available</td>`;
-        rejectedTableBody.appendChild(row);
-    }
-}
-
-async function pendingTabDisplay() {
-    console.log("fetching all pending requests");
-    hideAllLists();
-    pendingList.style.display = 'block';
-    let data = await getAllPendingRequests();
-    let ids = Object.keys(data);
-    pendingTableBody.innerHTML = '';
-    if (ids && ids.length > 0) {
-        ids.forEach(id => {
-            let user = data[id];
-            if (user.requestStatus === "pending") {
+    async function loadApprovedTable() {
+        console.log("fetching approved requests");
+        let data = await getAllApprovedRequests();
+        let ids = Object.keys(data);
+        approvedTableBody.innerHTML = '';
+        if (ids && ids.length > 0) {
+            ids.forEach(id => {
+                const user = data[id];
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
                 nameCell.textContent = user.name;
-                const currentRoleCell = document.createElement('td');
-                currentRoleCell.textContent = user.currentRole;
-                const requestedRoleCell = document.createElement('td');
-                requestedRoleCell.textContent = user.requestedRole;
-                const actionCell = document.createElement('td');
-                const approveButton = document.createElement('button');
-                approveButton.textContent = 'Approve';
-                approveButton.addEventListener('click', () => approveRoleChange(id));
-                const rejectButton = document.createElement('button');
-                rejectButton.textContent = 'Deny';
-                rejectButton.addEventListener('click', () => rejectRoleChange(id));
-                actionCell.appendChild(approveButton);
-                actionCell.appendChild(rejectButton);
+                const reqRoleCell = document.createElement('td');
+                reqRoleCell.textContent = user.roleRequested;
+                const timeStampCell = document.createElement('td');
+                timeStampCell.textContent = user.timeStamp;
                 row.appendChild(nameCell);
-                row.appendChild(currentRoleCell);
-                row.appendChild(requestedRoleCell);
-                row.appendChild(actionCell);
-                pendingTableBody.appendChild(row);
-            }
-        });
-    } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="4">No Pending Requests available</td>`;
-        pendingTableBody.appendChild(row);
-    }
-}
-
-pendingTab.addEventListener('click', () => pendingTabDisplay());
-
-async function approveRoleChange(id) {
-    console.log(id);
-    const apr = {
-        _id: id,
-        action: "approved"
-    }
-    try {
-        await postapproveRoleChange(id, apr);
-        console.log('request sent');
-    } catch (error) {
-        console.log('Error in sending request');
-    }
-    pendingTabDisplay();
-}
-
-async function rejectRoleChange(id) {
-    console.log(id);
-    const rej = {
-        _id: id,
-        action: "denied"
-    }
-    try {
-        await postrejectRoleChange(id, rej);
-        console.log('request sent');
-    } catch (error) {
-        console.log('Error in sending request');
-    }
-    pendingTabDisplay();
-}
-
-administrationTab.addEventListener('click', async () => {
-    hideAllLists();
-     administrationList.style.display = 'block';
-     firmwareSyncBtn.addEventListener('click', async () => {
-        const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
-        if (userConfirmed) {
-            await syncFirmwareData();
+                row.appendChild(reqRoleCell);
+                row.appendChild(timeStampCell);
+                approvedTableBody.appendChild(row);
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="2">No approved requests available</td>`;
+            approvedTableBody.appendChild(row);
         }
-        alert("Firmware update complete. Please visit the relevant site-page to apply the updated firmware.");
+    }
 
+    // Rejected Tab
+    rejectedTab.addEventListener('click', async () => {
+        hideAllLists();
+        rejectedList.style.display = 'block';
+        await loadRejectedTable();
     });
-     sourceCodeSyncBtn.addEventListener('click',async()=>{
-        const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
-        if (userConfirmed) {
-            await syncSourceCode();
+
+    async function loadRejectedTable() {
+        console.log("fetching rejected requests");
+        let data = await getAllRejectedRequests();
+        let ids = Object.keys(data);
+        rejectedTableBody.innerHTML = '';
+        if (ids && ids.length > 0) {
+            ids.forEach(id => {
+                const user = data[id];
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                const reqRoleCell = document.createElement('td');
+                reqRoleCell.textContent = user.roleRequested;
+                const timeStampCell = document.createElement('td');
+                timeStampCell.textContent = user.timeStamp;
+                row.appendChild(nameCell);
+                row.appendChild(reqRoleCell);
+                row.appendChild(timeStampCell);
+                rejectedTableBody.appendChild(row);
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="2">No rejected requests available</td>`;
+            rejectedTableBody.appendChild(row);
         }
-        alert("SERVER HAS BEEN UPDATED")
-     }) 
-});
-
-
-// Add this to your existing JavaScript
-
-document.getElementById('intimate-all-btn').addEventListener('click', async () => {
-    try {
-        const response = await fetch('/intimate-all-sites', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: 'intimate' })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to intimate all sites');
-        }
-
-        alert('All sites intimated successfully!');
-    } catch (error) {
-        console.error('Error intimating all sites:', error);
-        alert('Error intimating all sites. Please try again.');
     }
-});
+
+    async function pendingTabDisplay() {
+        console.log("fetching all pending requests");
+        hideAllLists();
+        pendingList.style.display = 'block';
+        let data = await getAllPendingRequests();
+        let ids = Object.keys(data);
+        pendingTableBody.innerHTML = '';
+        if (ids && ids.length > 0) {
+            ids.forEach(id => {
+                let user = data[id];
+                if (user.requestStatus === "pending") {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = user.name;
+                    const currentRoleCell = document.createElement('td');
+                    currentRoleCell.textContent = user.currentRole;
+                    const requestedRoleCell = document.createElement('td');
+                    requestedRoleCell.textContent = user.requestedRole;
+                    const actionCell = document.createElement('td');
+                    const approveButton = document.createElement('button');
+                    approveButton.textContent = 'Approve';
+                    approveButton.addEventListener('click', () => approveRoleChange(id));
+                    const rejectButton = document.createElement('button');
+                    rejectButton.textContent = 'Deny';
+                    rejectButton.addEventListener('click', () => rejectRoleChange(id));
+                    actionCell.appendChild(approveButton);
+                    actionCell.appendChild(rejectButton);
+                    row.appendChild(nameCell);
+                    row.appendChild(currentRoleCell);
+                    row.appendChild(requestedRoleCell);
+                    row.appendChild(actionCell);
+                    pendingTableBody.appendChild(row);
+                }
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="4">No Pending Requests available</td>`;
+            pendingTableBody.appendChild(row);
+        }
+    }
+
+    pendingTab.addEventListener('click', () => pendingTabDisplay());
+
+    async function approveRoleChange(id) {
+        console.log(id);
+        const apr = {
+            _id: id,
+            action: "approved"
+        }
+        try {
+            await postapproveRoleChange(id, apr);
+            console.log('request sent');
+        } catch (error) {
+            console.log('Error in sending request');
+        }
+        pendingTabDisplay();
+    }
+
+    async function rejectRoleChange(id) {
+        console.log(id);
+        const rej = {
+            _id: id,
+            action: "denied"
+        }
+        try {
+            await postrejectRoleChange(id, rej);
+            console.log('request sent');
+        } catch (error) {
+            console.log('Error in sending request');
+        }
+        pendingTabDisplay();
+    }
+
+    administrationTab.addEventListener('click', async () => {
+        hideAllLists();
+        administrationList.style.display = 'block';
+        firmwareSyncBtn.addEventListener('click', async () => {
+            const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+            if (userConfirmed) {
+                await syncFirmwareData();
+            }
+            alert("Firmware update complete. Please visit the relevant site-page to apply the updated firmware.");
+
+        });
+        sourceCodeSyncBtn.addEventListener('click', async () => {
+            const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+            if (userConfirmed) {
+                await syncSourceCode();
+            }
+            alert("SERVER HAS BEEN UPDATED")
+        })
+    });
+
+
+    // Add this to your existing JavaScript
+
+    document.getElementById('intimate-all-btn').addEventListener('click', async () => {
+        try {
+            const response = await fetch('/intimate-all-sites', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: 'intimate' })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to intimate all sites');
+            }
+
+            alert('All sites intimated successfully!');
+        } catch (error) {
+            console.error('Error intimating all sites:', error);
+            alert('Error intimating all sites. Please try again.');
+        }
+    });
+
+}

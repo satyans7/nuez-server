@@ -233,6 +233,13 @@ module.exports = function (app) {
     }
   })
 
+  app.get('/src/main/views/pages/superAdmin.html',async(req,res)=>{
+    res.sendFile(SUPERADMINPAGE);
+  })
+  const BUTTONMAP = path.join(__dirname, "../database/json-data/buttonMappings.json");
+  app.get('/buttonMap',async(req,res)=>{
+    res.sendFile(BUTTONMAP);
+  })
 
 
   //sites to device mapping
