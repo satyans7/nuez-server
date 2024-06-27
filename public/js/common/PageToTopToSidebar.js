@@ -5,28 +5,28 @@ document.addEventListener("DOMContentLoaded", function() {
         "superAdmin": {
             "navbarButtons": [
                 {
-                    "id": "consumer-navbar-btn",
-                    "class": "navbar-btn",
+                    "id": "super-admin-navbar-consumer-btn",
+                    "class": "super-admin-navbar-consumer-btn",
                     "html": "<img src=\"logo/consumer.svg\" alt=\"CONSUMER\">"
                 },
                 {
-                    "id": "admin-navbar-btn",
-                    "class": "navbar-btn",
+                    "id": "super-admin-navbar-admin-btn",
+                    "class": "super-admin-navbar-admin-btn",
                     "html": "<img src=\"logo/admin.svg\" alt=\"ADMIN\">"
                 },
                 {
-                    "id": "site-navbar-btn",
-                    "class": "navbar-btn",
+                    "id": "super-admin-navbar-site-btn",
+                    "class": "super-admin-navbar-site-btn",
                     "html": "<img src=\"logo/site.svg\" alt=\"SITES\">"
                 },
                 {
-                    "id": "advance-navbar-btn",
-                    "class": "navbar-btn",
+                    "id": "super-admin-navbar-advance-btn",
+                    "class": "super-admin-navbar-advance-btn",
                     "html": "<img src=\"logo/advance.svg\" alt=\"ADVANCE\">"
                 }
             ],
             "sidebarButtons": {
-                "consumer-navbar-btn": [
+                "super-admin-navbar-consumer-btn": [
                     {
                         "id": "dummy-7",
                         "class": "sidebar-btn",
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         "text": "Dummy Button 8"
                     }
                 ],
-                "admin-navbar-btn": [
+                "super-admin-navbar-admin-btn": [
                     {
                         "id": "dummy-9",
                         "class": "sidebar-btn",
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         "text": "Dummy Button 10"
                     }
                 ],
-                "site-navbar-btn": [
+                "super-admin-navbar-site-btn": [
                     {
                         "id": "dummy-11",
                         "class": "sidebar-btn",
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         "text": "Dummy Button 12"
                     }
                 ],
-                "advance-navbar-btn": [
+                "super-admin-navbar-advance-btn": [
                     {
                         "id": "users-tab",
                         "class": "sidebar-btn",
