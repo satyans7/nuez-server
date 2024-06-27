@@ -9,7 +9,7 @@ function getPageIdentifier() {
         return "admin";
     } else if (path.includes("site-dashboard")) {
         return "site";
-    } else if (path.includes("superadmin")) {
+    } else if (path.includes("superAdmin")) {
         return "superAdmin";
     }
 
