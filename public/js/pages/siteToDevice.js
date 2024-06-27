@@ -57,7 +57,6 @@ async function setInfo() {
 
 }
 
-// On loading 
 
 document.addEventListener('DOMContentLoaded', async () => {
     toggleVisibility();
