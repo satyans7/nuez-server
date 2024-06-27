@@ -6,50 +6,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 
 <body>
-
-    <div class="sidebar">
-        <div id="admin-id"></div>
-        <a href="#" id="view-site-button">All Sites</a>
-        <a href="#" id="settings-link">Edit Profile</a>
-        <a href="#" id="logout-link">Logout</a>
-    </div>
-
-    <div class="main-content">
-        <div class="header">
-            <div id="heading">
+    <div class="wrap-container">
+        <div class="topbar">
+            <div class="topbar-left">
+                    <img src="logo/logo.png" alt="Nuez logo">
+                    
+                    <h3>Nuez Smart Watermeter</h3> 
             </div>
-            <div class="button-group">
-                <button id="register-site-button">Register</button>
-                <button id="deregister-site-button">Deregister</button>
+            <div class="topbar-middle">
+                <div class="button-container">
+                    <button class="super-admin-navbar-consumer-btn" id="super-admin-navbar-consumer-btn"> <!-- Updated class and id -->
+                        <img src="logo/consumer.svg" alt="CONSUMER">
+                    </button>
+                    <span class="button-description">CONSUMER</span>
+                </div>
+                <div class="button-container">
+                    <button class="super-admin-navbar-admin-btn" id="super-admin-navbar-admin-btn"> <!-- Updated class and id -->
+                        <img src="logo/admin.svg" alt="ADMIN">
+                    </button>
+                    <span class="button-description">ADMIN</span>
+                </div>
+                <div class="button-container">
+                    <button class="super-admin-navbar-site-btn" id="super-admin-navbar-site-btn"> <!-- Updated class and id -->
+                        <img src="logo/site.svg" alt="SITES">
+                    </button>
+                    <span class="button-description">SITES</span>
+                </div>
+                <div class="button-container">
+                    <button class="super-admin-navbar-advance-btn" id="super-admin-navbar-advance-btn"> <!-- Updated class and id -->
+                        <img src="logo/advance.svg" alt="ADVANCE">
+                    </button>
+                    <span class="button-description">ADVANCE</span>
+                </div>
             </div>
+            
+             <div class="topbar-right">
+      
+                    <button class="logout-btn">
+                            <img src="logo/logout.svg" alt="LOGOUT">
+                            LOGOUT
+                    </button>
+                    
+                  
+             </div>
         </div>
+        <div class="main-content">
+      
+            
+        </div>
+        <div class="left-side-bar">
+        
+        </div>
+        <div class="right-side-bar"></div>
+        <div class="footer"></div>
+      </div>
+      
 
-        <div id="site-list" class="all-sites">
-
-        </div>
-
-        <div id="register-form-container" class="form-container" style="display: none;">
-            <form id="register-site-form">
-                <label for="site-id">Site ID:</label>
-                <input type="text" id="site-id" name="site-id" required>
-                <div class="register-search-results"></div>
-                <button type="submit">Register</button>
-                <button type="button" id="register-cancel-button">Cancel</button>
-            </form>
-        </div>
-        <div id="deregister-form-container" class="form-container" style="display: none;">
-            <form id="deregister-site-form">
-                <label for="site-id">Site ID:</label>
-                <input type="text" id="deregister-site-id" name="site-id" required>
-                <div class="deregister-search-results"></div>
-                <button type="submit">De-register</button>
-                <button type="button" id="deregister-cancel-button">Cancel</button>
-            </form>
-        </div>
-    </div>
 
     <script type="module" src="/js/pages/admin.js"></script>
 
