@@ -896,9 +896,10 @@ export function initializeSitePanel() {
         const tableContainer = document.getElementById('device-versions-container');
         tableContainer.innerHTML = ''; // Clear previous content
 
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        const tbody = document.createElement('tbody');
+    const table = document.createElement('table');
+    table.id = 'firmware-table';
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
 
         // Create table headers
         const headers = ['Device ID', 'Device Name', 'Version'];

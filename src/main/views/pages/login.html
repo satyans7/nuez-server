@@ -5,30 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
 </head>
 <body>
 
-<h2>Login Form</h2>
+<div class="loginformcs">
+
+    <h2>LOGIN FORM</h2>
 
 <form id="loginform">
-    <div>
-    <label for="username">Username:</label>
+    <div class="input-group">
+    <label for="username">Username</label>
     <input type="text" id="username" name="username" required>
-    </div>
-<br>
-    <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    </div>
-<br>
-    <div>
-    <button type="submit">Login</button>
-    </div>
-</form>
-<div>
-    <button id="otplogin">Login via OTP</button>
 </div>
-<button id="google">Sign in with Google</button>
+<br>
+<div class="input-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+</div>
+<br>
+    
+    <button type="submit">Login</button>
+
+    <button id="otplogin">Login via OTP  </button>
+
+    <button id="google">Sign in with Google   <i class="fa-brands fa-google" aria-hidden="true"></i> </button>
+    
+</form>
+
+   
+
+</div>
+
 <script type="module" src="./js/pages/login.js"></script>
 
 </body>
