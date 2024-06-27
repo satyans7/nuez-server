@@ -83,6 +83,12 @@ body {
     min-width: 30%;
     max-width: 30%;
     height: 120px;
+    cursor: pointer;
+}
+
+.card:hover{
+    transform: scale(1.02);
+    transition: all ease-in 0.1s;
 }
 
 .card-heading {
