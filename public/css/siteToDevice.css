@@ -69,8 +69,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 18px;
-    max-height: 520px;
-    overflow-y: auto;
     margin-top: 20px;
 }
 
@@ -84,6 +82,12 @@ body {
     min-width: 30%;
     max-width: 30%;
     height: 120px;
+    cursor: pointer;
+}
+
+.card:hover{
+    transform: scale(1.02);
+    transition: all ease-in 0.1s;
 }
 
 .card-heading {
