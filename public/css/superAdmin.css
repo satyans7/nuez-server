@@ -1,14 +1,4 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body {
-    height: 100vh;
-    width: 100vw;
-}
 
 /* Table */
 .table-container {
@@ -53,13 +43,6 @@ tr:hover td {
 }
 
 
-.list {
-    display: none;
-}
-
-#user-list {
-    display: block;
-}
 .sync-buttons-container{
     display: flex;
     justify-content: space-around;

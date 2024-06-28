@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "sidebarButtons": {
                 "super-admin-navbar-consumer-btn": [
                     {
-                        "id": "dummy-7",
+                        "id": "users",
                         "class": "sidebar-btn",
                         "text": "Dummy Button 7"
                     },
@@ -80,37 +80,37 @@ document.addEventListener("DOMContentLoaded", function () {
                 ],
                 "super-admin-navbar-advance-btn": [
                     {
-                        "id": "users-tab",
+                        "id": "users",
                         "class": "sidebar-btn",
                         "text": "All Consumers"
                     },
                     {
-                        "id": "admins-tab",
+                        "id": "admins",
                         "class": "sidebar-btn",
                         "text": "All Admins"
                     },
                     {
-                        "id": "sites-tab",
+                        "id": "sites",
                         "class": "sidebar-btn",
                         "text": "All Sites"
                     },
                     {
-                        "id": "approved-tab",
+                        "id": "approved",
                         "class": "sidebar-btn",
                         "text": "Approved Requests"
                     },
                     {
-                        "id": "rejected-tab",
+                        "id": "rejected",
                         "class": "sidebar-btn",
                         "text": "Rejected Requests"
                     },
                     {
-                        "id": "pending-tab",
+                        "id": "pending",
                         "class": "sidebar-btn",
                         "text": "Pending Requests"
                     },
                     {
-                        "id": "administration-tab",
+                        "id": "administration",
                         "class": "sidebar-btn",
                         "text": "Administration"
                     }
@@ -232,6 +232,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
     };
+    const content = {
+        "superAdmin": {
+            "users": "<div id='user-list' class='list'><h2>All Consumers</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='users-table-body'></tbody></table></div></div>",
+            "admins": "<div id='admin-list' class='list'><h2>All Admins</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='admins-table-body'></tbody></table></div></div>",
+            "sites": "<div id='site-list' class='list'><h2>All Sites</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th></tr></thead><tbody id='sites-table-body'></tbody></table></div><button id='intimate-all-btn'>Intimate All</button></div>",
+            "approved": "<div id='approved-list' class='list'><h2>Approved Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role Requested</th><th>TimeStamp</th></tr></thead><tbody id='approved-table-body'></tbody></table></div></div>",
+            "rejected": "<div id='rejected-list' class='list'><h2>Rejected Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role Requested</th><th>Timestamp</th></tr></thead><tbody id='rejected-table-body'></tbody></table></div></div>",
+            "pending": "<div id='pending-list' class='list'><h2>Pending Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Current Role</th><th>Requested Role</th><th>Action</th></tr></thead><tbody id='pending-table-body'></tbody></table></div></div>",
+            "administration": "<div id='administration-list' class='list'><h2>Administration</h2><br><div class='sync-buttons-container'><div class='sync-source-code-container'><span>SYNC SOURCE CODE</span><button id='syncSourceCode'><img src='logo/cloud_sync.svg' alt='sync'></button></div><div class='sync-firmware-container'><span>SYNC FIRMWARE</span><button id='syncFirmware'><img src='logo/sync.svg' alt=''></button></div></div></div>"
+        },
+        "admin": {
+            "view-site-button": "<div id='all-site-cards'></div>",
+            "register-site-button": "<div id='register-form-container' class='form-container' style='display: none;'><form id='register-site-form'><label for='site-id'>Site ID:</label><input type='text' id='site-id' name='site-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-cancel-button'>Cancel</button></form></div>",
+            "deregister-site-button": "<div id='deregister-form-container' class='form-container' style='display: none;'><form id='deregister-site-form'><label for='site-id'>Site ID:</label><input type='text' id='deregister-site-id' name='site-id' required><div class='deregister-search-results'></div><button type='submit'>De-register</button><button type='button' id='deregister-cancel-button'>Cancel</button></form></div>"
+        },
+        "site": {
+            "device-tab": "<div id='all-devices'></div>",
+            "consumer-tab": "<div id='all-consumers'></div>",
+            "device-maintenance-tab": "<div id='device-maintenance'></div>",
+            "edit-profile": "<div id='edit-profile'></div>",
+            "unassigned-devices-link": "<div id='unassigned-devices'></div>",
+            "firmware-link": "<div id='firmware'></div>"
+        }
+    }
 
     const topbarMiddle = document.querySelector(".topbar-middle");
     const leftSidebar = document.querySelector(".left-side-bar");
@@ -254,13 +278,23 @@ document.addEventListener("DOMContentLoaded", function () {
             return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
         }).join('');
     }
+    function renderMainContent(ids, page) {
+        const main = content[page][ids];
+
+        const mainContent = document.querySelector(".main-content");
+
+        mainContent.innerHTML = main || ""; // Ensure main is not undefined/null
+    }
+
 
     // Function to initialize the topbar buttons
     function initializeTopbarButtons(data) {
         let page = getPageIdentifier();
         console.log(page);
+        let start = 0;
+        let navid = '';
 
-        if (page === 'superAdmin' || page === 'admin' || page==='site') {
+        if (page === 'superAdmin' || page === 'admin' || page === 'site') {
             const pageData = data[page];
             const navbarButtons = pageData.navbarButtons;
 
@@ -273,27 +307,44 @@ document.addEventListener("DOMContentLoaded", function () {
                     const btnElement = document.getElementById(button.id);
                     if (btnElement) {
                         btnElement.addEventListener("click", function () {
+                            start++;
+                            navid = button.id;
                             // Handle button click action
                             console.log(`Button ${button.id} clicked.`);
                             const sidebarButtons = pageData.sidebarButtons[button.id];
                             if (leftSidebar) {
                                 leftSidebar.innerHTML = renderSidebarButtons(sidebarButtons);
-                                if (page === 'superAdmin') {
-                                    initializeSuperAdminPanel();
-                                } else if (page === 'admin') {
-                                    initializeAdminPanel();
-                                }else if(page === 'site'){
-                                    initializeSitePanel();
-                                }
+                                sidebarButtons.forEach(sideButton => {
+                                    const btn = document.getElementById(sideButton.id);
+                                    btn.addEventListener("click", () => {
+                                        if (page === 'superAdmin') {
+                                            renderMainContent(sideButton.id, page); // Ensure page variable is correct
+                                            initializeSuperAdminPanel(sideButton.id); // Double-check this function
+                                        } else if (page === 'admin') {
+                                            initializeAdminPanel(); // Verify if needed
+                                        } else if (page === 'site') {
+                                            initializeSitePanel(); // Verify if needed
+                                        }
+                                    });
+                                });
+
+
                             }
                         });
                     }
                 });
 
                 // Set default active button state
-                const defaultButton = document.getElementById(navbarButtons[0].id);
-                if (defaultButton) {
-                    defaultButton.click();
+                const defaultButtonTop = document.getElementById(navbarButtons[0].id);
+                if (defaultButtonTop) {
+                    defaultButtonTop.click();
+
+                    // Set the default active sidebar button
+                    const firstSidebarButtonId = pageData.sidebarButtons[navbarButtons[0].id][0].id;
+                    const firstSidebarButton = document.getElementById(firstSidebarButtonId);
+                    if (firstSidebarButton) {
+                        firstSidebarButton.click();
+                    }
                 }
             }
         }

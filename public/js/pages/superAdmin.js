@@ -15,28 +15,16 @@ import {
     sendFirmwareToSites
 } from '../client/client.js';
 
-export function initializeSuperAdminPanel() {
-    const usersTab = document.getElementById('users-tab');
-    const adminsTab = document.getElementById('admins-tab');
-    const approvedTab = document.getElementById('approved-tab');
-    const rejectedTab = document.getElementById('rejected-tab');
-    const pendingTab = document.getElementById('pending-tab');
-    const sitesTab = document.getElementById('sites-tab')
-    const usersList = document.getElementById('user-list');
-    const adminList = document.getElementById('admin-list');
-    const siteList = document.getElementById('site-list');
-    const approvedList = document.getElementById('approved-list');
-    const rejectedList = document.getElementById('rejected-list');
-    const pendingList = document.getElementById('pending-list');
-    const allLists = document.getElementsByClassName('list');
+
+
+export function initializeSuperAdminPanel(sidebarid) {
+    const Tab = document.getElementById(sidebarid);
     const usersTableBody = document.getElementById('users-table-body')
     const adminsTableBody = document.getElementById('admins-table-body')
     const sitesTableBody = document.getElementById('sites-table-body');
     const pendingTableBody = document.getElementById('pending-table-body')
     const approvedTableBody = document.getElementById('approved-table-body')
     const rejectedTableBody = document.getElementById('rejected-table-body')
-
-    const administrationTab = document.getElementById('administration-tab')
     const administrationList = document.getElementById('administration-list')
     const firmwareSyncBtn = document.getElementById('syncFirmware')
     const sourceCodeSyncBtn = document.getElementById('syncSourceCode')
@@ -87,11 +75,6 @@ export function initializeSuperAdminPanel() {
         }
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        hideAllLists();
-        usersList.style.display = 'block';
-        await loadUsersTable();
-    });
 
     async function loadUsersTable() {
         console.log("fetching users");
@@ -140,25 +123,6 @@ export function initializeSuperAdminPanel() {
         }
     }
 
-    // Function to hide all tables
-    function hideAllLists() {
-        for (let i = 0; i < allLists.length; i++) {
-            allLists[i].style.display = 'none';
-        }
-    }
-
-    // On clicking Users Tab
-    usersTab.addEventListener('click', async () => {
-        hideAllLists();
-        usersList.style.display = 'block';
-        await loadUsersTable();
-    });
-
-    adminsTab.addEventListener('click', async () => {
-        hideAllLists();
-        adminList.style.display = 'block';
-        await loadAdminsTable();
-    });
 
     async function loadAdminsTable() {
         console.log("fetching admins");
@@ -204,13 +168,6 @@ export function initializeSuperAdminPanel() {
             adminsTableBody.appendChild(row);
         }
     }
-
-
-    sitesTab.addEventListener('click', async () => {
-        hideAllLists();
-        siteList.style.display = 'block';
-        await loadSitesTable();
-    })
 
     async function loadSitesTable() {
         let data = await getSitesData();
@@ -260,12 +217,7 @@ export function initializeSuperAdminPanel() {
         }
     }
 
-    // Approved Tab
-    approvedTab.addEventListener('click', async () => {
-        hideAllLists();
-        approvedList.style.display = 'block';
-        await loadApprovedTable();
-    });
+
 
     async function loadApprovedTable() {
         console.log("fetching approved requests");
@@ -294,12 +246,7 @@ export function initializeSuperAdminPanel() {
         }
     }
 
-    // Rejected Tab
-    rejectedTab.addEventListener('click', async () => {
-        hideAllLists();
-        rejectedList.style.display = 'block';
-        await loadRejectedTable();
-    });
+ 
 
     async function loadRejectedTable() {
         console.log("fetching rejected requests");
@@ -329,9 +276,7 @@ export function initializeSuperAdminPanel() {
     }
 
     async function pendingTabDisplay() {
-        console.log("fetching all pending requests");
-        hideAllLists();
-        pendingList.style.display = 'block';
+       
         let data = await getAllPendingRequests();
         let ids = Object.keys(data);
         pendingTableBody.innerHTML = '';
@@ -369,7 +314,6 @@ export function initializeSuperAdminPanel() {
         }
     }
 
-    pendingTab.addEventListener('click', () => pendingTabDisplay());
 
     async function approveRoleChange(id) {
         console.log(id);
@@ -401,48 +345,61 @@ export function initializeSuperAdminPanel() {
         pendingTabDisplay();
     }
 
-    administrationTab.addEventListener('click', async () => {
-        hideAllLists();
-        administrationList.style.display = 'block';
-        firmwareSyncBtn.addEventListener('click', async () => {
-            const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
-            if (userConfirmed) {
-                await syncFirmwareData();
-            }
-            alert("Firmware update complete. Please visit the relevant site-page to apply the updated firmware.");
-
-        });
-        sourceCodeSyncBtn.addEventListener('click', async () => {
-            const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
-            if (userConfirmed) {
-                await syncSourceCode();
-            }
-            alert("SERVER HAS BEEN UPDATED")
-        })
-    });
+    
 
 
     // Add this to your existing JavaScript
 
-    document.getElementById('intimate-all-btn').addEventListener('click', async () => {
-        try {
-            const response = await fetch('/intimate-all-sites', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message: 'intimate' })
+    // document.getElementById('intimate-all-btn').addEventListener('click', async () => {
+    //     try {
+    //         const response = await fetch('/intimate-all-sites', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ message: 'intimate' })
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to intimate all sites');
+    //         }
+
+    //         alert('All sites intimated successfully!');
+    //     } catch (error) {
+    //         console.error('Error intimating all sites:', error);
+    //         alert('Error intimating all sites. Please try again.');
+    //     }
+    // });
+    async function eventListeners(){
+        if(sidebarid==='users')loadUsersTable();
+        else if(sidebarid==='admins')loadAdminsTable();
+        else if(sidebarid==='sites')loadSitesTable();
+        else if(sidebarid==='approved')loadApprovedTable();
+        else if(sidebarid==='rejected')loadRejectedTable();
+        else if(sidebarid==='pending')pendingTabDisplay();
+        else if(sidebarid==='administration'){
+            administrationTab.addEventListener('click', async () => {
+                hideAllLists();
+                administrationList.style.display = 'block';
+                firmwareSyncBtn.addEventListener('click', async () => {
+                    const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+                    if (userConfirmed) {
+                        await syncFirmwareData();
+                    }
+                    alert("Firmware update complete. Please visit the relevant site-page to apply the updated firmware.");
+        
+                });
+                sourceCodeSyncBtn.addEventListener('click', async () => {
+                    const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+                    if (userConfirmed) {
+                        await syncSourceCode();
+                    }
+                    alert("SERVER HAS BEEN UPDATED")
+                })
             });
-
-            if (!response.ok) {
-                throw new Error('Failed to intimate all sites');
-            }
-
-            alert('All sites intimated successfully!');
-        } catch (error) {
-            console.error('Error intimating all sites:', error);
-            alert('Error intimating all sites. Please try again.');
         }
-    });
-
+    }
+    eventListeners();
+    
 }
+
