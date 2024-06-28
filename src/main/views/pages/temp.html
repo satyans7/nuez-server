@@ -1,47 +1,4 @@
-
-    <!-- <div class="sidebar">
-        <div id="admin-id"></div>
-        <a href="#" id="view-site-button">All Sites</a>
-        <a href="#" id="settings-link">Edit Profile</a>
-        <a href="#" id="logout-link">Logout</a>
-    </div>
-
-    <div class="main-content">
-        <div class="header">
-            <div id="heading">
-            </div>
-            <div class="button-group">
-                <button id="register-site-button">Register</button>
-                <button id="deregister-site-button">Deregister</button>
-            </div>
-        </div>
-
-        <div id="site-list" class="all-sites">
-
-        </div>
-
-        <div id="register-form-container" class="form-container" style="display: none;">
-            <form id="register-site-form">
-                <label for="site-id">Site ID:</label>
-                <input type="text" id="site-id" name="site-id" required>
-                <div class="register-search-results"></div>
-                <button type="submit">Register</button>
-                <button type="button" id="register-cancel-button">Cancel</button>
-            </form>
-        </div>
-        <div id="deregister-form-container" class="form-container" style="display: none;">
-            <form id="deregister-site-form">
-                <label for="site-id">Site ID:</label>
-                <input type="text" id="deregister-site-id" name="site-id" required>
-                <div class="deregister-search-results"></div>
-                <button type="submit">De-register</button>
-                <button type="button" id="deregister-cancel-button">Cancel</button>
-            </form>
-        </div>
-    </div> -->
-
-<!-- 
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -49,154 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Site Dashboard</title>
     <link rel="stylesheet" href="/css/siteToDevice.css">
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 
 <body>
+    <div class="wrap-container">
+        <div class="topbar">
+            <div class="topbar-left">
+                <img src="/logo/logo.png" alt="Nuez logo">
 
-    <div class="sidebar">
-        <div id="site-id"></div>
-        <a href="#" id="device-tab">All Devices</a>
-        <a href="#" id="consumer-tab">All Consumers</a>
-        <a href="#" id="device-maintenance-tab">Maintenance</a>
-        <a href="#" id="edit-profile">Edit Profile</a>
-        <a href="#" id="unassigned-devices-link">Unassigned Devices</a> 
-        <a href="#" id="firmware-link">Firmware</a>
-        <a href="#" id="logout-link">Logout</a>
+                <h3>Nuez Smart Watermeter</h3>
+            </div>
+            <div class="topbar-middle">
+
+            </div>
+
+            <div class="topbar-right">
+
+                <button class="logout-btn">
+                    <img src="/logo/logout.svg" alt="LOGOUT">
+                    LOGOUT
+                </button>
+
+
+            </div>
+        </div>
+        <div class="main-content">
+
+    </div>
+    <div class="left-side-bar">
+
+    </div>
+    <div class="right-side-bar"></div>
+    <div class="footer"></div>
     </div>
 
-    <div class="main-content">
-        <div class="header">
-            <div id="heading"></div>
-            <div id="button-grp" class="button-group" style="display:none;">
-                <button id="register-button">Register</button>
-                <button id="deregister-button">Deregister</button>
-            </div>
-        </div>
-
-        <div id="main-container" class="container">
-            <div id="device-list" class="all-devices"></div>
-            <div id="maintenance-devices-list" class="maintenance-devices">
-                <div id="maintenance-action-tabs" class="maintenance-action-tabs">
-                    <button id="all-maintenance-devices">All Devices</button>
-                    <button id="enter-maintenance">Operational Mode</button>
-                    <button id="exit-maintenance">Maintenance Mode</button>
-                </div>
-                <div id="maintenance-container">
-                    <div id="all-maintenance-devices-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Device ID</th>
-                                    <th>Mode</th>
-                                </tr>
-                            </thead>
-                            <tbody id="all-mode-table-body">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="enter-maintenance-container">
-                        <div class="operational-mode-devices">
-                            <h2>Devices in Operational Mode</h2>
-                            <table id="operational-mode-table">
-                                <thead>
-                                    <tr>
-                                        <th>Device ID</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="operational-mode-table-body">
-                                </tbody>
-                            </table>
-                            
-                        </div>
-                        <button id="moveSelectedButton">Add</button>
-                        <div class="selected-devices">
-                            <h2>Selected Devices</h2>
-                            <ul class="selected-device-list" id="selected-device-list-1">
-                                
-                            </ul>
-                            <button id="sendSelectedButton">Enter Maintenance</button>
-                        </div>
-                    </div>
-                    <div id="exit-maintenance-container">
-                        <div class="maintenance-mode-devices">
-                            <h2>Devices in Maintenance Mode</h2>
-                            <table id="maintenance-mode-table">
-                                <thead>
-                                    <tr>
-                                        <th>Device ID</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="maintenance-mode-table-body">
-                                </tbody>
-                            </table>
-                            
-                        </div>
-                        <button id="moveSelectedButton-2">Add</button>
-                        <div class="selected-devices">
-                            <h2>Selected Devices</h2>
-                            <ul class="selected-device-list" id="selected-device-list-2">
-                                
-                            </ul>
-                            <button id="sendSelectedButton-2">Exit Maintenance</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div id="consumer-list" class="all-consumers"></div>
-            <div id="unassigned-devices-list" class="unassigned-devices"></div>
-            <div id="firmware-version-list" class="firmware-version" style="display:none;">
-                <div id="device-versions-container">
-                </div>
-                <select id="firmware-dropdown" size="10">
-                    <option value="" disabled selected>Select a firmware version</option>
-                </select>
-                <button id="upgrade-all-versions">Upgrade All Versions</button>
-                <button id="intimate-all">Intimate All</button>
-            </div>            
-        </div>
-
-        <div id="user-search-container" class="user-search-container" style="display:none;">
-            <label for="user-search-input">Search User:</label>
-            <input type="text" id="user-search-input" placeholder="Type to search...">
-            <ul id="user-list">
-            </ul>
-            <button id="assign-user-btn">Assign</button>
-            <span id="cancel-search-btn">&#x2716;</span> 
-        </div>
-
-        <div id="edit-form-container" class="form-container" style="display:none;">
-            <form id="edit-userForm">
-                <label for="edit-name">Name:</label>
-                <input type="text" id="edit-name" value="Current Name"><br><br>
-                <label for="edit-location">Location:</label>
-                <input type="text" id="edit-location" value="Current Location"><br><br>
-                <button type="submit" id="update-button">Update</button>
-            </form>
-        </div>
-
-        <div id="register-container" class="form-container" style="display:none;">
-            <form id="register-consumer-form">
-                <label for="register-consumer-id">Consumer ID:</label>
-                <input type="text" id="register-consumer-id" name="register-consumer-id" required>
-                <div class="register-search-results"></div>
-                <button type="submit" id="register-consumer-btn">Register</button>
-                <button type="button" id="register-consumer-cancel-button" class="cancel-button">Cancel</button>
-            </form>
-        </div>
-        <div id="deregister-container" class="form-container" style="display:none;">
-            <form id="deregister-consumer-form">
-                <label for="deregister-consumer-id">Consumer ID:</label>
-                <input type="text" id="deregister-consumer-id" name="deregister-consumer-id" required>
-                <div class="deregister-search-results"></div>
-                <button type="submit">De-register</button>
-                <button type="button" id="deregister-consumer-cancel-button" class="cancel-button">Cancel</button>
-            </form>
-        </div>
-
-        <script type="module" src="/js/pages/siteToDevice.js"></script>
-        <script src="/js/firmwareVersion.js"></script> 
-
+    <script type="module" src="/js/pages/siteToDevice.js"></script>
+    <script type="module" src="/js/common/PageToTopToSidebar.js"></script>
 </body>
 
-</html> -->
+</html>
