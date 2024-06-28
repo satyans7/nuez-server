@@ -80,7 +80,6 @@ export function initializeSitePanel() {
             unassignedDevicesContainer,
             firmwareVersionContainer,
             maintenanceDevicesContainer,
-            btnGroup
         ];
 
         sections.forEach(container => container.style.display = 'none');
@@ -124,6 +123,7 @@ export function initializeSitePanel() {
     function createDeviceCard(device, key) {
         const deviceCard = document.createElement('div');
         deviceCard.className = 'card';
+        deviceCard.id = 'fetch-device-data';
 
         const cardHeading = document.createElement('div');
         cardHeading.className = 'card-heading';
@@ -131,16 +131,12 @@ export function initializeSitePanel() {
         const deviceName = document.createElement('h3');
         deviceName.textContent = key;
 
-        const moreDetailsButton = document.createElement('button');
-        moreDetailsButton.id = 'fetch-device-data';
-        moreDetailsButton.textContent = 'More Details';
-        moreDetailsButton.addEventListener('click', () => {
+        deviceCard.addEventListener('click', () => {
             const route = `/api/device-profile/${key}`;
             window.location.href = route;
         });
 
         cardHeading.appendChild(deviceName);
-        cardHeading.appendChild(moreDetailsButton);
         deviceCard.appendChild(cardHeading);
 
         const cardBody = document.createElement('div');
@@ -206,6 +202,7 @@ export function initializeSitePanel() {
     function createConsumerCard(consumer, key) {
         const consumerCard = document.createElement('div');
         consumerCard.className = 'card';
+        consumerCard.id = 'fetch-consumer-data';
 
         const cardHeading = document.createElement('div');
         cardHeading.className = 'card-heading';
@@ -213,10 +210,7 @@ export function initializeSitePanel() {
         const consumerName = document.createElement('h3');
         consumerName.textContent = consumer.name;
 
-        const moreDetailsButton = document.createElement('button');
-        moreDetailsButton.id = 'fetch-consumer-data';
-        moreDetailsButton.textContent = 'More Details';
-        moreDetailsButton.addEventListener('click', () => {
+        consumerCard.addEventListener('click', () => {
             const adminId = getCurrentAdmin();
             const route = `/api/consumer-dashboard/${key}?adminId=${adminId}`;
             console.log(`Redirecting to: ${route}`);  // Log the route for debugging
@@ -224,7 +218,6 @@ export function initializeSitePanel() {
         });
 
         cardHeading.appendChild(consumerName);
-        cardHeading.appendChild(moreDetailsButton);
         consumerCard.appendChild(cardHeading);
 
         const cardBody = document.createElement('div');
