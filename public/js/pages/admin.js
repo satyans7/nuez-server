@@ -1,13 +1,10 @@
 import { getSitesData, getUserSiteMapping, registerDevice, registerSite, deregisterSite, getAllSitesUnderAdmin } from '../client/client.js';
 
 
-export function initializeAdminPanel() {
+export function initializeAdminPanel(sidebarid) {
     const allSitesContainer = document.getElementById('all-site-cards');
     const registerTab = document.getElementById('register-form-container');
     const deregisterTab = document.getElementById('deregister-form-container');
-    const registerBtn = document.getElementById('register-site-button');
-    const deregisterBtn = document.getElementById('deregister-site-button');
-    const viewSitesBtn = document.getElementById('view-site-button')
     const deregisterform = document.getElementById('deregister-site-form')
 
     //REGISTER SITE
@@ -54,17 +51,15 @@ export function initializeAdminPanel() {
     }
 
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    async function registerDomLoad()  {
         const searchResultsContainer = document.querySelector(".register-search-results");
         const siteIdInput = document.getElementById("site-id");
         const data = await getSitesData();
         const ids = Object.keys(data);
         populateSearchContainer(ids, searchResultsContainer, siteIdInput);
-    });
+    };
 
-    registerBtn.addEventListener('click', () => {
-        allSitesContainer.style.display = 'none';
-        deregisterTab.style.display = 'none';
+    async function registerbtn(){
         registerTab.style.display = 'block';
         const form = document.getElementById('register-site-form');
         form.addEventListener('submit', async (event) => {
@@ -81,29 +76,28 @@ export function initializeAdminPanel() {
         });
 
         document.getElementById('register-cancel-button').addEventListener('click', async () => {
-            deregisterTab.style.display = 'none';
+          
             allSitesContainer.style.display = 'block';
-            registerTab.style.display = 'block';
+            registerTab.style.display = 'none';
             await viewAllSites();
         });
-    });
+    };
 
 
 
     //DEREGISTER SITE
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    async function deregisterDomLoad (){
         const searchResultsContainer = document.querySelector(".deregister-search-results");
         const siteIdInput = document.getElementById("deregister-site-id");
         const user = getCurrentAdmin();
         const sites = await getUserSiteMapping();
         const ids = sites[user];
         populateSearchContainer(ids, searchResultsContainer, siteIdInput);
-    });
+    };
 
-    deregisterBtn.addEventListener('click', () => {
-        allSitesContainer.style.display = 'none';
-        registerTab.style.display = 'none';
+    async function deregisterbtn(){
+        
         deregisterTab.style.display = 'block';
 
         document.getElementById('deregister-site-form').addEventListener('submit', async (event) => {
@@ -130,21 +124,15 @@ export function initializeAdminPanel() {
 
         //when cancel button is clicked
         document.getElementById('deregister-cancel-button').addEventListener('click', async () => {
-            deregisterTab.style.display = 'none';
+            
             allSitesContainer.style.display = 'block';
-            registerTab.style.display = 'block';
+            deregisterTab.style.display = 'none';
             await viewAllSites();
         });
 
-    })
+    };
 
-    viewSitesBtn.addEventListener('click', async () => {
-        console.log("view all sites clicked")
-        await viewAllSites();
-    })
-    document.addEventListener('DOMContentLoaded', async () => {
-        await viewAllSites();
-    });
+    
 
     function getCurrentAdmin() {
         const fullUrl = window.location.href;
@@ -158,9 +146,6 @@ export function initializeAdminPanel() {
 
 
     async function viewAllSites() {
-
-        deregisterTab.style.display = 'none';
-        registerTab.style.display = 'none';
         allSitesContainer.style.display = 'flex';
         const AdminId = getCurrentAdmin();
         console.log(AdminId)
@@ -194,6 +179,18 @@ export function initializeAdminPanel() {
             }
         });
     }
+    function eventListeners(){
+        if(sidebarid==='viewsitebutton')viewAllSites();
+        else if(sidebarid==='registersitebutton')registerbtn();
+        else if(sidebarid==='deregistersitebutton')deregisterbtn();
+    }
 
+    function DOMContentLoaded (){
+        if(sidebarid==='registersitebutton')registerDomLoad();
+        else if(sidebarid==='deregistersitebutton')deregisterDomLoad();
+    }
+
+    DOMContentLoaded();
+    eventListeners();
 }
 
