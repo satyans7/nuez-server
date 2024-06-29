@@ -18,7 +18,6 @@ import {
 
 
 export function initializeSuperAdminPanel(sidebarid) {
-    const Tab = document.getElementById(sidebarid);
     const usersTableBody = document.getElementById('users-table-body')
     const adminsTableBody = document.getElementById('admins-table-body')
     const sitesTableBody = document.getElementById('sites-table-body');
