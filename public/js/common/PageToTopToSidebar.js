@@ -1,6 +1,7 @@
 import { initializeSuperAdminPanel } from '../pages/superAdmin.js';
 import { initializeAdminPanel } from '../pages/admin.js';
 import { initializeSitePanel } from '../pages/siteToDevice.js';
+import { initializeConsumerPanel } from '../pages/consumer.js';
 
 function getPageIdentifier() {
     const path = window.location.pathname;
@@ -11,6 +12,8 @@ function getPageIdentifier() {
         return "site";
     } else if (path.includes("superAdmin")) {
         return "superAdmin";
+    } else if (path.includes("consumer-dashboard")) {
+        return "consumer";
     }
 
     return ""; // Default or error case
@@ -230,6 +233,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 ]
             }
 
+        },
+        "consumer": {
+            "navbarButtons": [
+                {
+                    "id": "consumer-navbar-device-btn",
+                    "class": "consumer-navbar-device-btn",
+                    "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">"
+                },
+                {
+                    "id": "consumer-navbar-advance-btn",
+                    "class": "consumer-navbar-advance-btn",
+                    "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+
+                }
+            ],
+            "sidebarButtons": {
+                "consumer-navbar-device-btn": [
+                    {
+                        "id": "device-under-consumer",
+                        "class": "sidebar-btn",
+                        "text": "All Devices"
+                    }
+                ],
+                "consumer-navbar-advance-btn": [
+                    {
+                        "id": "device-under-consumer-advanced",
+                        "class": "sidebar-btn",
+                        "text": "All Devices"
+                    },
+                    {
+                        "id": "register-device-for-consumer",
+                        "class": "sidebar-btn",
+                        "text": "Register"
+                    },
+                    {
+                        "id": "deregister-device-for-consumer",
+                        "class": "sidebar-btn",
+                        "text": "Deregister"
+                    }
+                ]
+            }
         }
     };
     const content = {
@@ -356,6 +400,12 @@ document.addEventListener("DOMContentLoaded", function () {
             </select> 
         </div>
     `
+        },
+        "consumer": {
+            "device-under-consumer-advanced": `<div class="all-devices"></div>`,
+            "register-device-for-consumer": `<div id='registerdevice-form-container' class='form-container'><form id='register-device-form'><label for='device-id'>Device ID:</label><input type='text' id='register-device-id' name='register-device-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-device-cancel-button'>Cancel</button></form></div>`,
+            "deregister-device-for-consumer": `<div id='deregisterdevice-form-container' class='form-container'><form id='deregister-device-form'><label for='device-id'>Device ID:</label><input type='text' id='deregister-device-id' name='deregister-device-id' required><div class='deregister-search-results'></div><button type='submit'>De-Register</button><button type='button' id='deregister-device-cancel-button'>Cancel</button></form></div>`,
+
         }
     }
 
@@ -375,9 +425,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to render sidebar buttons
     function renderSidebarButtons(buttons) {
+        const page = getPageIdentifier();
+        const queryParams = new URLSearchParams(window.location.search);
+        const adminId = queryParams.get('adminId');
         return buttons.map(button => {
-            console.log(button);
-            return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
+            if (page === "consumer" && !adminId) {
+                if (button.text !== 'Register' && button.text !== 'Deregister') {
+                    return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
+                }
+            }
+            else return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
         }).join('');
     }
     function renderMainContent(ids, page) {
@@ -396,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let start = 0;
         let navid = '';
 
-        if (page === 'superAdmin' || page === 'admin' || page === 'site') {
+        if (page === 'superAdmin' || page === 'admin' || page === 'site' || page === 'consumer') {
             const pageData = data[page];
             const navbarButtons = pageData.navbarButtons;
 
@@ -428,6 +485,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                         } else if (page === 'site') {
                                             renderMainContent(sideButton.id, page);
                                             initializeSitePanel(sideButton.id); // Verify if needed
+                                        } else if (page === 'consumer') {
+                                            renderMainContent(sideButton.id, page);
+                                            initializeConsumerPanel(sideButton.id);
                                         }
                                     });
                                 });
