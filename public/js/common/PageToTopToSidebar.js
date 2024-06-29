@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "sidebarButtons": {
                 "admin-navbar-site-btn": [
                     {
-                        "id": "dummy-17",
+                        "id": "viewsitebutton",
                         "class": "sidebar-btn",
                         "text": "Dummy Button 17"
                     },
@@ -145,17 +145,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 ],
                 "admin-navbar-advance-btn": [
                     {
-                        "id": "view-site-button",
+                        "id": "viewsitebutton",
                         "class": "sidebar-btn",
                         "text": "All Sites"
                     },
                     {
-                        "id": "register-site-button",
+                        "id": "registersitebutton",
                         "class": "sidebar-btn",
                         "text": "Register"
                     },
                     {
-                        "id": "deregister-site-button",
+                        "id": "deregistersitebutton",
                         "class": "sidebar-btn",
                         "text": "Deregister"
                     }
@@ -184,46 +184,46 @@ document.addEventListener("DOMContentLoaded", function () {
             "sidebarButtons": {
                 "site-navbar-device-btn": [
                     {
-                        "id": "device-tab",
+                        "id": "device",
                         "class": "sidebar-btn",
                         "text": "All Devices"
                     }
                 ],
                 "site-navbar-consumer-btn": [
                     {
-                        "id": "consumer-tab",
+                        "id": "consumer",
                         "class": "sidebar-btn",
                         "text": "All Consumers"
                     }
                 ],
                 "site-navbar-advance-btn": [
                     {
-                        "id": "device-tab",
+                        "id": "device",
                         "class": "sidebar-btn",
                         "text": "All Devices"
                     },
                     {
-                        "id": "consumer-tab",
+                        "id": "consumer",
                         "class": "sidebar-btn",
                         "text": "All Consumers"
                     },
                     {
-                        "id": "device-maintenance-tab",
+                        "id": "devicemaintenance",
                         "class": "sidebar-btn",
                         "text": "Maintenance"
                     },
                     {
-                        "id": "edit-profile",
+                        "id": "editprofile",
                         "class": "sidebar-btn",
                         "text": "Edit Profile"
                     },
                     {
-                        "id": "unassigned-devices-link",
+                        "id": "unassigneddeviceslink",
                         "class": "sidebar-btn",
                         "text": "Unassigned Devices"
                     },
                     {
-                        "id": "firmware-link",
+                        "id": "firmwarelink",
                         "class": "sidebar-btn",
                         "text": "Firmware"
                     }
@@ -243,17 +243,119 @@ document.addEventListener("DOMContentLoaded", function () {
             "administration": "<div id='administration-list' class='list'><h2>Administration</h2><br><div class='sync-buttons-container'><div class='sync-source-code-container'><span>SYNC SOURCE CODE</span><button id='syncSourceCode'><img src='logo/cloud_sync.svg' alt='sync'></button></div><div class='sync-firmware-container'><span>SYNC FIRMWARE</span><button id='syncFirmware'><img src='logo/sync.svg' alt=''></button></div></div></div>"
         },
         "admin": {
-            "view-site-button": "<div id='all-site-cards'></div>",
-            "register-site-button": "<div id='register-form-container' class='form-container' style='display: none;'><form id='register-site-form'><label for='site-id'>Site ID:</label><input type='text' id='site-id' name='site-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-cancel-button'>Cancel</button></form></div>",
-            "deregister-site-button": "<div id='deregister-form-container' class='form-container' style='display: none;'><form id='deregister-site-form'><label for='site-id'>Site ID:</label><input type='text' id='deregister-site-id' name='site-id' required><div class='deregister-search-results'></div><button type='submit'>De-register</button><button type='button' id='deregister-cancel-button'>Cancel</button></form></div>"
+            "viewsitebutton": "<div id='all-site-cards'></div>",
+            "registersitebutton": "<div id='register-form-container' class='form-container'><form id='register-site-form'><label for='site-id'>Site ID:</label><input type='text' id='site-id' name='site-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-cancel-button'>Cancel</button></form></div>",
+            "deregistersitebutton": "<div id='deregister-form-container' class='form-container'><form id='deregister-site-form'><label for='site-id'>Site ID:</label><input type='text' id='deregister-site-id' name='site-id' required><div class='deregister-search-results'></div><button type='submit'>De-register</button><button type='button' id='deregister-cancel-button'>Cancel</button></form></div>"
         },
         "site": {
-            "device-tab": "<div id='all-devices'></div>",
-            "consumer-tab": "<div id='all-consumers'></div>",
-            "device-maintenance-tab": "<div id='device-maintenance'></div>",
-            "edit-profile": "<div id='edit-profile'></div>",
-            "unassigned-devices-link": "<div id='unassigned-devices'></div>",
-            "firmware-link": "<div id='firmware'></div>"
+            "device": `
+        <div id="device-list" class="all-devices"></div>
+    `,
+            "consumer": `
+        <div id="consumer-list" class="all-consumers"></div>
+    `,
+            "devicemaintenance": `
+        <div id="maintenance-devices-list" class="maintenance-devices" >
+            <div id="maintenance-action-tabs" class="maintenance-action-tabs">
+                <button id="all-maintenance-devices">All Devices</button>
+                <button id="enter-maintenance">Operational Mode</button>
+                <button id="exit-maintenance">Maintenance Mode</button>
+            </div>
+            <div id="maintenance-container">
+                <div id="all-maintenance-devices-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Device ID</th>
+                                <th>Mode</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-mode-table-body">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="enter-maintenance-container">
+                    <div class="operational-mode-devices">
+                        <h2>Devices in Operational Mode</h2>
+                        <table id="operational-mode-table">
+                            <thead>
+                                <tr>
+                                    <th>Device ID</th>
+                                </tr>
+                            </thead>
+                            <tbody id="operational-mode-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="moveSelectedButton">Add</button>
+                    <div class="selected-devices">
+                        <h2>Selected Devices</h2>
+                        <ul class="selected-device-list" id="selected-device-list-1">
+                        </ul>
+                        <button id="sendSelectedButton">Enter Maintenance</button>
+                    </div>
+                </div>
+                <div id="exit-maintenance-container">
+                    <div class="maintenance-mode-devices">
+                        <h2>Devices in Maintenance Mode</h2>
+                        <table id="maintenance-mode-table">
+                            <thead>
+                                <tr>
+                                    <th>Device ID</th>
+                                </tr>
+                            </thead>
+                            <tbody id="maintenance-mode-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="moveSelectedButton-2">Add</button>
+                    <div class="selected-devices">
+                        <h2>Selected Devices</h2>
+                        <ul class="selected-device-list" id="selected-device-list-2">
+                        </ul>
+                        <button id="sendSelectedButton-2">Exit Maintenance</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+            "editprofile": `
+        <div id="edit-form-container" class="form-container" >
+            <form id="edit-userForm">
+                <label for="edit-name">Name:</label>
+                <input type="text" id="edit-name" value="Current Name"><br><br>
+                <label for="edit-location">Location:</label>
+                <input type="text" id="edit-location" value="Current Location"><br><br>
+                <button type="submit" id="update-button">Update</button>
+            </form>
+        </div>
+    `,
+            "unassigneddeviceslink": `
+        <div id="unassigned-devices-list" class="unassigned-devices"></div>
+        <div id="user-search-container" class="user-search-container" style="display:none;">
+            <label for="user-search-input">Search User:</label>
+            <input type="text" id="user-search-input" placeholder="Type to search...">
+            <ul id="user-list">
+                <!-- User list will be populated here -->
+            </ul>
+            <button id="assign-user-btn">Assign</button>
+            <span id="cancel-search-btn">&#x2716;</span> <!-- Close Button -->
+        </div>
+    `,
+            "firmwarelink": `
+        <div id="firmware-version-list" class="firmware-version" >
+            <div id="firmware-button-id" class="firmware-button-class">
+                <button id="upgrade-all-versions">Upgrade All Versions</button>
+                <button id="intimate-all">Intimate All</button>
+            </div>
+            <div id="device-versions-container">
+                <!-- Device versions table will be displayed here -->
+            </div>
+            <select id="firmware-dropdown" size="10">
+                <option value="" disabled selected>Select a firmware version</option>
+            </select> 
+        </div>
+    `
         }
     }
 
@@ -321,9 +423,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                             renderMainContent(sideButton.id, page); // Ensure page variable is correct
                                             initializeSuperAdminPanel(sideButton.id); // Double-check this function
                                         } else if (page === 'admin') {
-                                            initializeAdminPanel(); // Verify if needed
+                                            renderMainContent(sideButton.id, page);
+                                            initializeAdminPanel(sideButton.id); // Verify if needed
                                         } else if (page === 'site') {
-                                            initializeSitePanel(); // Verify if needed
+                                            renderMainContent(sideButton.id, page);
+                                            initializeSitePanel(sideButton.id); // Verify if needed
                                         }
                                     });
                                 });
