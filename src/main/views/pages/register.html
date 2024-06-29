@@ -1,76 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register</title>
-    <link rel="stylesheet" href="./css/register.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  </head>
-  <body>
-    <div>
-    <h2>REGISTER</h2>
-    <div class="container" class="tab-content active">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="./css/register.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+  <div class="register-form" class="tab-content active">
+
+    <form id="regForm">
+
+      <h3>WELCOME NEW USER</h3>
+
+      <div class="register_option">
+        <!-- <div class="option">
+              <button id="otplogin">Login via OTP </button>
+          </div> -->
+        <div class="option">
+          <button id="google">Sign Up With Google
+            <img src="/logo/google.png" alt="">
+          </button>
+          
+        </div>
+      </div>
+      <!-- Login option separator -->
+      <p class="separator">
+        <span>or</span>
+      </p>
+
+
+      <div class="input-box">
+        <label for="fname">Full Name <span class="asterisk" aria-hidden="true">*</span></label>
+        <input type="text" id="fname" name="name" required />
+      </div>
+
+      <div class="input-box">
+        <label for="email">Email Address
+          <span class="asterisk" aria-hidden="true">*</span></label>
+ 
+        <input type="email" id="email" name="email" required />
+      </div>
+
+      <div class="input-box">
+        <label for="password">Password <span class="asterisk" aria-hidden="true">*</span></label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <fieldset>
+        <legend class="role">
+          Role <span class="asterisk" aria-hidden="true">*</span>
+        </legend>
+        <div>
+          <input type="radio" class="radio" id="admin" name="role" value="admin" />
+          <label for="admin">Admin</label>
+        </div>
+        <div>
+          <input type="radio" class="radio" id="consumer" name="role" value="consumer" />
+          <label for="consumer">Consumer</label>
+        </div>
+      </fieldset>
+
+      <button type="submit">Sign Up</button>
+      <p class="log_in">Already A User? <a href="/login">Sign In</a></p>
+
       
-      <form id="regForm">
-        <div>
-          <label for="fname"
-            >Full Name <span class="asterisk" aria-hidden="true">*</span></label
-          >
-          <br />
-          <input type="text" id="fname" name="name" required />
-        </div>
+    </form>
 
-        <div>
-          <label for="email"
-            >Email Address
-            <span class="asterisk" aria-hidden="true">*</span></label
-          >
-          <br />
-          <input type="email" id="email" name="email" required />
-        </div>
-        <div>
-          <label for="password"
-            >Password <span class="asterisk" aria-hidden="true">*</span></label
-          >
-          <br />
-          <input type="password" id="password" name="password" required />
-        </div>
-        <fieldset>
-          <legend class="role">
-            Role <span class="asterisk" aria-hidden="true">*</span>
-          </legend>
-          <div>
-            <input
-              type="radio"
-              class="radio"
-              id="admin"
-              name="role"
-              value="admin"
-            />
-            <label for="admin">Admin</label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              class="radio"
-              id="consumer"
-              name="role"
-              value="consumer"
-            />
-            <label for="consumer">Consumer</label>
-          </div>
-        </fieldset>
-        <button type="submit">Submit</button>
-        <button id="google">Sign up with Google   <i class="fa-brands fa-google" aria-hidden="true"></i></button>
-      </form>
-
-     
-    </div>
 
   </div>
-    
-    <!-- <script type="module" src="/pages/register.js"></script>  -->
-    <script type="module" src="./js/pages/register.js"></script>
-  </body>
+
+
+
+  <!-- <script type="module" src="/pages/register.js"></script>  -->
+  <script type="module" src="./js/pages/register.js"></script>
+</body>
+
 </html>
