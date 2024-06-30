@@ -1,0 +1,55 @@
+<!-- content -->
+<div id="maintenance-devices-list" class="maintenance-devices">
+    <div id="maintenance-action-tabs" class="maintenance-action-tabs">
+      <button id="all-maintenance-devices">All Devices</button>
+      <button id="enter-maintenance">Operational Mode</button>
+      <button id="exit-maintenance">Maintenance Mode</button>
+    </div>
+    <div id="maintenance-container">
+      <div id="all-maintenance-devices-container">
+        <table>
+          <thead>
+            <tr><th>Device ID</th><th>Mode</th></tr>
+          </thead>
+          <tbody id="all-mode-table-body"></tbody>
+        </table>
+      </div>
+      <div id="enter-maintenance-container">
+        <div class="operational-mode-devices">
+          <h2>Devices in Operational Mode</h2>
+          <table id="operational-mode-table">
+            <thead>
+              <tr><th>Device ID</th></tr>
+            </thead>
+            <tbody id="operational-mode-table-body"></tbody>
+          </table>
+        </div>
+        <button id="moveSelectedButton">Add</button>
+        <div class="selected-devices">
+          <h2>Selected Devices</h2>
+          <ul class="selected-device-list" id="selected-device-list-1"></ul>
+          <button id="sendSelectedButton">Enter Maintenance</button>
+        </div>
+      </div>
+      <div id="exit-maintenance-container">
+        <div class="maintenance-mode-devices">
+          <h2>Devices in Maintenance Mode</h2>
+          <table id="maintenance-mode-table">
+            <thead>
+              <tr><th>Device ID</th></tr>
+            </thead>
+            <tbody id="maintenance-mode-table-body"></tbody>
+          </table>
+        </div>
+        <button id="moveSelectedButton-2">Add</button>
+        <div class="selected-devices">
+          <h2>Selected Devices</h2>
+          <ul class="selected-device-list" id="selected-device-list-2"></ul>
+          <button id="sendSelectedButton-2">Exit Maintenance</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- help -->
+  <h3>help from site devicemaintenance id</h3>
+  
