@@ -6,61 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consumer Dashboard</title>
     <link rel="stylesheet" href="/css/consumer.css">
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 
 <body>
-
-    <div class="sidebar">
-        <div id="consumer-id"></div>
-        <a href="#dashboard" id="dashboard-link">Dashboard</a>
-        <a href="#users" id="users-link">Users</a>
-        <a href="#settings" id="settings-link">Settings</a>
-        <a href="#logout" id="logout-link">Logout</a>
-    </div>
-
-    <div class="main-content">
-        <div class="header">
-            <div id="heading"></div>
+    <div class="wrap-container">
+        <div class="topbar">
+            <div class="topbar-left">
+                    <img src="/logo/logo.png" alt="Nuez logo">
+                    
+                    <h3>Nuez Smart Watermeter</h3> 
+            </div>
+            <div class="topbar-middle">
+                
+            </div>
+            
+             <div class="topbar-right">
+      
+                    <button class="logout-btn">
+                            <img src="/logo/logout.svg" alt="LOGOUT">
+                            LOGOUT
+                    </button>
+                    
+                  
+             </div>
         </div>
+        <div class="main-content">
+            
+      
+            
+        </div>
+        <div class="left-side-bar">
+        
+        </div>
+        <div class="right-side-bar"></div>
+        <div class="footer"></div>
+      </div>
+      
 
-        <div id="button-container"></div> <!-- Container for admin buttons -->
-
-        <div id="device-list" class="all-devices"></div>
-    </div>
-
-    <div id="register-form-container" class="form-container" style="display: none;">
-        <form id="register-consumer-device-form">
-            <label for="register-device-id">Device ID:</label>
-            <input type="text" id="register-device-id" name="register-device-id" required>
-    
-            <label for="device-name">Name:</label>
-            <input type="text" id="device-name" name="device-name" required>
-    
-            <label for="device-type">Location:</label>
-            <input type="text" id="device-location" name="device-location" required>
-
-            <label for="device-type">Total Consumption:</label>
-            <input type="text" id="device-total-consumption" name="device-total-consumption" required>
-    
-            <label for="device-status">Status:</label>
-            <input type="text" id="device-status" name="device-status" required>
-    
-            <button type="submit" id="register-id">Register</button>
-            <button type="button" id="register-cancel-button" class="cancel-button">Cancel</button>
-        </form>
-    </div>
-    
-
-    <div id="deregister-form-container" class="form-container" style="display: none;">
-        <form id="deregister-consumer-device-form">
-            <label for="deregister-device-id">Device ID:</label>
-            <input type="text" id="deregister-device-id" name="device-id" required>
-            <button type="submit">Deregister</button>
-            <button type="button" id="cancel-deregister-button">Cancel</button>
-        </form>
-    </div>
 
     <script type="module" src="/js/pages/consumer.js"></script>
+    <script type="module" src="/js/common/PageToTopToSidebar.js"></script>
 
 </body>
 

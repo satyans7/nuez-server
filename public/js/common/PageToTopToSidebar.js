@@ -1,6 +1,7 @@
 import { initializeSuperAdminPanel } from '../pages/superAdmin.js';
 import { initializeAdminPanel } from '../pages/admin.js';
 import { initializeSitePanel } from '../pages/siteToDevice.js';
+import { initializeConsumerPanel } from '../pages/consumer.js';
 
 function getPageIdentifier() {
     const path = window.location.pathname;
@@ -11,13 +12,15 @@ function getPageIdentifier() {
         return "site";
     } else if (path.includes("superAdmin")) {
         return "superAdmin";
+    } else if (path.includes("consumer-dashboard")) {
+        return "consumer";
     }
 
     return ""; // Default or error case
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const data = {
+document.addEventListener("DOMContentLoaded", async function () {
+    const data ={
         "superAdmin": {
             "navbarButtons": [
                 {
@@ -230,134 +233,49 @@ document.addEventListener("DOMContentLoaded", function () {
                 ]
             }
 
+        },
+        "consumer": {
+            "navbarButtons": [
+                {
+                    "id": "consumer-navbar-device-btn",
+                    "class": "consumer-navbar-device-btn",
+                    "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">"
+                },
+                {
+                    "id": "consumer-navbar-advance-btn",
+                    "class": "consumer-navbar-advance-btn",
+                    "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+
+                }
+            ],
+            "sidebarButtons": {
+                "consumer-navbar-device-btn": [
+                    {
+                        "id": "device-under-consumer",
+                        "class": "sidebar-btn",
+                        "text": "All Devices"
+                    }
+                ],
+                "consumer-navbar-advance-btn": [
+                    {
+                        "id": "device-under-consumer-advanced",
+                        "class": "sidebar-btn",
+                        "text": "All Devices"
+                    },
+                    {
+                        "id": "register-device-for-consumer",
+                        "class": "sidebar-btn",
+                        "text": "Register"
+                    },
+                    {
+                        "id": "deregister-device-for-consumer",
+                        "class": "sidebar-btn",
+                        "text": "Deregister"
+                    }
+                ]
+            }
         }
     };
-    const content = {
-        "superAdmin": {
-            "users": "<div id='user-list' class='list'><h2>All Consumers</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='users-table-body'></tbody></table></div></div>",
-            "admins": "<div id='admin-list' class='list'><h2>All Admins</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='admins-table-body'></tbody></table></div></div>",
-            "sites": "<div id='site-list' class='list'><h2>All Sites</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th></tr></thead><tbody id='sites-table-body'></tbody></table></div><button id='intimate-all-btn'>Intimate All</button></div>",
-            "approved": "<div id='approved-list' class='list'><h2>Approved Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role Requested</th><th>TimeStamp</th></tr></thead><tbody id='approved-table-body'></tbody></table></div></div>",
-            "rejected": "<div id='rejected-list' class='list'><h2>Rejected Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role Requested</th><th>Timestamp</th></tr></thead><tbody id='rejected-table-body'></tbody></table></div></div>",
-            "pending": "<div id='pending-list' class='list'><h2>Pending Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Current Role</th><th>Requested Role</th><th>Action</th></tr></thead><tbody id='pending-table-body'></tbody></table></div></div>",
-            "administration": "<div id='administration-list' class='list'><h2>Administration</h2><br><div class='sync-buttons-container'><div class='sync-source-code-container'><span>SYNC SOURCE CODE</span><button id='syncSourceCode'><img src='logo/cloud_sync.svg' alt='sync'></button></div><div class='sync-firmware-container'><span>SYNC FIRMWARE</span><button id='syncFirmware'><img src='logo/sync.svg' alt=''></button></div></div></div>"
-        },
-        "admin": {
-            "viewsitebutton": "<div id='all-site-cards'></div>",
-            "registersitebutton": "<div id='register-form-container' class='form-container'><form id='register-site-form'><label for='site-id'>Site ID:</label><input type='text' id='site-id' name='site-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-cancel-button'>Cancel</button></form></div>",
-            "deregistersitebutton": "<div id='deregister-form-container' class='form-container'><form id='deregister-site-form'><label for='site-id'>Site ID:</label><input type='text' id='deregister-site-id' name='site-id' required><div class='deregister-search-results'></div><button type='submit'>De-register</button><button type='button' id='deregister-cancel-button'>Cancel</button></form></div>"
-        },
-        "site": {
-            "device": `
-        <div id="device-list" class="all-devices"></div>
-    `,
-            "consumer": `
-        <div id="consumer-list" class="all-consumers"></div>
-    `,
-            "devicemaintenance": `
-        <div id="maintenance-devices-list" class="maintenance-devices" >
-            <div id="maintenance-action-tabs" class="maintenance-action-tabs">
-                <button id="all-maintenance-devices">All Devices</button>
-                <button id="enter-maintenance">Operational Mode</button>
-                <button id="exit-maintenance">Maintenance Mode</button>
-            </div>
-            <div id="maintenance-container">
-                <div id="all-maintenance-devices-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Device ID</th>
-                                <th>Mode</th>
-                            </tr>
-                        </thead>
-                        <tbody id="all-mode-table-body">
-                        </tbody>
-                    </table>
-                </div>
-                <div id="enter-maintenance-container">
-                    <div class="operational-mode-devices">
-                        <h2>Devices in Operational Mode</h2>
-                        <table id="operational-mode-table">
-                            <thead>
-                                <tr>
-                                    <th>Device ID</th>
-                                </tr>
-                            </thead>
-                            <tbody id="operational-mode-table-body">
-                            </tbody>
-                        </table>
-                    </div>
-                    <button id="moveSelectedButton">Add</button>
-                    <div class="selected-devices">
-                        <h2>Selected Devices</h2>
-                        <ul class="selected-device-list" id="selected-device-list-1">
-                        </ul>
-                        <button id="sendSelectedButton">Enter Maintenance</button>
-                    </div>
-                </div>
-                <div id="exit-maintenance-container">
-                    <div class="maintenance-mode-devices">
-                        <h2>Devices in Maintenance Mode</h2>
-                        <table id="maintenance-mode-table">
-                            <thead>
-                                <tr>
-                                    <th>Device ID</th>
-                                </tr>
-                            </thead>
-                            <tbody id="maintenance-mode-table-body">
-                            </tbody>
-                        </table>
-                    </div>
-                    <button id="moveSelectedButton-2">Add</button>
-                    <div class="selected-devices">
-                        <h2>Selected Devices</h2>
-                        <ul class="selected-device-list" id="selected-device-list-2">
-                        </ul>
-                        <button id="sendSelectedButton-2">Exit Maintenance</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `,
-            "editprofile": `
-        <div id="edit-form-container" class="form-container" >
-            <form id="edit-userForm">
-                <label for="edit-name">Name:</label>
-                <input type="text" id="edit-name" value="Current Name"><br><br>
-                <label for="edit-location">Location:</label>
-                <input type="text" id="edit-location" value="Current Location"><br><br>
-                <button type="submit" id="update-button">Update</button>
-            </form>
-        </div>
-    `,
-            "unassigneddeviceslink": `
-        <div id="unassigned-devices-list" class="unassigned-devices"></div>
-        <div id="user-search-container" class="user-search-container" style="display:none;">
-            <label for="user-search-input">Search User:</label>
-            <input type="text" id="user-search-input" placeholder="Type to search...">
-            <ul id="user-list">
-                <!-- User list will be populated here -->
-            </ul>
-            <button id="assign-user-btn">Assign</button>
-            <span id="cancel-search-btn">&#x2716;</span> <!-- Close Button -->
-        </div>
-    `,
-            "firmwarelink": `
-        <div id="firmware-version-list" class="firmware-version" >
-            <div id="firmware-button-id" class="firmware-button-class">
-                <button id="upgrade-all-versions">Upgrade All Versions</button>
-                <button id="intimate-all">Intimate All</button>
-            </div>
-            <div id="device-versions-container">
-                <!-- Device versions table will be displayed here -->
-            </div>
-            <select id="firmware-dropdown" size="10">
-                <option value="" disabled selected>Select a firmware version</option>
-            </select> 
-        </div>
-    `
-        }
-    }
 
     const topbarMiddle = document.querySelector(".topbar-middle");
     const leftSidebar = document.querySelector(".left-side-bar");
@@ -375,28 +293,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to render sidebar buttons
     function renderSidebarButtons(buttons) {
+        const page = getPageIdentifier();
+        const queryParams = new URLSearchParams(window.location.search);
+        const adminId = queryParams.get('adminId');
         return buttons.map(button => {
-            console.log(button);
-            return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
+            if (page === "consumer" && !adminId) {
+                if (button.text !== 'Register' && button.text !== 'Deregister') {
+                    return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
+                }
+            }
+            else return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
         }).join('');
     }
-    function renderMainContent(ids, page) {
-        const main = content[page][ids];
-
-        const mainContent = document.querySelector(".main-content");
-
-        mainContent.innerHTML = main || ""; // Ensure main is not undefined/null
-    }
-
+    async function fetchHtmlFragment(role, key) {
+        try {
+          const response = await fetch(`/api/html/${role}/${key}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Failed to fetch HTML fragment:', error);
+          return null;
+        }
+      }
+      
+      // Example usage
+     async function loadFragment(role, key) {
+        const fragment = await fetchHtmlFragment(role, key);
+        if (fragment) {
+          document.querySelector(".main-content").innerHTML = fragment.content;
+          document.querySelector('.right-side-bar').innerHTML = fragment.help;
+        }
+      }
+      
 
     // Function to initialize the topbar buttons
     function initializeTopbarButtons(data) {
         let page = getPageIdentifier();
-        console.log(page);
-        let start = 0;
-        let navid = '';
 
-        if (page === 'superAdmin' || page === 'admin' || page === 'site') {
+        if (page === 'superAdmin' || page === 'admin' || page === 'site' || page === 'consumer') {
             const pageData = data[page];
             const navbarButtons = pageData.navbarButtons;
 
@@ -409,25 +346,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     const btnElement = document.getElementById(button.id);
                     if (btnElement) {
                         btnElement.addEventListener("click", function () {
-                            start++;
-                            navid = button.id;
-                            // Handle button click action
-                            console.log(`Button ${button.id} clicked.`);
+                        
                             const sidebarButtons = pageData.sidebarButtons[button.id];
                             if (leftSidebar) {
                                 leftSidebar.innerHTML = renderSidebarButtons(sidebarButtons);
                                 sidebarButtons.forEach(sideButton => {
                                     const btn = document.getElementById(sideButton.id);
-                                    btn.addEventListener("click", () => {
+                                    btn.addEventListener("click", async () => {
                                         if (page === 'superAdmin') {
-                                            renderMainContent(sideButton.id, page); // Ensure page variable is correct
+                                            await loadFragment(page , sideButton.id); // Ensure page variable is correct
                                             initializeSuperAdminPanel(sideButton.id); // Double-check this function
                                         } else if (page === 'admin') {
-                                            renderMainContent(sideButton.id, page);
+                                            await loadFragment(page , sideButton.id);
                                             initializeAdminPanel(sideButton.id); // Verify if needed
                                         } else if (page === 'site') {
-                                            renderMainContent(sideButton.id, page);
+                                            await loadFragment(page , sideButton.id);
                                             initializeSitePanel(sideButton.id); // Verify if needed
+                                        } else if (page === 'consumer') {
+                                            await loadFragment(page , sideButton.id);
+                                            initializeConsumerPanel(sideButton.id);
                                         }
                                     });
                                 });

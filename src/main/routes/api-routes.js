@@ -1,9 +1,9 @@
 const path = require("path");
 const controller = require("../controller/controller.js");
 const fs = require("fs");
-const simpleGit = require("simple-git");
 const mqtt = require("mqtt");
 const { exec } = require("child_process");
+const archiver = require('archiver');
 const SUPERADMIN = "/superAdmin"
 MAINTENANCE_ENTER = "enter"
 MAINTENANCE_EXIT = "exit"
@@ -354,9 +354,7 @@ module.exports = function (app) {
   });
 
   const localRepoPath = path.join(__dirname, '../local-repo');
-  const githubRepoUrl = 'https://github.com/priyansu1703/testFile';
 
-  // Function to read .bin filenames and store them in an array without .bin extension
 function getBinFilenamesWithoutExtension(directoryPath) {
   return new Promise((resolve, reject) => {
       fs.readdir(directoryPath, (err, files) => {
@@ -564,43 +562,33 @@ app.get('/api/firmware-versions', (req, res) => {
         console.error("Unhandled topic:", topic);
     }
   });
-  const filePath = path.join(__dirname, "../local-repo/firmware.ino.bin");
 
-  app.get("/download/firmware", async (req, res) => {
-    try {
-      // Read the binary file
-      fs.readFile(filePath, async (err, fileContent) => {
-        if (err) {
-          console.error("Error reading file:", err);
-          res.status(500).send("Error reading file");
-          return;
-        }
+app.get('/download/firmware', async (req, res) => {
+  try {
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', 'attachment; filename=local-repo.zip');
 
-        // Convert the data to a Blob
-        const blob = new Blob([fileContent], {
-          type: "application/octet-stream",
-        });
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Sets the compression level
+    });
 
-        res.setHeader("Content-Type", "application/octet-stream");
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename=${path.basename(filePath)}`
-        );
+    archive.on('error', (err) => {
+      throw err;
+    });
 
-        // Convert Blob to ArrayBuffer synchronously using await
-        try {
-          const buffer = await blob.arrayBuffer();
-          res.send(Buffer.from(buffer));
-        } catch (error) {
-          console.error("Error sending file:", error);
-          res.status(500).send("Error sending file");
-        }
-      });
-    } catch (error) {
-      console.error("Error sending file:", error);
-      res.status(500).send("Error sending file");
-    }
-  });
+    // Pipe the archive data to the response
+    archive.pipe(res);
+
+    // Append files from the local repo directory to the archive
+    archive.directory(localRepoPath, false);
+
+    // Finalize the archive and send it
+    archive.finalize();
+  } catch (error) {
+    console.error('Error sending zip folder:', error);
+    res.status(500).send('Error sending zip folder');
+  }
+});
 
   app.post("/:site_id/intimate-all-devices", async (req, res) => {
     try {
@@ -747,7 +735,27 @@ app.get('/api/firmware-versions', (req, res) => {
   })
 
 
-
+  app.get('/api/html/:role/:key', (req, res) => {
+    const { role, key } = req.params;
+    const filePath = path.join(__dirname, '../views/html_fragments', role, `${key}.html`);
+  
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        return res.status(404).send('Fragment not found');
+      }
+      
+      const contentMatch = data.match(/<!-- content -->([\s\S]*?)<!--/);
+      const helpMatch = data.match(/<!-- help -->([\s\S]*?)$/);
+  
+      if (contentMatch && helpMatch) {
+        const content = contentMatch[1].trim();
+        const help = helpMatch[1].trim();
+        res.json({ content, help });
+      } else {
+        res.status(500).send('Invalid HTML fragment format');
+      }
+    });
+  });
 
 
 
