@@ -2,6 +2,7 @@ import { getDevicesData, getConsumerDeviceMapping, getAllAdmins,registerConsumer
 
 export function initializeConsumerPanel(sidebarid){
 const alldevicesContainer = document.querySelector('.all-devices');
+const devicesTableBody = document.getElementById('devices-table-body');
 const registerTab = document.getElementById('registerdevice-form-container');
 const deregisterTab = document.getElementById('deregisterdevice-form-container');
 const deregisterform = document.getElementById('deregister-device-form')
@@ -136,6 +137,83 @@ function getCurrentId() {
     return user;
 }
 
+//DISPLAY DEVICE TABLE 
+
+async function displayAlldevices() {
+    const ConsumerId = getCurrentId();
+    const devicesData = await getDevicesData();
+    console.log(devicesData);
+    const consumerdeviceMapping = await getConsumerDeviceMapping();
+    console.log(consumerdeviceMapping);
+    let devices = [];
+    devices = consumerdeviceMapping[ConsumerId];
+    console.log(devices);
+    devicesTableBody.innerHTML = '';
+    if(devices && devices.length >0 ){
+    devices.forEach(async key => {
+        const device = devicesData[key];
+        if (device) {
+            const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                nameCell.textContent = device.name;
+                const locationCell = document.createElement('td');
+                locationCell.textContent = device.location;
+                const actionCell = document.createElement('td');
+                const requestButton = document.createElement('button');
+                requestButton.textContent = '+';
+                requestButton.addEventListener('click', () => {
+                    const nextRow = row.nextSibling;
+                    if (nextRow && nextRow.classList.contains('expanded')) {
+                        nextRow.remove();  // Hide the expanded row
+                    } else {
+                        const expandedRow = document.createElement('tr');
+                        expandedRow.classList.add('expanded');
+                        const expandedCell = document.createElement('td');
+                        expandedCell.colSpan = 3;
+    
+                        const innerTable = document.createElement('table');
+    
+                        const headerRow = document.createElement('tr');
+                        const passwordHeader = document.createElement('th');
+                        passwordHeader.textContent = 'Password';
+                        const workHeader = document.createElement('th');
+                        workHeader.textContent = 'Work';
+    
+                        headerRow.appendChild(passwordHeader);
+                        headerRow.appendChild(workHeader);
+                        innerTable.appendChild(headerRow);
+    
+                        const dataRow = document.createElement('tr');
+                        const passwordCell = document.createElement('td');
+                        passwordCell.textContent = '123';
+                        const workCell = document.createElement('td');
+                        workCell.textContent = 'job';
+    
+                        dataRow.appendChild(passwordCell);
+                        dataRow.appendChild(workCell);
+                        innerTable.appendChild(dataRow);
+    
+                        expandedCell.appendChild(innerTable);
+                        expandedRow.appendChild(expandedCell);
+                        row.parentNode.insertBefore(expandedRow, nextRow);
+                    }
+                });
+                row.style.cursor = "pointer";
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(locationCell);    
+                row.appendChild(actionCell);            
+                devicesTableBody.appendChild(row);
+        }
+    });
+}
+else{
+    const row = document.createElement('tr');
+    row.innerHTML = `<td colspan="3">No devices found for this site.</td>`;
+    devicesTableBody.appendChild(row);
+}
+}
+
 async function viewAlldevices() {
     const ConsumerId = getCurrentId();
     const devicesData = await getDevicesData();
@@ -179,7 +257,8 @@ async function showAllDevices(device, key) {
 }
 
 function eventListeners(){
-    if(sidebarid==='device-under-consumer-advanced') viewAlldevices();
+    if(sidebarid==='viewdevices') displayAlldevices();
+    else if(sidebarid==='device-under-consumer-advanced') viewAlldevices();
     else if(sidebarid==='register-device-for-consumer')registerbtn();
     else if(sidebarid==='deregister-device-for-consumer')deregisterbtn();
 }

@@ -15,6 +15,8 @@ export function initializeSitePanel(sidebarid) {
 
     const alldevicesContainer = document.querySelector('#device-list');
     const allConsumerContainer = document.querySelector('#consumer-list');
+    const devicesTableBody = document.getElementById('devices-table-body');
+    const consumersTableBody = document.getElementById('consumers-table-body');//ID in PTS.js
     const deregisterConsumerTab = document.getElementById('deregister-container')
     const registerConsumerTab = document.getElementById('register-container')
     const registerBtn = document.getElementById('register-button');
@@ -61,7 +63,76 @@ export function initializeSitePanel(sidebarid) {
     }
 
 
+    //DISPLAY DEVICES
+    async function displayAlldevices() {
 
+        const data = await getAllDevicesUnderSite(site);
+    
+        const devices = Object.keys(data);
+        if(devices && devices.length >0 ){
+        devices.forEach(async key => {
+            const device = data[key];
+            if (device) {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                nameCell.textContent = key;
+                const locationCell = document.createElement('td');
+                locationCell.textContent = device.location;
+                const actionCell = document.createElement('td');
+                const requestButton = document.createElement('button');
+                requestButton.textContent = '+';
+                requestButton.addEventListener('click', () => {
+                    const nextRow = row.nextSibling;
+                    if (nextRow && nextRow.classList.contains('expanded')) {
+                        nextRow.remove();  // Hide the expanded row
+                    } else {
+                        const expandedRow = document.createElement('tr');
+                        expandedRow.classList.add('expanded');
+                        const expandedCell = document.createElement('td');
+                        expandedCell.colSpan = 3;
+    
+                        const innerTable = document.createElement('table');
+    
+                        const headerRow = document.createElement('tr');
+                        const passwordHeader = document.createElement('th');
+                        passwordHeader.textContent = 'Password';
+                        const workHeader = document.createElement('th');
+                        workHeader.textContent = 'Work';
+    
+                        headerRow.appendChild(passwordHeader);
+                        headerRow.appendChild(workHeader);
+                        innerTable.appendChild(headerRow);
+    
+                        const dataRow = document.createElement('tr');
+                        const passwordCell = document.createElement('td');
+                        passwordCell.textContent = '123';
+                        const workCell = document.createElement('td');
+                        workCell.textContent = 'job';
+    
+                        dataRow.appendChild(passwordCell);
+                        dataRow.appendChild(workCell);
+                        innerTable.appendChild(dataRow);
+    
+                        expandedCell.appendChild(innerTable);
+                        expandedRow.appendChild(expandedCell);
+                        row.parentNode.insertBefore(expandedRow, nextRow);
+                    }
+                });
+                row.style.cursor = "pointer";
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(locationCell);    
+                row.appendChild(actionCell);            
+                devicesTableBody.appendChild(row);
+            } 
+        });
+    }
+    else{
+        const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="3">No devices found for this site.</td>`;
+            devicesTableBody.appendChild(row);
+    }
+    }
 
 
     // All Devices tab (Default) --------------------------------------------------------------------------//
@@ -125,7 +196,81 @@ export function initializeSitePanel(sidebarid) {
     }
 
 
+//DISPLAY CONSUMERS
 
+async function displayAllconsumers() {
+    const data = await getAllConsumersUnderSite(site);
+
+    const consumers = Object.keys(data);
+    consumersTableBody.innerHTML = '';
+    console.log(consumers);
+    if(consumers && consumers.length>0 ){
+    consumers.forEach(key => {
+        const consumer = data[key];
+        if (consumer) {
+            const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                nameCell.textContent = consumer.name;
+                const roleCell = document.createElement('td');
+                roleCell.textContent = consumer.role;
+                const actionCell = document.createElement('td');
+                const requestButton = document.createElement('button');
+                requestButton.textContent = '+';
+                requestButton.addEventListener('click', () => {
+                    const nextRow = row.nextSibling;
+                    if (nextRow && nextRow.classList.contains('expanded')) {
+                        nextRow.remove();  // Hide the expanded row
+                    } else {
+                        const expandedRow = document.createElement('tr');
+                        expandedRow.classList.add('expanded');
+                        const expandedCell = document.createElement('td');
+                        expandedCell.colSpan = 3;
+    
+                        const innerTable = document.createElement('table');
+    
+                        const headerRow = document.createElement('tr');
+                        const passwordHeader = document.createElement('th');
+                        passwordHeader.textContent = 'Password';
+                        const workHeader = document.createElement('th');
+                        workHeader.textContent = 'Work';
+    
+                        headerRow.appendChild(passwordHeader);
+                        headerRow.appendChild(workHeader);
+                        innerTable.appendChild(headerRow);
+    
+                        const dataRow = document.createElement('tr');
+                        const passwordCell = document.createElement('td');
+                        passwordCell.textContent = '123';
+                        const workCell = document.createElement('td');
+                        workCell.textContent = 'job';
+    
+                        dataRow.appendChild(passwordCell);
+                        dataRow.appendChild(workCell);
+                        innerTable.appendChild(dataRow);
+    
+                        expandedCell.appendChild(innerTable);
+                        expandedRow.appendChild(expandedCell);
+                        row.parentNode.insertBefore(expandedRow, nextRow);
+                    }
+                });
+                row.style.cursor = "pointer";
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(roleCell);    
+                row.appendChild(actionCell);            
+                consumersTableBody.appendChild(row);
+            
+        } else {
+            console.error(`Consumer not found for key: ${key}`);
+        }
+    });
+}
+else{
+    const row = document.createElement('tr');
+    row.innerHTML = `<td colspan="3">No consumer available for this site.</td>`;
+    sitesTableBody.appendChild(row);
+}
+}
     // ALL CONSUMERS TAB ----------------------------------------------------------------------------//
 
     async function toggleConsumerTab() {
@@ -929,7 +1074,9 @@ export function initializeSitePanel(sidebarid) {
         }
     };
     async function eventListeners() {
-        if (sidebarid === 'device') viewAlldevices();
+        if(sidebarid=== 'viewdevices') displayAlldevices();
+        else if (sidebarid === 'viewconsumers') displayAllconsumers();
+        else if (sidebarid === 'device') viewAlldevices();
         else if (sidebarid === 'consumer') toggleConsumerTab();
         else if (sidebarid === 'devicemaintenance') maintenancefunc();
         else if (sidebarid === 'editprofile') editfunc();
@@ -946,3 +1093,7 @@ export function initializeSitePanel(sidebarid) {
     eventListeners();
 
 }
+
+
+
+

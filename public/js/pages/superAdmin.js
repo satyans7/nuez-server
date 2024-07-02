@@ -75,6 +75,80 @@ export function initializeSuperAdminPanel(sidebarid) {
     }
 
 
+    async function displayUsersTable() {
+        console.log("fetching users");
+        let data = await getAllConsumers();
+        usersTableBody.innerHTML = '';
+        let ids = Object.keys(data);
+        if (ids && ids.length > 0) {
+            ids.forEach(async id => {
+                let user = data[id];
+                if (user.role === "consumer") {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = user.name;
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = user.email;
+                    const actionCell = document.createElement('td');
+                    const requestButton = document.createElement('button');
+                    requestButton.textContent = '+';
+                   
+                    
+                    requestButton.addEventListener('click', () => {
+                        const nextRow = row.nextSibling;
+                        if (nextRow && nextRow.classList.contains('expanded')) {
+                            nextRow.remove();  // Hide the expanded row
+                        } else {
+                            const expandedRow = document.createElement('tr');
+                            expandedRow.classList.add('expanded');
+                            const expandedCell = document.createElement('td');
+                            expandedCell.colSpan = 3;
+    
+                            const innerTable = document.createElement('table');
+
+                            const headerRow = document.createElement('tr');
+                            const passwordHeader = document.createElement('th');
+                            passwordHeader.textContent = 'Password';
+                            const workHeader = document.createElement('th');
+                            workHeader.textContent = 'Work';
+    
+                            headerRow.appendChild(passwordHeader);
+                            headerRow.appendChild(workHeader);
+                            innerTable.appendChild(headerRow);
+    
+                            const dataRow = document.createElement('tr');
+                            const passwordCell = document.createElement('td');
+                            passwordCell.textContent = '123';
+                            const workCell = document.createElement('td');
+                            workCell.textContent = 'job';
+    
+                            dataRow.appendChild(passwordCell);
+                            dataRow.appendChild(workCell);
+                            innerTable.appendChild(dataRow);
+    
+                            expandedCell.appendChild(innerTable);
+                            expandedRow.appendChild(expandedCell);
+                            row.parentNode.insertBefore(expandedRow, nextRow);
+                        }
+                    });
+                    
+                    
+                    row.style.cursor = "pointer";
+                    actionCell.appendChild(requestButton);
+                    row.appendChild(nameCell);
+                    row.appendChild(emailCell);    
+                    row.appendChild(actionCell);            
+                    usersTableBody.appendChild(row);
+                }
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="3">No users available</td>`;
+            usersTableBody.appendChild(row);
+        }
+    }
+
+
     async function loadUsersTable() {
         console.log("fetching users");
         let data = await getAllConsumers();
@@ -122,7 +196,76 @@ export function initializeSuperAdminPanel(sidebarid) {
         }
     }
 
+async function displayAdminsTable(){
+    console.log("fetching admins");
+        let data = await getAllAdmins();
+        adminsTableBody.innerHTML = '';
+        let ids = Object.keys(data);
+        if (ids && ids.length > 0) {
+            ids.forEach(async id => {
+                let user = data[id];
+                if (user.role === "admin") {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = user.name;
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = user.email;
+                    const actionCell = document.createElement('td');
+                    const requestButton = document.createElement('button');
+                    requestButton.textContent = '+';
+        
+                    requestButton.addEventListener('click', () => {
+                        const nextRow = row.nextSibling;
+                        if (nextRow && nextRow.classList.contains('expanded')) {
+                            nextRow.remove();  // Hide the expanded row
+                        } else {
+                            const expandedRow = document.createElement('tr');
+                            expandedRow.classList.add('expanded');
+                            const expandedCell = document.createElement('td');
+                            expandedCell.colSpan = 3;
+    
+                            const innerTable = document.createElement('table');
 
+                            const headerRow = document.createElement('tr');
+                            const passwordHeader = document.createElement('th');
+                            passwordHeader.textContent = 'Password';
+                            const workHeader = document.createElement('th');
+                            workHeader.textContent = 'Work';
+    
+                            headerRow.appendChild(passwordHeader);
+                            headerRow.appendChild(workHeader);
+                            innerTable.appendChild(headerRow);
+    
+                            const dataRow = document.createElement('tr');
+                            const passwordCell = document.createElement('td');
+                            passwordCell.textContent = '123';
+                            const workCell = document.createElement('td');
+                            workCell.textContent = 'job';
+    
+                            dataRow.appendChild(passwordCell);
+                            dataRow.appendChild(workCell);
+                            innerTable.appendChild(dataRow);
+    
+                            expandedCell.appendChild(innerTable);
+                            expandedRow.appendChild(expandedCell);
+                            row.parentNode.insertBefore(expandedRow, nextRow);
+                        }
+                    });
+                    row.style.cursor = "pointer";
+                    actionCell.appendChild(requestButton);
+                    row.appendChild(nameCell);
+                    row.appendChild(emailCell);
+                    row.appendChild(actionCell);
+                    adminsTableBody.appendChild(row);
+                }
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="3">No admins available</td>`;
+            adminsTableBody.appendChild(row);
+        }
+
+}
     async function loadAdminsTable() {
         console.log("fetching admins");
         let data = await getAllAdmins();
@@ -167,6 +310,80 @@ export function initializeSuperAdminPanel(sidebarid) {
             adminsTableBody.appendChild(row);
         }
     }
+
+    async function displaySitesTable(){
+
+        let data = await getSitesData();
+        console.log(data)
+        sitesTableBody.innerHTML = '';
+        let ids = Object.keys(data);
+        if (ids && ids.length > 0) {
+            ids.forEach(async id => {
+                let site = data[id];
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                nameCell.textContent = site.name;
+                const locationCell = document.createElement('td');
+                locationCell.textContent = site.location;
+                const actionCell = document.createElement('td');
+                    const requestButton = document.createElement('button');
+                    requestButton.textContent = '+';
+
+                    requestButton.addEventListener('click', () => {
+                        const nextRow = row.nextSibling;
+                        if (nextRow && nextRow.classList.contains('expanded')) {
+                            nextRow.remove();  // Hide the expanded row
+                        } else {
+                            const expandedRow = document.createElement('tr');
+                            expandedRow.classList.add('expanded');
+                            const expandedCell = document.createElement('td');
+                            expandedCell.colSpan = 3;
+    
+                            const innerTable = document.createElement('table');
+                            const headerRow = document.createElement('tr');
+                            const passwordHeader = document.createElement('th');
+                            passwordHeader.textContent = 'Password';
+                            const workHeader = document.createElement('th');
+                            workHeader.textContent = 'Work';
+    
+                            headerRow.appendChild(passwordHeader);
+                            headerRow.appendChild(workHeader);
+                            innerTable.appendChild(headerRow);
+    
+                            const dataRow = document.createElement('tr');
+                            const passwordCell = document.createElement('td');
+                            passwordCell.textContent = '123';
+                            const workCell = document.createElement('td');
+                            workCell.textContent = 'job';
+    
+                            dataRow.appendChild(passwordCell);
+                            dataRow.appendChild(workCell);
+                            innerTable.appendChild(dataRow);
+    
+                            expandedCell.appendChild(innerTable);
+                            expandedRow.appendChild(expandedCell);
+                            row.parentNode.insertBefore(expandedRow, nextRow);
+                        }
+                    });
+
+                row.style.cursor = "pointer";
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(locationCell);
+                row.appendChild(actionCell); 
+                sitesTableBody.appendChild(row);
+
+            });
+            
+
+
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="3">No sites available</td>`;
+            sitesTableBody.appendChild(row);
+        }
+
+ }
 
     async function loadSitesTable() {
         let data = await getSitesData();
@@ -370,7 +587,10 @@ export function initializeSuperAdminPanel(sidebarid) {
     //     }
     // });
     async function eventListeners(){
-        if(sidebarid==='users')loadUsersTable();
+        if(sidebarid==='dummy-1') displayUsersTable();
+        else if(sidebarid==='dummy-2') displayAdminsTable();
+        else if(sidebarid==='dummy-3') displaySitesTable();
+        else if(sidebarid==='users')loadUsersTable();
         else if(sidebarid==='admins')loadAdminsTable();
         else if(sidebarid==='sites')loadSitesTable();
         else if(sidebarid==='approved')loadApprovedTable();
@@ -401,4 +621,3 @@ export function initializeSuperAdminPanel(sidebarid) {
     eventListeners();
     
 }
-

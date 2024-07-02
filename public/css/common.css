@@ -213,3 +213,53 @@ body {
   background-color: #3D52A0;
   opacity: 80%;
 }
+
+
+/* Table */
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #ADBBDA;
+}
+
+tr {
+  padding: 10px;
+}
+
+/* Additional styling for better readability */
+th, td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #8697C4;
+  color: rgb(10, 10, 101);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+td {
+  background-color: #8697C4;
+  backface-visibility: 50%;
+  color: #333;
+  vertical-align: middle;
+}
+
+
+tr:hover td {
+  background-color: #536caf;
+}
+
+ .innerTable {     /*THE INNER TABLE ON + */
+  width: 100%;
+  margin: 0 auto;
+  font-size: 2.5 em;
+}
+ 
