@@ -706,11 +706,31 @@ else{
     // UNASSIGNED DEVICES ----------------------------------------------------------------------------//
 
     async function unassignedfunc() {
-        document.getElementById('user-search-input').addEventListener('input', filterUsers);
-        document.getElementById('cancel-search-btn').addEventListener('click', cancelSearch);
-        document.getElementById('assign-user-btn').addEventListener('click', assignUser);
+        const userSearchInput = document.getElementById('user-search-input');
+        const cancelSearchBtn = document.getElementById('cancel-search-btn');
+        const assignUserBtn = document.getElementById('assign-user-btn');
+        
+        if (userSearchInput) {
+            userSearchInput.addEventListener('input', filterUsers);
+        } else {
+            console.error('Element with ID "user-search-input" not found.');
+        }
+    
+        if (cancelSearchBtn) {
+            cancelSearchBtn.addEventListener('click', cancelSearch);
+        } else {
+            console.error('Element with ID "cancel-search-btn" not found.');
+        }
+    
+        if (assignUserBtn) {
+            assignUserBtn.addEventListener('click', assignUser);
+        } else {
+            console.error('Element with ID "assign-user-btn" not found.');
+        }
+    
         await viewUnassignedDevices();
     }
+    
 
 
 

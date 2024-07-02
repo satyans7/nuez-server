@@ -18,8 +18,8 @@ function getPageIdentifier() {
     return ""; // Default or error case
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const data = {
+document.addEventListener("DOMContentLoaded", async function () {
+    const data ={
         "superAdmin": {
             "navbarButtons": [
                 {
@@ -420,21 +420,33 @@ document.addEventListener("DOMContentLoaded", function () {
             else return `<button id="${button.id}" class="${button.class}">${button.text}</button>`;
         }).join('');
     }
-    function renderMainContent(ids, page) {
-        const main = content[page][ids];
-
-        const mainContent = document.querySelector(".main-content");
-
-        mainContent.innerHTML = main || ""; // Ensure main is not undefined/null
-    }
-
+    async function fetchHtmlFragment(role, key) {
+        try {
+          const response = await fetch(`/api/html/${role}/${key}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Failed to fetch HTML fragment:', error);
+          return null;
+        }
+      }
+      
+      // Example usage
+     async function loadFragment(role, key) {
+        const fragment = await fetchHtmlFragment(role, key);
+        if (fragment) {
+          document.querySelector(".main-content").innerHTML = fragment.content;
+          document.querySelector('.right-side-bar').innerHTML = fragment.help;
+        }
+      }
+      
 
     // Function to initialize the topbar buttons
     function initializeTopbarButtons(data) {
         let page = getPageIdentifier();
-        console.log(page);
-        let start = 0;
-        let navid = '';
 
         if (page === 'superAdmin' || page === 'admin' || page === 'site' || page === 'consumer') {
             const pageData = data[page];
@@ -449,27 +461,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     const btnElement = document.getElementById(button.id);
                     if (btnElement) {
                         btnElement.addEventListener("click", function () {
-                            start++;
-                            navid = button.id;
-                            // Handle button click action
-                            console.log(`Button ${button.id} clicked.`);
+                        
                             const sidebarButtons = pageData.sidebarButtons[button.id];
                             if (leftSidebar) {
                                 leftSidebar.innerHTML = renderSidebarButtons(sidebarButtons);
                                 sidebarButtons.forEach(sideButton => {
                                     const btn = document.getElementById(sideButton.id);
-                                    btn.addEventListener("click", () => {
+                                    btn.addEventListener("click", async () => {
                                         if (page === 'superAdmin') {
-                                            renderMainContent(sideButton.id, page); // Ensure page variable is correct
+                                            await loadFragment(page , sideButton.id); // Ensure page variable is correct
                                             initializeSuperAdminPanel(sideButton.id); // Double-check this function
                                         } else if (page === 'admin') {
-                                            renderMainContent(sideButton.id, page);
+                                            await loadFragment(page , sideButton.id);
                                             initializeAdminPanel(sideButton.id); // Verify if needed
                                         } else if (page === 'site') {
-                                            renderMainContent(sideButton.id, page);
+                                            await loadFragment(page , sideButton.id);
                                             initializeSitePanel(sideButton.id); // Verify if needed
                                         } else if (page === 'consumer') {
-                                            renderMainContent(sideButton.id, page);
+                                            await loadFragment(page , sideButton.id);
                                             initializeConsumerPanel(sideButton.id);
                                         }
                                     });

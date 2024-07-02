@@ -11,7 +11,7 @@
 body {
     width: 100%;
     min-height: 100vh;
-    padding: 0 12px; /* Adjusted padding */
+    padding: 0 10.2px; /* 12px * 0.85 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,17 +21,17 @@ body {
 /* Login form styling */
 .login-form {
     width: 100%;
-    max-width: 400px; /* Adjusted max-width */
+    max-width: 340px; /* 400px * 0.85 */
     background: #fff;
-    border-radius: 6px; /* Adjusted border-radius */
-    padding: 38px 28px; /* Adjusted padding */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Adjusted box-shadow */
+    border-radius: 5.1px; /* 6px * 0.85 */
+    padding: 32.3px 23.8px; /* 38px * 0.85, 28px * 0.85 */
+    box-shadow: 0 8.5px 17px rgba(0, 0, 0, 0.15); /* 10px * 0.85, 20px * 0.85 */
 }
 
 .login-form h3 {
-    font-size: 16px; /* Reduced font size */
+    font-size: 13.6px; /* 16px * 0.85 */
     text-align: center;
-    margin-bottom: 18px; /* Adjusted margin */
+    margin-bottom: 15.3px; /* 18px * 0.85 */
 }
 
 /* Login option styling */
@@ -39,21 +39,21 @@ body {
     display: block;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px; /* Adjusted margin */
+    margin-bottom: 15.3px; /* 18px * 0.85 */
 }
 
 .option button {
     width: 100%; /* Ensure the button takes up full width */
-    height: 52px; /* Adjusted height */
+    height: 44.2px; /* 52px * 0.85 */
     border: none;
-    border-radius: 5px; /* Adjusted border-radius */
+    border-radius: 4.25px; /* 5px * 0.85 */
     background: #94a2c8;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: background 0.3s;
-    font-size: 15px; /* Adjusted font size inside the button */
+    font-size: 12.75px; /* 15px * 0.85 */
 }
 
 .option button:hover {
@@ -61,21 +61,21 @@ body {
 }
 
 .option button i {
-    margin-left: 14px; /* Adjusted margin */
+    margin-left: 11.9px; /* 14px * 0.85 */
 }
 
 .option button img {
-    width: 54px; /* Adjusted width */
+    width: 45.9px; /* 54px * 0.85 */
 }
 
 .separator {
-    margin: 18px 0; /* Adjusted margin */
+    margin: 15.3px 0; /* 18px * 0.85 */
     text-align: center;
 }
 
 .separator span {
     background: #fff;
-    padding: 0 9px; /* Adjusted padding */
+    padding: 0 7.65px; /* 9px * 0.85 */
 }
 
 .login-form .separator::after {
@@ -83,47 +83,47 @@ body {
     display: block;
     height: 1px;
     background: #c2c2c2;
-    margin-top: 9px; /* Adjusted margin */
+    margin-top: 7.65px; /* 9px * 0.85 */
 }
 
 /* Input field and label styling */
 form .input-box {
-    margin-bottom: 22px; /* Adjusted margin */
+    margin-bottom: 18.7px; /* 22px * 0.85 */
 }
 
 form .input-box label {
     display: block;
     font-weight: 500;
-    margin-bottom: 7px; /* Adjusted margin */
+    margin-bottom: 5.95px; /* 7px * 0.85 */
 }
 
 form .input-box input {
     width: 100%;
-    height: 54px; /* Adjusted height */
+    height: 45.9px; /* 54px * 0.85 */
     border: 1px solid #dadaf2;
-    border-radius: 5px; /* Adjusted border-radius */
+    border-radius: 4.25px; /* 5px * 0.85 */
     outline: none;
     background: #f8f8fb;
-    font-size: 16px; /* Adjusted font size */
-    padding: 0 18px; /* Adjusted padding */
+    font-size: 13.6px; /* 16px * 0.85 */
+    padding: 0 15.3px; /* 18px * 0.85 */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 form .input-box input:focus {
     border-color: #9cbfdd;
-    box-shadow: 0 0 5px rgba(98, 108, 214, 0.5); /* Adjusted box-shadow */
+    box-shadow: 0 0 4.25px rgba(98, 108, 214, 0.5); /* 5px * 0.85 */
 }
 
 /* Login button styling */
 form button {
     width: 100%;
-    height: 52px; /* Adjusted height */
-    border-radius: 5px; /* Adjusted border-radius */
+    height: 44.2px; /* 52px * 0.85 */
+    border-radius: 4.25px; /* 5px * 0.85 */
     border: none;
     outline: none;
     background: #94a2c8;
     color: black;
-    font-size: 15px; /* Adjusted font size */
+    font-size: 12.75px; /* 15px * 0.85 */
     font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
@@ -145,29 +145,29 @@ a:hover {
 }
 
 .login-form p {
-    margin-top: 9px; /* Adjusted margin */
+    margin-top: 7.65px; /* 9px * 0.85 */
     text-align: center;
     font-weight: 500;
 }
 
 /* Styles for fieldset and legend */
 fieldset {
-    margin-bottom: 18px; /* Adjusted margin */
+    margin-bottom: 15.3px; /* 18px * 0.85 */
     border: none;
 }
 
 legend.role {
     font-weight: 500;
-    margin-bottom: 9px; /* Adjusted margin */
+    margin-bottom: 7.65px; /* 9px * 0.85 */
 }
 
 fieldset label {
     display: inline-block;
-    margin-right: 18px; /* Adjusted spacing between radio buttons and labels */
+    margin-right: 15.3px; /* 18px * 0.85 */
 }
 
 fieldset input[type="radio"] {
-    margin-right: 7px; /* Adjusted spacing between radio buttons */
+    margin-right: 5.95px; /* 7px * 0.85 */
 }
 
 .asterisk {
