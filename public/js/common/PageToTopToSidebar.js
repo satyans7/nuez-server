@@ -15,7 +15,6 @@ function getPageIdentifier() {
     } else if (path.includes("consumer-dashboard")) {
         return "consumer";
     }
-
     return ""; // Default or error case
 }
 
@@ -47,38 +46,23 @@ document.addEventListener("DOMContentLoaded", function () {
             "sidebarButtons": {
                 "super-admin-navbar-consumer-btn": [
                     {
-                        "id": "users",
+                        "id": "dummy-1",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 7"
-                    },
-                    {
-                        "id": "dummy-8",
-                        "class": "sidebar-btn",
-                        "text": "Dummy Button 8"
+                        "text": "Dummy Button 1"
                     }
                 ],
                 "super-admin-navbar-admin-btn": [
                     {
-                        "id": "dummy-9",
+                        "id": "dummy-2",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 9"
-                    },
-                    {
-                        "id": "dummy-10",
-                        "class": "sidebar-btn",
-                        "text": "Dummy Button 10"
+                        "text": "Dummy Button 2"
                     }
                 ],
                 "super-admin-navbar-site-btn": [
                     {
-                        "id": "dummy-11",
+                        "id": "dummy-3",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 11"
-                    },
-                    {
-                        "id": "dummy-12",
-                        "class": "sidebar-btn",
-                        "text": "Dummy Button 12"
+                        "text": "Dummy Button 3"
                     }
                 ],
                 "super-admin-navbar-advance-btn": [
@@ -136,14 +120,9 @@ document.addEventListener("DOMContentLoaded", function () {
             "sidebarButtons": {
                 "admin-navbar-site-btn": [
                     {
-                        "id": "viewsitebutton",
+                        "id": "dummy-17",
                         "class": "sidebar-btn",
                         "text": "Dummy Button 17"
-                    },
-                    {
-                        "id": "dummy-18",
-                        "class": "sidebar-btn",
-                        "text": "Dummy Button 18"
                     }
                 ],
                 "admin-navbar-advance-btn": [
@@ -187,16 +166,16 @@ document.addEventListener("DOMContentLoaded", function () {
             "sidebarButtons": {
                 "site-navbar-device-btn": [
                     {
-                        "id": "device",
+                        "id": "viewdevices",
                         "class": "sidebar-btn",
-                        "text": "All Devices"
+                        "text": "View Devices"
                     }
                 ],
                 "site-navbar-consumer-btn": [
                     {
-                        "id": "consumer",
+                        "id": "viewconsumers",
                         "class": "sidebar-btn",
-                        "text": "All Consumers"
+                        "text": "View Consumers"
                     }
                 ],
                 "site-navbar-advance-btn": [
@@ -251,9 +230,9 @@ document.addEventListener("DOMContentLoaded", function () {
             "sidebarButtons": {
                 "consumer-navbar-device-btn": [
                     {
-                        "id": "device-under-consumer",
+                        "id": "viewdevices",
                         "class": "sidebar-btn",
-                        "text": "All Devices"
+                        "text": "View Devices"
                     }
                 ],
                 "consumer-navbar-advance-btn": [
@@ -278,6 +257,9 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const content = {
         "superAdmin": {
+            "dummy-1": "<div id='user-list' class='list'><h2>All Consumers</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Details</th></tr></thead><tbody id='users-table-body'></tbody></table></div></div>",
+            "dummy-2": "<div id='user-list' class='list'><h2>All Admins</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Details</th></tr></thead><tbody id='admins-table-body'></tbody></table></div></div>",
+            "dummy-3": "<div id='site-list' class='list'><h2>All Sites</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='sites-table-body'></tbody></table></div></div>",
             "users": "<div id='user-list' class='list'><h2>All Consumers</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='users-table-body'></tbody></table></div></div>",
             "admins": "<div id='admin-list' class='list'><h2>All Admins</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='admins-table-body'></tbody></table></div></div>",
             "sites": "<div id='site-list' class='list'><h2>All Sites</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th></tr></thead><tbody id='sites-table-body'></tbody></table></div><button id='intimate-all-btn'>Intimate All</button></div>",
@@ -287,17 +269,17 @@ document.addEventListener("DOMContentLoaded", function () {
             "administration": "<div id='administration-list' class='list'><h2>Administration</h2><br><div class='sync-buttons-container'><div class='sync-source-code-container'><span>SYNC SOURCE CODE</span><button id='syncSourceCode'><img src='logo/cloud_sync.svg' alt='sync'></button></div><div class='sync-firmware-container'><span>SYNC FIRMWARE</span><button id='syncFirmware'><img src='logo/sync.svg' alt=''></button></div></div></div>"
         },
         "admin": {
+            "dummy-17":"<div id='site-list' class='list'><h2>Sites Under Admin</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='sites-table-body'></tbody></table></div></div>",
             "viewsitebutton": "<div id='all-site-cards'></div>",
             "registersitebutton": "<div id='register-form-container' class='form-container'><form id='register-site-form'><label for='site-id'>Site ID:</label><input type='text' id='site-id' name='site-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-cancel-button'>Cancel</button></form></div>",
             "deregistersitebutton": "<div id='deregister-form-container' class='form-container'><form id='deregister-site-form'><label for='site-id'>Site ID:</label><input type='text' id='deregister-site-id' name='site-id' required><div class='deregister-search-results'></div><button type='submit'>De-register</button><button type='button' id='deregister-cancel-button'>Cancel</button></form></div>"
         },
         "site": {
-            "device": `
-        <div id="device-list" class="all-devices"></div>
-    `,
+            "viewdevices":  "<div id='site-list' class='list'><h2>Devices Under Site</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='devices-table-body'></tbody></table></div></div>",
+            "viewconsumers": "<div id='site-list' class='list'><h2>Consumers Under Site</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role</th><th>Details</th></tr></thead><tbody id='consumers-table-body'></tbody></table></div></div>",
+            "device":         `<div id="device-list" class="all-devices"></div>`,
             "consumer": `
-        <div id="consumer-list" class="all-consumers"></div>
-    `,
+        <div id="consumer-list" class="all-consumers"></div>`,
             "devicemaintenance": `
         <div id="maintenance-devices-list" class="maintenance-devices" >
             <div id="maintenance-action-tabs" class="maintenance-action-tabs">
@@ -402,6 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
     `
         },
         "consumer": {
+            "viewdevices": "<div id='site-list' class='list'><h2>Devices Under Site</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='devices-table-body'></tbody></table></div></div>",
             "device-under-consumer-advanced": `<div class="all-devices"></div>`,
             "register-device-for-consumer": `<div id='registerdevice-form-container' class='form-container'><form id='register-device-form'><label for='device-id'>Device ID:</label><input type='text' id='register-device-id' name='register-device-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-device-cancel-button'>Cancel</button></form></div>`,
             "deregister-device-for-consumer": `<div id='deregisterdevice-form-container' class='form-container'><form id='deregister-device-form'><label for='device-id'>Device ID:</label><input type='text' id='deregister-device-id' name='deregister-device-id' required><div class='deregister-search-results'></div><button type='submit'>De-Register</button><button type='button' id='deregister-device-cancel-button'>Cancel</button></form></div>`,
@@ -517,3 +500,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize the topbar buttons on page load
     initializeTopbarButtons(data);
 });
+
+
+
+
+
+
+
+

@@ -2,10 +2,11 @@ import { getSitesData, getUserSiteMapping, registerDevice, registerSite, deregis
 
 
 export function initializeAdminPanel(sidebarid) {
+    const sitesTableBody = document.getElementById('sites-table-body');
     const allSitesContainer = document.getElementById('all-site-cards');
     const registerTab = document.getElementById('register-form-container');
     const deregisterTab = document.getElementById('deregister-form-container');
-    const deregisterform = document.getElementById('deregister-site-form')
+    const deregisterform = document.getElementById('deregister-site-form');
 
     //REGISTER SITE
 
@@ -144,6 +145,76 @@ export function initializeAdminPanel(sidebarid) {
     };
 
 
+    async function displayAllSites() {
+        const AdminId = getCurrentAdmin();
+        console.log(AdminId);
+        const val = await getAllSitesUnderAdmin(AdminId);
+        const sites = Object.keys(val);
+        sitesTableBody.innerHTML= '';
+        console.log(sites);
+        if(sites && sites.length>0){
+        sites.forEach(async key => {
+            let site = val[key];
+            if (site) {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                nameCell.textContent = site.name;
+                const locationCell = document.createElement('td');
+                locationCell.textContent = site.location;
+                const actionCell = document.createElement('td');
+                const requestButton = document.createElement('button');
+                requestButton.textContent = '+';
+                requestButton.addEventListener('click', () => {
+                    const nextRow = row.nextSibling;
+                    if (nextRow && nextRow.classList.contains('expanded')) {
+                        nextRow.remove();  // Hide the expanded row
+                    } else {
+                        const expandedRow = document.createElement('tr');
+                        expandedRow.classList.add('expanded');
+                        const expandedCell = document.createElement('td');
+                        expandedCell.colSpan = 3;
+    
+                        const innerTable = document.createElement('table');
+                        const headerRow = document.createElement('tr');
+                        const passwordHeader = document.createElement('th');
+                        passwordHeader.textContent = 'Password';
+                        const workHeader = document.createElement('th');
+                        workHeader.textContent = 'Work';
+    
+                        headerRow.appendChild(passwordHeader);
+                        headerRow.appendChild(workHeader);
+                        innerTable.appendChild(headerRow);
+    
+                        const dataRow = document.createElement('tr');
+                        const passwordCell = document.createElement('td');
+                        passwordCell.textContent = '123';
+                        const workCell = document.createElement('td');
+                        workCell.textContent = 'job';
+    
+                        dataRow.appendChild(passwordCell);
+                        dataRow.appendChild(workCell);
+                        innerTable.appendChild(dataRow);
+    
+                        expandedCell.appendChild(innerTable);
+                        expandedRow.appendChild(expandedCell);
+                        row.parentNode.insertBefore(expandedRow, nextRow);
+                    }
+                });
+                row.style.cursor = "pointer";
+                actionCell.appendChild(requestButton);
+                row.appendChild(nameCell);
+                row.appendChild(locationCell);    
+                row.appendChild(actionCell);            
+                sitesTableBody.appendChild(row);
+            }
+        });
+    } else{
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="3">No users available</td>`;
+        sitesTableBody.appendChild(row);
+    
+    }
+ }
 
     async function viewAllSites() {
         allSitesContainer.style.display = 'flex';
@@ -180,7 +251,8 @@ export function initializeAdminPanel(sidebarid) {
         });
     }
     function eventListeners(){
-        if(sidebarid==='viewsitebutton')viewAllSites();
+        if(sidebarid==='dummy-17') displayAllSites();
+        else if(sidebarid==='viewsitebutton')viewAllSites();
         else if(sidebarid==='registersitebutton')registerbtn();
         else if(sidebarid==='deregistersitebutton')deregisterbtn();
     }
@@ -193,4 +265,3 @@ export function initializeAdminPanel(sidebarid) {
     DOMContentLoaded();
     eventListeners();
 }
-
