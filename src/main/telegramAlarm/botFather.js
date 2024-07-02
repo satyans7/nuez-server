@@ -62,6 +62,6 @@ devicesWithConstantConsumption.push('4');
 }
 
 // Set up a periodic task to monitor consumption every minute
-setInterval(monitorConsumption, 6000); // Run every minute
+//setInterval(monitorConsumption, 6000); // Run every minute
 }
 

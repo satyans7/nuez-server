@@ -251,7 +251,7 @@ export function initializeAdminPanel(sidebarid) {
         });
     }
     function eventListeners(){
-        if(sidebarid==='dummy-17') displayAllSites();
+        if(sidebarid==='viewsites') displayAllSites();
         else if(sidebarid==='viewsitebutton')viewAllSites();
         else if(sidebarid==='registersitebutton')registerbtn();
         else if(sidebarid==='deregistersitebutton')deregisterbtn();

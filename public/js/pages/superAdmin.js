@@ -587,9 +587,9 @@ async function displayAdminsTable(){
     //     }
     // });
     async function eventListeners(){
-        if(sidebarid==='dummy-1') displayUsersTable();
-        else if(sidebarid==='dummy-2') displayAdminsTable();
-        else if(sidebarid==='dummy-3') displaySitesTable();
+        if(sidebarid==='viewconsumers') displayUsersTable();
+        else if(sidebarid==='viewadmins') displayAdminsTable();
+        else if(sidebarid==='viewsites') displaySitesTable();
         else if(sidebarid==='users')loadUsersTable();
         else if(sidebarid==='admins')loadAdminsTable();
         else if(sidebarid==='sites')loadSitesTable();

@@ -46,23 +46,23 @@ document.addEventListener("DOMContentLoaded", async function () {
             "sidebarButtons": {
                 "super-admin-navbar-consumer-btn": [
                     {
-                        "id": "dummy-1",
+                        "id": "viewconsumers",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 1"
+                        "text": "Consumers"
                     }
                 ],
                 "super-admin-navbar-admin-btn": [
                     {
-                        "id": "dummy-2",
+                        "id": "viewadmins",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 2"
+                        "text": "Admins"
                     }
                 ],
                 "super-admin-navbar-site-btn": [
                     {
-                        "id": "dummy-3",
+                        "id": "viewsites",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 3"
+                        "text": "Sites"
                     }
                 ],
                 "super-admin-navbar-advance-btn": [
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             "sidebarButtons": {
                 "admin-navbar-site-btn": [
                     {
-                        "id": "dummy-17",
+                        "id": "viewsites",
                         "class": "sidebar-btn",
                         "text": "Dummy Button 17"
                     }
@@ -255,143 +255,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
     };
-    const content = {
-        "superAdmin": {
-            "dummy-1": "<div id='user-list' class='list'><h2>All Consumers</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Details</th></tr></thead><tbody id='users-table-body'></tbody></table></div></div>",
-            "dummy-2": "<div id='user-list' class='list'><h2>All Admins</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Details</th></tr></thead><tbody id='admins-table-body'></tbody></table></div></div>",
-            "dummy-3": "<div id='site-list' class='list'><h2>All Sites</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='sites-table-body'></tbody></table></div></div>",
-            "users": "<div id='user-list' class='list'><h2>All Consumers</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='users-table-body'></tbody></table></div></div>",
-            "admins": "<div id='admin-list' class='list'><h2>All Admins</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody id='admins-table-body'></tbody></table></div></div>",
-            "sites": "<div id='site-list' class='list'><h2>All Sites</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th></tr></thead><tbody id='sites-table-body'></tbody></table></div><button id='intimate-all-btn'>Intimate All</button></div>",
-            "approved": "<div id='approved-list' class='list'><h2>Approved Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role Requested</th><th>TimeStamp</th></tr></thead><tbody id='approved-table-body'></tbody></table></div></div>",
-            "rejected": "<div id='rejected-list' class='list'><h2>Rejected Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role Requested</th><th>Timestamp</th></tr></thead><tbody id='rejected-table-body'></tbody></table></div></div>",
-            "pending": "<div id='pending-list' class='list'><h2>Pending Requests</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Current Role</th><th>Requested Role</th><th>Action</th></tr></thead><tbody id='pending-table-body'></tbody></table></div></div>",
-            "administration": "<div id='administration-list' class='list'><h2>Administration</h2><br><div class='sync-buttons-container'><div class='sync-source-code-container'><span>SYNC SOURCE CODE</span><button id='syncSourceCode'><img src='logo/cloud_sync.svg' alt='sync'></button></div><div class='sync-firmware-container'><span>SYNC FIRMWARE</span><button id='syncFirmware'><img src='logo/sync.svg' alt=''></button></div></div></div>"
-        },
-        "admin": {
-            "dummy-17":"<div id='site-list' class='list'><h2>Sites Under Admin</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='sites-table-body'></tbody></table></div></div>",
-            "viewsitebutton": "<div id='all-site-cards'></div>",
-            "registersitebutton": "<div id='register-form-container' class='form-container'><form id='register-site-form'><label for='site-id'>Site ID:</label><input type='text' id='site-id' name='site-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-cancel-button'>Cancel</button></form></div>",
-            "deregistersitebutton": "<div id='deregister-form-container' class='form-container'><form id='deregister-site-form'><label for='site-id'>Site ID:</label><input type='text' id='deregister-site-id' name='site-id' required><div class='deregister-search-results'></div><button type='submit'>De-register</button><button type='button' id='deregister-cancel-button'>Cancel</button></form></div>"
-        },
-        "site": {
-            "viewdevices":  "<div id='site-list' class='list'><h2>Devices Under Site</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='devices-table-body'></tbody></table></div></div>",
-            "viewconsumers": "<div id='site-list' class='list'><h2>Consumers Under Site</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Role</th><th>Details</th></tr></thead><tbody id='consumers-table-body'></tbody></table></div></div>",
-            "device":         `<div id="device-list" class="all-devices"></div>`,
-            "consumer": `
-        <div id="consumer-list" class="all-consumers"></div>`,
-            "devicemaintenance": `
-        <div id="maintenance-devices-list" class="maintenance-devices" >
-            <div id="maintenance-action-tabs" class="maintenance-action-tabs">
-                <button id="all-maintenance-devices">All Devices</button>
-                <button id="enter-maintenance">Operational Mode</button>
-                <button id="exit-maintenance">Maintenance Mode</button>
-            </div>
-            <div id="maintenance-container">
-                <div id="all-maintenance-devices-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Device ID</th>
-                                <th>Mode</th>
-                            </tr>
-                        </thead>
-                        <tbody id="all-mode-table-body">
-                        </tbody>
-                    </table>
-                </div>
-                <div id="enter-maintenance-container">
-                    <div class="operational-mode-devices">
-                        <h2>Devices in Operational Mode</h2>
-                        <table id="operational-mode-table">
-                            <thead>
-                                <tr>
-                                    <th>Device ID</th>
-                                </tr>
-                            </thead>
-                            <tbody id="operational-mode-table-body">
-                            </tbody>
-                        </table>
-                    </div>
-                    <button id="moveSelectedButton">Add</button>
-                    <div class="selected-devices">
-                        <h2>Selected Devices</h2>
-                        <ul class="selected-device-list" id="selected-device-list-1">
-                        </ul>
-                        <button id="sendSelectedButton">Enter Maintenance</button>
-                    </div>
-                </div>
-                <div id="exit-maintenance-container">
-                    <div class="maintenance-mode-devices">
-                        <h2>Devices in Maintenance Mode</h2>
-                        <table id="maintenance-mode-table">
-                            <thead>
-                                <tr>
-                                    <th>Device ID</th>
-                                </tr>
-                            </thead>
-                            <tbody id="maintenance-mode-table-body">
-                            </tbody>
-                        </table>
-                    </div>
-                    <button id="moveSelectedButton-2">Add</button>
-                    <div class="selected-devices">
-                        <h2>Selected Devices</h2>
-                        <ul class="selected-device-list" id="selected-device-list-2">
-                        </ul>
-                        <button id="sendSelectedButton-2">Exit Maintenance</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `,
-            "editprofile": `
-        <div id="edit-form-container" class="form-container" >
-            <form id="edit-userForm">
-                <label for="edit-name">Name:</label>
-                <input type="text" id="edit-name" value="Current Name"><br><br>
-                <label for="edit-location">Location:</label>
-                <input type="text" id="edit-location" value="Current Location"><br><br>
-                <button type="submit" id="update-button">Update</button>
-            </form>
-        </div>
-    `,
-            "unassigneddeviceslink": `
-        <div id="unassigned-devices-list" class="unassigned-devices"></div>
-        <div id="user-search-container" class="user-search-container" style="display:none;">
-            <label for="user-search-input">Search User:</label>
-            <input type="text" id="user-search-input" placeholder="Type to search...">
-            <ul id="user-list">
-                <!-- User list will be populated here -->
-            </ul>
-            <button id="assign-user-btn">Assign</button>
-            <span id="cancel-search-btn">&#x2716;</span> <!-- Close Button -->
-        </div>
-    `,
-            "firmwarelink": `
-        <div id="firmware-version-list" class="firmware-version" >
-            <div id="firmware-button-id" class="firmware-button-class">
-                <button id="upgrade-all-versions">Upgrade All Versions</button>
-                <button id="intimate-all">Intimate All</button>
-            </div>
-            <div id="device-versions-container">
-                <!-- Device versions table will be displayed here -->
-            </div>
-            <select id="firmware-dropdown" size="10">
-                <option value="" disabled selected>Select a firmware version</option>
-            </select> 
-        </div>
-    `
-        },
-        "consumer": {
-            "viewdevices": "<div id='site-list' class='list'><h2>Devices Under Site</h2><div class='table-container'><table><thead><tr><th>Name</th><th>Location</th><th>Details</th></tr></thead><tbody id='devices-table-body'></tbody></table></div></div>",
-            "device-under-consumer-advanced": `<div class="all-devices"></div>`,
-            "register-device-for-consumer": `<div id='registerdevice-form-container' class='form-container'><form id='register-device-form'><label for='device-id'>Device ID:</label><input type='text' id='register-device-id' name='register-device-id' required><div class='register-search-results'></div><button type='submit'>Register</button><button type='button' id='register-device-cancel-button'>Cancel</button></form></div>`,
-            "deregister-device-for-consumer": `<div id='deregisterdevice-form-container' class='form-container'><form id='deregister-device-form'><label for='device-id'>Device ID:</label><input type='text' id='deregister-device-id' name='deregister-device-id' required><div class='deregister-search-results'></div><button type='submit'>De-Register</button><button type='button' id='deregister-device-cancel-button'>Cancel</button></form></div>`,
-
-        }
-    }
-
+    
     const topbarMiddle = document.querySelector(".topbar-middle");
     const leftSidebar = document.querySelector(".left-side-bar");
 
