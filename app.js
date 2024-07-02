@@ -64,7 +64,7 @@ app.get("/", (req, res) => {
     else 
     res.redirect(`/api/${req.user.role}-dashboard/user_${req.user.user_id.substr(5)}`)
   }
-  else res.sendFile(path.join(__dirname, VIEW, HOME));
+  else res.sendFile(path.join(__dirname, VIEW, LOGIN));
 });
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, VIEW, LOGIN));
@@ -148,6 +148,7 @@ app.get("/logout", (req, res) => {
 
 // Start the server
 require("./src/main/routes/api-routes")(app);
+require("./src/main/telegramAlarm/botFather")(app);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

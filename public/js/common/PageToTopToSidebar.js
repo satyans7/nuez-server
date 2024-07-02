@@ -318,8 +318,6 @@ document.addEventListener("DOMContentLoaded", async function () {
           return null;
         }
       }
-      
-      // Example usage
      async function loadFragment(role, key) {
         const fragment = await fetchHtmlFragment(role, key);
         if (fragment) {
