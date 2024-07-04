@@ -455,32 +455,31 @@ class Controller {
 
   }
 
-  async downloadQRCode() {
-    const outputZipPath = path.join(__dirname, 'qr_codes_generated.zip');
-
-    // Create a ZIP archive
-    const archive = archiver('zip', {
-      zlib: { level: 9 } // Sets the compression level.
-    });
-
-    // Pipe the archive to the response stream
-    archive.pipe(res);
-
-    // Add the entire 'qr_codes_generated' directory to the archive
-    archive.directory(QRdirectoryPath, false);
-
-    // Finalize the archive and send it to the client as a download
-    archive.finalize();
-
-    // Clean up: Remove the ZIP file after sending it (optional)
-    archive.on('end', () => {
-      fs.unlink(outputZipPath, (err) => {
-        if (err) {
-          console.error('Error deleting ZIP file:', err);
-        }
-        console.log('ZIP file deleted successfully.');
+  async downloadQRCode(res) {
+    try {
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', 'attachment; filename=qr_generated.zip');
+  
+      const archive = archiver('zip', {
+        zlib: { level: 9 } // Sets the compression level
       });
-    });
+  
+      archive.on('error', (err) => {
+        throw err;
+      });
+  
+      // Pipe the archive data to the response
+      archive.pipe(res);
+  
+      // Append files from the local repo directory to the archive
+      archive.directory(QRdirectoryPath, false);
+  
+      // Finalize the archive and send it
+      archive.finalize();
+    } catch (error) {
+      console.error('Error sending zip folder:', error);
+      res.status(500).send('Error sending zip folder');
+    }
   }
 
   ////////////////AUTHORIZE_USER//////////////////////////////////
