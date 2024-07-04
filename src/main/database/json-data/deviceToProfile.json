@@ -7,5 +7,25 @@
   "SWM::MMH:LFM:CIL:JGE": {
     "name": "SWM::MMH:LFM:CIL:JGE",
     "location": "default"
+  },
+  "SWM::OEG:FLI:BLG:MPE": {
+    "name": "SWM::OEG:FLI:BLG:MPE",
+    "location": "default"
+  },
+  "SWM::MIC:OBI:PAJ:CJE": {
+    "name": "SWM::MIC:OBI:PAJ:CJE",
+    "location": "default"
+  },
+  "SWM::AIL:GBP:LIE:AEI": {
+    "name": "SWM::AIL:GBP:LIE:AEI",
+    "location": "default"
+  },
+  "SWM::AIL:GBP:LIE:LAI": {
+    "name": "SWM::AIL:GBP:LIE:LAI",
+    "location": "default"
+  },
+  "SWM::AIL:GBP:LIM:AMM": {
+    "name": "SWM::AIL:GBP:LIM:AMM",
+    "location": "default"
   }
 }

@@ -18,3 +18,5 @@ firmwareScript.sh
 sourceCodeScript.sh
 dataDeleteScript.sh
 database/
+json-data/
+qr_codes_generated/

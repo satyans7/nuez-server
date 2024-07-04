@@ -23,7 +23,6 @@ const SAMPLE_DATA_VIEW = "src/main/views";
 const SAMPLE_DATA_PAGE = "data.html";
 const SAMPLE_DATA_FOLDER = "src/main/data/xml";
 const sessionStore = "src/main/database/json-data/sessionStore.js"
-
 env.config();
 // start the session 
 app.use(
@@ -148,7 +147,6 @@ app.get("/logout", (req, res) => {
 
 // Start the server
 require("./src/main/routes/api-routes")(app);
-require("./src/main/telegramAlarm/botFather")(app);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
