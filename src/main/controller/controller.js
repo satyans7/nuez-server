@@ -5,6 +5,7 @@ const { roleAuthenticatorIdSensitive, roleAuthenticatorIdInSensitive, isAuthenti
 const QRCode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
+const archiver = require('archiver');
 
 const QRdirectoryPath = path.join(__dirname, 'qr_codes_generated');
 
@@ -452,6 +453,34 @@ class Controller {
       });
     })
 
+  }
+
+  async downloadQRCode() {
+    const outputZipPath = path.join(__dirname, 'qr_codes_generated.zip');
+
+    // Create a ZIP archive
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Sets the compression level.
+    });
+
+    // Pipe the archive to the response stream
+    archive.pipe(res);
+
+    // Add the entire 'qr_codes_generated' directory to the archive
+    archive.directory(QRdirectoryPath, false);
+
+    // Finalize the archive and send it to the client as a download
+    archive.finalize();
+
+    // Clean up: Remove the ZIP file after sending it (optional)
+    archive.on('end', () => {
+      fs.unlink(outputZipPath, (err) => {
+        if (err) {
+          console.error('Error deleting ZIP file:', err);
+        }
+        console.log('ZIP file deleted successfully.');
+      });
+    });
   }
 
   ////////////////AUTHORIZE_USER//////////////////////////////////

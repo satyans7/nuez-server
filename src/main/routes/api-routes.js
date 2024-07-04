@@ -773,7 +773,24 @@ app.get('/download/firmware', async (req, res) => {
     });
   });
   app.get('/api/generateQR',async(req,res)=>{
-    controller.generateQRCodes();
+    try{
+      await controller.generateQRCodes();
+      res.send("generated successfully")
+    }
+    catch (error) {
+      res.status(500).send("Internal Server Error");
+    }
+    
+  })
+  app.get("/api/downloadQR",async(req,res)=>{
+    try{
+      await controller.downloadQRCode();
+      res.send("downloaded successfully")
+    }
+    catch (error) {
+      res.status(500).send("Internal Server Error");
+    }
+    
   })
     
   
