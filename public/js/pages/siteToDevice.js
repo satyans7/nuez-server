@@ -827,7 +827,8 @@ else{
     async function assignUser() {
         const selectedUser = document.getElementById('user-search-input').value;
         const consumerToDeviceMapping = await getConsumerDeviceMapping();
-        if (selectedUser) {
+        const sitetoconsumer = await getSiteConsumerMapping();
+        if (selectedUser && sitetoconsumer[site].includes(selectedUser)) {
             if (selectedDeviceId) {
                 // Check if the user already exists in the mapping
                 if (consumerToDeviceMapping[selectedUser]) {
@@ -855,7 +856,7 @@ else{
                 alert('Please select a device.');
             }
         } else {
-            alert('Please select a user to assign.');
+            alert('Please enter a valid user id');
         }
     }
 
