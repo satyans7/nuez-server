@@ -100,6 +100,9 @@ module.exports = function (app) {
   const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
   const AEP_TO_SEND_FIRMWARE = "/send-firmware";
   const AEP_TO_FETCH_DEVICE_DATA ="/api/device/:deviceId"
+
+  const AEP_TO_GENERATE_DEVICE_INFO_QR = `/api/generate/deviceQR`;
+  const AEP_TO_DOWNLOAD_DEVICE_INFO_QR = "/api/download/deviceQR";
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -772,7 +775,7 @@ app.get('/download/firmware', async (req, res) => {
       }
     });
   });
-  app.get('/api/generateQR',async(req,res)=>{
+  app.get(AEP_TO_GENERATE_DEVICE_INFO_QR,async(req,res)=>{
     try{
       await controller.generateQRCodes();
       res.send("generated successfully")
@@ -782,7 +785,8 @@ app.get('/download/firmware', async (req, res) => {
     }
     
   })
-  app.get("/api/downloadQR",async(req,res)=>{
+  
+  app.get(AEP_TO_DOWNLOAD_DEVICE_INFO_QR,async(req,res)=>{
     await controller.downloadQRCode(res);
   
     
