@@ -20,6 +20,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "mqtt": "^5.7.0",
+    "node-telegram-bot-api": "^0.66.0",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
     "ntp-client": "^0.5.3",
