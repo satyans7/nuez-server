@@ -332,6 +332,11 @@ class Controller {
     return data;
   }
 
+  async fetchDeviceData(device_id){
+    let data=await this.fetchAllDevices();
+    return data[device_id];
+  }
+
   async fetchAllDevicesUnderSite(id){
     let data = await dbController.fetchAllDevicesUnderSite(id);
     return data;

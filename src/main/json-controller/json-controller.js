@@ -277,6 +277,8 @@ class JsonController {
     return data;
   }
 
+
+
   async fetchAllConsumersUnderSite(id){
     const sitetoconsumer = await this.fetchSiteToConsumer();
     const allconsumers = await this.fetchAllUsers();

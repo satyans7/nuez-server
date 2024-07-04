@@ -91,6 +91,8 @@ module.exports = function (app) {
   const AEP_TO_SYNC_FIRMWARE_DATA = "/api/sync-firmware";
   const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
   const AEP_TO_SEND_FIRMWARE = "/send-firmware";
+
+  const AEP_TO_FETCH_DEVICE_DATA ="/api/device/:deviceId"
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -259,6 +261,16 @@ module.exports = function (app) {
       res.status(500).send("Internal Server Error");
     }
   });
+
+  // fetch a single device data
+  app.get(AEP_TO_FETCH_DEVICE_DATA, async(req,res)=>{
+    try {
+      const data = await controller.fetchDeviceData(req.params.deviceId);
+      res.json(data);
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+    }
+  })
 
   app.get('/api/admin/alldevices/:id', async(req, res) => {
     try {
@@ -443,14 +455,17 @@ app.get('/api/firmware-versions', (req, res) => {
   
   // Function to get the current timestamp from NTP server
   const fetchNetworkTime = () => {
-    return new Promise((resolve, reject) => {
-      ntpClient.getNetworkTime("pool.ntp.org", 123, (err, date) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(date);
-      });
-    });
+    // return new Promise((resolve, reject) => {
+    //   ntpClient.getNetworkTime("pool.ntp.org", 123, (err, date) => {
+    //     if (err) {
+    //       return reject(err);
+    //     }
+    //     resolve(date);
+    //   });
+    // });
+    const localTime = new Date();
+    // console.log('Using local time:', localTime);
+    return localTime.toLocaleString();
   }
   
   const client = mqtt.connect("mqtt://192.168.33.250", {
@@ -551,7 +566,7 @@ app.get('/api/firmware-versions', (req, res) => {
           updateDeviceData(
             path.join(__dirname, "../database/json-data/deviceToProfile.json"),
             "timestamp",
-            { ...parsedMessage, timestamp: networkTime.toISOString() }
+            { ...parsedMessage, timestamp: networkTime }
           );
         } catch (error) {
           console.error("Error fetching network time:", error);
