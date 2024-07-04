@@ -433,7 +433,7 @@ class Controller {
     const allDeviceData = await this.fetchAllDevices();
     let deviceIds = Object.keys(allDeviceData);
     deviceIds.forEach(deviceId => {
-      const apiUrl = `http://192.168.33.250:4000/device-info/${deviceId}`;
+      const apiUrl = `http://206.189.138.34:4000/device-info/${deviceId}`;
 
       // Sanitize deviceId to remove characters not suitable for filenames
       const sanitizedDeviceId = deviceId.replace(/[^a-z0-9]/gi, '-'); // Replace non-alphanumeric characters with hyphen
