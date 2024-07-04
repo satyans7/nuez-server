@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 
-const QRdirectoryPath = path.join(__dirname, 'qr_codes_generated');
+const QRdirectoryPath = path.join(__dirname, '../qr_codes_generated');
 
 
 
