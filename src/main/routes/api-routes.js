@@ -30,6 +30,9 @@ module.exports = function (app) {
     "../views/pages",
     "deviceProfile.html"
   );
+
+  const DEVICEINFO =path.join(__dirname,"../views/pages","deviceInfo.html")
+
   const FIRMWARESYNC = path.join(__dirname, "../../../firmwareScript.sh");
   const SOURCECODESYNC = path.join(__dirname, "../../../sourceCodeScript.sh");
 
@@ -40,6 +43,7 @@ module.exports = function (app) {
   const PRIVATE_AEP_TO_DEVICEPROFILE = "/api/device-profile/:id";
 
   //public
+  const PUBLIC_AEP_TO_DEVICE_INFO ="/device-info/:deviceId"
 
   const AEP_TO_REGISTER_A_USER = "/api/user/register";
   const AEP_TO_AUTHENTICATE_A_USER = "/api/user/authenticate";
@@ -181,6 +185,10 @@ module.exports = function (app) {
   app.get(PRIVATE_AEP_TO_DEVICEPROFILE, (req, res) => {
     res.sendFile(DEVICEPROFILE);
   });
+
+  app.get(PUBLIC_AEP_TO_DEVICE_INFO,async(req,res)=>{
+    res.sendFile(DEVICEINFO);
+  })
 
   // LOGIN VIA OTP
   app.post(AEP_TO_GENERATE_OTP, async (req, res) => {
@@ -772,6 +780,9 @@ app.get('/download/firmware', async (req, res) => {
     });
   });
 
+  app.get('/api/generateQR',async(req,res)=>{
+    controller.generateQRCodes();
+  })
 
 
 

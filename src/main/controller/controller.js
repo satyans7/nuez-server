@@ -1,10 +1,18 @@
 const dbController = require("../db-controller/db-controller");
-const {passwordAuthController,otpAuthController,googleAuthController} = require("../auth-controller/auth-controller");
+const { passwordAuthController, otpAuthController, googleAuthController } = require("../auth-controller/auth-controller");
 const otpGeneratorUtility = require("../utils/otp-generator")
-const {roleAuthenticatorIdSensitive,roleAuthenticatorIdInSensitive,isAuthenticated} = require("../middlewares/auth")
+const { roleAuthenticatorIdSensitive, roleAuthenticatorIdInSensitive, isAuthenticated } = require("../middlewares/auth")
+const QRCode = require('qrcode');
+const path = require('path');
+const fs = require('fs');
+
+const QRdirectoryPath = path.join(__dirname, 'qr_codes_generated');
+
+
+
 
 class Controller {
-  passport=googleAuthController;
+  passport = googleAuthController;
   // roleAuthenticator=roleAuthenticator;
   //////////// FETCHING SAMPLE DATA///////////////////////////////////////////////
   async fetchSampleDataFromServer() {
@@ -54,48 +62,48 @@ class Controller {
 
   /////////////////////AUTHENTICATE USER/////////////////////////
   //isko mt chedna
-  async authenticateUser(req,res,formData) {
+  async authenticateUser(req, res, formData) {
     try {
       let authResult = await passwordAuthController.authenticateUser(formData);
       if (authResult.success) {
         if (authResult.route) {
-           // Handle special case for reserved emails
-          let user={
-            user_id:"idSA",
-            name:"nameSA",
-            email:formData.email,
-            role:"superAdmin"
-        }
-        req.login(user, (err) => {
-          if (err) {
-            return next(err);
+          // Handle special case for reserved emails
+          let user = {
+            user_id: "idSA",
+            name: "nameSA",
+            email: formData.email,
+            role: "superAdmin"
           }
-          
-          return res.status(200).send({success: true, route: authResult.route, message: 'Logged in successfully!!' });
-          // return { success: true, route: route, message: 'Logged In Successfully' };
-        });
-        }
-        
-        else {
-          let user={
-            user_id:authResult.user._id,
-            name:authResult.user.name,
-            email:authResult.user.email,
-            role:authResult.user.role
-        }
-        let route = `/api/${authResult.role}-dashboard/${user.user_id}`;
           req.login(user, (err) => {
             if (err) {
               return next(err);
             }
-            return res.status(200).send({success: true, route: route, message: 'Logged in successfully!!' });
+
+            return res.status(200).send({ success: true, route: authResult.route, message: 'Logged in successfully!!' });
+            // return { success: true, route: route, message: 'Logged In Successfully' };
+          });
+        }
+
+        else {
+          let user = {
+            user_id: authResult.user._id,
+            name: authResult.user.name,
+            email: authResult.user.email,
+            role: authResult.user.role
+          }
+          let route = `/api/${authResult.role}-dashboard/${user.user_id}`;
+          req.login(user, (err) => {
+            if (err) {
+              return next(err);
+            }
+            return res.status(200).send({ success: true, route: route, message: 'Logged in successfully!!' });
             // return { success: true, route: route, message: 'Logged In Successfully' };
           });
           // return { success: true, route: route, message: 'Logged In Successfully' };
         }
-      } 
+      }
       else {
-      return res.status(401).json({ message: 'Invalid email or password' });
+        return res.status(401).json({ message: 'Invalid email or password' });
         // return { success: false, route: 'null', message: 'Invalid username or password!!!' };
       }
     } catch (error) {
@@ -124,7 +132,7 @@ class Controller {
 
     const reqRole = req.body.reqRole;
     await dbController.requestRoleChange(userId, reqRole);
-  } 
+  }
   ////////////////////////////DELETE THE REQ AND ADD TO LOG////////////////////////////////////////
   async roleChangeResponse(req) {
     const action = req.body.action;
@@ -273,30 +281,30 @@ class Controller {
     }
     else return await dbController.saveotpemail(email, otp);
   }
-  async OTPVerification(req,res,email, providedotp) {
+  async OTPVerification(req, res, email, providedotp) {
     const authResult = await otpAuthController.verifyOTP(email, providedotp);
     if (authResult.success) {
-          await dbController.deleteOTPByEmail(email);
-          let user={
-            user_id:authResult.user._id,
-            name:authResult.user.name,
-            email:authResult.user.email,
-            role:authResult.user.role
-        }
-          let route = `/`;
-          req.login(user, (err) => {
-            if (err) {
-              return next(err);
-            }
-            return res.status(200).send({success: true, route: route, message: 'Logged in successfully!!' });
-          });   
+      await dbController.deleteOTPByEmail(email);
+      let user = {
+        user_id: authResult.user._id,
+        name: authResult.user.name,
+        email: authResult.user.email,
+        role: authResult.user.role
       }
-   else {
-      return  res.status(401).send( {success: false, route: 'null', message: 'Invalid OTP!!!' });
+      let route = `/`;
+      req.login(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).send({ success: true, route: route, message: 'Logged in successfully!!' });
+      });
+    }
+    else {
+      return res.status(401).send({ success: false, route: 'null', message: 'Invalid OTP!!!' });
+    }
   }
- }
-  
-  
+
+
 
   // const obj = new Controller();
   // obj.OTPGenerationAndStorage("priyansu.iitism@gmail.com");
@@ -314,7 +322,7 @@ class Controller {
     return data;
   }
 
-  async fetchAllSitesUnderAdmin(id){
+  async fetchAllSitesUnderAdmin(id) {
     let data = await dbController.fetchAllSitesUnderAdmin(id);
     return data;
   }
@@ -332,17 +340,17 @@ class Controller {
     return data;
   }
 
-  async fetchDeviceData(device_id){
-    let data=await this.fetchAllDevices();
+  async fetchDeviceData(device_id) {
+    let data = await this.fetchAllDevices();
     return data[device_id];
   }
 
-  async fetchAllDevicesUnderSite(id){
+  async fetchAllDevicesUnderSite(id) {
     let data = await dbController.fetchAllDevicesUnderSite(id);
     return data;
   }
 
-  async fetchAllConsumersUnderSite(id){
+  async fetchAllConsumersUnderSite(id) {
     let data = await dbController.fetchAllConsumersUnderSite(id);
     return data;
   }
@@ -415,10 +423,41 @@ class Controller {
     await dbController.postDevice(req, res);
   }
 
-////////////////AUTHORIZE_USER//////////////////////////////////
-roleAuthenticatorIdInSensitive=roleAuthenticatorIdInSensitive;
- roleAuthenticatorIdSensitive=roleAuthenticatorIdSensitive ;
- isAuthenticated=isAuthenticated;
+
+  async generateQRCodes() {
+    // Ensure the directory exists or create it if it doesn't
+    if (!fs.existsSync(QRdirectoryPath)) {
+      fs.mkdirSync(QRdirectoryPath);
+    }
+    const allDeviceData = await this.fetchAllDevices();
+    let deviceIds = Object.keys(allDeviceData);
+    deviceIds.forEach(deviceId => {
+      const apiUrl = `http://192.168.33.250:4000/device-info/${deviceId}`;
+
+      // Sanitize deviceId to remove characters not suitable for filenames
+      const sanitizedDeviceId = deviceId.replace(/[^a-z0-9]/gi, '-'); // Replace non-alphanumeric characters with hyphen
+
+      // Define the complete file path including the file name
+      const filePath = path.join(QRdirectoryPath, `QR_${sanitizedDeviceId}.png`);
+
+      // Generate QR code and save as image
+      QRCode.toFile(filePath, apiUrl, {
+        color: {
+          dark: '#000',  // QR code color
+          light: '#FFF'  // Background color
+        }
+      }, function (err) {
+        if (err) throw err;
+        console.log(`QR code generated and saved as ${filePath}`);
+      });
+    })
+
+  }
+
+  ////////////////AUTHORIZE_USER//////////////////////////////////
+  roleAuthenticatorIdInSensitive = roleAuthenticatorIdInSensitive;
+  roleAuthenticatorIdSensitive = roleAuthenticatorIdSensitive;
+  isAuthenticated = isAuthenticated;
 }
 
 module.exports = new Controller();
