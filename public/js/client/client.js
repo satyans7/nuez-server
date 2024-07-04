@@ -224,6 +224,8 @@ export async function enterMaintenance(object){
 }
 
 export async function exitMaintenance(object){
-    return await controller.exitMaintenance(object);
+    const res = await controller.exitMaintenance(object);
+    console.log(res);
+    return res;
 }
 

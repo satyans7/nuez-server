@@ -1,3 +1,4 @@
+
 const path = require("path");
 const controller = require("../controller/controller.js");
 const fs = require("fs");
@@ -7,7 +8,10 @@ const archiver = require('archiver');
 const SUPERADMIN = "/superAdmin"
 MAINTENANCE_ENTER = "enter"
 MAINTENANCE_EXIT = "exit"
+const { botFunction } = require("../telegramAlarm/botFather.js");
+
 module.exports = function (app) {
+  const { heartbeatMap, waterConsumptionMap } = require('../telegramAlarm/map.js');
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
     const data = await controller.fetchSampleDataFromServer();
@@ -95,7 +99,6 @@ module.exports = function (app) {
   const AEP_TO_SYNC_FIRMWARE_DATA = "/api/sync-firmware";
   const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
   const AEP_TO_SEND_FIRMWARE = "/send-firmware";
-
   const AEP_TO_FETCH_DEVICE_DATA ="/api/device/:deviceId"
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -270,16 +273,6 @@ module.exports = function (app) {
     }
   });
 
-  // fetch a single device data
-  app.get(AEP_TO_FETCH_DEVICE_DATA, async(req,res)=>{
-    try {
-      const data = await controller.fetchDeviceData(req.params.deviceId);
-      res.json(data);
-    } catch (error) {
-      res.status(500).send("Internal Server Error");
-    }
-  })
-
   app.get('/api/admin/alldevices/:id', async(req, res) => {
     try {
       const id = req.params.id;
@@ -372,6 +365,14 @@ module.exports = function (app) {
   app.post(AEP_TO_POST_DEVICE, async (req, res) => {
     await controller.postDevice(req, res);
   });
+  app.get(AEP_TO_FETCH_DEVICE_DATA, async(req,res)=>{
+    try {
+      const data = await controller.fetchDeviceData(req.params.deviceId);
+      res.json(data);
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+    }
+  })
 
   const localRepoPath = path.join(__dirname, '../local-repo');
 
@@ -463,18 +464,10 @@ app.get('/api/firmware-versions', (req, res) => {
   
   // Function to get the current timestamp from NTP server
   const fetchNetworkTime = () => {
-    // return new Promise((resolve, reject) => {
-    //   ntpClient.getNetworkTime("pool.ntp.org", 123, (err, date) => {
-    //     if (err) {
-    //       return reject(err);
-    //     }
-    //     resolve(date);
-    //   });
-    // });
     const localTime = new Date();
-    // console.log('Using local time:', localTime);
-    return localTime.toLocaleString();
-  }
+    return localTime.getTime(); // Returns the Unix timestamp in milliseconds
+};
+
   
   const client = mqtt.connect("mqtt://192.168.33.250", {
     port: 1883,
@@ -548,6 +541,8 @@ app.get('/api/firmware-versions', (req, res) => {
     switch (topicName) {
       case "water-consumption-data":
         const { site_id, device_id } = parsedMessage;
+        const networkTime = await fetchNetworkTime();
+        waterConsumptionMap.set(parsedMessage.device_id,networkTime);
         handleRegistration(site_id, device_id);
         break;
   
@@ -571,11 +566,9 @@ app.get('/api/firmware-versions', (req, res) => {
       case "device-heartbeat-info":
         try {
           const networkTime = await fetchNetworkTime();
-          updateDeviceData(
-            path.join(__dirname, "../database/json-data/deviceToProfile.json"),
-            "timestamp",
-            { ...parsedMessage, timestamp: networkTime }
-          );
+          heartbeatMap.set(parsedMessage.device_id,networkTime);
+          
+        
         } catch (error) {
           console.error("Error fetching network time:", error);
         }
@@ -779,11 +772,12 @@ app.get('/download/firmware', async (req, res) => {
       }
     });
   });
-
   app.get('/api/generateQR',async(req,res)=>{
     controller.generateQRCodes();
   })
-
+    
+  
+setTimeout(botFunction, 20000);
 
 
 };
