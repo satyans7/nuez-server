@@ -367,7 +367,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
     }
-
+    const logoutBtn=document.querySelector(".logout-btn");
+    logoutBtn.addEventListener("click",()=>{
+        window.location.href="/logout";
+    })
     // Initialize the topbar buttons on page load
     initializeTopbarButtons(data);
 });
