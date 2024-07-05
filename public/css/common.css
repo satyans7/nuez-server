@@ -398,7 +398,6 @@ tr:hover td {
   /* sidebar */
   .left-side-bar {
     grid-column: 1/5;
-    pad;
   }
 
   .left-side-bar button {
