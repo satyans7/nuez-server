@@ -58,7 +58,7 @@ app.use(controller.passport.session());
 app.get("/", (req, res) => {
     if(req.isAuthenticated()){
       if(req.user.role==="superAdmin"){
-        res.sendFile(path.join(__dirname, VIEW, SUPERADMIN));
+        res.redirect(`/superAdmin`)
       }
     else 
     res.redirect(`/api/${req.user.role}-dashboard/user_${req.user.user_id.substr(5)}`)
@@ -74,53 +74,9 @@ app.get("/register", (req, res) => {
 app.get("/loginviaotp",(req,res)=>{
   res.sendFile(path.join(__dirname,VIEW,OTPLOGIN))
 })
-// app.get("/superAdmin", (req, res) => {
-//   res.sendFile(path.join(__dirname, VIEW, SUPERADMIN));
-// });
-
-
-
-// app.get("/admin",(req, res) => {
-//   if (req.isAuthenticated()) {
-//     if(req.user.role=="admin")
-//     res.sendFile(path.join(__dirname, VIEW, ADMIN));
-//     else res.sendStatus(403);
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
-// app.get("/consumer", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     if(req.user.role=="consumer"){
-//       res.sendFile(path.join(__dirname, VIEW, CONSUMER));
-//     }
-//       else {
-//         res.sendStatus(403);
-//   } 
-// }else {
-//     res.redirect("/login");
-//   }                                                                                                                                                                                                                                                                                                      
-// });
-app.get("/test", (req, res) => {
-  res.sendFile(path.join(__dirname, TEST_VIEW, TEST));
+app.get("/superAdmin", (req, res) => {
+  res.sendFile(path.join(__dirname, VIEW, SUPERADMIN));
 });
-// app.get("/sample", (req, res) => {
-//   res.sendFile(path.join(__dirname, SAMPLE_DATA_VIEW, SAMPLE_DATA_PAGE));
-// });
-
-// app.get('/sample/download/:fileName', function(req, res) {
-//   const fileName = req.params.fileName;
-//   const filePath = path.join(__dirname, SAMPLE_DATA_FOLDER, fileName);
-
-//   res.download(filePath, fileName, function(err) {
-//     if (err) {
-//       console.error('Error sending file:', err);
-//       res.status(500).send('Error sending file');
-//     } else {
-//       console.log(`${fileName} sent successfully`);
-//     }
-//   });
-// });
 
 // google authentication routes
 app.get("/auth/google",controller.passport.authenticate("google",{scope:["profile","email"]}))
