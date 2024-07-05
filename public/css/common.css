@@ -240,6 +240,7 @@ td {
   padding: 12px 15px;
   border: 1px solid #ddd;
   text-align: center;
+    word-wrap: break-word; 
 }
 
 th {
@@ -269,6 +270,9 @@ tr:hover td {
   font-size: 2.5em;
 }
 
+.device-versions-container,
+.list,
+.all-admins,
 .all-devices,
 .all-consumers,
 .all-sites {
@@ -397,7 +401,10 @@ tr:hover td {
   }
 
   .left-side-bar button {
-    height: 1fr;
+    height: 0.8fr;
+    width: 100%;
+    font-size: 10px;
+    margin: 0px;
   }
 
   .right-side-bar {
@@ -415,16 +422,20 @@ tr:hover td {
 
   th,
   td {
-    padding: 8px;
+    padding: 5px;
+    
   }
 
 
   /* topbar */
 
   .topbar-left img {
-    width: 100px;
+    width: 90px;
   }
 
+  .topbar-left{
+    margin: 0px;
+  }
   .topbar-right {
     grid-template-columns: 1fr 3fr 0.2fr;
 
