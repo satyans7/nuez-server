@@ -142,29 +142,33 @@
 } */
 
 .maintenance-action-tabs{
+    display: flex;
+    gap: 10px;
     padding: 1rem 0;
+    flex-flow: wrap;
+    row-gap: 10px;
 }
 .operational-wrapper{
     display: flex;
-    justify-content: center;
-    gap : 2rem;
-    align-items: center;    
+    justify-content: space-between;
+    align-items: center;  
+    flex-flow: wrap;   
 }
 
 .maintenance-wrapper{
     display: flex;
-    justify-content: center;
-    gap : 2rem;
-    align-items: center;    
+    justify-content: space-between;
+    align-items: center;   
+    flex-flow: wrap; 
 }
 .maintenancecontainer {
     display: flex;
     flex-direction: column;
-    width: 35%;
-    height: 300px;
+    width: 300px;
+    height: 350px;
     margin: 10px;
     padding: 10px;
-    background-color : white;
+    background-color : #ECF0F1;
     border-radius : 10px;
     overflow-y: auto;
 }
@@ -172,7 +176,7 @@
 .selectedcontainer{
     display: flex;
     flex-direction: column;
-    width: 35%;
+    width: 300px;
     gap : 1rem;
     margin: 10px;
     padding: 10px;
@@ -199,7 +203,7 @@
     height: 300px;
     margin: 10px;
     padding: 10px;
-    background-color : white;
+    background-color : #ECF0F1;
     border-radius : 10px;
     
 }
@@ -223,4 +227,39 @@
 
 .button-item.selected {
     background-color: #ddd;
+}
+
+@media (max-width : 1000px){
+    .operational-wrapper{
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .maintenance-wrapper{
+        justify-content: center;
+        gap: 1rem;
+    }
+
+}
+@media (max-width : 768px){
+    .operational-wrapper{
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .maintenance-wrapper{
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .controls{
+        rotate: 90deg;
+    }
+}
+
+@media (max-width : 460px){
+    .maintenancecontainer , .selectedcontainer{
+        width : 90%;
+
+    }
 }

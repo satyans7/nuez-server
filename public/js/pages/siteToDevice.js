@@ -973,7 +973,7 @@ else{
             const tbody = document.createElement('tbody');
 
             // Create table headers
-            const headers = ['Device ID', 'Device Name', 'Version'];
+            const headers = ['Device ID', 'Version'];
             const headerRow = document.createElement('tr');
             headers.forEach(headerText => {
                 const header = document.createElement('th');
@@ -990,9 +990,6 @@ else{
                 deviceIdCell.textContent = device.id;
                 row.appendChild(deviceIdCell);
 
-                const deviceNameCell = document.createElement('td');
-                deviceNameCell.textContent = device.name;
-                row.appendChild(deviceNameCell);
 
                 const versionCell = document.createElement('td');
                 versionCell.textContent = device.version;
