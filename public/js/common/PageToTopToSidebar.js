@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     {
                         "id": "viewsites",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 17"
+                        "text": "View sites"
                     }
                 ],
                 "admin-navbar-advance-btn": [
@@ -367,7 +367,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
     }
-
+    const logoutBtn=document.querySelector(".logout-btn");
+    logoutBtn.addEventListener("click",()=>{
+        window.location.href="/logout";
+    })
     // Initialize the topbar buttons on page load
     initializeTopbarButtons(data);
 });
