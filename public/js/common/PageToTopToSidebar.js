@@ -18,13 +18,13 @@ function getPageIdentifier() {
     return ""; // Default or error case
 }
 const AEP_TO_GET_BUTTON_MAPPING='/api/buttonMapping'
-async function getButtonMapFromServer(){
+ async function getButtonMapFromServer(){
     try {
-        const response = await fetch(AEP_TO_GET_BUTTON_MAPPING);
+        const response =  await fetch(AEP_TO_GET_BUTTON_MAPPING);
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
-        const data = await response.json();
+        const data =  response.json();
         return data;
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -33,10 +33,14 @@ async function getButtonMapFromServer(){
 }
 document.addEventListener("DOMContentLoaded", async function () {
     const data = await getButtonMapFromServer();
-    initializeNavbar(data);
+    if (data) {
+        initializeNavbar(data);
+    } else {
+        console.error("Failed to fetch button mapping data.");
+    }
 });
 
-function initializeNavbar(data){
+async function initializeNavbar(data){
     const topbarMiddle = document.querySelector(".topbar-middle");
     const leftSidebar = document.querySelector(".left-side-bar");
 
