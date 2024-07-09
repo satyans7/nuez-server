@@ -159,58 +159,62 @@ export function initializeAdminPanel(sidebarid) {
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
                 nameCell.textContent = site.name;
-                const locationCell = document.createElement('td');
-                locationCell.textContent = site.location;
                 const actionCell = document.createElement('td');
+                actionCell.classList.add('action-cell');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = '+';
                 requestButton.addEventListener('click', () => {
-                    const nextRow = row.nextSibling;
-                    if (nextRow && nextRow.classList.contains('expanded')) {
-                        nextRow.remove();  // Hide the expanded row
+                    const existingCardRow = row.nextSibling;
+                    if (existingCardRow && existingCardRow.classList.contains('card-row')) {
+                        existingCardRow.remove();
                     } else {
-                        const expandedRow = document.createElement('tr');
-                        expandedRow.classList.add('expanded');
-                        const expandedCell = document.createElement('td');
-                        expandedCell.colSpan = 3;
-    
-                        const innerTable = document.createElement('table');
-                        const headerRow = document.createElement('tr');
-                        const passwordHeader = document.createElement('th');
-                        passwordHeader.textContent = 'Password';
-                        const workHeader = document.createElement('th');
-                        workHeader.textContent = 'Work';
-    
-                        headerRow.appendChild(passwordHeader);
-                        headerRow.appendChild(workHeader);
-                        innerTable.appendChild(headerRow);
-    
-                        const dataRow = document.createElement('tr');
-                        const passwordCell = document.createElement('td');
-                        passwordCell.textContent = '123';
-                        const workCell = document.createElement('td');
-                        workCell.textContent = 'job';
-    
-                        dataRow.appendChild(passwordCell);
-                        dataRow.appendChild(workCell);
-                        innerTable.appendChild(dataRow);
-    
-                        expandedCell.appendChild(innerTable);
-                        expandedRow.appendChild(expandedCell);
-                        row.parentNode.insertBefore(expandedRow, nextRow);
+                        const cardRow = document.createElement('tr');
+                        cardRow.classList.add('card-row');
+                        const cardCell = document.createElement('td');
+                        cardCell.colSpan = 2; // Span across all columns
+                        
+
+                        const siteCard = document.createElement('div');
+                        siteCard.className = 'displaycard';
+                        siteCard.id = 'fetch-site-data';
+
+                        const cardHeading = document.createElement('div');
+                        cardHeading.className = 'card-heading';
+
+                        const siteName = document.createElement('h3');
+                        siteName.textContent = site.name;
+                        cardHeading.appendChild(siteName);
+                        siteCard.appendChild(cardHeading);
+
+                        const cardBody = document.createElement('div');
+                        cardBody.className = 'card-body';
+
+                        const siteLocation = document.createElement('h4');
+                        siteLocation.textContent = site.location;
+
+                        cardBody.appendChild(siteLocation);
+                        siteCard.appendChild(cardBody);
+
+
+
+                        const card = siteCard;
+                        cardCell.appendChild(card);
+                        cardRow.appendChild(cardCell);
+
+                        // Insert the card row after the current row
+                        row.parentNode.insertBefore(cardRow, row.nextSibling);
                     }
                 });
                 row.style.cursor = "pointer";
                 actionCell.appendChild(requestButton);
-                row.appendChild(nameCell);
-                row.appendChild(locationCell);    
+                row.appendChild(nameCell);   
                 row.appendChild(actionCell);            
                 sitesTableBody.appendChild(row);
             }
         });
     } else{
         const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="3">No users available</td>`;
+        row.innerHTML = `<td colspan="2">No sites available</td>`;
         sitesTableBody.appendChild(row);
     
     }
