@@ -447,24 +447,15 @@ module.exports = function (app) {
   app.get(AEP_TO_FETCH_A_HTML_FRAGMENT_UNDER_A_PAGE, (req, res) => {
     const { role, key } = req.params;
     const filePath = path.join(__dirname, '../views/html_fragments', role, `${key}.html`);
-
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
         return res.status(404).send('Fragment not found');
       }
-
-      const contentMatch = data.match(/<!-- content -->([\s\S]*?)<!--/);
-      const helpMatch = data.match(/<!-- help -->([\s\S]*?)$/);
-
-      if (contentMatch && helpMatch) {
-        const content = contentMatch[1].trim();
-        const help = helpMatch[1].trim();
-        res.json({ content, help });
-      } else {
-        res.status(500).send('Invalid HTML fragment format');
-      }
+  
+      res.json({ fragment: data });
     });
   });
+  
 
   app.get(AEP_TO_GET_BUTTON_MAPPING, async (req, res) => {
     res.sendFile(BUTTONMAP);

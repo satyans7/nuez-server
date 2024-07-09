@@ -78,11 +78,18 @@ function initializeNavbar(data){
           return null;
         }
       }
-     async function loadFragment(role, key) {
+      
+      async function loadFragment(role, key) {
         const fragment = await fetchHtmlFragment(role, key);
         if (fragment) {
-          document.querySelector(".main-content").innerHTML = fragment.content;
-          document.querySelector('.right-side-bar').innerHTML = fragment.help;
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = fragment.fragment;
+      
+          const content = tempDiv.querySelector('.content').outerHTML;
+          const help = tempDiv.querySelector('.help').outerHTML;
+      
+          document.querySelector(".main-content").innerHTML = content;
+          document.querySelector('.right-side-bar').innerHTML = help;
         }
       }
       
