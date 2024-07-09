@@ -31,10 +31,12 @@ async function getButtonMapFromServer(){
         return null;
       }
 }
-
 document.addEventListener("DOMContentLoaded", async function () {
     const data = await getButtonMapFromServer();
-    
+    initializeNavbar(data);
+});
+
+function initializeNavbar(data){
     const topbarMiddle = document.querySelector(".topbar-middle");
     const leftSidebar = document.querySelector(".left-side-bar");
 
@@ -152,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     })
     // Initialize the topbar buttons on page load
     initializeTopbarButtons(data);
-});
+}
 
 
 
