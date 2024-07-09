@@ -15,6 +15,7 @@ const LOGIN = "pages/login.html";
 const REGISTER = "pages/register.html";
 const OTPLOGIN="pages/loginviaotp.html"
 const SUPERADMIN = "pages/superAdmin.html";
+const ERROR="pages/pageNotFound.html"
 const ADMIN = "pages/admin.html";
 const CONSUMER="pages/consumer.html";
 const TEST_VIEW = "src/main/views";
@@ -53,7 +54,7 @@ app.use(controller.passport.initialize());
 //integrate session with passport 
 app.use(controller.passport.session());
 
-
+require("./src/main/routes/api-routes")(app);
 // Define routes
 app.get("/", (req, res) => {
     if(req.isAuthenticated()){
@@ -100,9 +101,11 @@ app.get("/logout", (req, res) => {
     res.redirect("/login");
   });
 });
-
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, VIEW, ERROR));
+});
 // Start the server
-require("./src/main/routes/api-routes")(app);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

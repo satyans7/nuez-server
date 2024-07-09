@@ -29,7 +29,7 @@ function populateFormWithDeviceData(deviceId) {
     document.getElementById('deviceTotalConsumption').value = deviceTotalConsumption;
     document.getElementById('deviceStatus').value = deviceStatus;
     document.getElementById('deviceRegistrationDate').value = deviceRegistrationDate;
-    
+
 }
 
 // Function to delete a device
@@ -53,9 +53,9 @@ async function initializeProfilePage() {
     const particularDeviceData = devicesData[currentId];
 
     if (particularDeviceData) {
-        DEVICE_ID=currentId;
+        DEVICE_ID = currentId;
         console.log(particularDeviceData);
-        SITE_ID=particularDeviceData.siteId;
+        SITE_ID = particularDeviceData.siteId;
         grafanaPanel();
         populateDeviceCard(particularDeviceData);
         addEditDeleteButtons();
@@ -98,7 +98,7 @@ function addEditDeleteButtons() {
 // Function to setup form submission
 function setupFormSubmission() {
     const form = document.getElementById('editProfileForm');
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
         saveProfile();
     });
@@ -142,19 +142,48 @@ function closeForm() {
 
 // Initialize the profile page once the DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeProfilePage);
-async function grafanaPanel(){
-    // Create the iframe element
-    const iframe = document.createElement('iframe');
-    console.log(DEVICE_ID);
-    console.log(SITE_ID)
-    // iframe.src = `http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&from=1720425233122&to=1720468433122&var-device_id=SWM::MIC:OBI:PAK:LLM&var-site_id=SITE::NID:KNN:MCK:DPL&panelId=8`
-    iframe.src = `http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&from=1720460036083&to=1720503236083&panelId=8`;
-    
-    iframe.width = "450";
-    iframe.height = "200";
-    iframe.frameBorder = "0";
 
+async function createIframeTextPanel(url) {
+    let newDiv = document.createElement('div');
+
+    // Set the class name for the new div
+    newDiv.className = 'grafana-text-panel';
+    // Create the iframe element
+
+    const iframe1 = document.createElement('iframe');
+
+    iframe1.src = url;
+    iframe1.width = "300";
+    iframe1.height = "150";
+    iframe1.frameBorder = "0";
+    newDiv.appendChild(iframe1);
     // Append the iframe to the div with id 'graph-card'
-    document.getElementById('graph-card').appendChild(iframe);
+    document.getElementById('graph-card').appendChild(newDiv);
+}
+async function createIframeGraphPanel(url) {
+    let newDiv = document.createElement('div');
+
+    // Set the class name for the new div
+    newDiv.className = 'grafana-graph-panel';
+    // Create the iframe element
+
+    const iframe1 = document.createElement('iframe');
+
+    iframe1.src = url;
+    iframe1.width = "500";
+    iframe1.height = "300";
+    iframe1.frameBorder = "0";
+    newDiv.appendChild(iframe1);
+    // Append the iframe to the div with id 'graph-card'
+    document.getElementById('graph-card').appendChild(newDiv);
+}
+async function grafanaPanel() {
+
+    const panel_1_URL = `http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&from=1720483941783&to=1720505541783&refresh=1m&panelId=8`
+
+    const panel_2_URL=`http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&refresh=30s&panelId=2`
+    createIframeTextPanel(panel_1_URL);
+    createIframeGraphPanel(panel_2_URL)
+    
 };
 
