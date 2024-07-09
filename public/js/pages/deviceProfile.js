@@ -68,11 +68,13 @@ async function initializeProfilePage() {
 
 // Function to populate the device card with data
 function populateDeviceCard(data) {
+    console.log(data.owner);
     document.getElementById('device-name').textContent = `Name: ${data.name}`;
     document.getElementById('device-location').textContent = `Location: ${data.location}`;
-    document.getElementById('device-totalConsumption').textContent = `Total Consumption: ${data.totalConsumption}`;
-    document.getElementById('device-status').textContent = `Status: ${data.status}`;
-    document.getElementById('device-registrationDate').textContent = `Registration Date: ${data.registrationDate}`;
+    //document.getElementById('device-totalConsumption').textContent = `Total Consumption: ${data.totalConsumption}`;
+    //document.getElementById('device-status').textContent = `Status: ${data.status}`;
+    document.getElementById('device-owner').textContent = `Owner: ${data.owner}`;
+    //document.getElementById('device-registrationDate').textContent = `Registration Date: ${data.registrationDate}`;
 }
 
 // Function to add Edit and Delete buttons to the device card

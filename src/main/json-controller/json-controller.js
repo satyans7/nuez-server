@@ -532,6 +532,8 @@ async registerConsumerToDeviceMapping(req, res) {
 
   try {
     let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+    let deviceProfile = await this.readDatabase(DEVICE_DATA);
+
 
     if (Object.values(data).find(devices => devices.find(d => d === device))) {
       return res.status(400).json({ message: "Device already registered under another site" });
@@ -541,6 +543,8 @@ async registerConsumerToDeviceMapping(req, res) {
       if (!data[consumer].find(d => d === device)) {
         data[consumer].push(device);
         await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
+        deviceProfile[device].owner = consumer;
+        await this.writeDatabase(DEVICE_DATA, deviceProfile);
         return res.status(200).json({ message: "Device registered successfully", data });
       } else {
         return res.status(400).json({ message: "Device already exists" });
@@ -559,12 +563,15 @@ async deregisterConsumerToDeviceMapping(req, res) {
   const consumer = req.params.id;
   const device = req.body.device;
   let data = await this.readDatabase(CONSUMER_TO_DEVICE_DATA);
+  let deviceProfile = await this.readDatabase(DEVICE_DATA);
   try {
     if (data[consumer]) {
       const deviceIndex = data[consumer].findIndex(d => d === device);
       if (deviceIndex > -1) {
         data[consumer].splice(deviceIndex, 1);
         await this.writeDatabase(CONSUMER_TO_DEVICE_DATA, data);
+        deviceProfile[device].owner = "not assigned";
+        await this.writeDatabase(DEVICE_DATA, deviceProfile);
         return res.status(200).json({ message: "Device deleted successfully", data });
       } else {
         return res.status(400).json({ message: "Device not found for this site" });
