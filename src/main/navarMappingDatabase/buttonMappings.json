@@ -1,0 +1,236 @@
+{
+    "superAdmin": {
+        "navbarButtons": [
+            {
+                "id": "super-admin-navbar-consumer-btn",
+                "class": "super-admin-navbar-consumer-btn",
+                "html": "<img src=\"/logo/consumer.svg\" alt=\"CONSUMER\">"
+            },
+            {
+                "id": "super-admin-navbar-admin-btn",
+                "class": "super-admin-navbar-admin-btn",
+                "html": "<img src=\"/logo/admin.svg\" alt=\"ADMIN\">"
+            },
+            {
+                "id": "super-admin-navbar-site-btn",
+                "class": "super-admin-navbar-site-btn",
+                "html": "<img src=\"/logo/site.svg\" alt=\"SITES\">"
+            },
+            {
+                "id": "super-admin-navbar-advance-btn",
+                "class": "super-admin-navbar-advance-btn",
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+            }
+        ],
+        "sidebarButtons": {
+            "super-admin-navbar-consumer-btn": [
+                {
+                    "id": "viewconsumers",
+                    "class": "sidebar-btn",
+                    "text": "Consumers"
+                }
+            ],
+            "super-admin-navbar-admin-btn": [
+                {
+                    "id": "viewadmins",
+                    "class": "sidebar-btn",
+                    "text": "Admins"
+                }
+            ],
+            "super-admin-navbar-site-btn": [
+                {
+                    "id": "viewsites",
+                    "class": "sidebar-btn",
+                    "text": "Sites"
+                }
+            ],
+            "super-admin-navbar-advance-btn": [
+                {
+                    "id": "users",
+                    "class": "sidebar-btn",
+                    "text": "All Consumers"
+                },
+                {
+                    "id": "admins",
+                    "class": "sidebar-btn",
+                    "text": "All Admins"
+                },
+                {
+                    "id": "sites",
+                    "class": "sidebar-btn",
+                    "text": "All Sites"
+                },
+                {
+                    "id": "approved",
+                    "class": "sidebar-btn",
+                    "text": "Approved Requests"
+                },
+                {
+                    "id": "rejected",
+                    "class": "sidebar-btn",
+                    "text": "Rejected Requests"
+                },
+                {
+                    "id": "pending",
+                    "class": "sidebar-btn",
+                    "text": "Pending Requests"
+                },
+                {
+                    "id": "administration",
+                    "class": "sidebar-btn",
+                    "text": "Administration"
+                }
+            ]
+        }
+    },
+    "admin": {
+        "navbarButtons": [
+            {
+                "id": "admin-navbar-site-btn",
+                "class": "admin-navbar-site-btn",
+                "html": "<img src=\"/logo/site.svg\" alt=\"SITES\">"
+            },
+            {
+                "id": "admin-navbar-advance-btn",
+                "class": "admin-navbar-advance-btn",
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+            }
+        ],
+        "sidebarButtons": {
+            "admin-navbar-site-btn": [
+                {
+                    "id": "viewsites",
+                    "class": "sidebar-btn",
+                    "text": "View sites"
+                }
+            ],
+            "admin-navbar-advance-btn": [
+                {
+                    "id": "viewsitebutton",
+                    "class": "sidebar-btn",
+                    "text": "All Sites"
+                },
+                {
+                    "id": "registersitebutton",
+                    "class": "sidebar-btn",
+                    "text": "Register"
+                },
+                {
+                    "id": "deregistersitebutton",
+                    "class": "sidebar-btn",
+                    "text": "Deregister"
+                }
+            ]
+        }
+    },
+    "site": {
+        "navbarButtons": [
+            {
+                "id": "site-navbar-device-btn",
+                "class": "site-navbar-device-btn",
+                "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">"
+            },
+            {
+                "id": "site-navbar-consumer-btn",
+                "class": "site-navbar-consumer-btn",
+                "html": "<img src=\"/logo/consumer.svg\" alt=\"CONSUMER\">"
+            },
+            {
+                "id": "site-navbar-advance-btn",
+                "class": "site-navbar-advance-btn",
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+
+            }
+        ],
+        "sidebarButtons": {
+            "site-navbar-device-btn": [
+                {
+                    "id": "viewdevices",
+                    "class": "sidebar-btn",
+                    "text": "View Devices"
+                }
+            ],
+            "site-navbar-consumer-btn": [
+                {
+                    "id": "viewconsumers",
+                    "class": "sidebar-btn",
+                    "text": "View Consumers"
+                }
+            ],
+            "site-navbar-advance-btn": [
+                {
+                    "id": "device",
+                    "class": "sidebar-btn",
+                    "text": "All Devices"
+                },
+                {
+                    "id": "consumer",
+                    "class": "sidebar-btn",
+                    "text": "All Consumers"
+                },
+                {
+                    "id": "devicemaintenance",
+                    "class": "sidebar-btn",
+                    "text": "Maintenance"
+                },
+                {
+                    "id": "editprofile",
+                    "class": "sidebar-btn",
+                    "text": "Edit Profile"
+                },
+                {
+                    "id": "unassigneddeviceslink",
+                    "class": "sidebar-btn",
+                    "text": "Unassigned Devices"
+                },
+                {
+                    "id": "firmwarelink",
+                    "class": "sidebar-btn",
+                    "text": "Firmware"
+                }
+            ]
+        }
+
+    },
+    "consumer": {
+        "navbarButtons": [
+            {
+                "id": "consumer-navbar-device-btn",
+                "class": "consumer-navbar-device-btn",
+                "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">"
+            },
+            {
+                "id": "consumer-navbar-advance-btn",
+                "class": "consumer-navbar-advance-btn",
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+
+            }
+        ],
+        "sidebarButtons": {
+            "consumer-navbar-device-btn": [
+                {
+                    "id": "viewdevices",
+                    "class": "sidebar-btn",
+                    "text": "View Devices"
+                }
+            ],
+            "consumer-navbar-advance-btn": [
+                {
+                    "id": "device-under-consumer-advanced",
+                    "class": "sidebar-btn",
+                    "text": "All Devices"
+                },
+                {
+                    "id": "register-device-for-consumer",
+                    "class": "sidebar-btn",
+                    "text": "Register"
+                },
+                {
+                    "id": "deregister-device-for-consumer",
+                    "class": "sidebar-btn",
+                    "text": "Deregister"
+                }
+            ]
+        }
+    }
+}
