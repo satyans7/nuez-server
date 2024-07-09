@@ -9,9 +9,11 @@ const SUPERADMIN = "/superAdmin"
 MAINTENANCE_ENTER = "enter"
 MAINTENANCE_EXIT = "exit"
 const { botFunction } = require("../telegramAlarm/botFather.js");
+const { initializeTopics } = require("../mqtt/helper.js");
+const { handleCloudMqttConnect, handleCloudMqttMessage } = require("../mqtt/mqtt.js");
 
 module.exports = function (app) {
-  const { heartbeatMap, waterConsumptionMap } = require('../telegramAlarm/map.js');
+  const { heartbeatMap, waterConsumptionMap, deviceStatus } = require('../telegramAlarm/map.js');
   const AEP_SAMPLE = "/api/sample";
   app.get(AEP_SAMPLE, async (req, res) => {
     const data = await controller.fetchSampleDataFromServer();
@@ -379,22 +381,22 @@ module.exports = function (app) {
 
   const localRepoPath = path.join(__dirname, '../local-repo');
 
-function getBinFilenamesWithoutExtension(directoryPath) {
-  return new Promise((resolve, reject) => {
-      fs.readdir(directoryPath, (err, files) => {
-          if (err) {
-              return reject('Unable to scan directory: ' + err);
-          }
-          // Filter out non-.bin files and remove .bin extension
-          const binFiles = files
-              .filter(file => file.endsWith('.bin'))
-              .map(file => path.basename(file, '.bin'));
+// function getBinFilenamesWithoutExtension(directoryPath) {
+//   return new Promise((resolve, reject) => {
+//       fs.readdir(directoryPath, (err, files) => {
+//           if (err) {
+//               return reject('Unable to scan directory: ' + err);
+//           }
+//           // Filter out non-.bin files and remove .bin extension
+//           const binFiles = files
+//               .filter(file => file.endsWith('.bin'))
+//               .map(file => path.basename(file, '.bin'));
 
-          resolve(binFiles);
-          console.log(binFiles)
-      });
-  });
-}
+//           resolve(binFiles);
+//           console.log(binFiles)
+//       });
+//   });
+// }
 
 // Variable to store bin filenames in memory
 let binFilenamesInMemory = [];
@@ -402,7 +404,7 @@ let binFilenamesInMemory = [];
 // Initialize and store bin filenames in memory
 async function initializeBinFilenames() {
   try {
-      binFilenamesInMemory = await getBinFilenamesWithoutExtension(localRepoPath);
+      binFilenamesInMemory = await controller.getBinFilenamesWithoutExtension(localRepoPath);
       console.log('Bin filenames without extension stored in memory:', binFilenamesInMemory);
   } catch (error) {
       console.error('Error reading bin filenames:', error);
@@ -439,10 +441,6 @@ app.get('/api/firmware-versions', (req, res) => {
   //   }
   // });
 
-  app.get(AEP_TO_SEND_FIRMWARE, async (req, res) => {
-    // res.send("api called");
-    console.log("api called");
-  });
 
   const siteIdsFilePath = path.join(__dirname, "../database/json-data/siteRegistration.json");
   const deviceIdsFilePath = path.join(__dirname, "../database/json-data/deviceToProfile.json");
@@ -450,174 +448,174 @@ app.get('/api/firmware-versions', (req, res) => {
   
 
   
-  const deviceStatus = {};
+  // const deviceStatus = {};
   
   // Utility functions for database operations
-  const readDatabase = (filePath) => {
-    return JSON.parse(fs.readFileSync(filePath));
-  }
+//   const readDatabase = (filePath) => {
+//     return JSON.parse(fs.readFileSync(filePath));
+//   }
   
-  const writeDatabase = (filePath, data) => {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-  }
-    // In-memory storage for site and device data
-    const siteIds =readDatabase(siteIdsFilePath);
-    const deviceIds =readDatabase(deviceIdsFilePath);
-    const siteToDevice =readDatabase(siteToDeviceFilePath);
+//   const writeDatabase = (filePath, data) => {
+//     fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+//   }
+//     // In-memory storage for site and device data
+//     const siteIds =readDatabase(siteIdsFilePath);
+//     const deviceIds =readDatabase(deviceIdsFilePath);
+//     const siteToDevice =readDatabase(siteToDeviceFilePath);
   
-  // Function to get the current timestamp from NTP server
-  const fetchNetworkTime = () => {
-    const localTime = new Date();
-    return localTime.getTime(); // Returns the Unix timestamp in milliseconds
-};
+//   // Function to get the current timestamp from NTP server
+//   const fetchNetworkTime = () => {
+//     const localTime = new Date();
+//     return localTime.getTime(); // Returns the Unix timestamp in milliseconds
+// };
 
   
-  const client = mqtt.connect("mqtt://206.189.138.34", {
-    port: 1883,
-    username: "nuez",
-    password: "emqx@nuez",
-  });
+  // const client = mqtt.connect("mqtt://192.168.33.250", {
+  //   port: 1883,
+  //   username: "nuez",
+  //   password: "emqx@nuez",
+  // });
 
   // Function to subscribe to a topic
-  const subscribeToTopic = (topic) => {
-    client.subscribe(topic, (err) => {
-      if (err) {
-        console.error(`Error subscribing to ${topic} topic:`, err);
-      } else {
-        console.log(`Subscribed to ${topic} topic.`);
-      }
-    });
-  }
+  // const subscribeToTopic = (topic) => {
+  //   client.subscribe(topic, (err) => {
+  //     if (err) {
+  //       console.error(`Error subscribing to ${topic} topic:`, err);
+  //     } else {
+  //       console.log(`Subscribed to ${topic} topic.`);
+  //     }
+  //   });
+  // }
   
-  const handleRegistration = (siteId, deviceId) => {
-    if (!siteIds[siteId]) {
-      siteIds[siteId] = { name: siteId, location: "default" };
-      writeDatabase(siteIdsFilePath, siteIds);
-    }
+  // const handleRegistration = (siteId, deviceId) => {
+  //   if (!siteIds[siteId]) {
+  //     siteIds[siteId] = { name: siteId, location: "default" };
+  //     writeDatabase(siteIdsFilePath, siteIds);
+  //   }
   
-    if (!deviceIds[deviceId]) {
-      deviceIds[deviceId] = { name: deviceId, location: "default" };
-      writeDatabase(deviceIdsFilePath, deviceIds);
-    }
+  //   if (!deviceIds[deviceId]) {
+  //     deviceIds[deviceId] = { name: deviceId, location: "default" };
+  //     writeDatabase(deviceIdsFilePath, deviceIds);
+  //   }
   
-    if (!siteToDevice[siteId]) {
-      siteToDevice[siteId] = [];
-    }
+  //   if (!siteToDevice[siteId]) {
+  //     siteToDevice[siteId] = [];
+  //   }
   
-    if (!siteToDevice[siteId].includes(deviceId)) {
-      siteToDevice[siteId].push(deviceId);
-      writeDatabase(siteToDeviceFilePath, siteToDevice);
-    }
-  }
+  //   if (!siteToDevice[siteId].includes(deviceId)) {
+  //     siteToDevice[siteId].push(deviceId);
+  //     writeDatabase(siteToDeviceFilePath, siteToDevice);
+  //   }
+  // }
 
   
-  // Function to update device data
-  const updateDeviceData = (filePath, dataKey, updateData) => {
-    const rawData = readDatabase(filePath);
-    for (const [device_id, data] of Object.entries(updateData)) {
-      if (rawData.hasOwnProperty(device_id)) {
-        rawData[device_id][dataKey] = data;
-      }
-    }
-    writeDatabase(filePath, rawData);
-    console.log(`Device ${dataKey}s updated successfully.`);
-  }
+  // // Function to update device data
+  // const updateDeviceData = (filePath, dataKey, updateData) => {
+  //   const rawData = readDatabase(filePath);
+  //   for (const [device_id, data] of Object.entries(updateData)) {
+  //     if (rawData.hasOwnProperty(device_id)) {
+  //       rawData[device_id][dataKey] = data;
+  //     }
+  //   }
+  //   writeDatabase(filePath, rawData);
+  //   console.log(`Device ${dataKey}s updated successfully.`);
+  // }
   
   // MQTT client event handlers
-  client.on("connect", () => {
-    console.log("Connected to MQTT broker");
+  // client.on("connect", () => {
+  //   console.log("Connected to MQTT broker");
   
-    // Subscribe to necessary topics
-    const topics = [
-      "water-consumption-data",
-      "device-status-info/#",
-      "device-version-info/#",
-      "device-heartbeat-info/#"
-    ];
-    topics.forEach(subscribeToTopic);
-  });
+  //   // Subscribe to necessary topics
+  //   const topics = [
+  //     "water-consumption-data",
+  //     "device-status-info/#",
+  //     "device-version-info/#",
+  //     "device-heartbeat-info/#"
+  //   ];
+  //   topics.forEach(subscribeToTopic);
+  // });
   
-  client.on("message", async (topic, message) => {
-    const [topicName, siteId] = topic.split("/");
-    const parsedMessage = JSON.parse(message.toString());
+  // client.on("message", async (topic, message) => {
+  //   const [topicName, siteId] = topic.split("/");
+  //   const parsedMessage = JSON.parse(message.toString());
   
-    switch (topicName) {
-      case "water-consumption-data":
-        const { site_id, device_id } = parsedMessage;
-        const networkTime = await fetchNetworkTime();
-        waterConsumptionMap.set(parsedMessage.device_id,networkTime);
-        handleRegistration(site_id, device_id);
-        break;
+  //   switch (topicName) {
+  //     case "water-consumption-data":
+  //       const { site_id, device_id } = parsedMessage;
+  //       const networkTime = await fetchNetworkTime();
+  //       waterConsumptionMap.set(parsedMessage.device_id,networkTime);
+  //       handleRegistration(site_id, device_id);
+  //       break;
   
-      case "device-status-info":
-        deviceStatus[siteId] = parsedMessage;
-        updateDeviceData(
-          path.join(__dirname, "../database/json-data/deviceToProfile.json"),
-          "status",
-          parsedMessage
-        );
-        break;
+  //     case "device-status-info":
+  //       deviceStatus[siteId] = parsedMessage;
+  //       updateDeviceData(
+  //         path.join(__dirname, "../database/json-data/deviceToProfile.json"),
+  //         "status",
+  //         parsedMessage
+  //       );
+  //       break;
   
-      case "device-version-info":
-        updateDeviceData(
-          path.join(__dirname, "../database/json-data/deviceToProfile.json"),
-          "version",
-          parsedMessage
-        );
-        break;
+  //     case "device-version-info":
+  //       updateDeviceData(
+  //         path.join(__dirname, "../database/json-data/deviceToProfile.json"),
+  //         "version",
+  //         parsedMessage
+  //       );
+  //       break;
   
-      case "device-heartbeat-info":
-        try {
-          const networkTime = await fetchNetworkTime();
-          heartbeatMap.set(parsedMessage.device_id,networkTime);
+  //     case "device-heartbeat-info":
+  //       try {
+  //         const networkTime = await fetchNetworkTime();
+  //         heartbeatMap.set(parsedMessage.device_id,networkTime);
           
         
-        } catch (error) {
-          console.error("Error fetching network time:", error);
-        }
-        break;
+  //       } catch (error) {
+  //         console.error("Error fetching network time:", error);
+  //       }
+  //       break;
   
-      default:
-        console.error("Unhandled topic:", topic);
-    }
-  });
+  //     default:
+  //       console.error("Unhandled topic:", topic);
+  //   }
+  // });
 
-app.get('/download/firmware', async (req, res) => {
-  try {
-    res.setHeader('Content-Type', 'application/zip');
-    res.setHeader('Content-Disposition', 'attachment; filename=local-repo.zip');
+// app.get('/download/firmware', async (req, res) => {
+//   try {
+//     res.setHeader('Content-Type', 'application/zip');
+//     res.setHeader('Content-Disposition', 'attachment; filename=local-repo.zip');
 
-    const archive = archiver('zip', {
-      zlib: { level: 9 } // Sets the compression level
-    });
+//     const archive = archiver('zip', {
+//       zlib: { level: 9 } // Sets the compression level
+//     });
 
-    archive.on('error', (err) => {
-      throw err;
-    });
+//     archive.on('error', (err) => {
+//       throw err;
+//     });
 
-    // Pipe the archive data to the response
-    archive.pipe(res);
+//     // Pipe the archive data to the response
+//     archive.pipe(res);
 
-    // Append files from the local repo directory to the archive
-    archive.directory(localRepoPath, false);
+//     // Append files from the local repo directory to the archive
+//     archive.directory(localRepoPath, false);
 
-    // Finalize the archive and send it
-    archive.finalize();
-  } catch (error) {
-    console.error('Error sending zip folder:', error);
-    res.status(500).send('Error sending zip folder');
-  }
-});
+//     // Finalize the archive and send it
+//     archive.finalize();
+//   } catch (error) {
+//     console.error('Error sending zip folder:', error);
+//     res.status(500).send('Error sending zip folder');
+//   }
+// });
 
   app.post("/:site_id/intimate-all-devices", async (req, res) => {
     try {
-      const site_id = req.params.site_id; // Correctly access site_id from req.params
-      console.log(site_id);
-      const message = { version:`${req.body.version}` }
-      console.log(message)
-      // Publish the message to the "site_1/intimate" topic
-      client.publish(`intimate-latest-version-info/${site_id}`, JSON.stringify(message));
-
+      // const site_id = req.params.site_id; // Correctly access site_id from req.params
+      // console.log(site_id);
+      // const message = { version:`${req.body.version}` }
+      // console.log(message)
+      // // Publish the message to the "site_1/intimate" topic
+      // client.publish(`intimate-latest-version-info/${site_id}`, JSON.stringify(message));
+      await controller.intimateAllDevicesOfASite(req);
       res.status(200).json({ message: "Intimate message sent to all devices" });
     } catch (error) {
       console.error("Error intimating all devices:", error);
@@ -626,10 +624,11 @@ app.get('/download/firmware', async (req, res) => {
   });
 
   app.post("/:site_id/fetch-device-versions", async (req, res) => {
-    const site_id = req.params.site_id; // Correctly access site_id from req.params
     try {
-      // Publish the message to the MQTT topic
-      client.publish(`device-version-query/${site_id}`, "fetch versions from devices");
+      // const site_id = req.params.site_id; // Correctly access site_id from req.params
+      // // Publish the message to the MQTT topic
+      // client.publish(`device-version-query/${site_id}`, "fetch versions from devices");
+      await controller.fetchDeviceVersion(req);
       res.status(200).json({ message: "Message published successfully" });
     } catch (error) {
       console.error("Error publishing message:", error);
@@ -639,27 +638,78 @@ app.get('/download/firmware', async (req, res) => {
 
 
 
-  app.post("/intimate-all-sites", (req, res) => {
-    const firmwareFilePath = path.join(
-      __dirname,"../local-repo","version.json");
-    fs.readFile(firmwareFilePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Failed to read firmware.txt:", err);
-        res.status(500).send("Failed to read firmware version.");
-        return;
-      }
+  // app.post("/intimate-all-sites", (req, res) => {
+  //   const firmwareFilePath = path.join(
+  //     __dirname,"../local-repo","version.json");
+  //   fs.readFile(firmwareFilePath, "utf8", (err, data) => {
+  //     if (err) {
+  //       console.error("Failed to read firmware.txt:", err);
+  //       res.status(500).send("Failed to read firmware version.");
+  //       return;
+  //     }
 
-      client.publish("latest-firmware-version", data, (err) => {
-        if (err) {
-          console.error("Failed to publish firmware version:", err);
-          res.status(500).send("Failed to publish firmware version.");
-          return;
-        }
+  //     client.publish("latest-firmware-version", data, (err) => {
+  //       if (err) {
+  //         console.error("Failed to publish firmware version:", err);
+  //         res.status(500).send("Failed to publish firmware version.");
+  //         return;
+  //       }
 
-        res.send("Firmware version sent successfully.");
-      });
-    });
+  //       res.send("Firmware version sent successfully.");
+  //     });
+  //   });
+  // });
+
+  // ////////////////////// Maintenance Mode///////////////////////////////////////
+  // async function maintenance_service(site_id, list_of_ids, action) {
+  //   // Publish MQTT message to enter/exit maintenance mode
+  //   await client.publish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }));
+  // }
+  // async function device_status_query(site_id){
+  //   await client.publish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }));
+  // }
+
+  //// Enter Maintenance Mode
+  app.post('/api/maintenance/enter', async (req, res) => {
+    // const list_of_ids = req.body.devices_id;
+    // const site_id = req.body.site_id;
+   
+    // maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
+    // setTimeout(() => {
+    //   device_status_query(site_id);
+    //   }, 1000);
+    // setTimeout(() => {
+    //     res.json(deviceStatus[site_id])
+    //   }, 7000);
+   await controller.enterMaintenance(req,res);
+    
   });
+
+  // Exit maintenance mode route
+  app.post('/api/maintenance/exit', async (req, res) => {
+    // const list_of_ids = req.body.devices_id;
+    // const site_id = req.body.site_id;
+    // maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
+    // setTimeout(() => {
+    // device_status_query(site_id);
+    // }, 1000);
+    // setTimeout(() => {
+    //   res.json(deviceStatus[site_id])
+    // }, 7000);
+    await controller.exitMaintenance(req,res);
+  });
+
+  app.post('/api/device-status', async (req, res) => {
+    // const { site_id } = req.body;
+    // device_status_query(site_id);
+    // setTimeout(() => {
+    //   res.json(deviceStatus[site_id])
+    //   deviceStatus[site_id]={};
+    // }, 5000);
+    await controller.fetchDeviceStatus(req,res);
+  })
+
+
 
   app.get(AEP_TO_FETCH_USER_DATA_FROM_GOOGLEAUTH, (req, res) => {
     let userData = {
@@ -708,50 +758,6 @@ app.get('/download/firmware', async (req, res) => {
     });
   });
 
-  ////////////////////// Maintenance Mode///////////////////////////////////////
-  async function maintenance_service(site_id, list_of_ids, action) {
-    // Publish MQTT message to enter/exit maintenance mode
-    await client.publish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }));
-  }
-  async function device_status_query(site_id){
-    await client.publish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }));
-  }
-
-  //// Enter Maintenance Mode
-  app.post('/api/maintenance/enter', async (req, res) => {
-    const list_of_ids = req.body.devices_id;
-    const site_id = req.body.site_id;
-   
-    maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
-    setTimeout(() => {
-      device_status_query(site_id);
-      }, 1000);
-    setTimeout(() => {
-        res.json(deviceStatus[site_id])
-      }, 7000);
-  });
-
-  // Exit maintenance mode route
-  app.post('/api/maintenance/exit', async (req, res) => {
-    const list_of_ids = req.body.devices_id;
-    const site_id = req.body.site_id;
-    maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
-    setTimeout(() => {
-    device_status_query(site_id);
-    }, 1000);
-    setTimeout(() => {
-      res.json(deviceStatus[site_id])
-    }, 7000);
-  });
-
-  app.post('/api/device-status', async (req, res) => {
-    const { site_id } = req.body;
-    device_status_query(site_id);
-    setTimeout(() => {
-      res.json(deviceStatus[site_id])
-      deviceStatus[site_id]={};
-    }, 5000);
-  })
 
 
   app.get('/api/html/:role/:key', (req, res) => {
@@ -792,7 +798,9 @@ app.get('/download/firmware', async (req, res) => {
     
   })
     
-  
+  const topics=initializeTopics();
+  handleCloudMqttConnect(topics);
+  handleCloudMqttMessage(topics);
 setTimeout(botFunction, 20000);
 
 

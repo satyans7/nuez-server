@@ -1,5 +1,6 @@
 import { getDevicesData, updateDeviceData } from "../client/client.js";
-
+var DEVICE_ID;
+var SITE_ID;
 // Function to handle profile editing
 function editProfile() {
     console.log("Edit Profile clicked");
@@ -20,12 +21,15 @@ function populateFormWithDeviceData(deviceId) {
     const deviceStatus = document.getElementById('device-status').innerText.split(': ')[1];
     const deviceRegistrationDate = document.getElementById('device-registrationDate').innerText.split(': ')[1];
 
+
+
     document.getElementById('deviceId').value = deviceId;
     document.getElementById('deviceName').value = deviceName;
     document.getElementById('deviceLocation').value = deviceLocation;
     document.getElementById('deviceTotalConsumption').value = deviceTotalConsumption;
     document.getElementById('deviceStatus').value = deviceStatus;
     document.getElementById('deviceRegistrationDate').value = deviceRegistrationDate;
+    
 }
 
 // Function to delete a device
@@ -49,11 +53,16 @@ async function initializeProfilePage() {
     const particularDeviceData = devicesData[currentId];
 
     if (particularDeviceData) {
+        DEVICE_ID=currentId;
+        console.log(particularDeviceData);
+        SITE_ID=particularDeviceData.siteId;
+        grafanaPanel();
         populateDeviceCard(particularDeviceData);
         addEditDeleteButtons();
     } else {
         console.error('Device data not found for ID:', currentId);
     }
+
 
     setupFormSubmission();
 }
@@ -76,14 +85,14 @@ function addEditDeleteButtons() {
     editButton.textContent = 'Edit Profile';
     editButton.onclick = editProfile;
 
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete Device';
-    deleteButton.onclick = deleteDevice;
+    // const deleteButton = document.createElement('button');
+    // deleteButton.textContent = 'Delete Device';
+    // deleteButton.onclick = deleteDevice;
 
-    buttonContainer.appendChild(editButton);
-    buttonContainer.appendChild(deleteButton);
+    // buttonContainer.appendChild(editButton);
+    // buttonContainer.appendChild(deleteButton);
 
-    document.getElementById('device-card').appendChild(buttonContainer);
+    // document.getElementById('device-card').appendChild(buttonContainer);
 }
 
 // Function to setup form submission
@@ -133,3 +142,19 @@ function closeForm() {
 
 // Initialize the profile page once the DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeProfilePage);
+async function grafanaPanel(){
+    // Create the iframe element
+    const iframe = document.createElement('iframe');
+    console.log(DEVICE_ID);
+    console.log(SITE_ID)
+    // iframe.src = `http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&from=1720425233122&to=1720468433122&var-device_id=SWM::MIC:OBI:PAK:LLM&var-site_id=SITE::NID:KNN:MCK:DPL&panelId=8`
+    iframe.src = `http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&from=1720460036083&to=1720503236083&panelId=8`;
+    
+    iframe.width = "450";
+    iframe.height = "200";
+    iframe.frameBorder = "0";
+
+    // Append the iframe to the div with id 'graph-card'
+    document.getElementById('graph-card').appendChild(iframe);
+};
+
