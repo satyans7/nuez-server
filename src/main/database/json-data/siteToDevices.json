@@ -10,7 +10,8 @@
     "SWM::AIL:GBP:LIE:AEI",
     "SWM::MIC:OBI:PAK:LLM",
     "SWM::AIL:GBP:LIE:LAI",
-    "SWM::AIL:GBP:LIM:AMM"
+    "SWM::AIL:GBP:LIM:AMM",
+    "SWM::AIL:GBP:LIE:MGI"
   ],
   "SITE::EEB:MKI:KGF:GKL": [
     "SWM::OEG:FLI:BLG:MPE",
