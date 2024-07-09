@@ -23,7 +23,7 @@ module.exports = function (app) {
   const SITEPAGE = path.join(__dirname, "../views/pages", "siteToDevice.html");
   const DEVICEPROFILE = path.join(__dirname,"../views/pages","deviceProfile.html");
   const DEVICEINFO = path.join(__dirname, "../views/pages", "deviceInfo.html")
-  const BUTTONMAP = path.join(__dirname, "../database/json-data/buttonMappings.json");
+  const BUTTONMAP = path.join(__dirname, "../navbarMappingDatabase/buttonMappings.json");
 
   //Scripts
   const FIRMWARESYNC = path.join(__dirname, "../../../firmwareScript.sh");
