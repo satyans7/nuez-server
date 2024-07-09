@@ -195,3 +195,16 @@ form#editProfileForm button[type="button"]:hover {
 .overlay-content button[type="button"]:hover {
     background-color: #c82333;
 }
+.graph-card{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.grafana-graph-panel{
+   margin: 10px;
+}
+
+.grafana-text-panel{
+   margin: 10px;
+}
