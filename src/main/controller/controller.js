@@ -504,11 +504,12 @@ class Controller {
 
   ////////////////////// Maintenance Mode///////////////////////////////////////
   async maintenance_service(site_id, list_of_ids, action) {
-    // Publish MQTT message to enter/exit maintenance mode
-    await client.publish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }));
+    await handleCloudMqttPublish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }))
+  
   }
   async device_status_query(site_id){
-    await client.publish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }));
+    await handleCloudMqttPublish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }))
+    
   }
 
 
@@ -540,9 +541,9 @@ class Controller {
   async fetchDeviceStatus(req,res){
     const list_of_ids = req.body.devices_id;
     const site_id = req.body.site_id;
-    maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
+    this.maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
     setTimeout(() => {
-    device_status_query(site_id);
+    this.device_status_query(site_id);
     }, 1000);
     setTimeout(() => {
          res.json(deviceStatus[site_id])

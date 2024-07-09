@@ -496,7 +496,8 @@ else{
         const rightContainer = document.getElementById('right-container-maintenance');
         const moveRightButton = document.getElementById('move-right-maintenance');
         const moveLeftButton = document.getElementById('move-left-maintenance');
-
+        
+            leftContainer.innerHTML = '';
         const deviceStatus = await getDeviceStatus({ "site_id": site });
         const items = Object.keys(deviceStatus);
 
@@ -566,7 +567,8 @@ else{
         const rightContainer = document.getElementById('right-container-operational');
         const moveRightButton = document.getElementById('move-right-operational');
         const moveLeftButton = document.getElementById('move-left-operational');
-
+        
+        leftContainer.innerHTML = '';
         const deviceStatus = await getDeviceStatus({ "site_id": site })
         const items = Object.keys(deviceStatus);
 
