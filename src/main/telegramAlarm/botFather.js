@@ -6,10 +6,15 @@ const telegramBotToken = '7176670163:AAHxhW6oTlZIFYaU0XUXbk1Q8BnF1u5M1zY';
 const telegramChatId = -1002166014938;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
+const TELEGRAM_POST_URL=`https://api.telegram.org/bot${telegramBotToken}/sendMessage`
 const statusMap = new Map();
 const snoozeMap = new Map(); // To store snooze information for each device
 const consumptionCheckInterval = 20000;
-
+const INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL = 1000;
+const INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL = 30000;
+const INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL = 60000;
+const TELEGRAM_BOT_COMMAND='snooze';
+const EXPRESSION_FOR_DEVICE_ID=`device_id:-"(.+?)"`;
 async function botFunction() {
     console.log("Bot function executed.");
 
@@ -70,7 +75,7 @@ async function botFunction() {
                 } else {
                     const message = `Device with device_id:-"${deviceId}" has been inactive for quite long.`;
                     try {
-                        const response = await axios.post(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                        const response = await axios.post(TELEGRAM_POST_URL, {
                             chat_id: telegramChatId,
                             text: message,
                         });
@@ -89,14 +94,14 @@ async function botFunction() {
         return snoozeUntil > Date.now();
     }
 
-    bot.onText(/\/snooze (\d+)/, (msg, match) => {
+    bot.onText(`/\/${TELEGRAM_BOT_COMMAND} (\d+)/`, (msg, match) => {
         const chatId = msg.chat.id;
         const time = parseInt(match[1], 10); // Extract <time> from the command
         const repliedToMessage = msg.reply_to_message;
 
         if (repliedToMessage) {
             const repliedText = repliedToMessage.text;
-            const deviceIdMatch = repliedText.match(/device_id:-"(.+?)"/);
+            const deviceIdMatch = repliedText.match(`/${EXPRESSION_FOR_DEVICE_ID}/`);
             if (deviceIdMatch) {
                 const deviceId = deviceIdMatch[1];
                 snoozeMap.set(deviceId, Date.now() + time * 1000);
@@ -111,11 +116,21 @@ async function botFunction() {
     });
 
     heartbeatStatus();
-    setInterval(heartbeatStatus, 1000); // updates status map every 1 minute
-    setInterval(monitorConsumption, 30000); // Run every 15 seconds
-    setInterval(deviceDead, 60000); // Check device dead status every 1 minute
+    setInterval(heartbeatStatus, INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL); // updates status map every 1 minute
+    setInterval(monitorConsumption, INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL); // Run every 15 seconds
+    setInterval(deviceDead, INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL); // Check device dead status every 1 minute
 }
 
 module.exports = {
     botFunction,
 };
+
+// Here are a few commonly used Telegram Bot API endpoints and their purposes:
+
+// /sendMessage: Sends a message to a chat.
+// /sendPhoto: Sends a photo to a chat.
+// /sendDocument: Sends a document to a chat.
+// /sendVideo: Sends a video to a chat.
+// /sendAudio: Sends an audio file to a chat.
+// /editMessageText: Edits a text message.
+// /deleteMessage: Deletes a message.

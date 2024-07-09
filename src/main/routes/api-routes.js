@@ -87,6 +87,8 @@ module.exports = function (app) {
   const AEP_TO_DOWNLOAD_DEVICE_INFO_QR = "/api/download/deviceQR";
   const AEP_TO_GET_BUTTON_MAPPING='/api/buttonMapping'
 
+  
+  const TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION = 20000;
 
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -481,7 +483,6 @@ module.exports = function (app) {
   const topics = initializeTopics();
   handleCloudMqttConnect(topics);
   handleCloudMqttMessage(topics);
-  setTimeout(botFunction, 20000);
-
+  setTimeout(botFunction, TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION);
 
 };

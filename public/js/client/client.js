@@ -94,6 +94,10 @@ export async function getAllSitesUnderAdmin(id){
 export async function getDevicesData() {
     return await controller.getAllDevicesData();
 }
+
+export async function getDeviceData(id) {
+    return await controller.getDeviceData(id);
+}
 //SITE DEVICE MAPPING
 export async function getSiteDeviceMapping() {
     return await controller.getSiteToDeviceMapping();

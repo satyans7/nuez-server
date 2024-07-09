@@ -1,4 +1,4 @@
-import { getDevicesData, updateDeviceData } from "../client/client.js";
+import { getDeviceData, updateDeviceData } from "../client/client.js";
 var DEVICE_ID;
 var SITE_ID;
 // Function to handle profile editing
@@ -49,8 +49,7 @@ function getCurrentDevice() {
 async function initializeProfilePage() {
     document.getElementById('device-id').textContent = `DEVICE ID: ${getCurrentDevice()}`;
     const currentId = getCurrentDevice();
-    const devicesData = await getDevicesData();
-    const particularDeviceData = devicesData[currentId];
+    const particularDeviceData = getDeviceData(currentId);
 
     if (particularDeviceData) {
         DEVICE_ID = currentId;

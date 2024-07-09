@@ -26,6 +26,7 @@ const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites"
 const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
 const AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS = "/api/admin/sitetoconsumer";
 const AEP_TO_FETCH_ALL_DEVICES = '/api/admin/devices';
+const AEP_TO_FETCH_DEVICE_DATA = "/api/device"
 
 const AEP_TO_FETCH_CONSUMERS_TO_DEVICES = "/api/consumer/consumertodevice";
 
@@ -58,6 +59,7 @@ const AEP_TO_SEND_FIRMWARE ="/send-firmware"
 const AEP_TO_GET_DEVICE_STATUS = "/api/device-status"
 const AEP_TO_ENTER_MAINTENANCE = "/api/maintenance/enter"
 const AEP_TO_EXIT_MAINTENANCE = "/api/maintenance/exit"
+
 
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
@@ -146,6 +148,9 @@ export function getApitoFetchAllSitesData() {
 // SITE DEVICE PAGE
 export function getApitoFetchAllDevicesData() {
   return AEP_TO_FETCH_ALL_DEVICES;
+}
+export function getApitoFetchDeviceData(id) {
+  return `${AEP_TO_FETCH_DEVICE_DATA}/${id}`;
 }
 
 export function getApiToFetchSiteDeviceMapping() {

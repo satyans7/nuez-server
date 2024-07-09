@@ -110,6 +110,10 @@ export async function getAllDevicesData(){
     const api = cep.getApitoFetchAllDevicesData();
     return await cep.fetchDataFromServer(api);
 }
+export async function getDeviceData(id){
+    const api = cep.getApitoFetchDeviceData(id);
+    return await cep.fetchDataFromServer(api);
+}
 //SITE DEVICE MAPPING
 export async function getSiteToDeviceMapping(){
     const api =cep.getApiToFetchSiteDeviceMapping();
