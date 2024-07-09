@@ -9,7 +9,7 @@ passport.use("google",new GoogleStrategy({
   
     clientID:process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL:"http://206.189.138.34:4000/auth/google/callback",
+    callbackURL:"http://nuez-smart.utkalinga.com/auth/google/callback",
     userProfileURL:"https://www.googleapis.com/oauth2/v3/userinfo" 
   } ,async(accessToken,refreshToken,profile,cb)=>{
       try {
