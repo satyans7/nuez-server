@@ -76,52 +76,56 @@ export function initializeSitePanel(sidebarid) {
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
                 nameCell.textContent = key;
-                const locationCell = document.createElement('td');
-                locationCell.textContent = device.location;
                 const actionCell = document.createElement('td');
+                actionCell.classList.add('action-cell');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = '+';
                 requestButton.addEventListener('click', () => {
-                    const nextRow = row.nextSibling;
-                    if (nextRow && nextRow.classList.contains('expanded')) {
-                        nextRow.remove();  // Hide the expanded row
-                    } else {
-                        const expandedRow = document.createElement('tr');
-                        expandedRow.classList.add('expanded');
-                        const expandedCell = document.createElement('td');
-                        expandedCell.colSpan = 3;
-    
-                        const innerTable = document.createElement('table');
-    
-                        const headerRow = document.createElement('tr');
-                        const passwordHeader = document.createElement('th');
-                        passwordHeader.textContent = 'Password';
-                        const workHeader = document.createElement('th');
-                        workHeader.textContent = 'Work';
-    
-                        headerRow.appendChild(passwordHeader);
-                        headerRow.appendChild(workHeader);
-                        innerTable.appendChild(headerRow);
-    
-                        const dataRow = document.createElement('tr');
-                        const passwordCell = document.createElement('td');
-                        passwordCell.textContent = '123';
-                        const workCell = document.createElement('td');
-                        workCell.textContent = 'job';
-    
-                        dataRow.appendChild(passwordCell);
-                        dataRow.appendChild(workCell);
-                        innerTable.appendChild(dataRow);
-    
-                        expandedCell.appendChild(innerTable);
-                        expandedRow.appendChild(expandedCell);
-                        row.parentNode.insertBefore(expandedRow, nextRow);
-                    }
+                     // Check if a card already exists and toggle it
+                     const existingCardRow = row.nextSibling;
+                     if (existingCardRow && existingCardRow.classList.contains('card-row')) {
+                         existingCardRow.remove();
+                     } else {
+                         const cardRow = document.createElement('tr');
+                         cardRow.classList.add('card-row');
+                         const cardCell = document.createElement('td');
+                         cardCell.colSpan = 2; // Span across all columns
+
+
+                         const deviceCard = document.createElement('div');
+                         deviceCard.className = 'displaycard';
+                         deviceCard.id = 'fetch-device-data';
+                 
+                         const cardHeading = document.createElement('div');
+                         cardHeading.className = 'card-heading';
+                 
+                         const deviceName = document.createElement('h3');
+                         deviceName.textContent = key;
+                 
+                         cardHeading.appendChild(deviceName);
+                         deviceCard.appendChild(cardHeading);
+                 
+                         const cardBody = document.createElement('div');
+                         cardBody.className = 'card-body';
+                 
+                         const deviceLocation = document.createElement('h4');
+                         deviceLocation.textContent = device.location;
+                 
+                         cardBody.appendChild(deviceLocation);
+                         deviceCard.appendChild(cardBody);
+
+                         const card=deviceCard;
+
+                         cardCell.appendChild(card);
+                         cardRow.appendChild(cardCell);
+ 
+                         // Insert the card row after the current row
+                         row.parentNode.insertBefore(cardRow, row.nextSibling);
+                     }
                 });
                 row.style.cursor = "pointer";
                 actionCell.appendChild(requestButton);
-                row.appendChild(nameCell);
-                row.appendChild(locationCell);    
+                row.appendChild(nameCell);   
                 row.appendChild(actionCell);            
                 devicesTableBody.appendChild(row);
             } 
@@ -129,7 +133,7 @@ export function initializeSitePanel(sidebarid) {
     }
     else{
         const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="3">No devices found for this site.</td>`;
+            row.innerHTML = `<td colspan="2">No devices found for this site.</td>`;
             devicesTableBody.appendChild(row);
     }
     }
@@ -211,52 +215,56 @@ async function displayAllconsumers() {
             const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
                 nameCell.textContent = consumer.name;
-                const roleCell = document.createElement('td');
-                roleCell.textContent = consumer.role;
                 const actionCell = document.createElement('td');
+                actionCell.classList.add('action-cell');
                 const requestButton = document.createElement('button');
                 requestButton.textContent = '+';
                 requestButton.addEventListener('click', () => {
-                    const nextRow = row.nextSibling;
-                    if (nextRow && nextRow.classList.contains('expanded')) {
-                        nextRow.remove();  // Hide the expanded row
+                    
+                    const existingCardRow = row.nextSibling;
+                    if (existingCardRow && existingCardRow.classList.contains('card-row')) {
+                        existingCardRow.remove();
                     } else {
-                        const expandedRow = document.createElement('tr');
-                        expandedRow.classList.add('expanded');
-                        const expandedCell = document.createElement('td');
-                        expandedCell.colSpan = 3;
-    
-                        const innerTable = document.createElement('table');
-    
-                        const headerRow = document.createElement('tr');
-                        const passwordHeader = document.createElement('th');
-                        passwordHeader.textContent = 'Password';
-                        const workHeader = document.createElement('th');
-                        workHeader.textContent = 'Work';
-    
-                        headerRow.appendChild(passwordHeader);
-                        headerRow.appendChild(workHeader);
-                        innerTable.appendChild(headerRow);
-    
-                        const dataRow = document.createElement('tr');
-                        const passwordCell = document.createElement('td');
-                        passwordCell.textContent = '123';
-                        const workCell = document.createElement('td');
-                        workCell.textContent = 'job';
-    
-                        dataRow.appendChild(passwordCell);
-                        dataRow.appendChild(workCell);
-                        innerTable.appendChild(dataRow);
-    
-                        expandedCell.appendChild(innerTable);
-                        expandedRow.appendChild(expandedCell);
-                        row.parentNode.insertBefore(expandedRow, nextRow);
+                        const cardRow = document.createElement('tr');
+                        cardRow.classList.add('card-row');
+                        const cardCell = document.createElement('td');
+                        cardCell.colSpan = 2; // Span across all columns
+                        
+
+                        const consumerCard = document.createElement('div');
+                        consumerCard.className = 'displaycard';
+                        consumerCard.id = 'fetch-consumer-data';
+
+                        const cardHeading = document.createElement('div');
+                        cardHeading.className = 'card-heading';
+
+                        const consumerName = document.createElement('h3');
+                        consumerName.textContent = consumer.name;
+                        cardHeading.appendChild(consumerName);
+                        consumerCard.appendChild(cardHeading);
+
+                        const cardBody = document.createElement('div');
+                        cardBody.className = 'card-body';
+
+                        const consumerLocation = document.createElement('h4');
+                        consumerLocation.textContent = consumer.role;
+
+                        cardBody.appendChild(consumerLocation);
+                        consumerCard.appendChild(cardBody);
+
+
+
+                        const card = consumerCard;
+                        cardCell.appendChild(card);
+                        cardRow.appendChild(cardCell);
+
+                        // Insert the card row after the current row
+                        row.parentNode.insertBefore(cardRow, row.nextSibling);
                     }
                 });
                 row.style.cursor = "pointer";
                 actionCell.appendChild(requestButton);
-                row.appendChild(nameCell);
-                row.appendChild(roleCell);    
+                row.appendChild(nameCell); 
                 row.appendChild(actionCell);            
                 consumersTableBody.appendChild(row);
             
@@ -267,7 +275,7 @@ async function displayAllconsumers() {
 }
 else{
     const row = document.createElement('tr');
-    row.innerHTML = `<td colspan="3">No consumer available for this site.</td>`;
+    row.innerHTML = `<td colspan="2">No consumer available for this site.</td>`;
     sitesTableBody.appendChild(row);
 }
 }

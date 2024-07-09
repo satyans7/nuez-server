@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     {
                         "id": "viewsites",
                         "class": "sidebar-btn",
-                        "text": "Dummy Button 17"
+                        "text": "Sites"
                     }
                 ],
                 "admin-navbar-advance-btn": [
