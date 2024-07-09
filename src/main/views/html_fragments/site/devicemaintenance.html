@@ -1,45 +1,49 @@
 <!-- content -->
-<div id="maintenance-action-tabs" class="maintenance-action-tabs">
-  <button id="all-maintenance-devices">All Devices</button>
-  <button id="enter-maintenance">Operational Mode</button>
-  <button id="exit-maintenance">Maintenance Mode</button>
-</div>
-<div class="all-modes-wrapper" id="all-modes-wrapper">
-  <table>
-    <thead>
-      <tr><th>Device ID</th><th>Mode</th></tr>
-    </thead>
-    <tbody id="all-mode-table-body"></tbody>
-  </table>
-</div>
-<div class="operational-wrapper" id="operational-wrapper">
-  <div class="maintenancecontainer" id="left-container-operational"> 
+<div class="content">
+  <div id="maintenance-action-tabs" class="maintenance-action-tabs">
+    <button id="all-maintenance-devices">All Devices</button>
+    <button id="enter-maintenance">Operational Mode</button>
+    <button id="exit-maintenance">Maintenance Mode</button>
   </div>
-  <div class="controls">
+  <div class="all-modes-wrapper" id="all-modes-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Device ID</th>
+          <th>Mode</th>
+        </tr>
+      </thead>
+      <tbody id="all-mode-table-body"></tbody>
+    </table>
+  </div>
+  <div class="operational-wrapper" id="operational-wrapper">
+    <div class="maintenancecontainer" id="left-container-operational">
+    </div>
+    <div class="controls">
       <button id="move-right-operational">→</button>
       <button id="move-left-operational">←</button>
-  </div>
-  
-  <div class="selectedcontainer" >
-    <div class="selected-list" id="right-container-operational"></div>
-    <button id="enter-maintenance-btn">Enter Maintenance</button> 
+    </div>
 
+    <div class="selectedcontainer">
+      <div class="selected-list" id="right-container-operational"></div>
+      <button id="enter-maintenance-btn">Enter Maintenance</button>
+
+    </div>
   </div>
-</div>
-<div class="maintenance-wrapper" id="maintenance-wrapper">
-  <div class="maintenancecontainer" id="left-container-maintenance"> 
-  </div>
-  <div class="controls">
+  <div class="maintenance-wrapper" id="maintenance-wrapper">
+    <div class="maintenancecontainer" id="left-container-maintenance">
+    </div>
+    <div class="controls">
       <button id="move-right-maintenance">→</button>
       <button id="move-left-maintenance">←</button>
-  </div>
-  
-  <div class="selectedcontainer" >
-    <div class="selected-list" id="right-container-maintenance"></div>
-    <button id="exit-maintenance-btn">Exit Maintenance</button> 
+    </div>
 
+    <div class="selectedcontainer">
+      <div class="selected-list" id="right-container-maintenance"></div>
+      <button id="exit-maintenance-btn">Exit Maintenance</button>
+
+    </div>
   </div>
 </div>
-  <!-- help -->
-  <h3>help from site devicemaintenance id</h3>
-  
+<!-- help -->
+<h3 class="help">help from site devicemaintenance id</h3>

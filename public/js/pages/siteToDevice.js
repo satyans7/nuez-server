@@ -19,23 +19,15 @@ export function initializeSitePanel(sidebarid) {
     const consumersTableBody = document.getElementById('consumers-table-body');//ID in PTS.js
     const deregisterConsumerTab = document.getElementById('deregister-container')
     const registerConsumerTab = document.getElementById('register-container')
-    const registerBtn = document.getElementById('register-button');
-    const deregisterBtn = document.getElementById('deregister-button');
-    const btnGroup = document.getElementById('button-grp')
+    const registerBtn = document.getElementById('register-consumer-btn');
+    const deregisterBtn = document.getElementById('deregister-consumer-btn');
+    const btnGroup = document.getElementById('btn-grp')
     const headingText = document.getElementById('heading');
     const currentSite = document.getElementById('site-id');
-    const deviceTab = document.getElementById('device-tab');
-    const consumerTab = document.getElementById('consumer-tab');
-    const editBtn = document.getElementById('edit-profile');
-    const editTab = document.getElementById('edit-form-container');
     const updateBtn = document.getElementById('update-button');
     const registerConsumerForm = document.getElementById('register-consumer-form');
     const deregisterConsumerForm = document.getElementById('deregister-consumer-form');
-    const unassignedDevicesLink = document.getElementById('unassigned-devices-link');
     const unassignedDevicesContainer = document.getElementById('unassigned-devices-list');
-    const maintenanceTab = document.getElementById('device-maintenance-tab')
-   // const maintenanceDevicesContainer = document.getElementById('maintenance-devices-list')
-    const firmwareVersionContainer = document.getElementById('firmware-version-list');
 
     // Current Site Id
     const site = getCurrentSiteId();
@@ -282,16 +274,32 @@ else{
     // ALL CONSUMERS TAB ----------------------------------------------------------------------------//
 
     async function toggleConsumerTab() {
-        await viewAllconsumers();
-        btnGroup.style.display = 'flex';
+        console.log('toggle')
+        await viewAllconsumers();       
+        
+
         registerBtn.addEventListener('click', () => {
             registerConsumerTab.style.display = 'block';
-            btnGroup.style.display = 'flex';
+            deregisterConsumerTab.style.display = 'none';
+            allConsumerContainer.style.display = 'none';
+            registerDomLoad();
+            
         });
         deregisterBtn.addEventListener('click', () => {
             deregisterConsumerTab.style.display = 'block';
-            btnGroup.style.display = 'flex';
+           registerConsumerTab.style.display = 'none';
+           allConsumerContainer.style.display = 'none';
+           deregisterDomLoad();           
+
         });
+
+        document.getElementById('all-consumers-btn').addEventListener('click', ()=>{
+            deregisterConsumerTab.style.display = 'none';
+           registerConsumerTab.style.display = 'none';
+           allConsumerContainer.style.display = 'block';
+           viewAllconsumers();
+
+        })
     }
 
 
@@ -299,7 +307,9 @@ else{
     //consumer
 
     async function viewAllconsumers() {
-        allConsumerContainer.style.display = 'flex';
+        registerConsumerTab.style.display = "none";
+        deregisterConsumerTab.style.display = 'none';
+        allConsumerContainer.style.display = 'block';
         const data = await getAllConsumersUnderSite(site);
 
         if (!data) {
@@ -409,6 +419,7 @@ else{
         const siteIdInput = document.getElementById("register-consumer-id");
         const data = await getAllConsumers();
         const ids = Object.keys(data);
+        searchResultsContainer.innerHTML = "";
         populateSearchContainer(ids, searchResultsContainer, siteIdInput);
         registerConsumerForm.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -418,7 +429,7 @@ else{
             };
             console.log(consumer)
             const jsonResponse = await registerConsumer(site, consumer);
-            await toggleConsumerTab()
+            await viewAllconsumers();
             alert(jsonResponse.message);
             registerConsumerForm.reset();
         })
@@ -429,6 +440,7 @@ else{
         const siteIdInput = document.getElementById("deregister-consumer-id");
         const data = await getSiteConsumerMapping();
         const ids = data[site];
+        searchResultsContainer.innerHTML = "";
         populateSearchContainer(ids, searchResultsContainer, siteIdInput);
 
         deregisterConsumerForm.addEventListener('submit', async (event) => {
@@ -439,7 +451,8 @@ else{
             }
             try {
                 const response = await deregisterConsumer(site, consumer);
-                await toggleConsumerTab();
+                //await toggleConsumerTab();
+                await viewAllconsumers();
                 alert(response.message);
                 deregisterConsumerForm.reset();
 
@@ -504,7 +517,8 @@ else{
         const rightContainer = document.getElementById('right-container-maintenance');
         const moveRightButton = document.getElementById('move-right-maintenance');
         const moveLeftButton = document.getElementById('move-left-maintenance');
-
+        
+            leftContainer.innerHTML = '';
         const deviceStatus = await getDeviceStatus({ "site_id": site });
         const items = Object.keys(deviceStatus);
 
@@ -574,7 +588,8 @@ else{
         const rightContainer = document.getElementById('right-container-operational');
         const moveRightButton = document.getElementById('move-right-operational');
         const moveLeftButton = document.getElementById('move-left-operational');
-
+        
+        leftContainer.innerHTML = '';
         const deviceStatus = await getDeviceStatus({ "site_id": site })
         const items = Object.keys(deviceStatus);
 
@@ -780,15 +795,7 @@ else{
             showUserSearch(deviceId);
         });
 
-        const deleteButton = document.createElement('button');
-        deleteButton.id = `delete-button-${index}`; // Ensure this ID matches the CSS
-        deleteButton.textContent = 'Delete';
-        deleteButton.addEventListener('click', () => {
-            // Implement delete functionality here
-        });
-
         actionCell.appendChild(assignButton);
-        actionCell.appendChild(deleteButton);
         row.appendChild(actionCell);
 
         return row;
@@ -981,7 +988,7 @@ else{
             const tbody = document.createElement('tbody');
 
             // Create table headers
-            const headers = ['Device ID', 'Device Name', 'Version'];
+            const headers = ['Device ID', 'Version'];
             const headerRow = document.createElement('tr');
             headers.forEach(headerText => {
                 const header = document.createElement('th');
@@ -998,9 +1005,6 @@ else{
                 deviceIdCell.textContent = device.id;
                 row.appendChild(deviceIdCell);
 
-                const deviceNameCell = document.createElement('td');
-                deviceNameCell.textContent = device.name;
-                row.appendChild(deviceNameCell);
 
                 const versionCell = document.createElement('td');
                 versionCell.textContent = device.version;

@@ -52,8 +52,12 @@ export function initializeSuperAdminPanel(sidebarid) {
         if (pendingRequests[id] && pendingRequests[id].requestStatus === 'pending') {
             const msg = 'Request Sent';
             disableRequestButton(requestButton, msg);
-        } else if ((admintosite[id] && admintosite[id].length > 0) || (consumertodevice[id] && consumertodevice[id].length > 0)) {
+        } else if(admintosite[id] && admintosite[id].length > 0) {
             const msg = 'Already have sites'
+            disableRequestButton(requestButton, msg);
+
+        }else if(consumertodevice[id] && consumertodevice[id].length > 0){
+            const msg = 'Already have devices'
             disableRequestButton(requestButton, msg);
 
         } else {
@@ -65,7 +69,7 @@ export function initializeSuperAdminPanel(sidebarid) {
     // Function to handle 'Request for Role change' button click
     async function handleRequestRoleChange(id, requestButton, request) {
         try {
-            disableRequestButton(requestButton); // Disable button on click
+            disableRequestButton(requestButton, 'Request sent'); // Disable button on click
             await requestRoleChange(id, request);
             alert("Request added successfully");
         } catch (error) {
@@ -166,8 +170,8 @@ export function initializeSuperAdminPanel(sidebarid) {
                     const row = document.createElement('tr');
                     const nameCell = document.createElement('td');
                     nameCell.textContent = user.name;
-                    const emailCell = document.createElement('td');
-                    emailCell.textContent = user.email;
+                    const idCell = document.createElement('td');
+                    idCell.textContent = id;
                     const actionCell = document.createElement('td');
                     const requestButton = document.createElement('button');
                     requestButton.textContent = 'Request for Role change';
@@ -189,7 +193,7 @@ export function initializeSuperAdminPanel(sidebarid) {
 
                     actionCell.appendChild(requestButton);
                     row.appendChild(nameCell);
-                    row.appendChild(emailCell);
+                    row.appendChild(idCell);
                     row.appendChild(actionCell);
                     usersTableBody.appendChild(row);
                 }
@@ -289,8 +293,8 @@ async function displayAdminsTable(){
                     const row = document.createElement('tr');
                     const nameCell = document.createElement('td');
                     nameCell.textContent = user.name;
-                    const emailCell = document.createElement('td');
-                    emailCell.textContent = user.email;
+                    const idCell = document.createElement('td');
+                    idCell.textContent = id;
                     const actionCell = document.createElement('td');
                     const requestButton = document.createElement('button');
                     requestButton.textContent = 'Request for Role change';
@@ -310,7 +314,7 @@ async function displayAdminsTable(){
                     nameCell.style.cursor = "pointer"
                     actionCell.appendChild(requestButton);
                     row.appendChild(nameCell);
-                    row.appendChild(emailCell);
+                    row.appendChild(idCell);
                     row.appendChild(actionCell);
                     adminsTableBody.appendChild(row);
                 }
@@ -519,10 +523,8 @@ async function displayAdminsTable(){
                     const row = document.createElement('tr');
                     const nameCell = document.createElement('td');
                     nameCell.textContent = user.name;
-                    const currentRoleCell = document.createElement('td');
-                    currentRoleCell.textContent = user.currentRole;
-                    const requestedRoleCell = document.createElement('td');
-                    requestedRoleCell.textContent = user.requestedRole;
+                    const roleChangeCell = document.createElement('td');
+                    roleChangeCell.textContent = `${user.currentRole} to ${user.requestedRole}`;
                     const actionCell = document.createElement('td');
                     const approveButton = document.createElement('button');
                     approveButton.textContent = 'Approve';
@@ -533,15 +535,14 @@ async function displayAdminsTable(){
                     actionCell.appendChild(approveButton);
                     actionCell.appendChild(rejectButton);
                     row.appendChild(nameCell);
-                    row.appendChild(currentRoleCell);
-                    row.appendChild(requestedRoleCell);
+                    row.appendChild(roleChangeCell );
                     row.appendChild(actionCell);
                     pendingTableBody.appendChild(row);
                 }
             });
         } else {
             const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="4">No Pending Requests available</td>`;
+            row.innerHTML = `<td colspan="3">No Pending Requests available</td>`;
             pendingTableBody.appendChild(row);
         }
     }

@@ -2,41 +2,30 @@
 const path = require("path");
 const controller = require("../controller/controller.js");
 const fs = require("fs");
-const mqtt = require("mqtt");
 const { exec } = require("child_process");
-const archiver = require('archiver');
 const SUPERADMIN = "/superAdmin"
 MAINTENANCE_ENTER = "enter"
 MAINTENANCE_EXIT = "exit"
 const { botFunction } = require("../telegramAlarm/botFather.js");
+const { initializeTopics } = require("../mqtt/helper.js");
+const { handleCloudMqttConnect, handleCloudMqttMessage } = require("../mqtt/mqtt.js");
 
 module.exports = function (app) {
-  const { heartbeatMap, waterConsumptionMap } = require('../telegramAlarm/map.js');
-  const AEP_SAMPLE = "/api/sample";
-  app.get(AEP_SAMPLE, async (req, res) => {
-    const data = await controller.fetchSampleDataFromServer();
-    res.send(data);
-  });
+  
   const permForAdmin = "admin";
   const permForConsumer = "consumer";
   const permForSuperAdmin = "superAdmin";
 
+  //Pages
   const ADMINPAGE = path.join(__dirname, "../views/pages", "admin.html");
   const CONSUMERPAGE = path.join(__dirname, "../views/pages", "consumer.html");
-  const SUPERADMINPAGE = path.join(
-    __dirname,
-    "../views/pages",
-    "superAdmin.html"
-  );
+  const SUPERADMINPAGE = path.join(__dirname,"../views/pages","superAdmin.html");
   const SITEPAGE = path.join(__dirname, "../views/pages", "siteToDevice.html");
-  const DEVICEPROFILE = path.join(
-    __dirname,
-    "../views/pages",
-    "deviceProfile.html"
-  );
+  const DEVICEPROFILE = path.join(__dirname,"../views/pages","deviceProfile.html");
+  const DEVICEINFO = path.join(__dirname, "../views/pages", "deviceInfo.html")
+  const BUTTONMAP = path.join(__dirname, "../navbarMappingDatabase/buttonMappings.json");
 
-  const DEVICEINFO =path.join(__dirname,"../views/pages","deviceInfo.html")
-
+  //Scripts
   const FIRMWARESYNC = path.join(__dirname, "../../../firmwareScript.sh");
   const SOURCECODESYNC = path.join(__dirname, "../../../sourceCodeScript.sh");
 
@@ -47,8 +36,7 @@ module.exports = function (app) {
   const PRIVATE_AEP_TO_DEVICEPROFILE = "/api/device-profile/:id";
 
   //public
-  const PUBLIC_AEP_TO_DEVICE_INFO ="/device-info/:deviceId"
-
+  const PUBLIC_AEP_TO_DEVICE_INFO = "/device-info/:deviceId"
   const AEP_TO_REGISTER_A_USER = "/api/user/register";
   const AEP_TO_AUTHENTICATE_A_USER = "/api/user/authenticate";
   const AEP_TO_UPDATE_PROFILE_OF_A_USER = "/api/user/profile/:id";
@@ -59,50 +47,47 @@ module.exports = function (app) {
   const AEP_TO_REQUEST_FOR_ROLE_CHANGE = "/api/user/request/:id";
   const AEP_TO_FETCH_ROLE_CHANGE_REQ = "/api/user/role-change-req";
   const AEP_FOR_ROLE_CHANGE_RESPONSE = "/api/user/response/:id";
-
   const AEP_TO_FETCH_APPROVED_LOG = "/api/response/approved";
   const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
-
   const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
   const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites";
-
+  const AEP_TO_FETCH_SITES_UNDER_AN_ADMIN = '/api/admin/allsites/:id';
+  const AEP_TO_FETCH_ALL_DEVICES_UNDER_A_SITE = '/api/admin/alldevices/:id';
+  const AEP_TO_FETCH_ALL_CONSUMERS_UNDER_A_SITE = '/api/admin/allconsumers/:id';
   const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
   const AEP_TO_FETCH_ALL_DEVICES = "/api/admin/devices";
-
   const AEP_TO_GENERATE_OTP = "/api/generateotp";
   const AEP_TO_VERIFY_OTP = "/api/verifyotp";
-
   const AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS = "/api/admin/sitetoconsumer";
   const AEP_TO_FETCH_CONSUMERS_TO_DEVICES = "/api/consumer/consumertodevice";
-
   const AEP_TO_PUT_SITE = "/api/admin/sites/:id";
   const AEP_TO_PUT_DEVICE = "/api/admin/devices/:id";
-
   const AEP_TO_FETCH_USER_DATA_FROM_GOOGLEAUTH = "/api/fetchDataFromGoogle";
-
   const AEP_TO_REGISTER_SITE = "/api/admin/registersite/:id";
   const AEP_TO_DEREGISTER_SITE = "/api/admin/deregistersite/:id";
   const AEP_TO_REGISTER_DEVICE = "/api/admin/registerdevice/:id";
   const AEP_TO_DEREGISTER_DEVICE = "/api/admin/deregisterdevice/:id";
-
   const AEP_TO_REGISTER_CONSUMER = "/api/admin/registerconsumer/:id";
   const AEP_TO_DEREGISTER_CONSUMER = "/api/admin/deregisterconsumer/:id";
-
-  const AEP_TO_REGISTER_CONSUMER_TO_DEVICE_MAPPING =
-    "/api/admin/registerconsumertodevice/:id";
-  const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING =
-    "/api/admin/deregisterconsumertodevice/:id";
-
-  const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER =
-    "/api/admin/assigndevicetoconsumer/:id";
+  const AEP_TO_REGISTER_CONSUMER_TO_DEVICE_MAPPING ="/api/admin/registerconsumertodevice/:id";
+  const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING ="/api/admin/deregisterconsumertodevice/:id";
+  const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER ="/api/admin/assigndevicetoconsumer/:id";
+  const AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS = '/api/firmware-versions';
+  const AEP_TO_INTIMATE_ALL_DEVICES_UNDER_A_SITE = "/:site_id/intimate-all-devices";
+  const AEP_TO_FETCH_ALL_DEVICES_FIRMWARE_VERSIONS = "/:site_id/fetch-device-versions";
+  const AEP_TO_ENTER_A_DEVICE_IN_MAINTENANCE_MODE = '/api/maintenance/enter';
+  const AEP_TO_EXIT_A_DEVICE_FROM_MAINTENANCE_MODE = '/api/maintenance/exit';
+  const AEP_TO_FETCH_ALL_DEVICES_MODES = '/api/device-status';
+  const AEP_TO_FETCH_A_HTML_FRAGMENT_UNDER_A_PAGE = '/api/html/:role/:key';
   const AEP_TO_POST_DEVICE = "/api/admin/newdevice/:id";
   const AEP_TO_SYNC_FIRMWARE_DATA = "/api/sync-firmware";
   const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
-  const AEP_TO_SEND_FIRMWARE = "/send-firmware";
-  const AEP_TO_FETCH_DEVICE_DATA ="/api/device/:deviceId"
-
+  const AEP_TO_FETCH_DEVICE_DATA = "/api/device/:deviceId"
   const AEP_TO_GENERATE_DEVICE_INFO_QR = `/api/generate/deviceQR`;
   const AEP_TO_DOWNLOAD_DEVICE_INFO_QR = "/api/download/deviceQR";
+  const AEP_TO_GET_BUTTON_MAPPING='/api/buttonMapping'
+
+
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
     // console.log("registering")
@@ -164,21 +149,13 @@ module.exports = function (app) {
   });
 
   ////////////PROTECTED ROUTES FOR PAGES RENDERING//////////////////
-  app.get(
-    PRIVATE_AEP_TO_ADMINROUTE,controller.isAuthenticated(),
-    controller.roleAuthenticatorIdSensitive(permForAdmin),
-    (req, res) => {
+  app.get(PRIVATE_AEP_TO_ADMINROUTE, controller.isAuthenticated(),controller.roleAuthenticatorIdSensitive(permForAdmin),(req, res) => {
       res.sendFile(ADMINPAGE);
-    }
-  );
+  });
 
-  app.get(
-    PRIVATE_AEP_TO_CONSUMERROUTE,controller.isAuthenticated(),
-    controller.roleAuthenticatorIdSensitive(permForConsumer),
-    (req, res) => {
+  app.get(PRIVATE_AEP_TO_CONSUMERROUTE, controller.isAuthenticated(),controller.roleAuthenticatorIdSensitive(permForConsumer),(req, res) => {
       res.sendFile(CONSUMERPAGE);
-    }
-  );
+  });
 
   app.get(SUPERADMIN, (req, res) => {
     res.sendFile(SUPERADMINPAGE);
@@ -192,7 +169,7 @@ module.exports = function (app) {
     res.sendFile(DEVICEPROFILE);
   });
 
-  app.get(PUBLIC_AEP_TO_DEVICE_INFO,async(req,res)=>{
+  app.get(PUBLIC_AEP_TO_DEVICE_INFO, async (req, res) => {
     res.sendFile(DEVICEINFO);
   })
 
@@ -214,11 +191,6 @@ module.exports = function (app) {
     // return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
   });
 
-  ///////////TESTING ROUTES////////////////
-  app.post("/test-url", async (req, res) => {
-    let data = await controller.test();
-    res.json(data);
-  });
 
   //ADMIN PAGE  ADMIN_TO_SITE_MAPPING
   app.get(AEP_TO_FETCH_ALL_ADMINS_TO_SITES, async (req, res) => {
@@ -237,26 +209,17 @@ module.exports = function (app) {
     }
   });
 
-  app.get('/api/admin/allsites/:id', async(req, res) => {
+  app.get(AEP_TO_FETCH_SITES_UNDER_AN_ADMIN, async (req, res) => {
     try {
       const id = req.params.id;
       const data = await controller.fetchAllSitesUnderAdmin(id);
       res.json(data);
-      
+
     } catch (error) {
       res.status(500).send("Internal Server Error");
-      
+
     }
   })
-
-  app.get('/src/main/views/pages/superAdmin.html',async(req,res)=>{
-    res.sendFile(SUPERADMINPAGE);
-  })
-  const BUTTONMAP = path.join(__dirname, "../database/json-data/buttonMappings.json");
-  app.get('/buttonMap',async(req,res)=>{
-    res.sendFile(BUTTONMAP);
-  })
-
 
   //sites to device mapping
 
@@ -276,27 +239,28 @@ module.exports = function (app) {
     }
   });
 
-  app.get('/api/admin/alldevices/:id', async(req, res) => {
+  
+  app.get(AEP_TO_FETCH_ALL_DEVICES_UNDER_A_SITE, async (req, res) => {
     try {
       const id = req.params.id;
       const data = await controller.fetchAllDevicesUnderSite(id);
       res.json(data);
-      
+
     } catch (error) {
       res.status(500).send("Internal Server Error");
-      
+
     }
   })
 
-  app.get('/api/admin/allconsumers/:id', async(req, res) => {
+  app.get(AEP_TO_FETCH_ALL_CONSUMERS_UNDER_A_SITE, async (req, res) => {
     try {
       const id = req.params.id;
       const data = await controller.fetchAllConsumersUnderSite(id);
       res.json(data);
-      
+
     } catch (error) {
       res.status(500).send("Internal Server Error");
-      
+
     }
   })
 
@@ -358,9 +322,7 @@ module.exports = function (app) {
     await controller.deregisterConsumerToDeviceMapping(req, res);
   });
 
-  app.patch(
-    AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER,
-    async (req, res) => {
+  app.patch(AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER,async (req, res) => {
       await controller.AssignDevicetoConsumer(req, res);
     }
   );
@@ -368,7 +330,7 @@ module.exports = function (app) {
   app.post(AEP_TO_POST_DEVICE, async (req, res) => {
     await controller.postDevice(req, res);
   });
-  app.get(AEP_TO_FETCH_DEVICE_DATA, async(req,res)=>{
+  app.get(AEP_TO_FETCH_DEVICE_DATA, async (req, res) => {
     try {
       const data = await controller.fetchDeviceData(req.params.deviceId);
       res.json(data);
@@ -377,247 +339,29 @@ module.exports = function (app) {
     }
   })
 
+
+  // Variable to store bin filenames in memory
+  let binFilenamesInMemory = [];
   const localRepoPath = path.join(__dirname, '../local-repo');
-
-function getBinFilenamesWithoutExtension(directoryPath) {
-  return new Promise((resolve, reject) => {
-      fs.readdir(directoryPath, (err, files) => {
-          if (err) {
-              return reject('Unable to scan directory: ' + err);
-          }
-          // Filter out non-.bin files and remove .bin extension
-          const binFiles = files
-              .filter(file => file.endsWith('.bin'))
-              .map(file => path.basename(file, '.bin'));
-
-          resolve(binFiles);
-          console.log(binFiles)
-      });
-  });
-}
-
-// Variable to store bin filenames in memory
-let binFilenamesInMemory = [];
-
-// Initialize and store bin filenames in memory
-async function initializeBinFilenames() {
-  try {
-      binFilenamesInMemory = await getBinFilenamesWithoutExtension(localRepoPath);
-      console.log('Bin filenames without extension stored in memory:', binFilenamesInMemory);
-  } catch (error) {
-      console.error('Error reading bin filenames:', error);
-  }
-}
-
-initializeBinFilenames();
-app.get('/api/firmware-versions', (req, res) => {
-  res.json(binFilenamesInMemory.map((name, id) => ({ id, name })));
-});
-  // const updateRepo = async () => {
-  //   const git = simpleGit();
-
-  //   if (!fs.existsSync(localRepoPath)) {
-  //     // Clone the repository if it doesn't exist
-  //     console.log('Cloning the repository...');
-  //     await git.clone(githubRepoUrl, localRepoPath);
-  //   } else {
-  //     // Pull the latest changes if the repository exists
-  //     console.log('Pulling the latest changes...');
-  //     await git.cwd(localRepoPath);
-  //     await git.pull();
-  //   }
-  // };
-
-  // // Define a route for the button click to update the repository
-  // app.get(AEP_TO_SYNC_FIRMWARE_DATA, async (req, res) => {
-  //   try {
-  //     await updateRepo();
-  //     res.send('Repository updated successfully!');
-  //   } catch (error) {
-  //     console.error('Error updating repository:', error);
-  //     res.status(500).send('Error updating repository');
-  //   }
-  // });
-
-  app.get(AEP_TO_SEND_FIRMWARE, async (req, res) => {
-    // res.send("api called");
-    console.log("api called");
-  });
-
-  const siteIdsFilePath = path.join(__dirname, "../database/json-data/siteRegistration.json");
-  const deviceIdsFilePath = path.join(__dirname, "../database/json-data/deviceToProfile.json");
-  const siteToDeviceFilePath = path.join(__dirname, "../database/json-data/siteToDevices.json");
-  
-
-  
-  const deviceStatus = {};
-  
-  // Utility functions for database operations
-  const readDatabase = (filePath) => {
-    return JSON.parse(fs.readFileSync(filePath));
-  }
-  
-  const writeDatabase = (filePath, data) => {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-  }
-    // In-memory storage for site and device data
-    const siteIds =readDatabase(siteIdsFilePath);
-    const deviceIds =readDatabase(deviceIdsFilePath);
-    const siteToDevice =readDatabase(siteToDeviceFilePath);
-  
-  // Function to get the current timestamp from NTP server
-  const fetchNetworkTime = () => {
-    const localTime = new Date();
-    return localTime.getTime(); // Returns the Unix timestamp in milliseconds
-};
-
-  
-  const client = mqtt.connect("mqtt://192.168.33.250", {
-    port: 1883,
-    username: "nuez",
-    password: "emqx@nuez",
-  });
-
-  // Function to subscribe to a topic
-  const subscribeToTopic = (topic) => {
-    client.subscribe(topic, (err) => {
-      if (err) {
-        console.error(`Error subscribing to ${topic} topic:`, err);
-      } else {
-        console.log(`Subscribed to ${topic} topic.`);
-      }
-    });
-  }
-  
-  const handleRegistration = (siteId, deviceId) => {
-    if (!siteIds[siteId]) {
-      siteIds[siteId] = { name: siteId, location: "default" };
-      writeDatabase(siteIdsFilePath, siteIds);
-    }
-  
-    if (!deviceIds[deviceId]) {
-      deviceIds[deviceId] = { name: deviceId, location: "default" };
-      writeDatabase(deviceIdsFilePath, deviceIds);
-    }
-  
-    if (!siteToDevice[siteId]) {
-      siteToDevice[siteId] = [];
-    }
-  
-    if (!siteToDevice[siteId].includes(deviceId)) {
-      siteToDevice[siteId].push(deviceId);
-      writeDatabase(siteToDeviceFilePath, siteToDevice);
-    }
-  }
-
-  
-  // Function to update device data
-  const updateDeviceData = (filePath, dataKey, updateData) => {
-    const rawData = readDatabase(filePath);
-    for (const [device_id, data] of Object.entries(updateData)) {
-      if (rawData.hasOwnProperty(device_id)) {
-        rawData[device_id][dataKey] = data;
-      }
-    }
-    writeDatabase(filePath, rawData);
-    console.log(`Device ${dataKey}s updated successfully.`);
-  }
-  
-  // MQTT client event handlers
-  client.on("connect", () => {
-    console.log("Connected to MQTT broker");
-  
-    // Subscribe to necessary topics
-    const topics = [
-      "water-consumption-data",
-      "device-status-info/#",
-      "device-version-info/#",
-      "device-heartbeat-info/#"
-    ];
-    topics.forEach(subscribeToTopic);
-  });
-  
-  client.on("message", async (topic, message) => {
-    const [topicName, siteId] = topic.split("/");
-    const parsedMessage = JSON.parse(message.toString());
-  
-    switch (topicName) {
-      case "water-consumption-data":
-        const { site_id, device_id } = parsedMessage;
-        const networkTime = await fetchNetworkTime();
-        waterConsumptionMap.set(parsedMessage.device_id,networkTime);
-        handleRegistration(site_id, device_id);
-        break;
-  
-      case "device-status-info":
-        deviceStatus[siteId] = parsedMessage;
-        updateDeviceData(
-          path.join(__dirname, "../database/json-data/deviceToProfile.json"),
-          "status",
-          parsedMessage
-        );
-        break;
-  
-      case "device-version-info":
-        updateDeviceData(
-          path.join(__dirname, "../database/json-data/deviceToProfile.json"),
-          "version",
-          parsedMessage
-        );
-        break;
-  
-      case "device-heartbeat-info":
-        try {
-          const networkTime = await fetchNetworkTime();
-          heartbeatMap.set(parsedMessage.device_id,networkTime);
-          
-        
-        } catch (error) {
-          console.error("Error fetching network time:", error);
-        }
-        break;
-  
-      default:
-        console.error("Unhandled topic:", topic);
-    }
-  });
-
-app.get('/download/firmware', async (req, res) => {
-  try {
-    res.setHeader('Content-Type', 'application/zip');
-    res.setHeader('Content-Disposition', 'attachment; filename=local-repo.zip');
-
-    const archive = archiver('zip', {
-      zlib: { level: 9 } // Sets the compression level
-    });
-
-    archive.on('error', (err) => {
-      throw err;
-    });
-
-    // Pipe the archive data to the response
-    archive.pipe(res);
-
-    // Append files from the local repo directory to the archive
-    archive.directory(localRepoPath, false);
-
-    // Finalize the archive and send it
-    archive.finalize();
-  } catch (error) {
-    console.error('Error sending zip folder:', error);
-    res.status(500).send('Error sending zip folder');
-  }
-});
-
-  app.post("/:site_id/intimate-all-devices", async (req, res) => {
+  // Initialize and store bin filenames in memory
+  async function initializeBinFilenames() {
     try {
-      const site_id = req.params.site_id; // Correctly access site_id from req.params
-      console.log(site_id);
-      const message = { version:`${req.body.version}` }
-      console.log(message)
-      // Publish the message to the "site_1/intimate" topic
-      client.publish(`intimate-latest-version-info/${site_id}`, JSON.stringify(message));
+      binFilenamesInMemory = await controller.getBinFilenamesWithoutExtension(localRepoPath);
+      console.log('Bin filenames without extension stored in memory:', binFilenamesInMemory);
+    } catch (error) {
+      console.error('Error reading bin filenames:', error);
+    }
+  }
 
+  app.get(AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS, (req, res) => {
+    initializeBinFilenames();
+    res.json(binFilenamesInMemory.map((name, id) => ({ id, name })));
+  });
+
+  
+  app.post(AEP_TO_INTIMATE_ALL_DEVICES_UNDER_A_SITE, async (req, res) => {
+    try {
+      await controller.intimateAllDevicesOfASite(req);
       res.status(200).json({ message: "Intimate message sent to all devices" });
     } catch (error) {
       console.error("Error intimating all devices:", error);
@@ -625,11 +369,10 @@ app.get('/download/firmware', async (req, res) => {
     }
   });
 
-  app.post("/:site_id/fetch-device-versions", async (req, res) => {
-    const site_id = req.params.site_id; // Correctly access site_id from req.params
+  
+  app.post(AEP_TO_FETCH_ALL_DEVICES_FIRMWARE_VERSIONS, async (req, res) => {
     try {
-      // Publish the message to the MQTT topic
-      client.publish(`device-version-query/${site_id}`, "fetch versions from devices");
+      await controller.fetchDeviceVersion(req);
       res.status(200).json({ message: "Message published successfully" });
     } catch (error) {
       console.error("Error publishing message:", error);
@@ -637,29 +380,22 @@ app.get('/download/firmware', async (req, res) => {
     }
   });
 
-
-
-  app.post("/intimate-all-sites", (req, res) => {
-    const firmwareFilePath = path.join(
-      __dirname,"../local-repo","version.json");
-    fs.readFile(firmwareFilePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Failed to read firmware.txt:", err);
-        res.status(500).send("Failed to read firmware version.");
-        return;
-      }
-
-      client.publish("latest-firmware-version", data, (err) => {
-        if (err) {
-          console.error("Failed to publish firmware version:", err);
-          res.status(500).send("Failed to publish firmware version.");
-          return;
-        }
-
-        res.send("Firmware version sent successfully.");
-      });
-    });
+  
+  //// Enter Maintenance Mode
+  app.post(AEP_TO_ENTER_A_DEVICE_IN_MAINTENANCE_MODE, async (req, res) => {
+    await controller.enterMaintenance(req, res);
   });
+
+  
+  // Exit maintenance mode route
+  app.post(AEP_TO_EXIT_A_DEVICE_FROM_MAINTENANCE_MODE, async (req, res) => {
+    await controller.exitMaintenance(req, res);
+  });
+
+  
+  app.post(AEP_TO_FETCH_ALL_DEVICES_MODES, async (req, res) => {
+    await controller.fetchDeviceStatus(req, res);
+  })
 
   app.get(AEP_TO_FETCH_USER_DATA_FROM_GOOGLEAUTH, (req, res) => {
     let userData = {
@@ -708,92 +444,44 @@ app.get('/download/firmware', async (req, res) => {
     });
   });
 
-  ////////////////////// Maintenance Mode///////////////////////////////////////
-  async function maintenance_service(site_id, list_of_ids, action) {
-    // Publish MQTT message to enter/exit maintenance mode
-    await client.publish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }));
-  }
-  async function device_status_query(site_id){
-    await client.publish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }));
-  }
-
-  //// Enter Maintenance Mode
-  app.post('/api/maintenance/enter', async (req, res) => {
-    const list_of_ids = req.body.devices_id;
-    const site_id = req.body.site_id;
-   
-    maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
-    setTimeout(() => {
-      device_status_query(site_id);
-      }, 1000);
-    setTimeout(() => {
-        res.json(deviceStatus[site_id])
-      }, 7000);
-  });
-
-  // Exit maintenance mode route
-  app.post('/api/maintenance/exit', async (req, res) => {
-    const list_of_ids = req.body.devices_id;
-    const site_id = req.body.site_id;
-    maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
-    setTimeout(() => {
-    device_status_query(site_id);
-    }, 1000);
-    setTimeout(() => {
-      res.json(deviceStatus[site_id])
-    }, 7000);
-  });
-
-  app.post('/api/device-status', async (req, res) => {
-    const { site_id } = req.body;
-    device_status_query(site_id);
-    setTimeout(() => {
-      res.json(deviceStatus[site_id])
-      deviceStatus[site_id]={};
-    }, 5000);
-  })
-
-
-  app.get('/api/html/:role/:key', (req, res) => {
+  app.get(AEP_TO_FETCH_A_HTML_FRAGMENT_UNDER_A_PAGE, (req, res) => {
     const { role, key } = req.params;
     const filePath = path.join(__dirname, '../views/html_fragments', role, `${key}.html`);
-  
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
         return res.status(404).send('Fragment not found');
       }
-      
-      const contentMatch = data.match(/<!-- content -->([\s\S]*?)<!--/);
-      const helpMatch = data.match(/<!-- help -->([\s\S]*?)$/);
   
-      if (contentMatch && helpMatch) {
-        const content = contentMatch[1].trim();
-        const help = helpMatch[1].trim();
-        res.json({ content, help });
-      } else {
-        res.status(500).send('Invalid HTML fragment format');
-      }
+      res.json({ fragment: data });
     });
   });
-  app.get(AEP_TO_GENERATE_DEVICE_INFO_QR,async(req,res)=>{
-    try{
+  
+
+  app.get(AEP_TO_GET_BUTTON_MAPPING, async (req, res) => {
+    res.sendFile(BUTTONMAP);
+  })
+
+  app.get(AEP_TO_GENERATE_DEVICE_INFO_QR, async (req, res) => {
+    try {
       await controller.generateQRCodes();
       res.send("generated successfully")
     }
     catch (error) {
       res.status(500).send("Internal Server Error");
     }
-    
+
   })
-  
-  app.get(AEP_TO_DOWNLOAD_DEVICE_INFO_QR,async(req,res)=>{
+
+  app.get(AEP_TO_DOWNLOAD_DEVICE_INFO_QR, async (req, res) => {
     await controller.downloadQRCode(res);
-  
-    
+
+
   })
-    
-  
-setTimeout(botFunction, 20000);
+
+  const topics = initializeTopics();
+  handleCloudMqttConnect(topics);
+  handleCloudMqttMessage(topics);
+  setTimeout(botFunction, 20000);
 
 
 };

@@ -20,3 +20,4 @@ dataDeleteScript.sh
 database/
 json-data/
 qr_codes_generated/
+a.sh

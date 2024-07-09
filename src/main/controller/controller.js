@@ -6,6 +6,8 @@ const QRCode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
+const { handleCloudMqttPublish } = require("../mqtt/helper");
+const { deviceStatus } = require("../telegramAlarm/map");
 
 const QRdirectoryPath = path.join(__dirname, '../qr_codes_generated');
 
@@ -481,7 +483,91 @@ class Controller {
       res.status(500).send('Error sending zip folder');
     }
   }
+  async intimateAllDevicesOfASite(req){
+    const site_id = req.params.site_id; // Correctly access site_id from req.params
+      console.log(site_id);
+      const message = { version:`${req.body.version}` }
+      console.log(message)
+      // Publish the message to the "site_1/intimate" topic
+      
+      handleCloudMqttPublish(`intimate-latest-version-info/${site_id}`,JSON.stringify(message))
+    
+  }
+  async fetchDeviceVersion(req){
+    const site_id=req.params.site_id;
+     handleCloudMqttPublish(`device-version-query/${site_id}`, "fetch versions from devices");
+  }
 
+  async initmateAllSites(req){
+
+  }
+
+  ////////////////////// Maintenance Mode///////////////////////////////////////
+  async maintenance_service(site_id, list_of_ids, action) {
+    await handleCloudMqttPublish(`maintenance/${site_id}`, JSON.stringify({ list_of_ids: list_of_ids, action: action }))
+  
+  }
+  async device_status_query(site_id){
+    await handleCloudMqttPublish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }))
+    
+  }
+
+
+  async enterMaintenance(req,res){
+    const list_of_ids = req.body.devices_id;
+    const site_id = req.body.site_id;
+   
+    this.maintenance_service(site_id, list_of_ids, MAINTENANCE_ENTER);
+    setTimeout(() => {
+      this.device_status_query(site_id);
+      }, 1000);
+    setTimeout(() => {
+        res.json(deviceStatus[site_id])
+      }, 7000);
+  }
+
+  async exitMaintenance(req,res){
+    const list_of_ids = req.body.devices_id;
+    const site_id = req.body.site_id;
+    this.maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
+    setTimeout(() => {
+    this.device_status_query(site_id);
+    }, 1000);
+    setTimeout(() => {
+      res.json(deviceStatus[site_id])
+    }, 7000);
+  }
+
+  async fetchDeviceStatus(req,res){
+    const list_of_ids = req.body.devices_id;
+    const site_id = req.body.site_id;
+    this.maintenance_service(site_id, list_of_ids, MAINTENANCE_EXIT);
+    setTimeout(() => {
+    this.device_status_query(site_id);
+    }, 1000);
+    setTimeout(() => {
+         res.json(deviceStatus[site_id])
+        deviceStatus[site_id]={};
+     }, 5000);
+    
+  }  
+
+  async getBinFilenamesWithoutExtension(directoryPath) {
+      return new Promise((resolve, reject) => {
+          fs.readdir(directoryPath, (err, files) => {
+              if (err) {
+                  return reject('Unable to scan directory: ' + err);
+              }
+              // Filter out non-.bin files and remove .bin extension
+              const binFiles = files
+                  .filter(file => file.endsWith('.bin'))
+                  .map(file => path.basename(file, '.bin'));
+    
+              resolve(binFiles);
+              console.log(binFiles)
+          });
+      });
+    }
   ////////////////AUTHORIZE_USER//////////////////////////////////
   roleAuthenticatorIdInSensitive = roleAuthenticatorIdInSensitive;
   roleAuthenticatorIdSensitive = roleAuthenticatorIdSensitive;
