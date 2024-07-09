@@ -787,15 +787,7 @@ else{
             showUserSearch(deviceId);
         });
 
-        const deleteButton = document.createElement('button');
-        deleteButton.id = `delete-button-${index}`; // Ensure this ID matches the CSS
-        deleteButton.textContent = 'Delete';
-        deleteButton.addEventListener('click', () => {
-            // Implement delete functionality here
-        });
-
         actionCell.appendChild(assignButton);
-        actionCell.appendChild(deleteButton);
         row.appendChild(actionCell);
 
         return row;
