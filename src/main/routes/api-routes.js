@@ -472,7 +472,7 @@ app.get('/api/firmware-versions', (req, res) => {
 };
 
   
-  const client = mqtt.connect("mqtt://192.168.33.250", {
+  const client = mqtt.connect("mqtt://206.189.138.34", {
     port: 1883,
     username: "nuez",
     password: "emqx@nuez",
