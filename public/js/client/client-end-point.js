@@ -53,6 +53,7 @@ const AEP_TO_POST_DEVICE="/api/admin/newdevice";
 
 const AEP_TO_SYNC_FIRMWARE_DATA ="/api/sync-firmware"
 const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
+const AEP_TO_SYNC_PI_SOURCECODE = "/api/sync-pi-sourcecode";
 const AEP_TO_SEND_FIRMWARE ="/send-firmware"
 
 //Maintenance
@@ -223,6 +224,9 @@ export function getApiToSyncFirmware() {
 }
 export function getApiToSyncSourceCode() {
   return AEP_TO_SYNC_SOURCECODE; 
+}
+export function getApiToSyncPiSourceCode() {
+  return AEP_TO_SYNC_PI_SOURCECODE; 
 }
 
 export function getApiToSendFirmwareToSites() {

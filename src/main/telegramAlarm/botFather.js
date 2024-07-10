@@ -6,39 +6,40 @@ const telegramBotToken = '7176670163:AAHxhW6oTlZIFYaU0XUXbk1Q8BnF1u5M1zY';
 const telegramChatId = -1002166014938;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
-const TELEGRAM_POST_URL=`https://api.telegram.org/bot${telegramBotToken}/sendMessage`
+const TELEGRAM_POST_URL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`
 const statusMap = new Map();
 const snoozeMap = new Map(); // To store snooze information for each device
 const consumptionCheckInterval = 20000;
 const INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL = 1000;
 const INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL = 30000;
 const INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL = 60000;
-const TELEGRAM_BOT_COMMAND='snooze';
-const EXPRESSION_FOR_DEVICE_ID=`device_id:-"(.+?)"`;
+const TELEGRAM_BOT_COMMAND = 'snooze';
+const EXPRESSION_FOR_DEVICE_ID = `device_id:-"(.+?)"`;
 async function botFunction() {
     console.log("Bot function executed.");
-
+    console.log(heartbeatMap, waterConsumptionMap);
     async function heartbeatStatus() {
-        heartbeatMap.forEach((h1, d1) => {
+        heartbeatMap.forEach((deviceData, deviceId) => {
             const currentTime = new Date().getTime();
-            const lastHeartbeatTime = new Date(h1).getTime();
-
+            const lastHeartbeatTime = new Date(deviceData.timestamp).getTime();
             const timeDiff = (currentTime - lastHeartbeatTime) / 1000; // Time difference in seconds
+
             if (timeDiff <= 10) {
-                statusMap.set(d1, "alive");
+                statusMap.set(deviceId, "alive");
             } else {
-                statusMap.set(d1, "dead");
+                statusMap.set(deviceId, "dead");
             }
         });
     }
+
 
     async function monitorConsumption() {
         try {
             statusMap.forEach((status, deviceId) => {
                 const currentTime = new Date().getTime();
-                const lastConsumptionTime = waterConsumptionMap.get(deviceId); // Use .get() to retrieve the value
+                const lastConsumptionTime = waterConsumptionMap.get(deviceId).timestamp;
 
-                if (status === "alive" && (currentTime - lastConsumptionTime) > consumptionCheckInterval) {
+                if (status === "alive" && (currentTime - new Date(lastConsumptionTime).getTime()) > consumptionCheckInterval) {
                     if (isDeviceSnoozed(deviceId)) {
                         console.log(`Device ${deviceId} is snoozed. Skipping alert.`);
                     } else {
@@ -63,9 +64,9 @@ async function botFunction() {
     async function deviceDead() {
         const inactiveThreshold = 120; // 2 minutes in seconds
 
-        for (const [deviceId, lastHeartbeat] of heartbeatMap.entries()) {
+        for (const [deviceId, deviceData] of heartbeatMap.entries()) {
             const currentTime = new Date().getTime();
-            const lastHeartbeatTime = new Date(lastHeartbeat).getTime();
+            const lastHeartbeatTime = new Date(deviceData.timestamp).getTime();
             const timeDiff = (currentTime - lastHeartbeatTime) / 1000; // Time difference in seconds
             console.log(`Current Time: ${currentTime}, Last Heartbeat Time: ${lastHeartbeatTime}, Time Difference: ${timeDiff}`);
 
@@ -88,20 +89,21 @@ async function botFunction() {
         }
     }
 
+
     function isDeviceSnoozed(deviceId) {
         if (!snoozeMap.has(deviceId)) return false;
         const snoozeUntil = snoozeMap.get(deviceId);
         return snoozeUntil > Date.now();
     }
 
-    bot.onText(`/\/${TELEGRAM_BOT_COMMAND} (\d+)/`, (msg, match) => {
+    bot.onText(new RegExp(`/${TELEGRAM_BOT_COMMAND} (\\d+)`), (msg, match) => {
         const chatId = msg.chat.id;
         const time = parseInt(match[1], 10); // Extract <time> from the command
         const repliedToMessage = msg.reply_to_message;
 
         if (repliedToMessage) {
             const repliedText = repliedToMessage.text;
-            const deviceIdMatch = repliedText.match(`/${EXPRESSION_FOR_DEVICE_ID}/`);
+            const deviceIdMatch = repliedText.match(new RegExp(EXPRESSION_FOR_DEVICE_ID));
             if (deviceIdMatch) {
                 const deviceId = deviceIdMatch[1];
                 snoozeMap.set(deviceId, Date.now() + time * 1000);
@@ -114,6 +116,7 @@ async function botFunction() {
             bot.sendMessage(chatId, `Please reply to a message containing a device_id with the snooze command.`);
         }
     });
+
 
     heartbeatStatus();
     setInterval(heartbeatStatus, INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL); // updates status map every 1 minute

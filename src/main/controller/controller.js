@@ -8,7 +8,7 @@ const fs = require('fs');
 const archiver = require('archiver');
 const { handleCloudMqttPublish } = require("../mqtt/helper");
 const { deviceStatus } = require("../telegramAlarm/map");
-
+const PI_SOURCE_CODE_SYNC = `pi-source-code-sync`;
 const QRdirectoryPath = path.join(__dirname, '../qr_codes_generated');
 
 
@@ -510,6 +510,10 @@ class Controller {
   async device_status_query(site_id){
     await handleCloudMqttPublish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }))
     
+  }
+
+  async sync_pi_source_code(){
+    await handleCloudMqttPublish(PI_SOURCE_CODE_SYNC, JSON.stringify({ "query": "git pull" }))
   }
 
 

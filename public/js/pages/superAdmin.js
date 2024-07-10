@@ -12,6 +12,7 @@ import {
     getSitesData,
     syncFirmwareData,
     syncSourceCode,
+    syncPiSourceCode,
     sendFirmwareToSites
 } from '../client/client.js';
 
@@ -27,6 +28,7 @@ export function initializeSuperAdminPanel(sidebarid) {
     const administrationList = document.getElementById('administration-list')
     const firmwareSyncBtn = document.getElementById('syncFirmware')
     const sourceCodeSyncBtn = document.getElementById('syncSourceCode')
+    const piSourceCodeSyncBtn = document.getElementById('syncPiSourceCode')
     const firmwareToSitesBtn = document.getElementById('firmwareToSitesBtn')
     // Function to disable the 'Request for Role change' button
     function disableRequestButton(button, msg) {
@@ -578,6 +580,31 @@ async function displayAdminsTable(){
         pendingTabDisplay();
     }
 
+    async function administrationTabDisplay(){
+        firmwareSyncBtn.addEventListener('click', async () => {
+            const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+            if (userConfirmed) {
+                await syncFirmwareData();
+            }
+            alert("Firmware update complete. Please visit the relevant site-page to apply the updated firmware.");
+
+        });
+        sourceCodeSyncBtn.addEventListener('click', async () => {
+            const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+            if (userConfirmed) {
+                await syncSourceCode();
+            }
+            alert("SERVER HAS BEEN UPDATED")
+        })
+        piSourceCodeSyncBtn.addEventListener('click', async () => {
+            const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
+            if (userConfirmed) {
+                await syncPiSourceCode();
+            }
+            alert("PI HAS BEEN UPDATED")
+        })
+    }
+
     
 
 
@@ -613,27 +640,7 @@ async function displayAdminsTable(){
         else if(sidebarid==='approved')loadApprovedTable();
         else if(sidebarid==='rejected')loadRejectedTable();
         else if(sidebarid==='pending')pendingTabDisplay();
-        else if(sidebarid==='administration'){
-            administrationTab.addEventListener('click', async () => {
-                hideAllLists();
-                administrationList.style.display = 'block';
-                firmwareSyncBtn.addEventListener('click', async () => {
-                    const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
-                    if (userConfirmed) {
-                        await syncFirmwareData();
-                    }
-                    alert("Firmware update complete. Please visit the relevant site-page to apply the updated firmware.");
-        
-                });
-                sourceCodeSyncBtn.addEventListener('click', async () => {
-                    const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
-                    if (userConfirmed) {
-                        await syncSourceCode();
-                    }
-                    alert("SERVER HAS BEEN UPDATED")
-                })
-            });
-        }
+        else if(sidebarid==='administration')administrationTabDisplay();
     }
     eventListeners();
     

@@ -212,6 +212,9 @@ export async function syncFirmwareData(){
 export async function syncSourceCode(){
     await controller.syncSourceCode();
 }
+export async function syncPiSourceCode(){
+    await controller.syncPiSourceCode();
+}
 
 export async function sendFirmwareToSites(){
     await controller.sendFirmwareToSites();

@@ -82,6 +82,7 @@ module.exports = function (app) {
   const AEP_TO_POST_DEVICE = "/api/admin/newdevice/:id";
   const AEP_TO_SYNC_FIRMWARE_DATA = "/api/sync-firmware";
   const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
+  const AEP_TO_SYNC_PI_SOURCECODE = "/api/sync-pi-sourcecode";
   const AEP_TO_FETCH_DEVICE_DATA = "/api/device/:deviceId"
   const AEP_TO_GENERATE_DEVICE_INFO_QR = `/api/generate/deviceQR`;
   const AEP_TO_DOWNLOAD_DEVICE_INFO_QR = "/api/download/deviceQR";
@@ -446,6 +447,9 @@ module.exports = function (app) {
     });
   });
 
+  app.get(AEP_TO_SYNC_PI_SOURCECODE, (req, res) => {
+    controller.sync_pi_source_code();
+  });
   app.get(AEP_TO_FETCH_A_HTML_FRAGMENT_UNDER_A_PAGE, (req, res) => {
     const { role, key } = req.params;
     const filePath = path.join(__dirname, '../views/html_fragments', role, `${key}.html`);
