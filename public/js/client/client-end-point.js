@@ -62,6 +62,8 @@ const AEP_TO_ENTER_MAINTENANCE = "/api/maintenance/enter"
 const AEP_TO_EXIT_MAINTENANCE = "/api/maintenance/exit"
 
 
+//Site level source code sync
+const AEP_TO_SYNC_PI_SOURCECODE_FOR_PARTICULAR_SITE = "/api/sync-pi-sourcecode/";
 export function getApiToRegisterUser() {
   return AEP_TO_REGISTER_A_USER;
 }
@@ -177,6 +179,10 @@ export function getApiToFetchConsumersUnderSite(id){
   return `/api/admin/allconsumers/${id}`;
 }
 
+//site source code sync
+export function getApiToSyncSiteSourceCode() {
+  return AEP_TO_SYNC_PI_SOURCECODE_FOR_PARTICULAR_SITE;
+}
 //delete a device
 export function getApiToDeleteSiteDeviceMapping(deviceId) {
   return `${AEP_TO_DELETE_SITE_DEVICE_MAPPING}/${deviceId}`;

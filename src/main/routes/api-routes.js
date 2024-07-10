@@ -28,7 +28,7 @@ module.exports = function (app) {
   //Scripts
   const FIRMWARESYNC = path.join(__dirname, "../../../firmwareScript.sh");
   const SOURCECODESYNC = path.join(__dirname, "../../../sourceCodeScript.sh");
-
+  const PISOURCECODESYNC = path.join(__dirname, "../../../pisourceCodeScript.sh");
   //private
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard/:id";
   const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard/:id";
@@ -74,6 +74,7 @@ module.exports = function (app) {
   const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER ="/api/admin/assigndevicetoconsumer/:id";
   const AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS = '/api/firmware-versions';
   const AEP_TO_INTIMATE_ALL_DEVICES_UNDER_A_SITE = "/:site_id/intimate-all-devices";
+  const AEP_TO_INTIMATE_ALL_SITES='/intimate-all-sites'
   const AEP_TO_FETCH_ALL_DEVICES_FIRMWARE_VERSIONS = "/:site_id/fetch-device-versions";
   const AEP_TO_ENTER_A_DEVICE_IN_MAINTENANCE_MODE = '/api/maintenance/enter';
   const AEP_TO_EXIT_A_DEVICE_FROM_MAINTENANCE_MODE = '/api/maintenance/exit';
@@ -83,13 +84,14 @@ module.exports = function (app) {
   const AEP_TO_SYNC_FIRMWARE_DATA = "/api/sync-firmware";
   const AEP_TO_SYNC_SOURCECODE = "/api/sync-sourcecode";
   const AEP_TO_SYNC_PI_SOURCECODE = "/api/sync-pi-sourcecode";
+  const AEP_TO_SYNC_PI_SOURCECODE_FOR_PARTICULAR_SITE = "/api/sync-pi-sourcecode/:id";
   const AEP_TO_FETCH_DEVICE_DATA = "/api/device/:deviceId"
   const AEP_TO_GENERATE_DEVICE_INFO_QR = `/api/generate/deviceQR`;
   const AEP_TO_DOWNLOAD_DEVICE_INFO_QR = "/api/download/deviceQR";
   const AEP_TO_GET_BUTTON_MAPPING='/api/buttonMapping'
 
   
-  const TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION = 20000;
+  const TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION = 200000000000000;
 
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -356,8 +358,8 @@ module.exports = function (app) {
     }
   }
 
-  app.get(AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS, (req, res) => {
-    initializeBinFilenames();
+  app.get(AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS, async(req, res) => {
+    await initializeBinFilenames();
     res.json(binFilenamesInMemory.map((name, id) => ({ id, name })));
   });
 
@@ -369,6 +371,16 @@ module.exports = function (app) {
     } catch (error) {
       console.error("Error intimating all devices:", error);
       res.status(500).json({ error: "Failed to intimate all devices" });
+    }
+  });
+
+  app.post(AEP_TO_INTIMATE_ALL_SITES, async (req, res) => {
+    try {
+      await controller.intimateAllSites(req);
+      res.status(200).json({ message: "Intimate message sent to all sites" });
+    } catch (error) {
+      console.error("Error intimating all sites:", error);
+      res.status(500).json({ error: "Failed to intimate all sites" });
     }
   });
 
@@ -448,8 +460,25 @@ module.exports = function (app) {
   });
 
   app.get(AEP_TO_SYNC_PI_SOURCECODE, (req, res) => {
-    controller.sync_pi_source_code();
+    exec(PISOURCECODESYNC, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        res.status(500).send(`Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        res.status(500).send(`stderr: ${stderr}`);
+        return;
+      }
+      res.send(`stdout: ${stdout}`);
+    });
   });
+
+  app.get(AEP_TO_SYNC_PI_SOURCECODE_FOR_PARTICULAR_SITE,(req,res)=>{
+    const id=req.params.id;
+    controller.sync_pi_source_code(id);
+  })
   app.get(AEP_TO_FETCH_A_HTML_FRAGMENT_UNDER_A_PAGE, (req, res) => {
     const { role, key } = req.params;
     const filePath = path.join(__dirname, '../views/html_fragments', role, `${key}.html`);

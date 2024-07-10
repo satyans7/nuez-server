@@ -220,6 +220,10 @@ export async function sendFirmwareToSites(){
     await controller.sendFirmwareToSites();
 }
 
+export async function syncPiSourceCodeForParticularSite(site){
+    await controller.syncPiSourceCodeForParticularSite(site);
+}
+
 //Maintenance
 
 export async function getDeviceStatus(object){

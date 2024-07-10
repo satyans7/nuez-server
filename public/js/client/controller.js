@@ -254,6 +254,11 @@ export async function postDevice(id, data) {
     const api=cep.getApiToSyncPiSourceCode();
     cep.fetchDataFromServer(api);
  }
+ export async function syncPiSourceCodeForParticularSite(id){
+    const api=cep.getApiToSyncSiteSourceCode();
+    cep.fetchDataFromServer(`${api}${id}`);
+ }
+ 
 
  export async function sendFirmwareToSites(){
     const api=cep.getApiToSendFirmwareToSites();

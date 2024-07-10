@@ -8,7 +8,7 @@ const fs = require('fs');
 const archiver = require('archiver');
 const { handleCloudMqttPublish } = require("../mqtt/helper");
 const { deviceStatus } = require("../telegramAlarm/map");
-const PI_SOURCE_CODE_SYNC = `pi-source-code-sync`;
+const TOPIC_FOR_PI_SOURCE_CODE_SYNC = `pi-source-code-sync`;
 const QRdirectoryPath = path.join(__dirname, '../qr_codes_generated');
 
 
@@ -493,6 +493,14 @@ class Controller {
       handleCloudMqttPublish(`intimate-latest-version-info/${site_id}`,JSON.stringify(message))
     
   }
+  async intimateAllSites(req){
+      const message = { version:`${req.body.version}` }
+      console.log(message)
+      // Publish the message to the "site_1/intimate" topic
+      
+      handleCloudMqttPublish(`intimate-latest-version-info/${site_id}`,JSON.stringify(message))
+    
+  }
   async fetchDeviceVersion(req){
     const site_id=req.params.site_id;
      handleCloudMqttPublish(`device-version-query/${site_id}`, "fetch versions from devices");
@@ -512,8 +520,8 @@ class Controller {
     
   }
 
-  async sync_pi_source_code(){
-    await handleCloudMqttPublish(PI_SOURCE_CODE_SYNC, JSON.stringify({ "query": "git pull" }))
+  async sync_pi_source_code(id){
+    await handleCloudMqttPublish(`${TOPIC_FOR_PI_SOURCE_CODE_SYNC}/${id}`, JSON.stringify({ "query": "git pull" }))
   }
 
 
