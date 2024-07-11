@@ -8,6 +8,7 @@ function editProfile() {
     const form = document.getElementById('editProfileForm');
     form.style.display = 'block'; // Display the overlay
     form.classList.add('overlay-content');
+    document.querySelector('.device-profile-container').style.display='none'
 
     const deviceId = getCurrentDevice();
     populateFormWithDeviceData(deviceId);
@@ -90,10 +91,10 @@ function addEditDeleteButtons() {
     // deleteButton.textContent = 'Delete Device';
     // deleteButton.onclick = deleteDevice;
 
-    // buttonContainer.appendChild(editButton);
+     buttonContainer.appendChild(editButton);
     // buttonContainer.appendChild(deleteButton);
 
-    // document.getElementById('device-card').appendChild(buttonContainer);
+     document.getElementById('device-card').appendChild(buttonContainer);
 }
 
 // Function to setup form submission
@@ -104,7 +105,10 @@ function setupFormSubmission() {
         saveProfile();
     });
 
-    document.getElementById('cancelButton').addEventListener('click', closeForm);
+    document.getElementById('cancelButton').addEventListener('click',()=>{
+        document.querySelector('.device-profile-container').style.display='block';
+        closeForm();
+    });
 }
 
 // Function to handle form submission and save profile
