@@ -112,15 +112,7 @@
 /*Firmware table*/
 
 
-#firmware-dropdown {
-    overflow-y: auto;
-    border-radius: 10px;
-    background-color: var(--main-color);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
+
 
 .firmware-button-class{
     padding: 1rem;

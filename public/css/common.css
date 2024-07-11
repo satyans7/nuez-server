@@ -1,7 +1,7 @@
 /* General Reset */
 
 :root{
-  --main-color : #2C3E50;
+  --main-color : black;
   /* --hover : #3498DB; */
   --bg : #ECF0F1;
   --hover : #516f83;
@@ -350,4 +350,14 @@ td {
   width : 30%;
   max-width: 450px;
   border-radius: 10px;
+}
+
+.firmware-dropdown {
+  overflow-y: auto;
+  border-radius: 10px;
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
 }
