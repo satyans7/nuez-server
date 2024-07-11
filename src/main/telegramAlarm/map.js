@@ -4,7 +4,7 @@ const { InfluxDB } = require('@influxdata/influxdb-client');
 const url = 'http://206.189.138.34:8086'; // Replace with your InfluxDB URL
 const token = 'Le35X6VPDyYO1xYMJrhID2ItpWQXE6P1ZTDMoYwZ_oZgqFSal6-qO8Se6LoUTtJlXADWeBVs83jP6n_h7bXYHw=='; // Replace with your InfluxDB token
 const org = 'nuez'; // Replace with your InfluxDB organization
-const heartbeatBucket = 'DeviceHeartBeat'; // Replace with your heartbeat bucket
+const heartbeatBucket = 'deviceHeartBeat'; // Replace with your heartbeat bucket
 const waterConsumptionBucket = 'waterMeterData'; // Replace with your water consumption bucket
 
 // Create an InfluxDB client
@@ -14,7 +14,7 @@ const influxDB = new InfluxDB({ url, token });
 const heartbeatMap = new Map();
 const waterConsumptionMap = new Map();
 const deviceStatus = {};
-
+let sitesBinFileNamesInMemory={};
 // Function to populate heartbeatMap from InfluxDB
 async function populateHeartbeatMap() {
   const queryApi = influxDB.getQueryApi(org);
@@ -73,5 +73,6 @@ populateMaps();
 module.exports = {
   heartbeatMap,
   waterConsumptionMap,
-  deviceStatus
+  deviceStatus,
+  sitesBinFileNamesInMemory
 };

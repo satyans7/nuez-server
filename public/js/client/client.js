@@ -94,6 +94,10 @@ export async function getAllSitesUnderAdmin(id){
 export async function getDevicesData() {
     return await controller.getAllDevicesData();
 }
+
+export async function getDeviceData(id) {
+    return await controller.getDeviceData(id);
+}
 //SITE DEVICE MAPPING
 export async function getSiteDeviceMapping() {
     return await controller.getSiteToDeviceMapping();
@@ -208,9 +212,16 @@ export async function syncFirmwareData(){
 export async function syncSourceCode(){
     await controller.syncSourceCode();
 }
+export async function syncPiSourceCode(){
+    await controller.syncPiSourceCode();
+}
 
 export async function sendFirmwareToSites(){
     await controller.sendFirmwareToSites();
+}
+
+export async function syncPiSourceCodeForParticularSite(site){
+    await controller.syncPiSourceCodeForParticularSite(site);
 }
 
 //Maintenance

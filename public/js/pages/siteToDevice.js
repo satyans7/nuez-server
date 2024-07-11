@@ -7,7 +7,8 @@ import {
     exitMaintenance,
     getDeviceStatus,
     getAllDevicesUnderSite,
-    getAllConsumersUnderSite
+    getAllConsumersUnderSite,
+    syncPiSourceCodeForParticularSite
 } from '../client/client.js';
 
 
@@ -28,7 +29,7 @@ export function initializeSitePanel(sidebarid) {
     const registerConsumerForm = document.getElementById('register-consumer-form');
     const deregisterConsumerForm = document.getElementById('deregister-consumer-form');
     const unassignedDevicesContainer = document.getElementById('unassigned-devices-list');
-
+    const piSourceCodeSyncBtn = document.getElementById('syncPiSourceCodeForSite')
     // Current Site Id
     const site = getCurrentSiteId();
 
@@ -279,14 +280,14 @@ else{
         
 
         registerBtn.addEventListener('click', () => {
-            registerConsumerTab.style.display = 'block';
+            registerConsumerTab.style.display = 'flex';
             deregisterConsumerTab.style.display = 'none';
             allConsumerContainer.style.display = 'none';
             registerDomLoad();
             
         });
         deregisterBtn.addEventListener('click', () => {
-            deregisterConsumerTab.style.display = 'block';
+            deregisterConsumerTab.style.display = 'flex';
            registerConsumerTab.style.display = 'none';
            allConsumerContainer.style.display = 'none';
            deregisterDomLoad();           
@@ -296,7 +297,7 @@ else{
         document.getElementById('all-consumers-btn').addEventListener('click', ()=>{
             deregisterConsumerTab.style.display = 'none';
            registerConsumerTab.style.display = 'none';
-           allConsumerContainer.style.display = 'block';
+           allConsumerContainer.style.display = 'flex';
            viewAllconsumers();
 
         })
@@ -309,7 +310,7 @@ else{
     async function viewAllconsumers() {
         registerConsumerTab.style.display = "none";
         deregisterConsumerTab.style.display = 'none';
-        allConsumerContainer.style.display = 'block';
+        allConsumerContainer.style.display = 'flex';
         const data = await getAllConsumersUnderSite(site);
 
         if (!data) {
@@ -897,7 +898,7 @@ else{
 
 
     // FIRMWARE ------------------------------------------------------------------------------------------------//
-
+    const AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS = `/api/firmware-versions/${site}`;
     async function firmwarefunc() {
         await fetchDeviceVersions();
         await populateFirmwareDropdown();
@@ -910,27 +911,39 @@ else{
             await intimateAll(selectedVersion);
         });
 
-
+        
         async function populateFirmwareDropdown() {
             try {
-                const response = await fetch('/api/firmware-versions');
+                console.log('Fetching firmware versions...');
+                const response = await fetch(AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS);
                 if (!response.ok) {
                     throw new Error('Failed to fetch firmware versions');
                 }
+        
                 const firmwareVersions = await response.json();
+                console.log('Firmware versions fetched:', firmwareVersions);
+        
                 const dropdown = document.getElementById('firmware-dropdown');
+                if (!dropdown) {
+                    throw new Error('Dropdown element not found');
+                }
+        
                 dropdown.innerHTML = ''; // Clear previous options
-
+                console.log('Populating dropdown...');
+        
                 firmwareVersions.forEach(version => {
                     const option = document.createElement('option');
                     option.value = version.id; // Assuming each version has a unique ID
                     option.textContent = version.name; // Display name of the version
                     dropdown.appendChild(option);
                 });
+        
+                console.log('Dropdown populated successfully');
             } catch (error) {
                 console.error('Error fetching firmware versions:', error);
             }
         }
+        
 
         async function fetchDeviceVersions() {
             try {
@@ -1040,6 +1053,15 @@ else{
             }
         }
     };
+    async function administrationTabDisplay(){
+        piSourceCodeSyncBtn.addEventListener('click', async () => {
+            const userConfirmed = confirm('Are you sure you want to sync the firmware data for this site?');
+            if (userConfirmed) {
+                await syncPiSourceCodeForParticularSite(site);
+            }
+            alert("THIS SITE HAS BEEN UPDATED")
+        })
+    }
     async function eventListeners() {
         if(sidebarid=== 'viewdevices') displayAlldevices();
         else if (sidebarid === 'viewconsumers') displayAllconsumers();
@@ -1049,7 +1071,10 @@ else{
         else if (sidebarid === 'editprofile') editfunc();
         else if (sidebarid === 'unassigneddeviceslink') unassignedfunc();
         else if (sidebarid === 'firmwarelink') firmwarefunc();
+        else if (sidebarid === 'administration') administrationTabDisplay();
     }
+
+    //DOMLOADED
     async function call() {
         if (sidebarid === 'device') {
             setInfo();

@@ -7,8 +7,8 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 const { handleCloudMqttPublish } = require("../mqtt/helper");
-const { deviceStatus } = require("../telegramAlarm/map");
-
+const { deviceStatus , sitesBinFileNamesInMemory} = require("../telegramAlarm/map");
+const TOPIC_FOR_PI_SOURCE_CODE_SYNC = `pi-source-code-sync`;
 const QRdirectoryPath = path.join(__dirname, '../qr_codes_generated');
 
 
@@ -493,6 +493,14 @@ class Controller {
       handleCloudMqttPublish(`intimate-latest-version-info/${site_id}`,JSON.stringify(message))
     
   }
+  async intimateAllSites(req){
+      const message = { version:`${req.body.version}` }
+      console.log(message)
+      // Publish the message to the "site_1/intimate" topic
+      
+      handleCloudMqttPublish(`latest-firmware-version`,JSON.stringify(message))
+    
+  }
   async fetchDeviceVersion(req){
     const site_id=req.params.site_id;
      handleCloudMqttPublish(`device-version-query/${site_id}`, "fetch versions from devices");
@@ -510,6 +518,10 @@ class Controller {
   async device_status_query(site_id){
     await handleCloudMqttPublish(`device-status-query/${site_id}`, JSON.stringify({ "query": "send_device_status_info" }))
     
+  }
+
+  async sync_pi_source_code(id){
+    await handleCloudMqttPublish(`${TOPIC_FOR_PI_SOURCE_CODE_SYNC}/${id}`, JSON.stringify({ "query": "git pull" }))
   }
 
 
@@ -551,6 +563,27 @@ class Controller {
      }, 5000);
     
   }  
+
+  async recieveBinFilesFromPi(req,res){
+    const id=req.params.id;
+    const data=req.body.binFiles;
+    console.log(data);
+    sitesBinFileNamesInMemory[id]=data;
+    res.status(201).json({ success: true, message: 'Successfully registered' });
+  }
+  
+
+  async fetchPiFirmwareVersions(req,res){
+    const id=req.params.id;
+    handleCloudMqttPublish(`binary-list/${id}`,JSON.stringify({"message":"send available binary list"}));
+    setTimeout(()=>{
+      const binFiles = sitesBinFileNamesInMemory[id] || [];
+        // Format the response as an array of objects with `id` and `name` properties
+        const formattedResponse = binFiles.map((name, index) => ({ id: index, name }));
+        res.json(formattedResponse);
+        sitesBinFileNamesInMemory[id] = {};
+    },4000)
+  }
 
   async getBinFilenamesWithoutExtension(directoryPath) {
       return new Promise((resolve, reject) => {

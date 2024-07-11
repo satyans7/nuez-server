@@ -110,6 +110,10 @@ export async function getAllDevicesData(){
     const api = cep.getApitoFetchAllDevicesData();
     return await cep.fetchDataFromServer(api);
 }
+export async function getDeviceData(id){
+    const api = cep.getApitoFetchDeviceData(id);
+    return await cep.fetchDataFromServer(api);
+}
 //SITE DEVICE MAPPING
 export async function getSiteToDeviceMapping(){
     const api =cep.getApiToFetchSiteDeviceMapping();
@@ -246,6 +250,15 @@ export async function postDevice(id, data) {
     const api=cep.getApiToSyncSourceCode();
     cep.fetchDataFromServer(api);
  }
+ export async function syncPiSourceCode(){
+    const api=cep.getApiToSyncPiSourceCode();
+    cep.fetchDataFromServer(api);
+ }
+ export async function syncPiSourceCodeForParticularSite(id){
+    const api=cep.getApiToSyncSiteSourceCode();
+    cep.fetchDataFromServer(`${api}${id}`);
+ }
+ 
 
  export async function sendFirmwareToSites(){
     const api=cep.getApiToSendFirmwareToSites();

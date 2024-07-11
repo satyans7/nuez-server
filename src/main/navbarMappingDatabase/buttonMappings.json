@@ -196,6 +196,11 @@
                     "id": "firmwarelink",
                     "class": "sidebar-btn",
                     "text": "Firmware"
+                },
+                {
+                    "id": "administration",
+                    "class": "sidebar-btn",
+                    "text": "Administration"
                 }
             ]
         }

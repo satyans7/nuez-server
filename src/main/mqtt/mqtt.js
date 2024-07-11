@@ -1,6 +1,6 @@
 const mqtt = require("mqtt");
 const { initializeMqttClients, handleMessage } = require("./helper");
-const mqttBrokerUrl ="mqtt://206.189.138.34";
+const mqttBrokerUrl ="mqtt://139.59.27.195";
 const mqttOptions={
   port:1883,
   username:"nuez",

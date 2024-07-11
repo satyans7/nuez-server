@@ -1,4 +1,4 @@
-import { getDevicesData, updateDeviceData } from "../client/client.js";
+import { getDeviceData, updateDeviceData } from "../client/client.js";
 var DEVICE_ID;
 var SITE_ID;
 // Function to handle profile editing
@@ -49,8 +49,7 @@ function getCurrentDevice() {
 async function initializeProfilePage() {
     document.getElementById('device-id').textContent = `DEVICE ID: ${getCurrentDevice()}`;
     const currentId = getCurrentDevice();
-    const devicesData = await getDevicesData();
-    const particularDeviceData = devicesData[currentId];
+    const particularDeviceData = getDeviceData(currentId);
 
     if (particularDeviceData) {
         DEVICE_ID = currentId;
@@ -69,11 +68,13 @@ async function initializeProfilePage() {
 
 // Function to populate the device card with data
 function populateDeviceCard(data) {
+    console.log(data.owner);
     document.getElementById('device-name').textContent = `Name: ${data.name}`;
     document.getElementById('device-location').textContent = `Location: ${data.location}`;
-    document.getElementById('device-totalConsumption').textContent = `Total Consumption: ${data.totalConsumption}`;
-    document.getElementById('device-status').textContent = `Status: ${data.status}`;
-    document.getElementById('device-registrationDate').textContent = `Registration Date: ${data.registrationDate}`;
+    //document.getElementById('device-totalConsumption').textContent = `Total Consumption: ${data.totalConsumption}`;
+    //document.getElementById('device-status').textContent = `Status: ${data.status}`;
+    document.getElementById('device-owner').textContent = `Owner: ${data.owner}`;
+    //document.getElementById('device-registrationDate').textContent = `Registration Date: ${data.registrationDate}`;
 }
 
 // Function to add Edit and Delete buttons to the device card
