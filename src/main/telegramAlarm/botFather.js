@@ -2,9 +2,9 @@ const { heartbeatMap, waterConsumptionMap } = require('./map.js');
 const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
 
+
 const telegramBotToken = '7176670163:AAHxhW6oTlZIFYaU0XUXbk1Q8BnF1u5M1zY';
 const telegramChatId = -1002166014938;
-
 const bot = new TelegramBot(telegramBotToken, { polling: true });
 const TELEGRAM_POST_URL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`
 const statusMap = new Map();
@@ -15,9 +15,11 @@ const INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL = 3000000000;
 const INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL = 6000000000;
 const TELEGRAM_BOT_COMMAND = 'snooze';
 const EXPRESSION_FOR_DEVICE_ID = `device_id:-"(.+?)"`;
+
 async function botFunction() {
     console.log("Bot function executed.");
     console.log(heartbeatMap, waterConsumptionMap);
+    
     async function heartbeatStatus() {
         heartbeatMap.forEach((deviceData, deviceId) => {
             const currentTime = new Date().getTime();
@@ -31,7 +33,6 @@ async function botFunction() {
             }
         });
     }
-
 
     async function monitorConsumption() {
         try {
@@ -89,7 +90,6 @@ async function botFunction() {
         }
     }
 
-
     function isDeviceSnoozed(deviceId) {
         if (!snoozeMap.has(deviceId)) return false;
         const snoozeUntil = snoozeMap.get(deviceId);
@@ -117,12 +117,17 @@ async function botFunction() {
         }
     });
 
-
     heartbeatStatus();
     setInterval(heartbeatStatus, INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL); // updates status map every 1 minute
     setInterval(monitorConsumption, INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL); // Run every 15 seconds
     setInterval(deviceDead, INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL); // Check device dead status every 1 minute
 }
+
+bot.on('polling_error', (error) => {
+    if (error.code !== 'ETELEGRAM' || !error.message.includes('409 Conflict')) {
+        console.error('Polling error:', error);
+    }
+});
 
 module.exports = {
     botFunction,
