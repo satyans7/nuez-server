@@ -180,11 +180,14 @@ async function createIframeGraphPanel(url) {
 }
 async function grafanaPanel() {
 
-    const panel_1_URL = `http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&from=1720483941783&to=1720505541783&refresh=1m&panelId=8`
+    const panel_1_URL = `http://139.59.27.195:3000/d-solo/p5PBXx_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&refresh=5s&panelId=2`
 
-    const panel_2_URL=`http://206.189.138.34:3000/d-solo/io7xPk_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&refresh=30s&panelId=2`
+    const panel_2_URL=`http://139.59.27.195:3000/d-solo/p5PBXx_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&refresh=5s&panelId=3`
+
+    const panel_3_URL=`http://139.59.27.195:3000/d-solo/p5PBXx_Iz/water-consumption-dashboard?orgId=1&var-device_id=${DEVICE_ID}&var-site_id=${SITE_ID}&refresh=5s&panelId=4`
     createIframeTextPanel(panel_1_URL);
-    createIframeGraphPanel(panel_2_URL)
+    createIframeGraphPanel(panel_2_URL);
+    createIframeGraphPanel(panel_3_URL);
     
 };
 
