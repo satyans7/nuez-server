@@ -257,6 +257,10 @@ th {
   letter-spacing: 0.1em;
 }
 
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
 td {
   background-color: #ECF0F1;
   color: #333;

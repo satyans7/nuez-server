@@ -4,22 +4,26 @@
             {
                 "id": "super-admin-navbar-consumer-btn",
                 "class": "super-admin-navbar-consumer-btn",
-                "html": "<img src=\"/logo/consumer.svg\" alt=\"CONSUMER\">"
+                "html": "<img src=\"/logo/consumer.svg\" alt=\"CONSUMER\">",
+                "text": "Consumer"
             },
             {
                 "id": "super-admin-navbar-admin-btn",
                 "class": "super-admin-navbar-admin-btn",
-                "html": "<img src=\"/logo/admin.svg\" alt=\"ADMIN\">"
+                "html": "<img src=\"/logo/admin.svg\" alt=\"ADMIN\">",
+                "text": "Admin"
             },
             {
                 "id": "super-admin-navbar-site-btn",
                 "class": "super-admin-navbar-site-btn",
-                "html": "<img src=\"/logo/site.svg\" alt=\"SITES\">"
+                "html": "<img src=\"/logo/site.svg\" alt=\"SITES\">",
+                "text": "Site"
             },
             {
                 "id": "super-admin-navbar-advance-btn",
                 "class": "super-admin-navbar-advance-btn",
-                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
+                "text": "Gear"
             }
         ],
         "sidebarButtons": {
@@ -88,12 +92,14 @@
             {
                 "id": "admin-navbar-site-btn",
                 "class": "admin-navbar-site-btn",
-                "html": "<img src=\"/logo/site.svg\" alt=\"SITES\">"
+                "html": "<img src=\"/logo/site.svg\" alt=\"SITES\">",
+                "text": "Site"
             },
             {
                 "id": "admin-navbar-advance-btn",
                 "class": "admin-navbar-advance-btn",
-                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
+                "text": "Gear" 
             }
         ],
         "sidebarButtons": {
@@ -128,17 +134,20 @@
             {
                 "id": "site-navbar-device-btn",
                 "class": "site-navbar-device-btn",
-                "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">"
+                "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">",
+                "text": "Device"
             },
             {
                 "id": "site-navbar-consumer-btn",
                 "class": "site-navbar-consumer-btn",
-                "html": "<img src=\"/logo/consumer.svg\" alt=\"CONSUMER\">"
+                "html": "<img src=\"/logo/consumer.svg\" alt=\"CONSUMER\">",
+                "text": "Consumer"
             },
             {
                 "id": "site-navbar-advance-btn",
                 "class": "site-navbar-advance-btn",
-                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
+                "text":"Gear"
 
             }
         ],
@@ -197,12 +206,14 @@
             {
                 "id": "consumer-navbar-device-btn",
                 "class": "consumer-navbar-device-btn",
-                "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">"
+                "html": "<img src=\"/logo/device.svg\" alt=\"DEVICES\">",
+                "text":"Device"
             },
             {
                 "id": "consumer-navbar-advance-btn",
                 "class": "consumer-navbar-advance-btn",
-                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">"
+                "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
+                "text":"Gear"
 
             }
         ],
