@@ -6,6 +6,9 @@ const QRCode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
+const { createCanvas } = require('canvas');
+
+
 const { handleCloudMqttPublish } = require("../mqtt/helper");
 const { deviceStatus, sitesBinFileNamesInMemory } = require("../telegramAlarm/map");
 const TOPIC_FOR_PI_SOURCE_CODE_SYNC = `pi-source-code-sync`;
@@ -569,6 +572,7 @@ class Controller {
 
     try {
       let data = await dbController.readDatabase(ADMIN_TO_SITE_DATA);
+      let sites = await dbController.readDatabase(SITE_DATA);
 
       // Initialize the database if it is empty
       if (!data) {
@@ -590,7 +594,9 @@ class Controller {
         } else {
           // Add the new site to the user's list of sites
           data[userId].push(newSite);
-          await dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          sites[newSite].admin = userId;
+         dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+         dbController.writeDatabase(SITE_DATA, sites);
           return res.status(200).json({ message: "Site registered successfully", data });
         }
       } else {
@@ -613,6 +619,7 @@ class Controller {
 
     try {
       let data = await dbController.readDatabase(ADMIN_TO_SITE_DATA);
+      let sites = await dbController.readDatabase(SITE_DATA);
 
       // Initialize data if it is empty
       if (!data) {
@@ -623,7 +630,9 @@ class Controller {
         const siteIndex = data[userId].indexOf(siteToRemove);
         if (siteIndex > -1) {
           data[userId].splice(siteIndex, 1);
-          await dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          sites[siteToRemove].admin = "not assigned";
+          dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          dbController.writeDatabase(SITE_DATA, sites);
           return res.status(200).json({ message: "Site deleted successfully", data });
         } else {
           return res.status(400).json({ message: "Site not found for this user" });
@@ -810,28 +819,54 @@ class Controller {
     if (!fs.existsSync(QRdirectoryPathForDevices)) {
       fs.mkdirSync(QRdirectoryPathForDevices, { recursive: true });
     }
+  
     const allDeviceData = await this.fetchAllDevices();
     let deviceIds = Object.keys(allDeviceData);
-    deviceIds.forEach(deviceId => {
+  
+    for (const deviceId of deviceIds) {
       const apiUrl = `http://139.59.27.195/device-info/${deviceId}`;
-
+  
       // Sanitize deviceId to remove characters not suitable for filenames
       const sanitizedDeviceId = deviceId.replace(/[^a-z0-9]/gi, '-'); // Replace non-alphanumeric characters with hyphen
-
+  
       // Define the complete file path including the file name
       const filePath = path.join(QRdirectoryPathForDevices, `QR_${sanitizedDeviceId}.png`);
-
-      // Generate QR code and save as image
-      QRCode.toFile(filePath, apiUrl, {
-        color: {
-          dark: '#000',  // QR code color
-          light: '#FFF'  // Background color
-        }
-      }, function (err) {
-        if (err) throw err;
-        console.log(`QR code generated and saved as ${filePath}`);
+  
+      // Create a canvas
+      const canvas = createCanvas(400, 500); // Create a canvas with extra space for the text
+      const ctx = canvas.getContext('2d');
+  
+      // Generate QR code and draw it on the canvas
+      await new Promise((resolve, reject) => {
+        QRCode.toCanvas(createCanvas(300, 500), apiUrl, {
+          margin: 2, // Margin around the QR code
+          color: {
+            dark: '#000',  // QR code color
+            light: '#FFF'  // Background color
+          }
+        }, (error, qrCanvas) => {
+          if (error) reject(error);
+          
+          const qrSize = 300;
+          const qrX = (canvas.width - qrSize) / 2;
+          const qrY = 50;
+          ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+          resolve();
+        });
       });
-    })
+  
+      // Add deviceId text below the QR code
+      ctx.font = 'bold 20px Arial';
+      ctx.fillText("NUEZ SMART WATERMETER",50,400)
+      ctx.font = 'bold 25px Arial';
+      ctx.fillText(deviceId, 50, 430); // Adjust position as needed
+  
+      // Save the canvas as a PNG file
+      const buffer = canvas.toBuffer('image/png');
+      fs.writeFileSync(filePath, buffer);
+  
+      console.log(`QR code generated and saved as ${filePath}`);
+    }
   }
 
   async downloadQRCode(res) {
@@ -868,26 +903,50 @@ class Controller {
     }
     const allSitesData = await this.fetchAllSites();
     let siteIds = Object.keys(allSitesData);
-    siteIds.forEach(siteId => {
+    for (const siteId of siteIds) {
       const apiUrl = `http://139.59.27.195/site-info/${siteId}`;
-
-      // Sanitize siteId to remove characters not suitable for filenames
+  
+      // Sanitize deviceId to remove characters not suitable for filenames
       const sanitizedSiteId = siteId.replace(/[^a-z0-9]/gi, '-'); // Replace non-alphanumeric characters with hyphen
-
+  
       // Define the complete file path including the file name
       const filePath = path.join(QRdirectoryPathForSites, `QR_${sanitizedSiteId}.png`);
-
-      // Generate QR code and save as image
-      QRCode.toFile(filePath, apiUrl, {
-        color: {
-          dark: '#000',  // QR code color
-          light: '#FFF'  // Background color
-        }
-      }, function (err) {
-        if (err) throw err;
-        console.log(`QR code generated and saved as ${filePath}`);
+  
+      // Create a canvas
+      const canvas = createCanvas(400, 500); // Create a canvas with extra space for the text
+      const ctx = canvas.getContext('2d');
+  
+      // Generate QR code and draw it on the canvas
+      await new Promise((resolve, reject) => {
+        QRCode.toCanvas(createCanvas(300, 500), apiUrl, {
+          margin: 2, // Margin around the QR code
+          color: {
+            dark: '#000',  // QR code color
+            light: '#FFF'  // Background color
+          }
+        }, (error, qrCanvas) => {
+          if (error) reject(error);
+          
+          const qrSize = 300;
+          const qrX = (canvas.width - qrSize) / 2;
+          const qrY = 50;
+          ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+          resolve();
+        });
       });
-    })
+  
+      // Add deviceId text below the QR code
+      ctx.font = 'bold 20px Arial';
+      ctx.fillText("NUEZ Technologies",50,400)
+      ctx.font = 'bold 25px Arial';
+      ctx.fillText(siteId, 50, 430); // Adjust position as needed
+  
+      // Save the canvas as a PNG file
+      const buffer = canvas.toBuffer('image/png');
+      fs.writeFileSync(filePath, buffer);
+  
+      console.log(`QR code generated and saved as ${filePath}`);
+    }
   }
 
   async downloadSiteQRCode(res) {

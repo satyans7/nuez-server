@@ -713,14 +713,14 @@ else{
 
 
     async function viewUnassignedDevices() {
-        const siteToDeviceMapping = await getSiteDeviceMapping(); // Get device mapping for the current site
+        
         const consumerToDeviceMapping = await getConsumerDeviceMapping(); // Get consumer device mapping for all users
         const siteConsumerMapping = await getSiteConsumerMapping(); // Get consumer mapping for the current site
 
         unassignedDevicesContainer.innerHTML = ''; // Clear previous content
-
-        const devices = siteToDeviceMapping[site] || []; // Get devices for the current site
-
+        const data = await getAllDevicesUnderSite(site);
+        const devices = Object.keys(data) || []; // Get devices for the current site
+       
         // Create the table structure
         const table = document.createElement('table');
         table.id = 'unassigned-devices-table';

@@ -70,10 +70,13 @@ export function initializeAdminPanel(sidebarid) {
                 site: document.getElementById('site-id').value
             }
 
+            console.log(ob);
             const res = await registerSite(ob, user);
-            await viewAllSites();
             alert(res.message);
             form.reset();
+            await viewAllSites();         
+            
+            
         });
 
         document.getElementById('register-cancel-button').addEventListener('click', async () => {
@@ -113,9 +116,9 @@ export function initializeAdminPanel(sidebarid) {
 
             try {
                 const response = await deregisterSite(user, object);
-                await viewAllSites();
                 alert(response.message);
                 deregisterform.reset();
+                await viewAllSites();
 
             } catch (error) {
                 console.error('Error deregistering site:', error);
