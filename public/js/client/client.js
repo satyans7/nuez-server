@@ -149,7 +149,9 @@ export async function updateDeviceData(id, request) {
 export async function registerSite(data,id)
 {
     
-    return await controller.registerSite(data,id);
+    const res = await controller.registerSite(data,id);
+    console.log(res);
+    return res;
 }
 
 export async function registerDevice(data,id)

@@ -78,7 +78,7 @@ const handleHeartbeat = async (message, topics) => {
 
 const handleRegistration = (siteId, deviceId) => {
   if (!siteIds[siteId]) {
-    siteIds[siteId] = { name: siteId, location: "default" };
+    siteIds[siteId] = { name: siteId, location: "default", admin: "Not Assigned" };
     writeDatabase(siteIdsFilePath, siteIds);
   }
 
