@@ -280,14 +280,14 @@ else{
         
 
         registerBtn.addEventListener('click', () => {
-            registerConsumerTab.style.display = 'block';
+            registerConsumerTab.style.display = 'flex';
             deregisterConsumerTab.style.display = 'none';
             allConsumerContainer.style.display = 'none';
             registerDomLoad();
             
         });
         deregisterBtn.addEventListener('click', () => {
-            deregisterConsumerTab.style.display = 'block';
+            deregisterConsumerTab.style.display = 'flex';
            registerConsumerTab.style.display = 'none';
            allConsumerContainer.style.display = 'none';
            deregisterDomLoad();           
@@ -297,7 +297,7 @@ else{
         document.getElementById('all-consumers-btn').addEventListener('click', ()=>{
             deregisterConsumerTab.style.display = 'none';
            registerConsumerTab.style.display = 'none';
-           allConsumerContainer.style.display = 'block';
+           allConsumerContainer.style.display = 'flex';
            viewAllconsumers();
 
         })
@@ -310,7 +310,7 @@ else{
     async function viewAllconsumers() {
         registerConsumerTab.style.display = "none";
         deregisterConsumerTab.style.display = 'none';
-        allConsumerContainer.style.display = 'block';
+        allConsumerContainer.style.display = 'flex';
         const data = await getAllConsumersUnderSite(site);
 
         if (!data) {

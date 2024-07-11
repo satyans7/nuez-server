@@ -1,5 +1,4 @@
-#unassigned-devices-table button, 
-#maintenance-devices-table button {
+#unassigned-devices-table button {
     background-color: #4CAF50;
     color: white;
     padding: 8px 12px;
@@ -114,15 +113,19 @@
 
 
 #firmware-dropdown {
-    max-height: 200px; /* Adjust the height as needed */
     overflow-y: auto;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
 .firmware-button-class{
-    background-color: white;
     padding: 1rem;
     display: flex;
-    gap: 3rem;
+    gap: 1rem;
     justify-content: center;
     border-radius: 5px;
 }
@@ -168,7 +171,7 @@
     height: 350px;
     margin: 10px;
     padding: 10px;
-    background-color : #ECF0F1;
+    background-color : white;
     border-radius : 10px;
     overflow-y: auto;
 }
@@ -203,7 +206,7 @@
     height: 300px;
     margin: 10px;
     padding: 10px;
-    background-color : #ECF0F1;
+    background-color : white;
     border-radius : 10px;
     
 }
