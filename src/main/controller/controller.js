@@ -9,7 +9,8 @@ const archiver = require('archiver');
 const { handleCloudMqttPublish } = require("../mqtt/helper");
 const { deviceStatus, sitesBinFileNamesInMemory } = require("../telegramAlarm/map");
 const TOPIC_FOR_PI_SOURCE_CODE_SYNC = `pi-source-code-sync`;
-const QRdirectoryPath = path.join(__dirname, '../qr_codes_generated');
+const QRdirectoryPathForDevices = path.join(__dirname, '../qr_codes_generated/qr_codes_generated_devices');
+const QRdirectoryPathForSites = path.join(__dirname, '../qr_codes_generated/qr_codes_generated_sites');
 
 const USER_DATA = path.join(__dirname, "../database/json-data/jsonData.json");
 const REQ_DATA = path.join(__dirname, "../database/json-data/requestData.json");
@@ -477,6 +478,11 @@ class Controller {
     return data[device_id];
   }
 
+  async fetchSiteData(site_id) {
+    let data = await this.fetchAllSites();
+    return data[site_id];
+  }
+
   async fetchAllDevicesUnderSite(id) {
     const sitetodevice = await this.fetchAllSitetoDevice();
     const allDevices = await this.fetchAllDevices();
@@ -799,11 +805,10 @@ class Controller {
     await handleCloudMqttPublish(`${TOPIC_FOR_PI_SOURCE_CODE_SYNC}/${id}`, JSON.stringify({ "query": "git pull" }))
   }
 
-
   async generateQRCodes() {
     // Ensure the directory exists or create it if it doesn't
-    if (!fs.existsSync(QRdirectoryPath)) {
-      fs.mkdirSync(QRdirectoryPath);
+    if (!fs.existsSync(QRdirectoryPathForDevices)) {
+      fs.mkdirSync(QRdirectoryPathForDevices, { recursive: true });
     }
     const allDeviceData = await this.fetchAllDevices();
     let deviceIds = Object.keys(allDeviceData);
@@ -814,7 +819,7 @@ class Controller {
       const sanitizedDeviceId = deviceId.replace(/[^a-z0-9]/gi, '-'); // Replace non-alphanumeric characters with hyphen
 
       // Define the complete file path including the file name
-      const filePath = path.join(`QRdirectoryPath, QR_${sanitizedDeviceId}.png`);
+      const filePath = path.join(QRdirectoryPathForDevices, `QR_${sanitizedDeviceId}.png`);
 
       // Generate QR code and save as image
       QRCode.toFile(filePath, apiUrl, {
@@ -827,7 +832,6 @@ class Controller {
         console.log(`QR code generated and saved as ${filePath}`);
       });
     })
-
   }
 
   async downloadQRCode(res) {
@@ -846,8 +850,8 @@ class Controller {
       // Pipe the archive data to the response
       archive.pipe(res);
 
-      // Append files from the local repo directory to the archive
-      archive.directory(QRdirectoryPath, false);
+      // Append files from the QR directory for devices to the archive
+      archive.directory(QRdirectoryPathForDevices, false);
 
       // Finalize the archive and send it
       archive.finalize();
@@ -856,6 +860,63 @@ class Controller {
       res.status(500).send('Error sending zip folder');
     }
   }
+
+  async generateSiteQRCodes() {
+    // Ensure the directory exists or create it if it doesn't
+    if (!fs.existsSync(QRdirectoryPathForSites)) {
+      fs.mkdirSync(QRdirectoryPathForSites, { recursive: true });
+    }
+    const allSitesData = await this.fetchAllSites();
+    let siteIds = Object.keys(allSitesData);
+    siteIds.forEach(siteId => {
+      const apiUrl = `http://139.59.27.195/site-info/${siteId}`;
+
+      // Sanitize siteId to remove characters not suitable for filenames
+      const sanitizedSiteId = siteId.replace(/[^a-z0-9]/gi, '-'); // Replace non-alphanumeric characters with hyphen
+
+      // Define the complete file path including the file name
+      const filePath = path.join(QRdirectoryPathForSites, `QR_${sanitizedSiteId}.png`);
+
+      // Generate QR code and save as image
+      QRCode.toFile(filePath, apiUrl, {
+        color: {
+          dark: '#000',  // QR code color
+          light: '#FFF'  // Background color
+        }
+      }, function (err) {
+        if (err) throw err;
+        console.log(`QR code generated and saved as ${filePath}`);
+      });
+    })
+  }
+
+  async downloadSiteQRCode(res) {
+    try {
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', 'attachment; filename=qr_generated.zip');
+
+      const archive = archiver('zip', {
+        zlib: { level: 9 } // Sets the compression level
+      });
+
+      archive.on('error', (err) => {
+        throw err;
+      });
+
+      // Pipe the archive data to the response
+      archive.pipe(res);
+
+      // Append files from the QR directory for sites to the archive
+      archive.directory(QRdirectoryPathForSites, false);
+
+      // Finalize the archive and send it
+      archive.finalize();
+    } catch (error) {
+      console.error('Error sending zip folder:', error);
+      res.status(500).send('Error sending zip folder');
+    }
+  }
+
   async intimateAllDevicesOfASite(req) {
     const site_id = req.params.site_id; // Correctly access site_id from req.params
     console.log(site_id);

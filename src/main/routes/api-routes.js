@@ -22,6 +22,7 @@ module.exports = function (app) {
   const SITEPAGE = path.join(__dirname, "../views/pages", "siteToDevice.html");
   const DEVICEPROFILE = path.join(__dirname, "../views/pages", "deviceProfile.html");
   const DEVICEINFO = path.join(__dirname, "../views/pages", "deviceInfo.html")
+  const SITEINFO = path.join(__dirname, "../views/pages", "siteInfo.html")
   const BUTTONMAP = path.join(__dirname, "../navbarMappingDatabase/buttonMappings.json");
 
   //Scripts
@@ -37,6 +38,7 @@ module.exports = function (app) {
 
   //public
   const PUBLIC_AEP_TO_DEVICE_INFO = "/device-info/:deviceId"
+  const PUBLIC_AEP_TO_SITE_INFO = "/site-info/:siteId"
   const AEP_TO_REGISTER_A_USER = "/api/user/register";
   const AEP_TO_AUTHENTICATE_A_USER = "/api/user/authenticate";
   const AEP_TO_UPDATE_PROFILE_OF_A_USER = "/api/user/profile/:id";
@@ -51,6 +53,7 @@ module.exports = function (app) {
   const AEP_TO_FETCH_DENIED_LOG = "/api/response/denied";
   const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
   const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites";
+  const AEP_TO_FETCH_SITE_DATA = "/api/site/:siteId"
   const AEP_TO_FETCH_SITES_UNDER_AN_ADMIN = '/api/admin/allsites/:id';
   const AEP_TO_FETCH_ALL_DEVICES_UNDER_A_SITE = '/api/admin/alldevices/:id';
   const AEP_TO_FETCH_ALL_CONSUMERS_UNDER_A_SITE = '/api/admin/allconsumers/:id';
@@ -90,6 +93,8 @@ module.exports = function (app) {
   const AEP_TO_FETCH_DEVICE_DATA = "/api/device/:deviceId"
   const AEP_TO_GENERATE_DEVICE_INFO_QR = "/api/generate/deviceQR";
   const AEP_TO_DOWNLOAD_DEVICE_INFO_QR = "/api/download/deviceQR";
+  const AEP_TO_GENERATE_SITE_INFO_QR = "/api/generate/siteQR";
+  const AEP_TO_DOWNLOAD_SITE_INFO_QR = "/api/download/siteQR";
   const AEP_TO_GET_BUTTON_MAPPING = '/api/buttonMapping'
 
 
@@ -176,6 +181,9 @@ module.exports = function (app) {
 
   app.get(PUBLIC_AEP_TO_DEVICE_INFO, async (req, res) => {
     res.sendFile(DEVICEINFO);
+  })
+  app.get(PUBLIC_AEP_TO_SITE_INFO, async (req, res) => {
+    res.sendFile(SITEINFO);
   })
 
   // LOGIN VIA OTP
@@ -337,6 +345,15 @@ module.exports = function (app) {
   app.get(AEP_TO_FETCH_DEVICE_DATA, async (req, res) => {
     try {
       const data = await controller.fetchDeviceData(req.params.deviceId);
+      res.json(data);
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+    }
+  })
+
+  app.get(AEP_TO_FETCH_SITE_DATA, async (req, res) => {
+    try {
+      const data = await controller.fetchSiteData(req.params.siteId);
       res.json(data);
     } catch (error) {
       res.status(500).send("Internal Server Error");
@@ -540,6 +557,22 @@ module.exports = function (app) {
 
   app.get(AEP_TO_DOWNLOAD_DEVICE_INFO_QR, async (req, res) => {
     await controller.downloadQRCode(res);
+
+
+  })
+  app.get(AEP_TO_GENERATE_SITE_INFO_QR, async (req, res) => {
+    try {
+      await controller.generateSiteQRCodes();
+      res.send("generated successfully")
+    }
+    catch (error) {
+      res.status(500).send("Internal Server Error");
+    }
+
+  })
+
+  app.get(AEP_TO_DOWNLOAD_SITE_INFO_QR, async (req, res) => {
+    await controller.downloadSiteQRCode(res);
 
 
   })
