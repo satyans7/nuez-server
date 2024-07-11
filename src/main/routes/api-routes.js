@@ -1,4 +1,3 @@
-
 const path = require("path");
 const controller = require("../controller/controller.js");
 const fs = require("fs");
@@ -11,7 +10,7 @@ const { initializeTopics } = require("../mqtt/helper.js");
 const { handleCloudMqttConnect, handleCloudMqttMessage } = require("../mqtt/mqtt.js");
 
 module.exports = function (app) {
-  
+
   const permForAdmin = "admin";
   const permForConsumer = "consumer";
   const permForSuperAdmin = "superAdmin";
@@ -19,9 +18,9 @@ module.exports = function (app) {
   //Pages
   const ADMINPAGE = path.join(__dirname, "../views/pages", "admin.html");
   const CONSUMERPAGE = path.join(__dirname, "../views/pages", "consumer.html");
-  const SUPERADMINPAGE = path.join(__dirname,"../views/pages","superAdmin.html");
+  const SUPERADMINPAGE = path.join(__dirname, "../views/pages", "superAdmin.html");
   const SITEPAGE = path.join(__dirname, "../views/pages", "siteToDevice.html");
-  const DEVICEPROFILE = path.join(__dirname,"../views/pages","deviceProfile.html");
+  const DEVICEPROFILE = path.join(__dirname, "../views/pages", "deviceProfile.html");
   const DEVICEINFO = path.join(__dirname, "../views/pages", "deviceInfo.html")
   const BUTTONMAP = path.join(__dirname, "../navbarMappingDatabase/buttonMappings.json");
 
@@ -29,6 +28,7 @@ module.exports = function (app) {
   const FIRMWARESYNC = path.join(__dirname, "../../../firmwareScript.sh");
   const SOURCECODESYNC = path.join(__dirname, "../../../sourceCodeScript.sh");
   const PISOURCECODESYNC = path.join(__dirname, "../../../pisourceCodeScript.sh");
+
   //private
   const PRIVATE_AEP_TO_ADMINROUTE = "/api/admin-dashboard/:id";
   const PRIVATE_AEP_TO_CONSUMERROUTE = "/api/consumer-dashboard/:id";
@@ -69,9 +69,9 @@ module.exports = function (app) {
   const AEP_TO_DEREGISTER_DEVICE = "/api/admin/deregisterdevice/:id";
   const AEP_TO_REGISTER_CONSUMER = "/api/admin/registerconsumer/:id";
   const AEP_TO_DEREGISTER_CONSUMER = "/api/admin/deregisterconsumer/:id";
-  const AEP_TO_REGISTER_CONSUMER_TO_DEVICE_MAPPING ="/api/admin/registerconsumertodevice/:id";
-  const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING ="/api/admin/deregisterconsumertodevice/:id";
-  const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER ="/api/admin/assigndevicetoconsumer/:id";
+  const AEP_TO_REGISTER_CONSUMER_TO_DEVICE_MAPPING = "/api/admin/registerconsumertodevice/:id";
+  const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING = "/api/admin/deregisterconsumertodevice/:id";
+  const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER = "/api/admin/assigndevicetoconsumer/:id";
   const AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS = '/api/firmware-versions';
   const AEP_TO_RECIEVE_BINFILESMAP_MAP_FROM_PI='/api/recieve/firmware-versions/:id';
   const AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS = '/api/firmware-versions/:id';
@@ -88,27 +88,25 @@ module.exports = function (app) {
   const AEP_TO_SYNC_PI_SOURCECODE = "/api/sync-pi-sourcecode";
   const AEP_TO_SYNC_PI_SOURCECODE_FOR_PARTICULAR_SITE = "/api/sync-pi-sourcecode/:id";
   const AEP_TO_FETCH_DEVICE_DATA = "/api/device/:deviceId"
-  const AEP_TO_GENERATE_DEVICE_INFO_QR = `/api/generate/deviceQR`;
+  const AEP_TO_GENERATE_DEVICE_INFO_QR = "/api/generate/deviceQR";
   const AEP_TO_DOWNLOAD_DEVICE_INFO_QR = "/api/download/deviceQR";
-  const AEP_TO_GET_BUTTON_MAPPING='/api/buttonMapping'
+  const AEP_TO_GET_BUTTON_MAPPING = '/api/buttonMapping'
 
-  
+
   const TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION = 200000000;
 
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
-    // console.log("registering")
     await controller.registerUser(req, res);
   });
+
+
   ////////LOGIN A USER / AUTHENTICATE/////////
   app.post(AEP_TO_AUTHENTICATE_A_USER, async (req, res) => {
     const data = await controller.authenticateUser(req, res, req.body);
-    // if (data.success) {
-    //   return res.json(data);
-    // } else {
-    //   return res.status(401).json({ message: 'Invalid email or password' });
-    // }
   });
+
+
   //////////////////////////////////////////FETCH DATA//////////////////////////////////////////////////
 
   ///////////FETCH ALL CONSUMERS///////////
@@ -156,12 +154,12 @@ module.exports = function (app) {
   });
 
   ////////////PROTECTED ROUTES FOR PAGES RENDERING//////////////////
-  app.get(PRIVATE_AEP_TO_ADMINROUTE, controller.isAuthenticated(),controller.roleAuthenticatorIdSensitive(permForAdmin),(req, res) => {
-      res.sendFile(ADMINPAGE);
+  app.get(PRIVATE_AEP_TO_ADMINROUTE, controller.isAuthenticated(), controller.roleAuthenticatorIdSensitive(permForAdmin), (req, res) => {
+    res.sendFile(ADMINPAGE);
   });
 
-  app.get(PRIVATE_AEP_TO_CONSUMERROUTE, controller.isAuthenticated(),controller.roleAuthenticatorIdSensitive(permForConsumer),(req, res) => {
-      res.sendFile(CONSUMERPAGE);
+  app.get(PRIVATE_AEP_TO_CONSUMERROUTE, controller.isAuthenticated(), controller.roleAuthenticatorIdSensitive(permForConsumer), (req, res) => {
+    res.sendFile(CONSUMERPAGE);
   });
 
   app.get(SUPERADMIN, (req, res) => {
@@ -185,7 +183,7 @@ module.exports = function (app) {
     const email = await controller.OTPGenerationAndStorage(req.body.email);
     return res
       .status(200)
-      .json({ message: `Otp has been sent to ${email} successfully!!!` });
+      .json(`{ message: Otp has been sent to ${email} successfully!!! }`);
   });
 
   app.post(AEP_TO_VERIFY_OTP, async (req, res) => {
@@ -195,7 +193,6 @@ module.exports = function (app) {
       req.body.email,
       req.body.otp
     );
-    // return res.status(401).json({ message: 'Wrong OTP !!! Try Again' });
   });
 
 
@@ -231,7 +228,7 @@ module.exports = function (app) {
   //sites to device mapping
 
   app.get(AEP_TO_FETCH_ALL_SITES_TO_DEVICES, async (req, res) => {
-    const data = await controller.fetchAllSiteToDevice();
+    const data = await controller.fetchAllSitetoDevice();
     res.json(data);
   });
 
@@ -246,7 +243,7 @@ module.exports = function (app) {
     }
   });
 
-  
+
   app.get(AEP_TO_FETCH_ALL_DEVICES_UNDER_A_SITE, async (req, res) => {
     try {
       const id = req.params.id;
@@ -274,7 +271,7 @@ module.exports = function (app) {
   //consumer to device mapping
   app.get(AEP_TO_FETCH_CONSUMERS_TO_DEVICES, async (req, res) => {
     try {
-      const data = await controller.fetchAllConsumerToDevice();
+      const data = await controller.fetchAllConsumertoDevice();
       res.json(data);
     } catch (error) {
       res.status(500).send("Internal Server Error");
@@ -329,9 +326,9 @@ module.exports = function (app) {
     await controller.deregisterConsumerToDeviceMapping(req, res);
   });
 
-  app.patch(AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER,async (req, res) => {
-      await controller.AssignDevicetoConsumer(req, res);
-    }
+  app.patch(AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER, async (req, res) => {
+    await controller.AssignDevicetoConsumer(req, res);
+  }
   );
 
   app.post(AEP_TO_POST_DEVICE, async (req, res) => {
@@ -360,6 +357,11 @@ module.exports = function (app) {
     }
   }
 
+  app.get(AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS, async(req, res) => {
+    await initializeBinFilenames();
+    res.json(binFilenamesInMemory.map((name, id) => ({ id, name })));
+  });
+
 
   app.get('/api/firmware/:version', (req, res) => {
     const version = req.params.version;
@@ -382,12 +384,7 @@ module.exports = function (app) {
     });
   });
 
-  
 
-  app.get(AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS, async(req, res) => {
-    await initializeBinFilenames();
-    res.json(binFilenamesInMemory.map((name, id) => ({ id, name })));
-  });
   app.get(AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS, async(req, res) => {
    
     await controller.fetchPiFirmwareVersions(req,res);
@@ -397,7 +394,8 @@ module.exports = function (app) {
   app.post(AEP_TO_RECIEVE_BINFILESMAP_MAP_FROM_PI, async(req,res)=>{
       await controller.recieveBinFilesFromPi(req,res);
   })
-  
+
+
   app.post(AEP_TO_INTIMATE_ALL_DEVICES_UNDER_A_SITE, async (req, res) => {
     try {
       await controller.intimateAllDevicesOfASite(req);
@@ -407,7 +405,6 @@ module.exports = function (app) {
       res.status(500).json({ error: "Failed to intimate all devices" });
     }
   });
-
   app.post(AEP_TO_INTIMATE_ALL_SITES, async (req, res) => {
     try {
       await controller.intimateAllSites(req);
@@ -418,7 +415,6 @@ module.exports = function (app) {
     }
   });
 
-  
   app.post(AEP_TO_FETCH_ALL_DEVICES_FIRMWARE_VERSIONS, async (req, res) => {
     try {
       await controller.fetchDeviceVersion(req);
@@ -429,19 +425,19 @@ module.exports = function (app) {
     }
   });
 
-  
+
   //// Enter Maintenance Mode
   app.post(AEP_TO_ENTER_A_DEVICE_IN_MAINTENANCE_MODE, async (req, res) => {
     await controller.enterMaintenance(req, res);
   });
 
-  
+
   // Exit maintenance mode route
   app.post(AEP_TO_EXIT_A_DEVICE_FROM_MAINTENANCE_MODE, async (req, res) => {
     await controller.exitMaintenance(req, res);
   });
 
-  
+
   app.post(AEP_TO_FETCH_ALL_DEVICES_MODES, async (req, res) => {
     await controller.fetchDeviceStatus(req, res);
   })
@@ -513,18 +509,19 @@ module.exports = function (app) {
     const id=req.params.id;
     controller.sync_pi_source_code(id);
   })
+
   app.get(AEP_TO_FETCH_A_HTML_FRAGMENT_UNDER_A_PAGE, (req, res) => {
     const { role, key } = req.params;
-    const filePath = path.join(__dirname, '../views/html_fragments', role, `${key}.html`);
+    const filePath = path.join(__dirname, '../views/html_fragments', role, `${ key }.html`);
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
         return res.status(404).send('Fragment not found');
       }
-  
+
       res.json({ fragment: data });
     });
   });
-  
+
 
   app.get(AEP_TO_GET_BUTTON_MAPPING, async (req, res) => {
     res.sendFile(BUTTONMAP);
@@ -550,6 +547,7 @@ module.exports = function (app) {
   const topics = initializeTopics();
   handleCloudMqttConnect(topics);
   handleCloudMqttMessage(topics);
-  // setTimeout(botFunction, TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION);
+  // setTimeout(botFunction, 20000);
+
 
 };

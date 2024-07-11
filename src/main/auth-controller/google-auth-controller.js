@@ -1,7 +1,7 @@
 const env = require('dotenv');
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
-const dbController=require("../db-controller/db-controller")
+const Helper = require("./helper.js");
 env.config();
 
 //  The strategy makes a session of user 
@@ -23,7 +23,7 @@ passport.use("google",new GoogleStrategy({
               email:profile.email,
               role:""
           }
-          let result=await dbController.findUserByEmail(user.email);
+          let result=await Helper.findUserByEmail(user.email);
             if(result!==({})){
               user.role=result.role;
               user.user_id=result._id;

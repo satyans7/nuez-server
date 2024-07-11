@@ -23,7 +23,7 @@
                 "id": "super-admin-navbar-advance-btn",
                 "class": "super-admin-navbar-advance-btn",
                 "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
-                "text": "Gear"
+                "text": "Advance"
             }
         ],
         "sidebarButtons": {
@@ -99,7 +99,7 @@
                 "id": "admin-navbar-advance-btn",
                 "class": "admin-navbar-advance-btn",
                 "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
-                "text": "Gear" 
+                "text": "Advance" 
             }
         ],
         "sidebarButtons": {
@@ -147,7 +147,7 @@
                 "id": "site-navbar-advance-btn",
                 "class": "site-navbar-advance-btn",
                 "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
-                "text":"Gear"
+                "text":"Advance"
 
             }
         ],
@@ -218,7 +218,7 @@
                 "id": "consumer-navbar-advance-btn",
                 "class": "consumer-navbar-advance-btn",
                 "html": "<img src=\"/logo/advance.svg\" alt=\"ADVANCE\">",
-                "text":"Gear"
+                "text":"Advance"
 
             }
         ],
