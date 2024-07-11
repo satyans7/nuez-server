@@ -54,6 +54,7 @@ body {
     cursor: pointer;
     transition: background 0.3s;
     font-size: 12.75px; /* 15px * 0.85 */
+    margin-bottom: 10px;
 }
 
 .option button:hover {
@@ -62,6 +63,7 @@ body {
 
 .option button i {
     margin-left: 11.9px; /* 14px * 0.85 */
+    
 }
 
 .option button img {
