@@ -564,26 +564,37 @@ class Controller {
     
   }  
 
-  async recieveBinFilesFromPi(req,res){
-    const id=req.params.id;
-    const data=req.body.binFiles;
-    console.log(data);
-    sitesBinFileNamesInMemory[id]=data;
-    res.status(201).json({ success: true, message: 'Successfully registered' });
-  }
-  
+  async recieveBinFilesFromPi(req, res) {
+    const id = req.params.id;
+    const data = req.body.binFiles;
 
-  async fetchPiFirmwareVersions(req,res){
-    const id=req.params.id;
-    handleCloudMqttPublish(`binary-list/${id}`,JSON.stringify({"message":"send available binary list"}));
-    setTimeout(()=>{
-      const binFiles = sitesBinFileNamesInMemory[id] || [];
-        // Format the response as an array of objects with `id` and `name` properties
-        const formattedResponse = binFiles.map((name, index) => ({ id: index, name }));
-        res.json(formattedResponse);
+    // Check if data is an array
+    if (!Array.isArray(data)) {
+        return res.status(400).json({ success: false, message: 'Invalid data format' });
+    }
+
+    console.log(data);
+    sitesBinFileNamesInMemory[id] = data;
+    res.status(201).json({ success: true, message: 'Successfully registered' });
+}
+
+async fetchPiFirmwareVersions(req, res) {
+    const id = req.params.id;
+    handleCloudMqttPublish(`binary-list/${id}`, JSON.stringify({ "message": "send available binary list" }));
+    
+    setTimeout(() => {
+        const binFiles = sitesBinFileNamesInMemory[id] || [];
+        
+        if (Array.isArray(binFiles)) {
+            const formattedResponse = binFiles.map((name, index) => ({ id: index, name }));
+            res.json(formattedResponse);
+        } else {
+            res.status(500).json({ success: false, message: 'Invalid binFiles format' });
+        }
+        
         sitesBinFileNamesInMemory[id] = {};
-    },4000)
-  }
+    }, 4000);
+}
 
   async getBinFilenamesWithoutExtension(directoryPath) {
       return new Promise((resolve, reject) => {
