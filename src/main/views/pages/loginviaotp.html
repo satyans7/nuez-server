@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login via OTP</title>
-    <link rel="stylesheet" href="./css/loginviaotp.css">
+    <link rel="stylesheet" href="./css/login.css"> <!-- Using login.css for shared styles -->
 </head>
-<body>
-    
-<div>
-    <h2>Login via OTP</h2>
-    <div class="container">
-        
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" required>
-        </div>
 
-        <button id="sendotp">Send OTP</button>
-<hr>
-        <div class="form-group" style="margin-top: 20px;">
-            <label for="otp">Enter OTP</label>
-            <input type="text" id="otp" required>
-        </div>
-        
-        <button id="verifyotp">Verify OTP</button>
-    </div>
+<body>
+    <div class="login-form">
+        <form id="otpform">
+            <h3>LOGIN VIA OTP</h3>
+            <div class="input-box">
+                <label for="email">Email Address <span class="asterisk" aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Enter email address" required>
+            </div>
+
+            <button type="button" id="sendotp">Send OTP</button>
+            <hr>
+
+            <div class="input-box" style="margin-top: 20px;">
+                <label for="otp">Enter OTP <span class="asterisk" aria-hidden="true">*</span></label>
+                <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+            </div>
+
+            <button type="button" id="verifyotp">Verify OTP</button>
+        </form>
     </div>
     <script type="module" src="./js/pages/loginviaotp.js"></script>
-    
 </body>
+
 </html>

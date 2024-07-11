@@ -1,4 +1,4 @@
-const dbController = require("../db-controller/db-controller");
+const Helper = require("./helper.js");
 const  mailSenderUtility = require("../utils/mailSender")
 
 class otpAuthController {
@@ -17,9 +17,10 @@ class otpAuthController {
         }
       }
     async verifyOTP(email,providedotp){
-      const otp = await dbController.findOTPByEmail(email)
+      const otp = await Helper.findOTPByEmail(email)
+      console.log(otp);
       if(otp===providedotp){
-        const user = await dbController.findUserByEmail(email);
+        const user = await Helper.findUserByEmail(email);
         return { success: true, user: user, message: 'Logged In Successfully' };
       }
       else return { success: false, user:undefined, message: 'WRONG OTP!!! TRY AGAIN' };

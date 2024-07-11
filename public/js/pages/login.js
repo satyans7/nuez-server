@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded',()=>
     })
 })
 document.addEventListener('DOMContentLoaded',()=>
-  { document.getElementById("otplogin").addEventListener("click",()=>{
+  { document.getElementById("otplogin").addEventListener("click",(event)=>{
+    event.preventDefault();
         window.location.href="/loginviaotp"
   })
   })
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded',()=>
 
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('google').addEventListener('click', function(event) {
+      event.preventDefault();
         window.location.href='/auth/google'
     })
   });
