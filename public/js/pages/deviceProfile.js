@@ -49,7 +49,7 @@ function getCurrentDevice() {
 async function initializeProfilePage() {
     document.getElementById('device-id').textContent = `DEVICE ID: ${getCurrentDevice()}`;
     const currentId = getCurrentDevice();
-    const particularDeviceData = getDeviceData(currentId);
+    const particularDeviceData = await getDeviceData(currentId);
 
     if (particularDeviceData) {
         DEVICE_ID = currentId;
