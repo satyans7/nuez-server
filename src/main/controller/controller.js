@@ -563,6 +563,7 @@ class Controller {
 
     try {
       let data = await dbController.readDatabase(ADMIN_TO_SITE_DATA);
+      let sites = await dbController.readDatabase(SITE_DATA);
 
       // Initialize the database if it is empty
       if (!data) {
@@ -584,7 +585,9 @@ class Controller {
         } else {
           // Add the new site to the user's list of sites
           data[userId].push(newSite);
-          await dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          sites[newSite].admin = userId;
+         dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+         dbController.writeDatabase(SITE_DATA, sites);
           return res.status(200).json({ message: "Site registered successfully", data });
         }
       } else {
@@ -607,6 +610,7 @@ class Controller {
 
     try {
       let data = await dbController.readDatabase(ADMIN_TO_SITE_DATA);
+      let sites = await dbController.readDatabase(SITE_DATA);
 
       // Initialize data if it is empty
       if (!data) {
@@ -617,7 +621,9 @@ class Controller {
         const siteIndex = data[userId].indexOf(siteToRemove);
         if (siteIndex > -1) {
           data[userId].splice(siteIndex, 1);
-          await dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          sites[siteToRemove].admin = "not assigned";
+          dbController.writeDatabase(ADMIN_TO_SITE_DATA, data);
+          dbController.writeDatabase(SITE_DATA, sites);
           return res.status(200).json({ message: "Site deleted successfully", data });
         } else {
           return res.status(400).json({ message: "Site not found for this user" });

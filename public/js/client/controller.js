@@ -176,6 +176,7 @@ export async function updateDevice(id, data) {
 export async function registerSite(data,id) {
     const api = cep.getApiToRegisterSite(id);
     const response = await cep.fetchPost(api,data);
+    console.log(response);
     return response;
 }
 
