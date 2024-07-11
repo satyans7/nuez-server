@@ -365,3 +365,130 @@ td {
   padding: 5px 10px;
   cursor: pointer;
 }
+
+/* Media Queries for Responsiveness */
+
+@media (max-width: 768px) {
+  .card {
+    min-width: 100%;
+    /* Adjust min-width for small screens */
+  }
+
+  .card-content {
+    font-size: 0.9rem;
+    /* Adjust font size for small screens */
+  }
+
+  .card button {
+    width: 80px;
+    height: 25px;
+    font-size: 0.8rem;
+  }
+
+  .form-container {
+    width: 90%;
+    padding: 10px;
+  }
+
+  .form-container label,
+  .form-container input,
+  .form-container button {
+    font-size: 14px;
+  }
+  
+
+  /* sidebar */
+  .left-side-bar {
+    grid-column: 1/5;
+  }
+
+  .left-side-bar button {
+    width: 100%;
+    margin: 0px;
+    padding: 3px;
+    font-size: 10px;
+    word-wrap: break-word; 
+  }
+
+  .right-side-bar {
+    display: none;
+  }
+
+  /* main content */
+  .main-content {
+    grid-column: 5/21;
+  }
+
+  body {
+    font-size: 12px;
+  }
+
+  th,
+  td {
+    padding: 5px;
+    
+  }
+
+
+  /* topbar */
+
+  .topbar-left img {
+    width: 70px;
+  }
+
+  .topbar-left{
+    margin: 0px;
+  }
+  .topbar {
+    grid-template-columns: 2fr 3fr 1fr;
+
+  }
+
+  .button-container {
+    margin: 1px;
+  }
+
+  .button-container img{
+    height: 20px;
+    width: 20px;
+  }
+  .button-container button{
+    padding: 7px;
+  }
+
+  .logout-btn {
+    border: unset;
+    text-decoration: unset;
+    display: unset;
+    align-items: unset;
+    justify-content: unset;
+    padding: unset;
+    margin: unset;
+    color: unset;
+    width: unset;
+    background-color: unset;
+    transition: unset;
+    font-size: unset;
+    font-family: unset;
+    position: unset;
+    overflow: unset;
+    letter-spacing: unset;
+    cursor: unset;
+    border-radius: unset;
+    gap: unset;
+    justify-content: center;
+  }
+
+  .logout-btn::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .logout-btn {
+    font-size: 0;
+    /* Hide text by setting font-size to 0 */
+  }
+}
