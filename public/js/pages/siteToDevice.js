@@ -898,7 +898,7 @@ else{
 
 
     // FIRMWARE ------------------------------------------------------------------------------------------------//
-
+    const AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS = `/api/firmware-versions/${site}`;
     async function firmwarefunc() {
         await fetchDeviceVersions();
         await populateFirmwareDropdown();
@@ -911,11 +911,11 @@ else{
             await intimateAll(selectedVersion);
         });
 
-
+        
         async function populateFirmwareDropdown() {
             try {
                 console.log('Fetching firmware versions...');
-                const response = await fetch('/api/firmware-versions');
+                const response = await fetch(AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS);
                 if (!response.ok) {
                     throw new Error('Failed to fetch firmware versions');
                 }

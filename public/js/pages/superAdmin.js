@@ -54,11 +54,11 @@ export function initializeSuperAdminPanel(sidebarid) {
         if (pendingRequests[id] && pendingRequests[id].requestStatus === 'pending') {
             const msg = 'Request Sent';
             disableRequestButton(requestButton, msg);
-        } else if(admintosite[id] && admintosite[id].length > 0) {
+        } else if (admintosite[id] && admintosite[id].length > 0) {
             const msg = 'Already have sites'
             disableRequestButton(requestButton, msg);
 
-        }else if(consumertodevice[id] && consumertodevice[id].length > 0){
+        } else if (consumertodevice[id] && consumertodevice[id].length > 0) {
             const msg = 'Already have devices'
             disableRequestButton(requestButton, msg);
 
@@ -97,8 +97,8 @@ export function initializeSuperAdminPanel(sidebarid) {
                     actionCell.classList.add('action-cell');
                     const requestButton = document.createElement('button');
                     requestButton.textContent = '+';
-                   
-                    
+
+
                     requestButton.addEventListener('click', () => {
 
                         const existingCardRow = row.nextSibling;
@@ -109,46 +109,46 @@ export function initializeSuperAdminPanel(sidebarid) {
                             cardRow.classList.add('card-row');
                             const cardCell = document.createElement('td');
                             cardCell.colSpan = 2; // Span across all columns
-                            
-    
+
+
                             const consumerCard = document.createElement('div');
                             consumerCard.className = 'displaycard';
                             consumerCard.id = 'fetch-consumer-data';
-    
+
                             const cardHeading = document.createElement('div');
                             cardHeading.className = 'card-heading';
-    
+
                             const consumerName = document.createElement('h3');
                             consumerName.textContent = user.name;
                             cardHeading.appendChild(consumerName);
                             consumerCard.appendChild(cardHeading);
-    
+
                             const cardBody = document.createElement('div');
                             cardBody.className = 'card-body';
-    
+
                             const consumerLocation = document.createElement('h4');
                             consumerLocation.textContent = user.email;;
-    
+
                             cardBody.appendChild(consumerLocation);
                             consumerCard.appendChild(cardBody);
-    
-    
-    
+
+
+
                             const card = consumerCard;
                             cardCell.appendChild(card);
                             cardRow.appendChild(cardCell);
-    
+
                             // Insert the card row after the current row
                             row.parentNode.insertBefore(cardRow, row.nextSibling);
                         }
-                        
-                        });
-                    
-                    
+
+                    });
+
+
                     row.style.cursor = "pointer";
                     actionCell.appendChild(requestButton);
-                    row.appendChild(nameCell); 
-                    row.appendChild(actionCell);            
+                    row.appendChild(nameCell);
+                    row.appendChild(actionCell);
                     usersTableBody.appendChild(row);
                 }
             });
@@ -207,8 +207,8 @@ export function initializeSuperAdminPanel(sidebarid) {
         }
     }
 
-async function displayAdminsTable(){
-    console.log("fetching admins");
+    async function displayAdminsTable() {
+        console.log("fetching admins");
         let data = await getAllAdmins();
         adminsTableBody.innerHTML = '';
         let ids = Object.keys(data);
@@ -223,7 +223,7 @@ async function displayAdminsTable(){
                     actionCell.classList.add('action-cell');
                     const requestButton = document.createElement('button');
                     requestButton.textContent = '+';
-        
+
                     requestButton.addEventListener('click', () => {
 
                         const existingCardRow = row.nextSibling;
@@ -234,40 +234,40 @@ async function displayAdminsTable(){
                             cardRow.classList.add('card-row');
                             const cardCell = document.createElement('td');
                             cardCell.colSpan = 2; // Span across all columns
-                            
-    
+
+
                             const adminCard = document.createElement('div');
                             adminCard.className = 'displaycard';
                             adminCard.id = 'fetch-admin-data';
-    
+
                             const cardHeading = document.createElement('div');
                             cardHeading.className = 'card-heading';
-    
+
                             const adminName = document.createElement('h3');
                             adminName.textContent = user.name;
                             cardHeading.appendChild(adminName);
                             adminCard.appendChild(cardHeading);
-    
+
                             const cardBody = document.createElement('div');
                             cardBody.className = 'card-body';
-    
+
                             const adminLocation = document.createElement('h4');
                             adminLocation.textContent = user.email;
-    
+
                             cardBody.appendChild(adminLocation);
                             adminCard.appendChild(cardBody);
-    
-    
-    
+
+
+
                             const card = adminCard;
                             cardCell.appendChild(card);
                             cardRow.appendChild(cardCell);
-    
+
                             // Insert the card row after the current row
                             row.parentNode.insertBefore(cardRow, row.nextSibling);
                         }
-                        
-                       
+
+
                     });
                     row.style.cursor = "pointer";
                     actionCell.appendChild(requestButton);
@@ -282,7 +282,7 @@ async function displayAdminsTable(){
             adminsTableBody.appendChild(row);
         }
 
-}
+    }
     async function loadAdminsTable() {
         console.log("fetching admins");
         let data = await getAllAdmins();
@@ -328,7 +328,7 @@ async function displayAdminsTable(){
         }
     }
 
-    async function displaySitesTable(){
+    async function displaySitesTable() {
 
         let data = await getSitesData();
         console.log(data)
@@ -342,61 +342,61 @@ async function displayAdminsTable(){
                 nameCell.textContent = site.name;
                 const actionCell = document.createElement('td');
                 actionCell.classList.add('action-cell');
-                    const requestButton = document.createElement('button');
-                    requestButton.textContent = '+';
+                const requestButton = document.createElement('button');
+                requestButton.textContent = '+';
 
-                    requestButton.addEventListener('click', () => {
-                        const existingCardRow = row.nextSibling;
-                        if (existingCardRow && existingCardRow.classList.contains('card-row')) {
-                            existingCardRow.remove();
-                        } else {
-                            const cardRow = document.createElement('tr');
-                            cardRow.classList.add('card-row');
-                            const cardCell = document.createElement('td');
-                            cardCell.colSpan = 2; // Span across all columns
-                            
-    
-                            const siteCard = document.createElement('div');
-                            siteCard.className = 'displaycard';
-                            siteCard.id = 'fetch-site-data';
-    
-                            const cardHeading = document.createElement('div');
-                            cardHeading.className = 'card-heading';
-    
-                            const siteName = document.createElement('h3');
-                            siteName.textContent = site.name;
-                            cardHeading.appendChild(siteName);
-                            siteCard.appendChild(cardHeading);
-    
-                            const cardBody = document.createElement('div');
-                            cardBody.className = 'card-body';
-    
-                            const siteLocation = document.createElement('h4');
-                            siteLocation.textContent = site.location;
-    
-                            cardBody.appendChild(siteLocation);
-                            siteCard.appendChild(cardBody);
-    
-    
-    
-                            const card = siteCard;
-                            cardCell.appendChild(card);
-                            cardRow.appendChild(cardCell);
-    
-                            // Insert the card row after the current row
-                            row.parentNode.insertBefore(cardRow, row.nextSibling);
-                        }
-                        
-                    });
+                requestButton.addEventListener('click', () => {
+                    const existingCardRow = row.nextSibling;
+                    if (existingCardRow && existingCardRow.classList.contains('card-row')) {
+                        existingCardRow.remove();
+                    } else {
+                        const cardRow = document.createElement('tr');
+                        cardRow.classList.add('card-row');
+                        const cardCell = document.createElement('td');
+                        cardCell.colSpan = 2; // Span across all columns
+
+
+                        const siteCard = document.createElement('div');
+                        siteCard.className = 'displaycard';
+                        siteCard.id = 'fetch-site-data';
+
+                        const cardHeading = document.createElement('div');
+                        cardHeading.className = 'card-heading';
+
+                        const siteName = document.createElement('h3');
+                        siteName.textContent = site.name;
+                        cardHeading.appendChild(siteName);
+                        siteCard.appendChild(cardHeading);
+
+                        const cardBody = document.createElement('div');
+                        cardBody.className = 'card-body';
+
+                        const siteLocation = document.createElement('h4');
+                        siteLocation.textContent = site.location;
+
+                        cardBody.appendChild(siteLocation);
+                        siteCard.appendChild(cardBody);
+
+
+
+                        const card = siteCard;
+                        cardCell.appendChild(card);
+                        cardRow.appendChild(cardCell);
+
+                        // Insert the card row after the current row
+                        row.parentNode.insertBefore(cardRow, row.nextSibling);
+                    }
+
+                });
 
                 row.style.cursor = "pointer";
                 actionCell.appendChild(requestButton);
                 row.appendChild(nameCell);
-                row.appendChild(actionCell); 
+                row.appendChild(actionCell);
                 sitesTableBody.appendChild(row);
 
             });
-            
+
 
 
         } else {
@@ -405,10 +405,11 @@ async function displayAdminsTable(){
             sitesTableBody.appendChild(row);
         }
 
- }
+    }
 
     async function loadSitesTable() {
         let data = await getSitesData();
+        await populateFirmwareDropdown();
         console.log(data)
         sitesTableBody.innerHTML = '';
         let ids = Object.keys(data);
@@ -429,11 +430,6 @@ async function displayAdminsTable(){
                 sitesTableBody.appendChild(row);
 
             });
-            firmwareToSitesBtn.addEventListener("click", async () => {
-                await sendFirmwareToSites();
-                alert("btn clicked")
-            })
-
 
         } else {
             const row = document.createElement('tr');
@@ -441,6 +437,84 @@ async function displayAdminsTable(){
             sitesTableBody.appendChild(row);
         }
 
+        const intimateAllBtn = document.getElementById('intimate-all-btn');
+        const dropdown = document.getElementById('firmware-dropdown');
+
+        if (dropdown) {
+            dropdown.addEventListener('change', () => {
+                if (dropdown.value) {
+                    intimateAllBtn.disabled = false;
+                } else {
+                    intimateAllBtn.disabled = true;
+                }
+            });
+        } else {
+            console.error('Firmware dropdown not found.');
+        }
+
+        if (intimateAllBtn) {
+            intimateAllBtn.addEventListener('click', async () => {
+                const selectedVersion = dropdown.options[dropdown.selectedIndex].textContent;
+                await intimateAll(selectedVersion);
+            });
+        } else {
+            console.error('Intimate all button not found.');
+        }
+
+        async function populateFirmwareDropdown() {
+            try {
+                console.log('Fetching firmware versions...');
+                const response = await fetch('/api/firmware-versions');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch firmware versions');
+                }
+        
+                const firmwareVersions = await response.json();
+                console.log('Firmware versions fetched:', firmwareVersions);
+        
+                const dropdown = document.getElementById('firmware-dropdown');
+                if (!dropdown) {
+                    throw new Error('Dropdown element not found');
+                }
+        
+                dropdown.innerHTML = ''; // Clear previous options
+                console.log('Populating dropdown...');
+        
+                firmwareVersions.forEach(version => {
+                    const option = document.createElement('option');
+                    option.value = version.id; // Assuming each version has a unique ID
+                    option.textContent = version.name; // Display name of the version
+                    dropdown.appendChild(option);
+                });
+        
+                console.log('Dropdown populated successfully');
+            } catch (error) {
+                console.error('Error fetching firmware versions:', error);
+            }
+           
+        }
+
+        async function intimateAll(version) {
+            try {
+                const message = { version: version };
+                const response = await fetch(`/intimate-all-sites`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(message)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to intimate all sites');
+                } else {
+                    alert('All sites intimated successfully!');
+                }
+            } catch (error) {
+                console.error('Error intimating all sites:', error);
+                alert('Error intimating all sites. Please try again.');
+            }
+        }
 
 
     }
@@ -484,7 +558,7 @@ async function displayAdminsTable(){
         }
     }
 
- 
+
 
     async function loadRejectedTable() {
         console.log("fetching rejected requests");
@@ -514,7 +588,7 @@ async function displayAdminsTable(){
     }
 
     async function pendingTabDisplay() {
-       
+
         let data = await getAllPendingRequests();
         let ids = Object.keys(data);
         pendingTableBody.innerHTML = '';
@@ -537,7 +611,7 @@ async function displayAdminsTable(){
                     actionCell.appendChild(approveButton);
                     actionCell.appendChild(rejectButton);
                     row.appendChild(nameCell);
-                    row.appendChild(roleChangeCell );
+                    row.appendChild(roleChangeCell);
                     row.appendChild(actionCell);
                     pendingTableBody.appendChild(row);
                 }
@@ -580,7 +654,7 @@ async function displayAdminsTable(){
         pendingTabDisplay();
     }
 
-    async function administrationTabDisplay(){
+    async function administrationTabDisplay() {
         firmwareSyncBtn.addEventListener('click', async () => {
             const userConfirmed = confirm('Are you sure you want to sync the firmware data?');
             if (userConfirmed) {
@@ -605,43 +679,20 @@ async function displayAdminsTable(){
         })
     }
 
-    
 
 
-    // Add this to your existing JavaScript
-
-    // document.getElementById('intimate-all-btn').addEventListener('click', async () => {
-    //     try {
-    //         const response = await fetch('/intimate-all-sites', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({ message: 'intimate' })
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error('Failed to intimate all sites');
-    //         }
-
-    //         alert('All sites intimated successfully!');
-    //     } catch (error) {
-    //         console.error('Error intimating all sites:', error);
-    //         alert('Error intimating all sites. Please try again.');
-    //     }
-    // });
-    async function eventListeners(){
-        if(sidebarid==='viewconsumers') displayUsersTable();
-        else if(sidebarid==='viewadmins') displayAdminsTable();
-        else if(sidebarid==='viewsites') displaySitesTable();
-        else if(sidebarid==='users')loadUsersTable();
-        else if(sidebarid==='admins')loadAdminsTable();
-        else if(sidebarid==='sites')loadSitesTable();
-        else if(sidebarid==='approved')loadApprovedTable();
-        else if(sidebarid==='rejected')loadRejectedTable();
-        else if(sidebarid==='pending')pendingTabDisplay();
-        else if(sidebarid==='administration')administrationTabDisplay();
+    async function eventListeners() {
+        if (sidebarid === 'viewconsumers') displayUsersTable();
+        else if (sidebarid === 'viewadmins') displayAdminsTable();
+        else if (sidebarid === 'viewsites') displaySitesTable();
+        else if (sidebarid === 'users') loadUsersTable();
+        else if (sidebarid === 'admins') loadAdminsTable();
+        else if (sidebarid === 'sites') loadSitesTable();
+        else if (sidebarid === 'approved') loadApprovedTable();
+        else if (sidebarid === 'rejected') loadRejectedTable();
+        else if (sidebarid === 'pending') pendingTabDisplay();
+        else if (sidebarid === 'administration') administrationTabDisplay();
     }
     eventListeners();
-    
+
 }

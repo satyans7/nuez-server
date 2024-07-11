@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { waterConsumptionMap, heartbeatMap, deviceStatus } = require("../telegramAlarm/map");
+const { waterConsumptionMap, heartbeatMap, deviceStatus, sitesBinFileNamesInMemory } = require("../telegramAlarm/map");
 let cloud_mqtt;
 const path = require ('path');
 function  initializeMqttClients(cloudClient) {
@@ -12,7 +12,6 @@ function initializeTopics() {
     MQTT_CLOUD_DEVICE_STATUS_INFO: "device-status-info/#",
     MQTT_CLOUD_DEVICE_VERSION_INFO: "device-version-info/#",
     MQTT_CLOUD_DEVICE_HEARTBEAT_INFO: "device-heartbeat-info/#",
-
     MQTT_CLOUD_PREFIX_DEVICE_STATUS_INFO: "device-status-info",
     MQTT_CLOUD_PREFIX_DEVICE_VERSION_INFO: "device-version-info",
     MQTT_CLOUD_PREFIX_DEVICE_HEARTBEAT_INFO: "device-heartbeat-info"

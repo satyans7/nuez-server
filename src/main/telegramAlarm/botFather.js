@@ -9,10 +9,10 @@ const bot = new TelegramBot(telegramBotToken, { polling: true });
 const TELEGRAM_POST_URL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`
 const statusMap = new Map();
 const snoozeMap = new Map(); // To store snooze information for each device
-const consumptionCheckInterval = 20000;
-const INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL = 1000;
-const INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL = 30000;
-const INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL = 60000;
+const consumptionCheckInterval = 20000000000;
+const INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL = 100000000;
+const INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL = 3000000000;
+const INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL = 6000000000;
 const TELEGRAM_BOT_COMMAND = 'snooze';
 const EXPRESSION_FOR_DEVICE_ID = `device_id:-"(.+?)"`;
 async function botFunction() {

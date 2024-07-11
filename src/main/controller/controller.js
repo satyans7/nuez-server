@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 const { handleCloudMqttPublish } = require("../mqtt/helper");
-const { deviceStatus } = require("../telegramAlarm/map");
+const { deviceStatus , sitesBinFileNamesInMemory} = require("../telegramAlarm/map");
 const TOPIC_FOR_PI_SOURCE_CODE_SYNC = `pi-source-code-sync`;
 const QRdirectoryPath = path.join(__dirname, '../qr_codes_generated');
 
@@ -498,7 +498,7 @@ class Controller {
       console.log(message)
       // Publish the message to the "site_1/intimate" topic
       
-      handleCloudMqttPublish(`intimate-latest-version-info/${site_id}`,JSON.stringify(message))
+      handleCloudMqttPublish(`latest-firmware-version`,JSON.stringify(message))
     
   }
   async fetchDeviceVersion(req){
@@ -563,6 +563,27 @@ class Controller {
      }, 5000);
     
   }  
+
+  async recieveBinFilesFromPi(req,res){
+    const id=req.params.id;
+    const data=req.body.binFiles;
+    console.log(data);
+    sitesBinFileNamesInMemory[id]=data;
+    res.status(201).json({ success: true, message: 'Successfully registered' });
+  }
+  
+
+  async fetchPiFirmwareVersions(req,res){
+    const id=req.params.id;
+    handleCloudMqttPublish(`binary-list/${id}`,JSON.stringify({"message":"send available binary list"}));
+    setTimeout(()=>{
+      const binFiles = sitesBinFileNamesInMemory[id] || [];
+        // Format the response as an array of objects with `id` and `name` properties
+        const formattedResponse = binFiles.map((name, index) => ({ id: index, name }));
+        res.json(formattedResponse);
+        sitesBinFileNamesInMemory[id] = {};
+    },4000)
+  }
 
   async getBinFilenamesWithoutExtension(directoryPath) {
       return new Promise((resolve, reject) => {

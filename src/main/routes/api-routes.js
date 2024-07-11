@@ -73,6 +73,8 @@ module.exports = function (app) {
   const AEP_TO_DEREGISTER_CONSUMER_TO_DEVICE_MAPPING ="/api/admin/deregisterconsumertodevice/:id";
   const AEP_TO_ASSIGN_AN_EXISTING_DEVICE_TO_A_CONSUMER ="/api/admin/assigndevicetoconsumer/:id";
   const AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS = '/api/firmware-versions';
+  const AEP_TO_RECIEVE_BINFILESMAP_MAP_FROM_PI='/api/recieve/firmware-versions/:id';
+  const AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS = '/api/firmware-versions/:id';
   const AEP_TO_INTIMATE_ALL_DEVICES_UNDER_A_SITE = "/:site_id/intimate-all-devices";
   const AEP_TO_INTIMATE_ALL_SITES='/intimate-all-sites'
   const AEP_TO_FETCH_ALL_DEVICES_FIRMWARE_VERSIONS = "/:site_id/fetch-device-versions";
@@ -91,7 +93,7 @@ module.exports = function (app) {
   const AEP_TO_GET_BUTTON_MAPPING='/api/buttonMapping'
 
   
-  const TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION = 200000000000000;
+  const TELEGRAM_BOT_FUNCTION_CALL_AFTER_MAP_POPULATION = 200000000;
 
   ////////REGISTERING A USER///////
   app.post(AEP_TO_REGISTER_A_USER, async (req, res) => {
@@ -358,11 +360,43 @@ module.exports = function (app) {
     }
   }
 
+
+  app.get('/api/firmware/:version', (req, res) => {
+    const version = req.params.version;
+    const filePath = path.join(localRepoPath, `${version}.bin`);
+  
+    // Check if the file exists
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+      if (err) {
+        console.error(`Firmware version ${version} not found.`);
+        return res.status(404).send('Firmware version not found');
+      }
+  
+      // Send the file if it exists
+      res.sendFile(filePath, (err) => {
+        if (err) {
+          console.error(`Error sending firmware version ${version}:`, err);
+          res.status(500).send('Error sending firmware file');
+        }
+      });
+    });
+  });
+
+  
+
   app.get(AEP_TO_FETCH_ALL_AVAILABLE_FIRMWARE_VERSIONS, async(req, res) => {
     await initializeBinFilenames();
     res.json(binFilenamesInMemory.map((name, id) => ({ id, name })));
   });
+  app.get(AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS, async(req, res) => {
+   
+    await controller.fetchPiFirmwareVersions(req,res);
+  });
+  
 
+  app.post(AEP_TO_RECIEVE_BINFILESMAP_MAP_FROM_PI, async(req,res)=>{
+      await controller.recieveBinFilesFromPi(req,res);
+  })
   
   app.post(AEP_TO_INTIMATE_ALL_DEVICES_UNDER_A_SITE, async (req, res) => {
     try {
