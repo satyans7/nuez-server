@@ -22,6 +22,7 @@ const AEP_TO_VERIFY_OTP ="/api/verifyotp"
 
 const AEP_TO_FETCH_ALL_ADMINS_TO_SITES = "/api/admin/admintosite";
 const AEP_TO_FETCH_ALL_SITES = "/api/admin/sites"
+const AEP_TO_FETCH_SITE_DATA = "/api/site"
 
 const AEP_TO_FETCH_ALL_SITES_TO_DEVICES = "/api/admin/sitetodevice";
 const AEP_TO_FETCH_ALL_SITES_TO_CONSUMERS = "/api/admin/sitetoconsumer";
@@ -148,6 +149,12 @@ export function getApiToFetchAdminSiteMapping() {
 export function getApitoFetchAllSitesData() {
   return AEP_TO_FETCH_ALL_SITES;
 }
+
+export function getApitoFetchSiteData(id) {
+  return `${AEP_TO_FETCH_SITE_DATA}/${id}`;
+}
+
+
 // SITE DEVICE PAGE
 export function getApitoFetchAllDevicesData() {
   return AEP_TO_FETCH_ALL_DEVICES;

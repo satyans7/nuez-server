@@ -89,7 +89,9 @@ export async function getAllSitesUnderAdmin(id){
     return await controller.getAllSitesUnderAdmin(id);
 }
 
-
+export async function getSiteData(id) {
+    return await controller.getSiteData(id);
+}
 //SITE DEVICE PAGE
 export async function getDevicesData() {
     return await controller.getAllDevicesData();
