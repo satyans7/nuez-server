@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('device-version').textContent = data.version;
       document.getElementById('device-location').textContent = data.location;
       document.getElementById('device-owner').textContent = data.owner;
-      document.getElementById('device-site').textContent = data.site;
+      document.getElementById('device-site').textContent = data.siteId;
     } else {
       document.getElementById('error').textContent = 'Invalid device info';
     }
