@@ -12,7 +12,6 @@ export function initializeAdminPanel(sidebarid) {
 
     function populateSearchContainer(data, searchResultsContainer, siteIdInput) {
         data.forEach(val => {
-            if (val.substring(0, 4) === 'site') {
                 const row = document.createElement('div');
                 row.className = 'search-result';
                 row.textContent = val;
@@ -24,7 +23,6 @@ export function initializeAdminPanel(sidebarid) {
                     }
                 });
                 searchResultsContainer.appendChild(row);
-            }
         });
 
         // Filter search results based on input value
