@@ -901,7 +901,7 @@ else{
     const AEP_TO_FETCH_ALL_AVAILABLE_PI_FIRMWARE_VERSIONS = `/api/firmware-versions/${site}`;
     async function firmwarefunc() {
         await fetchDeviceVersions();
-        await populateFirmwareDropdown();
+        populateFirmwareDropdown();
         document.getElementById('upgrade-all-versions').addEventListener('click', async () => {
             await upgradeAllDeviceVersions();
         });

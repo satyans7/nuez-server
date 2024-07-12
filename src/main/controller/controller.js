@@ -1019,6 +1019,7 @@ class Controller {
     this.device_status_query(site_id);
     setTimeout(() => {
       res.json(deviceStatus[site_id])
+      deviceStatus[site_id]={};
     }, 7000);
   }
 
@@ -1029,6 +1030,7 @@ class Controller {
     this.device_status_query(site_id);
     setTimeout(() => {
       res.json(deviceStatus[site_id])
+      deviceStatus[site_id]={};
     }, 7000);
   }
 

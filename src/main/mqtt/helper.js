@@ -83,7 +83,7 @@ const handleRegistration = (siteId, deviceId) => {
   }
 
   if (!deviceIds[deviceId]) {
-    deviceIds[deviceId] = { name: deviceId, siteId: siteId ,location: "default", owner:"Not Assigned" };
+    deviceIds[deviceId] = { name: deviceId, siteId: siteId ,location: "BLR", owner:"Not Assigned" };
     writeDatabase(deviceIdsFilePath, deviceIds);
   }
 
