@@ -580,7 +580,7 @@ module.exports = function (app) {
   const topics = initializeTopics();
   handleCloudMqttConnect(topics);
   handleCloudMqttMessage(topics);
-  // setTimeout(botFunction, 20000);
+  setTimeout(botFunction, 20000);
 
 
 };
