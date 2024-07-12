@@ -948,7 +948,8 @@ else{
         async function fetchDeviceVersions() {
             try {
                 // Fetch devices and their versions
-                const devicesData = await getDevicesData();
+                //const devicesData = await getDevicesData();
+                const devicesData = await getAllDevicesUnderSite(site);
                 const versions = Object.keys(devicesData).map((deviceId) => {
                     const device = devicesData[deviceId];
                     return { id: deviceId, name: device.name, version: device.version };
@@ -965,7 +966,8 @@ else{
         async function upgradeAllDeviceVersions() {
             try {
                 // Fetch devices and their versions
-                const devicesData = await getDevicesData();
+               // const devicesData = await getDevicesData();
+               const devicesData = await getAllDevicesUnderSite(site);
                 const deviceIds = Object.keys(devicesData);
                 const response = await fetch(`/${site}/fetch-device-versions`, {
                     method: 'POST',

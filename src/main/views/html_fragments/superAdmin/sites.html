@@ -1,17 +1,23 @@
 <div id='site-list' class='list content'>
-  <h2>All Sites</h2>
-  <div class='table-container'>
-      <table>
-          <thead>
-              <tr><th>Name</th><th>Location</th></tr>
-          </thead>
-          <tbody id='sites-table-body'></tbody>
-      </table>
-  </div>
-  <select id="firmware-dropdown" class="firmware-dropdown">
-      <option value="" disabled selected>Select a firmware version</option>
-  </select>
-  <button id='intimate-all-btn' disabled>Intimate All</button>
+    <h2>All Sites</h2>
+    <div class="site-btn-grp">
+        <button id='intimate-all-btn' disabled>Intimate All</button>
+        <select id="firmware-dropdown" class="firmware-dropdown">
+            <option value="" disabled selected>Select a firmware version</option>
+        </select>     
+    </div>
+    <div class='table-container'>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody id='sites-table-body'></tbody>
+        </table>
+    </div>
+
 </div>
 
 <h3 class="help">Help from Super Admin sites id</h3>
