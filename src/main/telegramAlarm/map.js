@@ -1,8 +1,8 @@
 const { InfluxDB } = require('@influxdata/influxdb-client');
 
 // InfluxDB configuration
-const url = 'http://206.189.138.34:8086'; // Replace with your InfluxDB URL
-const token = 'Le35X6VPDyYO1xYMJrhID2ItpWQXE6P1ZTDMoYwZ_oZgqFSal6-qO8Se6LoUTtJlXADWeBVs83jP6n_h7bXYHw=='; // Replace with your InfluxDB token
+const url = 'http://139.59.27.195:8086'; // Replace with your InfluxDB URL
+const token = '8H1jrJTgpb8pWw3DdZ9Ol5ApY7inrYE3Dx_6yfFFGTfxBbcg_vl9QvHUAKNM9XHmEZ_7ZepLApO_qsEK273aqA=='; // Replace with your InfluxDB token
 const org = 'nuez'; // Replace with your InfluxDB organization
 const heartbeatBucket = 'deviceHeartBeat'; // Replace with your heartbeat bucket
 const waterConsumptionBucket = 'waterMeterData'; // Replace with your water consumption bucket

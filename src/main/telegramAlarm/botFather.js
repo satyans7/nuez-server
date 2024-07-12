@@ -9,61 +9,71 @@ const bot = new TelegramBot(telegramBotToken, { polling: true });
 const TELEGRAM_POST_URL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`
 const statusMap = new Map();
 const snoozeMap = new Map(); // To store snooze information for each device
-const consumptionCheckInterval = 20000000000;
-const INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL = 100000000;
-const INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL = 3000000000;
-const INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL = 6000000000;
+const messageMap = new Map();
+const consumptionCheckInterval = 30000;
+const INTERVAL_FOR_HEARTBEAT_FUNCTION_CALL = 60000;
+const INTERVAL_FOR_WATER_CONSUMPTION_FUNCTION_CALL = 60000;
+const INTERVAL_FOR_DEVICE_DEAD_CHECK_FUNCTION_CALL = 60000;
+const inactiveThreshold = 120; // 2 minutes in seconds
 const TELEGRAM_BOT_COMMAND = 'snooze';
 const EXPRESSION_FOR_DEVICE_ID = `device_id:-"(.+?)"`;
 
 async function botFunction() {
     console.log("Bot function executed.");
     console.log(heartbeatMap, waterConsumptionMap);
-    
-    async function heartbeatStatus() {
-        heartbeatMap.forEach((deviceData, deviceId) => {
-            const currentTime = new Date().getTime();
-            const lastHeartbeatTime = new Date(deviceData.timestamp).getTime();
-            const timeDiff = (currentTime - lastHeartbeatTime) / 1000; // Time difference in seconds
 
-            if (timeDiff <= 10) {
-                statusMap.set(deviceId, "alive");
-            } else {
-                statusMap.set(deviceId, "dead");
-            }
-        });
+    async function heartbeatStatus() {
+        if (heartbeatMap) {
+            heartbeatMap.forEach((deviceData, deviceId) => {
+                const currentTime = new Date().getTime();
+                const lastHeartbeatTime = new Date(deviceData.timestamp).getTime();
+                const timeDiff = (currentTime - lastHeartbeatTime) / 1000; // Time difference in seconds
+
+                if (timeDiff <= 10) {
+                    statusMap.set(deviceId, "alive");
+                } else {
+                    statusMap.set(deviceId, "dead");
+                }
+            });
+        }
     }
 
     async function monitorConsumption() {
         try {
-            statusMap.forEach((status, deviceId) => {
-                const currentTime = new Date().getTime();
-                const lastConsumptionTime = waterConsumptionMap.get(deviceId).timestamp;
+            if (statusMap) {
+                statusMap.forEach((status, deviceId) => {
+                    const currentTime = new Date().getTime();
+                    const deviceData = waterConsumptionMap.get(deviceId);
 
-                if (status === "alive" && (currentTime - new Date(lastConsumptionTime).getTime()) > consumptionCheckInterval) {
-                    if (isDeviceSnoozed(deviceId)) {
-                        console.log(`Device ${deviceId} is snoozed. Skipping alert.`);
-                    } else {
-                        const message = `Device with device_id:-"${deviceId}" is on but not sensing data, there may be some leakage.`;
-                        console.log(message);
-                        axios.post(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-                            chat_id: telegramChatId,
-                            text: message,
-                        }).then(response => {
-                            console.log(`Message sent for device ${deviceId}:`, response.data);
-                        }).catch(error => {
-                            console.error(`Error sending message for device ${deviceId}:`, error);
-                        });
+                    if (deviceData && status === "alive" && (currentTime - new Date(deviceData.timestamp).getTime()) > consumptionCheckInterval) {
+                        if (isDeviceSnoozed(deviceId)) {
+                            console.log(`Device ${deviceId} is snoozed. Skipping alert.`);
+                        } else if (isMessageSentAlready(deviceId)) {
+                            console.log(`Device ${deviceId} has already sent message. Skipping alert.`);
+                        } else {
+                            const message = `Device with device_id:-"${deviceId}" is on but not sensing data, there may be some leakage.`;
+                            console.log(message);
+                            messageMap.set(deviceId, Date.now());
+                            // Date.now() returns the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC, also known as the Unix Epoch
+                            axios.post(TELEGRAM_POST_URL, {
+                                chat_id: telegramChatId,
+                                text: message,
+                            }).then(response => {
+                                console.log(`Message sent for device ${deviceId}:`, response.data);
+                            }).catch(error => {
+                                console.error(`Error sending message for device ${deviceId}:`, error);
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         } catch (error) {
             console.error('Error querying', error);
         }
     }
 
+
     async function deviceDead() {
-        const inactiveThreshold = 120; // 2 minutes in seconds
 
         for (const [deviceId, deviceData] of heartbeatMap.entries()) {
             const currentTime = new Date().getTime();
@@ -74,9 +84,15 @@ async function botFunction() {
             if (timeDiff > inactiveThreshold) {
                 if (isDeviceSnoozed(deviceId)) {
                     console.log(`Device ${deviceId} is snoozed. Skipping alert.`);
+                }
+                else if (ismessageSentAlready(deviceId)) {
+                    console.log(`Device ${deviceId} has already sent message. Skipping alert.`);
                 } else {
                     const message = `Device with device_id:-"${deviceId}" has been inactive for quite long.`;
                     try {
+                        if (messageMap) {
+                            messageMap.set(deviceId, Date.now())
+                        }
                         const response = await axios.post(TELEGRAM_POST_URL, {
                             chat_id: telegramChatId,
                             text: message,
@@ -91,14 +107,20 @@ async function botFunction() {
     }
 
     function isDeviceSnoozed(deviceId) {
-        if (!snoozeMap.has(deviceId)) return false;
+        if (snoozeMap && !(snoozeMap.has(deviceId))) return false;
         const snoozeUntil = snoozeMap.get(deviceId);
         return snoozeUntil > Date.now();
+    }
+    function ismessageSentAlready(deviceId) {
+        if (messageMap && (!messageMap.has(deviceId))) return false;
+        const lastMessageTimestamp = messageMap.get(deviceId);
+        return (Date.now() - lastMessageTimestamp) < 3600000;
     }
 
     bot.onText(new RegExp(`/${TELEGRAM_BOT_COMMAND} (\\d+)`), (msg, match) => {
         const chatId = msg.chat.id;
-        const time = parseInt(match[1], 10); // Extract <time> from the command
+        const min = parseInt(match[1], 10); // Extract <time> from the command
+        const time = min * 60;
         const repliedToMessage = msg.reply_to_message;
 
         if (repliedToMessage) {
@@ -125,7 +147,7 @@ async function botFunction() {
 
 bot.on('polling_error', (error) => {
     if (error.code !== 'ETELEGRAM' || !error.message.includes('409 Conflict')) {
-        console.error('Polling error:', error);
+        console.log("telegram error")
     }
 });
 
