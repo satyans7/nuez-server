@@ -66,9 +66,9 @@ async function registerbtn(){
         }
 
         const res = await registerConsumerDeviceMapping(ob, user);
-        await viewAlldevices();
         alert(res.message);
         form.reset();
+        await viewAlldevices();        
     });
 
     document.getElementById('register-device-cancel-button').addEventListener('click', async () => {
@@ -268,8 +268,8 @@ function eventListeners(){
 }
 
 function DOMContentLoaded (){
-    if(sidebarid==='registersitebutton')registerDomLoad();
-    else if(sidebarid==='deregistersitebutton')deregisterDomLoad();
+    if(sidebarid==='register-device-for-consumer')registerDomLoad();
+    else if(sidebarid==='deregister-device-for-consumer')deregisterDomLoad();
 }
 
 DOMContentLoaded();
