@@ -7,3 +7,11 @@
 .list button{
     display: inline;
 }
+
+
+.site-btn-grp{
+    padding: 10px;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
